@@ -29,14 +29,17 @@ export default function Today() {
       const currentUser = await base44.auth.me();
       setUser(currentUser);
       
-      // Build event options from user's event_types
+      // Build event options from user's event_types (only valid events)
       if (currentUser?.event_types && currentUser.event_types.length > 0) {
+        const validEvents = ["shot", "discus", "javelin"];
         const icons = { shot: "🏋️", discus: "🥏", javelin: "🎯" };
-        const options = currentUser.event_types.map(event => ({
-          id: event.id,
-          label: event.label,
-          icon: icons[event.id] || "🎯"
-        }));
+        const options = currentUser.event_types
+          .filter(event => validEvents.includes(event.id))
+          .map(event => ({
+            id: event.id,
+            label: event.label,
+            icon: icons[event.id]
+          }));
         setEventOptions(options);
       }
       
