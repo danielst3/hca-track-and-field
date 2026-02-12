@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DayTypeBadge from "../components/shared/DayTypeBadge";
 import AbbreviationsKey from "../components/shared/AbbreviationsKey";
-import LogThrowForm from "../components/tracking/LogThrowForm";
+import LogPerformanceForm from "../components/tracking/LogPerformanceForm";
 import QuickLogButton from "../components/tracking/QuickLogButton";
 import PracticePlanText from "../components/shared/PracticePlanText";
 import EventToggle from "../components/shared/EventToggle";
@@ -287,7 +287,7 @@ export default function Today() {
                       🏋️ Shot Put
                     </CardTitle>
                     {user && user.role !== "admin" && (
-                      <LogThrowForm event="shot" eventLabel="Shot" user={user} />
+                      <LogPerformanceForm event="shot" eventLabel="Shot" user={user} />
                     )}
                   </div>
                 </CardHeader>
@@ -312,7 +312,7 @@ export default function Today() {
                       🥏 Discus
                     </CardTitle>
                     {user && user.role !== "admin" && (
-                      <LogThrowForm event="discus" eventLabel="Discus" user={user} />
+                      <LogPerformanceForm event="discus" eventLabel="Discus" user={user} />
                     )}
                   </div>
                 </CardHeader>
@@ -337,7 +337,7 @@ export default function Today() {
                       🎯 Javelin
                     </CardTitle>
                     {user && user.role !== "admin" && (
-                      <LogThrowForm event="javelin" eventLabel="Javelin" user={user} />
+                      <LogPerformanceForm event="javelin" eventLabel="Javelin" user={user} />
                     )}
                   </div>
                 </CardHeader>
