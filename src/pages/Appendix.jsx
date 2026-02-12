@@ -1,161 +1,235 @@
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Scroll, Book, Dumbbell, Info, Shield, Target } from "lucide-react";
+import { Scroll, Book, Dumbbell, Info, Shield, Target, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { drillsDatabase } from "../data/drillsDatabase";
 
 const sections = [
   {
     id: "abbreviations",
     title: "Abbreviations & Terminology",
     icon: Book,
-    content: [
-      { term: "PP", definition: "Power Position", description: "The final throwing position before release" },
-      { term: "FT", definition: "Full Throw", description: "Complete throwing motion from start to finish" },
-      { term: "SA", definition: "South African", description: "A specific drill technique for discus and shot" },
-      { term: "IS", definition: "Impulse Step", description: "Quick stepping drill for rhythm development" },
-      { term: "MB", definition: "Medicine Ball", description: "Weighted ball used for power development" },
-      { term: "ER", definition: "External Rotation", description: "Shoulder rotation exercise for javelin" },
-      { term: "TQ", definition: "Technical Quality throws", description: "Focus on form over distance" },
-      { term: "Lift-H", definition: "Heavy Lift Day", description: "Strength emphasis in weight room" },
-      { term: "Lift-P", definition: "Power Lift Day", description: "Explosive/power emphasis in weight room" },
-    ],
+  },
+  {
+    id: "drills-warmup",
+    title: "Warm-Up & Prep",
+    icon: Activity,
+  },
+  {
+    id: "drills-shot",
+    title: "Shot Put Drills",
+    icon: Dumbbell,
+  },
+  {
+    id: "drills-discus",
+    title: "Discus Drills",
+    icon: Dumbbell,
+  },
+  {
+    id: "drills-javelin",
+    title: "Javelin Drills",
+    icon: Dumbbell,
+  },
+  {
+    id: "drills-strength",
+    title: "Strength Training",
+    icon: Dumbbell,
+  },
+  {
+    id: "drills-prehab",
+    title: "Prehab & Mobility",
+    icon: Activity,
   },
   {
     id: "implements",
     title: "Implement Specifications",
     icon: Target,
-    content: [
-      { 
-        event: "Shot Put",
-        specs: [
-          "High School Boys: 12 lb (5.44 kg)",
-          "High School Girls: 4 kg (8.8 lb)",
-          "Diameter: 110-130mm",
-          "Material: Iron or brass"
-        ]
-      },
-      { 
-        event: "Discus",
-        specs: [
-          "High School Boys: 1.6 kg (3.5 lb)",
-          "High School Girls: 1 kg (2.2 lb)",
-          "Diameter: 219-221mm (boys), 180-182mm (girls)",
-          "Material: Wood or plastic with metal rim"
-        ]
-      },
-      { 
-        event: "Javelin",
-        specs: [
-          "High School Boys: 800g (1.76 lb)",
-          "High School Girls: 600g (1.32 lb)",
-          "Length: 2.6-2.7m (boys), 2.2-2.3m (girls)",
-          "Material: Metal shaft with cord grip"
-        ]
-      },
-    ],
-  },
-  {
-    id: "drills",
-    title: "Common Drills Library",
-    icon: Dumbbell,
-    content: [
-      {
-        drill: "Power Position Throws",
-        events: ["Shot", "Discus"],
-        description: "Start from final power position, focus on block and drive through release. Builds explosive power and proper finish mechanics."
-      },
-      {
-        drill: "South Africans",
-        events: ["Shot"],
-        description: "Standing throw with feet together, emphasizing chest drive and arm extension. Develops upper body power and coordination."
-      },
-      {
-        drill: "Impulse Steps",
-        events: ["Discus"],
-        description: "Quick rhythm steps to build momentum and timing. Helps develop smooth transitions in the throwing motion."
-      },
-      {
-        drill: "External Rotation Series",
-        events: ["Javelin"],
-        description: "Shoulder strengthening and mobility exercises. Critical for arm health and throwing efficiency."
-      },
-      {
-        drill: "Medicine Ball Work",
-        events: ["Shot", "Discus", "Javelin"],
-        description: "Overhead throws, chest passes, rotational throws. Develops core strength and explosive power."
-      },
-    ],
   },
   {
     id: "principles",
     title: "Training Principles",
     icon: Info,
-    content: [
-      {
-        principle: "Progressive Overload",
-        description: "Gradually increase training volume and intensity over the season. Start with technical work and build to full efforts."
-      },
-      {
-        principle: "Specificity",
-        description: "Training should mimic competition demands. More full throws as season progresses, technical work maintains throughout."
-      },
-      {
-        principle: "Recovery",
-        description: "Throwing is high-intensity. Indoor/recovery days are essential. Respect fatigue, especially in javelin (arm health)."
-      },
-      {
-        principle: "Technical Foundation",
-        description: "Master basics before adding complexity. Quality over quantity. Bad reps reinforce bad habits."
-      },
-      {
-        principle: "Periodization",
-        description: "Season divided into phases: Base (technical), Build (volume), Competition (intensity), Taper (peak)."
-      },
-    ],
   },
   {
     id: "safety",
     title: "Safety Guidelines",
     icon: Shield,
-    content: [
-      {
-        category: "General Safety",
-        rules: [
-          "Always warm up properly before throwing",
-          "Never throw without coach supervision",
-          "Check throwing area is clear before each throw",
-          "Retrieve implements only when coach signals all-clear",
-          "Report any pain or discomfort immediately"
-        ]
-      },
-      {
-        category: "Javelin Specific",
-        rules: [
-          "Never exceed recommended weekly throw volume",
-          "Stop immediately if shoulder/elbow pain occurs",
-          "Carry javelin point-down when walking",
-          "Never throw javelin without spotter",
-          "Track weekly throw count religiously"
-        ]
-      },
-      {
-        category: "Shot Put & Discus",
-        rules: [
-          "Clear the ring completely before next thrower enters",
-          "Check toe board and ring for damage before use",
-          "Never throw outside designated throwing sector",
-          "Use proper lifting technique when handling implements",
-          "Wipe implements if wet or slippery"
-        ]
-      },
-    ],
+  },
+];
+
+const abbreviations = [
+  { term: "PP", definition: "Power Position", description: "The final throwing position before release" },
+  { term: "FT", definition: "Full Throw", description: "Complete throwing motion from start to finish" },
+  { term: "SA", definition: "South African", description: "A specific drill technique for discus and shot" },
+  { term: "IS", definition: "Impulse Step", description: "Quick stepping drill for rhythm development" },
+  { term: "MB", definition: "Medicine Ball", description: "Weighted ball used for power development" },
+  { term: "ER", definition: "External Rotation", description: "Shoulder rotation exercise for javelin" },
+  { term: "TQ", definition: "Technical Quality throws", description: "Focus on form over distance" },
+  { term: "Lift-H", definition: "Heavy Lift Day", description: "Strength emphasis in weight room" },
+  { term: "Lift-P", definition: "Power Lift Day", description: "Explosive/power emphasis in weight room" },
+];
+
+const implements = [
+  { 
+    event: "Shot Put",
+    specs: [
+      "High School Boys: 12 lb (5.44 kg)",
+      "High School Girls: 4 kg (8.8 lb)",
+      "Diameter: 110-130mm",
+      "Material: Iron or brass"
+    ]
+  },
+  { 
+    event: "Discus",
+    specs: [
+      "High School Boys: 1.6 kg (3.5 lb)",
+      "High School Girls: 1 kg (2.2 lb)",
+      "Diameter: 219-221mm (boys), 180-182mm (girls)",
+      "Material: Wood or plastic with metal rim"
+    ]
+  },
+  { 
+    event: "Javelin",
+    specs: [
+      "High School Boys: 800g (1.76 lb)",
+      "High School Girls: 600g (1.32 lb)",
+      "Length: 2.6-2.7m (boys), 2.2-2.3m (girls)",
+      "Material: Metal shaft with cord grip"
+    ]
+  },
+];
+
+const principles = [
+  {
+    principle: "Progressive Overload",
+    description: "Gradually increase training volume and intensity over the season. Start with technical work and build to full efforts."
+  },
+  {
+    principle: "Specificity",
+    description: "Training should mimic competition demands. More full throws as season progresses, technical work maintains throughout."
+  },
+  {
+    principle: "Recovery",
+    description: "Throwing is high-intensity. Indoor/recovery days are essential. Respect fatigue, especially in javelin (arm health)."
+  },
+  {
+    principle: "Technical Foundation",
+    description: "Master basics before adding complexity. Quality over quantity. Bad reps reinforce bad habits."
+  },
+  {
+    principle: "Periodization",
+    description: "Season divided into phases: Base (technical), Build (volume), Competition (intensity), Taper (peak)."
+  },
+];
+
+const safety = [
+  {
+    category: "General Safety",
+    rules: [
+      "Always warm up properly before throwing",
+      "Never throw without coach supervision",
+      "Check throwing area is clear before each throw",
+      "Retrieve implements only when coach signals all-clear",
+      "Report any pain or discomfort immediately"
+    ]
+  },
+  {
+    category: "Javelin Specific",
+    rules: [
+      "Never exceed recommended weekly throw volume",
+      "Stop immediately if shoulder/elbow pain occurs",
+      "Carry javelin point-down when walking",
+      "Never throw javelin without spotter",
+      "Track weekly throw count religiously"
+    ]
+  },
+  {
+    category: "Shot Put & Discus",
+    rules: [
+      "Clear the ring completely before next thrower enters",
+      "Check toe board and ring for damage before use",
+      "Never throw outside designated throwing sector",
+      "Use proper lifting technique when handling implements",
+      "Wipe implements if wet or slippery"
+    ]
   },
 ];
 
 export default function Appendix() {
   const [activeSection, setActiveSection] = useState("abbreviations");
+  const [expandedDrill, setExpandedDrill] = useState(null);
 
-  const currentSection = sections.find((s) => s.id === activeSection);
+  const getDrillsByCategory = (category) => {
+    return drillsDatabase.filter(d => d.category === category);
+  };
+
+  const renderDrillCard = (drill, index) => (
+    <div key={index} className="border border-slate-200 rounded-lg overflow-hidden">
+      <button
+        onClick={() => setExpandedDrill(expandedDrill === index ? null : index)}
+        className="w-full p-4 bg-slate-50 hover:bg-slate-100 transition-colors text-left"
+      >
+        <h3 className="text-lg font-bold text-slate-900">{drill.name}</h3>
+        {drill.purpose && (
+          <p className="text-sm text-slate-600 mt-1">{drill.purpose}</p>
+        )}
+      </button>
+      
+      {expandedDrill === index && (
+        <div className="p-4 space-y-4 bg-white">
+          {drill.setup && (
+            <div>
+              <p className="text-sm font-semibold text-slate-700 mb-1">Setup:</p>
+              <p className="text-sm text-slate-600">{drill.setup}</p>
+            </div>
+          )}
+          
+          {drill.executionSteps && drill.executionSteps.length > 0 && (
+            <div>
+              <p className="text-sm font-semibold text-slate-700 mb-2">Execution:</p>
+              <ol className="space-y-2">
+                {drill.executionSteps.map((step, idx) => (
+                  <li key={idx} className="flex items-start gap-2 text-sm text-slate-600">
+                    <span className="font-semibold text-blue-600 min-w-[20px]">{idx + 1}.</span>
+                    <span>{step}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+          
+          {drill.cues && drill.cues.length > 0 && (
+            <div>
+              <p className="text-sm font-semibold text-slate-700 mb-2">Coaching Cues:</p>
+              <div className="flex flex-wrap gap-2">
+                {drill.cues.map((cue, idx) => (
+                  <span
+                    key={idx}
+                    className="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full font-medium"
+                  >
+                    "{cue}"
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {drill.commonFaultsFixes && drill.commonFaultsFixes.length > 0 && (
+            <div>
+              <p className="text-sm font-semibold text-slate-700 mb-2">Common Faults & Fixes:</p>
+              <div className="space-y-2">
+                {drill.commonFaultsFixes.map((item, idx) => (
+                  <div key={idx} className="p-2 bg-red-50 rounded border border-red-200 text-sm">
+                    <span className="text-slate-700">{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 pb-20">
@@ -172,7 +246,7 @@ export default function Appendix() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 px-4">
           {/* Navigation Sidebar */}
           <div className="lg:col-span-1">
-            <Card className="sticky top-4">
+            <Card className="sticky top-20">
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm text-slate-600 uppercase tracking-wide">
                   Contents
@@ -205,18 +279,15 @@ export default function Appendix() {
           <div className="lg:col-span-3">
             <Card>
               <CardHeader className="border-b">
-                <div className="flex items-center gap-3">
-                  {React.createElement(currentSection.icon, {
-                    className: "w-6 h-6 text-blue-600",
-                  })}
-                  <CardTitle className="text-2xl">{currentSection.title}</CardTitle>
-                </div>
+                <CardTitle className="text-2xl">
+                  {sections.find(s => s.id === activeSection)?.title}
+                </CardTitle>
               </CardHeader>
               <CardContent className="pt-6">
-                {/* Abbreviations Section */}
+                {/* Abbreviations */}
                 {activeSection === "abbreviations" && (
                   <div className="space-y-4">
-                    {currentSection.content.map((item) => (
+                    {abbreviations.map((item) => (
                       <div
                         key={item.term}
                         className="p-4 bg-slate-50 rounded-lg border border-slate-200"
@@ -235,10 +306,47 @@ export default function Appendix() {
                   </div>
                 )}
 
-                {/* Implements Section */}
+                {/* Drill Sections */}
+                {activeSection === "drills-warmup" && (
+                  <div className="space-y-4">
+                    {getDrillsByCategory("Warm-up").map((drill, idx) => renderDrillCard(drill, idx))}
+                  </div>
+                )}
+                
+                {activeSection === "drills-shot" && (
+                  <div className="space-y-4">
+                    {getDrillsByCategory("Shot").map((drill, idx) => renderDrillCard(drill, idx))}
+                  </div>
+                )}
+                
+                {activeSection === "drills-discus" && (
+                  <div className="space-y-4">
+                    {getDrillsByCategory("Discus").map((drill, idx) => renderDrillCard(drill, idx))}
+                  </div>
+                )}
+                
+                {activeSection === "drills-javelin" && (
+                  <div className="space-y-4">
+                    {getDrillsByCategory("Javelin").map((drill, idx) => renderDrillCard(drill, idx))}
+                  </div>
+                )}
+                
+                {activeSection === "drills-strength" && (
+                  <div className="space-y-4">
+                    {getDrillsByCategory("Strength").map((drill, idx) => renderDrillCard(drill, idx))}
+                  </div>
+                )}
+                
+                {activeSection === "drills-prehab" && (
+                  <div className="space-y-4">
+                    {getDrillsByCategory("Prehab").map((drill, idx) => renderDrillCard(drill, idx))}
+                  </div>
+                )}
+
+                {/* Implements */}
                 {activeSection === "implements" && (
                   <div className="space-y-6">
-                    {currentSection.content.map((item) => (
+                    {implements.map((item) => (
                       <div key={item.event} className="space-y-3">
                         <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
                           {item.event === "Shot Put" && "🏋️"}
@@ -262,37 +370,10 @@ export default function Appendix() {
                   </div>
                 )}
 
-                {/* Drills Section */}
-                {activeSection === "drills" && (
-                  <div className="space-y-4">
-                    {currentSection.content.map((item) => (
-                      <div
-                        key={item.drill}
-                        className="p-4 bg-slate-50 rounded-lg border border-slate-200"
-                      >
-                        <h3 className="text-lg font-bold text-slate-900 mb-2">
-                          {item.drill}
-                        </h3>
-                        <div className="flex gap-2 mb-3">
-                          {item.events.map((event) => (
-                            <span
-                              key={event}
-                              className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full font-medium"
-                            >
-                              {event}
-                            </span>
-                          ))}
-                        </div>
-                        <p className="text-sm text-slate-600">{item.description}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* Training Principles Section */}
+                {/* Principles */}
                 {activeSection === "principles" && (
                   <div className="space-y-4">
-                    {currentSection.content.map((item) => (
+                    {principles.map((item) => (
                       <div
                         key={item.principle}
                         className="p-4 bg-slate-50 rounded-lg border border-slate-200"
@@ -306,10 +387,10 @@ export default function Appendix() {
                   </div>
                 )}
 
-                {/* Safety Section */}
+                {/* Safety */}
                 {activeSection === "safety" && (
                   <div className="space-y-6">
-                    {currentSection.content.map((item) => (
+                    {safety.map((item) => (
                       <div key={item.category} className="space-y-3">
                         <h3 className="text-xl font-bold text-red-900 flex items-center gap-2">
                           <Shield className="w-5 h-5" />

@@ -47,22 +47,22 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
-import Today from './pages/Today';
+import Appendix from './pages/Appendix';
+import AthleteDetail from './pages/AthleteDetail';
+import Athletes from './pages/Athletes';
 import Calendar from './pages/Calendar';
 import Progress from './pages/Progress';
-import Athletes from './pages/Athletes';
-import AthleteDetail from './pages/AthleteDetail';
-import Appendix from './pages/Appendix';
+import Today from './pages/Today';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "Today": Today,
+    "Appendix": Appendix,
+    "AthleteDetail": AthleteDetail,
+    "Athletes": Athletes,
     "Calendar": Calendar,
     "Progress": Progress,
-    "Athletes": Athletes,
-    "AthleteDetail": AthleteDetail,
-    "Appendix": Appendix,
+    "Today": Today,
 }
 
 export const pagesConfig = {
