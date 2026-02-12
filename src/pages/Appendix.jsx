@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Scroll, Book, Dumbbell, Info, Shield, Target, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { drillsDatabase } from "../data/drillsDatabase";
+import { drillsDatabase } from "../components/data/drillsDatabase";
 
 const sections = [
   {
