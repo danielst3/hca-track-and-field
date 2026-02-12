@@ -108,7 +108,7 @@ export default function Settings() {
       <div className="max-w-3xl mx-auto space-y-6">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100 select-none">Settings</h1>
-          <p className="text-slate-600 dark:text-gray-400 mt-1">
+          <p className="text-slate-700 dark:text-gray-300 mt-1">
             {isCoach ? "Manage your team and practice plans" : "Manage your profile and preferences"}
           </p>
         </div>
@@ -120,22 +120,22 @@ export default function Settings() {
               <User className="w-5 h-5" />
               Profile
             </CardTitle>
-            <CardDescription className="dark:text-gray-400">
+            <CardDescription className="dark:text-gray-300">
               View and update your personal information
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             <div>
-              <p className="text-sm text-slate-600 dark:text-gray-400">Name</p>
-              <p className="font-medium dark:text-gray-200">{user.full_name}</p>
+              <p className="text-sm text-slate-700 dark:text-gray-300 font-medium">Name</p>
+              <p className="font-medium text-slate-900 dark:text-gray-100">{user.full_name}</p>
             </div>
             <div>
-              <p className="text-sm text-slate-600 dark:text-gray-400">Email</p>
-              <p className="font-medium dark:text-gray-200">{user.email}</p>
+              <p className="text-sm text-slate-700 dark:text-gray-300 font-medium">Email</p>
+              <p className="font-medium text-slate-900 dark:text-gray-100">{user.email}</p>
             </div>
             <div>
-              <p className="text-sm text-slate-600 dark:text-gray-400">Role</p>
-              <p className="font-medium dark:text-gray-200">{isCoach ? "Coach" : "Athlete"}</p>
+              <p className="text-sm text-slate-700 dark:text-gray-300 font-medium">Role</p>
+              <p className="font-medium text-slate-900 dark:text-gray-100">{isCoach ? "Coach" : "Athlete"}</p>
             </div>
           </CardContent>
         </Card>
@@ -146,7 +146,7 @@ export default function Settings() {
             <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
                 <CardTitle className="dark:text-gray-100">Team Management</CardTitle>
-                <CardDescription className="dark:text-gray-400">
+                <CardDescription className="dark:text-gray-300">
                   Manage athletes and team settings
                 </CardDescription>
               </CardHeader>
@@ -169,7 +169,7 @@ export default function Settings() {
             <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
                 <CardTitle className="dark:text-gray-100">Practice & Training</CardTitle>
-                <CardDescription className="dark:text-gray-400">
+                <CardDescription className="dark:text-gray-300">
                   Manage practice plans and resources
                 </CardDescription>
               </CardHeader>
@@ -216,7 +216,7 @@ export default function Settings() {
             <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
                 <CardTitle className="dark:text-gray-100">Communication</CardTitle>
-                <CardDescription className="dark:text-gray-400">
+                <CardDescription className="dark:text-gray-300">
                   Manage team posts and announcements
                 </CardDescription>
               </CardHeader>
@@ -239,7 +239,7 @@ export default function Settings() {
             <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
                 <CardTitle className="dark:text-gray-100">Export Data</CardTitle>
-                <CardDescription className="dark:text-gray-400">
+                <CardDescription className="dark:text-gray-300">
                   Download team throwing history
                 </CardDescription>
               </CardHeader>
@@ -263,7 +263,7 @@ export default function Settings() {
             <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
                 <CardTitle className="dark:text-gray-100">My Progress</CardTitle>
-                <CardDescription className="dark:text-gray-400">
+                <CardDescription className="dark:text-gray-300">
                   View your training and performance data
                 </CardDescription>
               </CardHeader>
@@ -286,7 +286,7 @@ export default function Settings() {
             <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
                 <CardTitle className="dark:text-gray-100">Export Data</CardTitle>
-                <CardDescription className="dark:text-gray-400">
+                <CardDescription className="dark:text-gray-300">
                   Download your throwing history
                 </CardDescription>
               </CardHeader>
