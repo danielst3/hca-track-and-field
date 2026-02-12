@@ -65,6 +65,12 @@ export default function Calendar() {
 
 
 
+  useEffect(() => {
+    if (user?.default_events && user.default_events.length > 0) {
+      setSelectedEvents(user.default_events);
+    }
+  }, [user]);
+
   const { data: allSeasons = [] } = useQuery({
     queryKey: ["allSeasons"],
     queryFn: async () => {
@@ -170,6 +176,14 @@ export default function Calendar() {
     updateSelectedEventsMutation.mutate(newEvents);
   };
 
+  const toggleEventAndSave = (eventId) => {
+    const newEvents = selectedEvents.includes(eventId)
+      ? selectedEvents.filter(e => e !== eventId)
+      : [...selectedEvents, eventId];
+    setSelectedEvents(newEvents);
+    updateSelectedEventsMutation.mutate(newEvents);
+  };
+
   const getPlanContent = (plan) => {
     const content = [];
     if (selectedEvents.includes("shot") && plan.shot_text) content.push("🏋️");
@@ -215,7 +229,7 @@ export default function Calendar() {
               key={event.id}
               event={event}
               isSelected={selectedEvents.includes(event.id)}
-              onClick={() => toggleEvent(event.id)}
+              onClick={() => toggleEventAndSave(event.id)}
             />
           ))}
         </div>
