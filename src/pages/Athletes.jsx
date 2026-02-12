@@ -104,29 +104,25 @@ export default function Athletes() {
 
   const handleInvite = async (e) => {
     e.preventDefault();
-    
+
     // Validate email domain for athletes
     if (inviteRole === "user" && !inviteEmail.toLowerCase().endsWith("@hcakc.org")) {
       toast.error("Athletes must have an @hcakc.org email address");
       return;
     }
-    
-    try {
-       // For inviteUser API, map roles: parent -> user, others stay same
-       const apiRole = inviteRole === "admin" ? "admin" : "user";
 
-       // Send the invitation
-       await base44.users.inviteUser(inviteEmail, apiRole);
-      
-      // Track the pending invitation with the actual role
+    try {
+       const apiRole = inviteRole === "admin" ? "admin" : "user";
+       await base44.invitations.inviteUser(inviteEmail, apiRole);
+
       await base44.entities.PendingInvitation.create({
         email: inviteEmail,
         role: inviteRole,
         status: "pending"
       });
-      
+
       queryClient.invalidateQueries({ queryKey: ["pendingInvitations"] });
-      
+
       const roleLabel = inviteRole === "user" ? "Athlete" : inviteRole === "admin" ? "Coach" : "Parent";
       toast.success(`${roleLabel} invited successfully!`);
       setInviteEmail("");
@@ -146,9 +142,8 @@ export default function Athletes() {
       }
 
       const apiRole = request.role === "admin" ? "admin" : "user";
-       // Parents are treated as "user" role in the API
-       await base44.users.inviteUser(request.email, apiRole);
-      
+      await base44.invitations.inviteUser(request.email, apiRole);
+
       await base44.entities.PendingInvitation.create({
         email: request.email,
         role: request.role,
@@ -156,10 +151,10 @@ export default function Athletes() {
       });
 
       await base44.entities.AccessRequest.update(request.id, { status: "approved" });
-      
+
       queryClient.invalidateQueries({ queryKey: ["accessRequests"] });
       queryClient.invalidateQueries({ queryKey: ["pendingInvitations"] });
-      
+
       toast.success("Access request approved and invitation sent!");
     } catch (error) {
       toast.error("Failed to approve request");
