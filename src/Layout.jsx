@@ -454,7 +454,7 @@ export default function Layout({ children, currentPageName }) {
                   <>
                     <DropdownMenuItem 
                       onClick={handleStopImpersonating}
-                      className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none bg-blue-50"
+                      className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none"
                     >
                       <LogOut className="w-4 h-4 mr-2" />
                       Stop Viewing as Athlete
@@ -466,7 +466,7 @@ export default function Layout({ children, currentPageName }) {
                   <>
                     <DropdownMenuItem 
                       onClick={handleToggleParentView}
-                      className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none bg-purple-50"
+                      className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none"
                     >
                       <Users className="w-4 h-4 mr-2" />
                       {user.isViewingAsParent ? "Switch to Coach View" : "Switch to Parent View"}
