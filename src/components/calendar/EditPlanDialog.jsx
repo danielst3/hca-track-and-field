@@ -29,7 +29,17 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
     notes: "",
   });
 
+  const [activeSeason, setActiveSeason] = useState(null);
+
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const fetchActiveSeason = async () => {
+      const seasons = await base44.entities.Season.filter({ is_active: true });
+      setActiveSeason(seasons[0] || null);
+    };
+    fetchActiveSeason();
+  }, []);
 
   useEffect(() => {
     if (plan) {
@@ -121,14 +131,22 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
   });
 
   const handleSavePlan = () => {
+    if (!activeSeason) {
+      toast.error("No active season. Please create and activate a season first.");
+      return;
+    }
     const dateStr = format(date, "yyyy-MM-dd");
     planMutation.mutate({
       id: plan?.id,
-      data: { ...planData, date: dateStr },
+      data: { ...planData, date: dateStr, season_id: activeSeason.id },
     });
   };
 
   const handleSaveMeet = () => {
+    if (!activeSeason) {
+      toast.error("No active season. Please create and activate a season first.");
+      return;
+    }
     if (!meetData.name.trim()) {
       toast.error("Meet name is required");
       return;
@@ -136,7 +154,7 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
     const dateStr = format(date, "yyyy-MM-dd");
     meetMutation.mutate({
       id: meet?.id,
-      data: { ...meetData, date: dateStr },
+      data: { ...meetData, date: dateStr, season_id: activeSeason.id },
     });
   };
 
