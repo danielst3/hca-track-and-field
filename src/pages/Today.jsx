@@ -57,17 +57,17 @@ export default function Today() {
 
   if (planLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[#BDA5A5] to-[#d4bebe] p-4 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
-          <p className="text-slate-600">Loading today's plan...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#551e1b] mx-auto mb-4" />
+          <p className="text-slate-700">Loading today's plan...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-[#BDA5A5] to-[#d4bebe] p-4 pb-20">
       <div className="max-w-7xl mx-auto space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">

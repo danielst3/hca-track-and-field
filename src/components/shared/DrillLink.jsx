@@ -61,7 +61,7 @@ export default function DrillLink({ drillKey, displayText }) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 font-semibold underline decoration-dotted cursor-pointer"
+        className="inline-flex items-center gap-1 text-[#551e1b] hover:text-[#6b2622] font-semibold underline decoration-dotted cursor-pointer"
       >
         {displayText}
         <Info className="w-3 h-3" />
@@ -92,7 +92,7 @@ export default function DrillLink({ drillKey, displayText }) {
                 <ol className="space-y-2">
                   {drill.executionSteps.map((step, idx) => (
                     <li key={idx} className="flex items-start gap-2 text-sm text-slate-600">
-                      <span className="font-semibold text-blue-600 min-w-[20px]">{idx + 1}.</span>
+                      <span className="font-semibold text-[#551e1b] min-w-[20px]">{idx + 1}.</span>
                       <span>{step}</span>
                     </li>
                   ))}
@@ -107,7 +107,7 @@ export default function DrillLink({ drillKey, displayText }) {
                   {drill.cues.map((cue, idx) => (
                     <span
                       key={idx}
-                      className="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full font-medium"
+                      className="px-3 py-1 bg-[#BDA5A5] text-[#551e1b] text-sm rounded-full font-medium"
                     >
                       "{cue}"
                     </span>

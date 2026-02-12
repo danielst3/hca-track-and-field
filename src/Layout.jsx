@@ -33,7 +33,7 @@ export default function Layout({ children, currentPageName }) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4" />
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#BDA5A5] mx-auto mb-4" />
           <p className="text-white">Loading...</p>
         </div>
       </div>
@@ -42,17 +42,21 @@ export default function Layout({ children, currentPageName }) {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800 p-4">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#551e1b] to-[#6b2622] p-4">
         <div className="text-center max-w-md">
-          <Trophy className="w-20 h-20 text-blue-400 mx-auto mb-6" />
-          <h1 className="text-4xl font-bold text-white mb-3">Throws Daily</h1>
-          <p className="text-slate-300 mb-8">
+          <img 
+            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698de82661ea1d1ad2bf86f9/785163a71_HorseLogoOfficial1.png" 
+            alt="HCA Chargers" 
+            className="w-32 h-32 object-contain mx-auto mb-6"
+          />
+          <h1 className="text-4xl font-bold text-white mb-3">HCA Chargers Track & Field</h1>
+          <p className="text-[#d4bebe] mb-8">
             High School Track & Field Throws Program
           </p>
           <Button
             onClick={() => base44.auth.redirectToLogin(createPageUrl("Today"))}
             size="lg"
-            className="w-full bg-blue-600 hover:bg-blue-700"
+            className="w-full bg-[#BDA5A5] hover:bg-[#a89191] text-[#551e1b] font-bold"
           >
             Sign In
           </Button>
@@ -78,15 +82,19 @@ export default function Layout({ children, currentPageName }) {
       ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="min-h-screen bg-gradient-to-br from-[#BDA5A5] to-[#d4bebe]">
       {/* Top Bar */}
-      <div className="bg-gradient-to-r from-slate-900 to-slate-800 border-b border-slate-700 sticky top-0 z-50">
+      <div className="bg-gradient-to-r from-[#551e1b] to-[#6b2622] border-b border-[#441611] sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <Trophy className="w-6 h-6 text-blue-400" />
+            <img 
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698de82661ea1d1ad2bf86f9/785163a71_HorseLogoOfficial1.png" 
+              alt="HCA Chargers" 
+              className="w-10 h-10 object-contain"
+            />
             <div>
-              <h1 className="text-lg font-bold text-white">Throws Daily</h1>
-              <p className="text-xs text-slate-400">
+              <h1 className="text-lg font-bold text-white">HCA Chargers Track & Field</h1>
+              <p className="text-xs text-[#d4bebe]">
                 {user.full_name} • {user.role === "admin" ? "Coach" : "Athlete"}
               </p>
             </div>
@@ -122,8 +130,8 @@ export default function Layout({ children, currentPageName }) {
                   className={cn(
                     "flex flex-col items-center gap-1 h-auto py-2 px-4",
                     isActive
-                      ? "text-blue-600 bg-blue-50"
-                      : "text-slate-600 hover:text-blue-600 hover:bg-blue-50"
+                      ? "text-[#551e1b] bg-[#BDA5A5]"
+                      : "text-slate-600 hover:text-[#551e1b] hover:bg-[#BDA5A5]"
                   )}
                 >
                   <Icon className="w-5 h-5" />
