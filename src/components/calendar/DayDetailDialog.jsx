@@ -22,7 +22,7 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, 
         <DialogHeader>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <DialogTitle className="text-2xl dark:text-gray-100">
+              <DialogTitle className="text-2xl text-gray-900 dark:text-gray-100">
                 {format(date, "EEEE, MMMM d, yyyy")}
               </DialogTitle>
               <div className="flex items-center gap-2">
