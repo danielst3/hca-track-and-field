@@ -176,7 +176,7 @@ export default function Calendar() {
               )}
               onClick={() => toggleEvent(event.id)}
             >
-              {event.icon} {event.label}
+              {event.label}
             </Badge>
           ))}
         </div>
