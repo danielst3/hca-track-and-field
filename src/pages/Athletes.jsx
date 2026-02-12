@@ -42,6 +42,14 @@ export default function Athletes() {
     queryFn: () => base44.entities.User.list(),
   });
 
+  const { data: pendingInvitations = [] } = useQuery({
+    queryKey: ["pendingInvitations"],
+    queryFn: async () => {
+      const invites = await base44.entities.PendingInvitation.filter({ status: "pending" });
+      return invites;
+    },
+  });
+
   const roleUpdateMutation = useMutation({
     mutationFn: ({ userId, newRole }) => base44.entities.User.update(userId, { role: newRole }),
     onSuccess: () => {
@@ -63,7 +71,18 @@ export default function Athletes() {
     }
     
     try {
+      // Send the invitation
       await base44.users.inviteUser(inviteEmail, inviteRole);
+      
+      // Track the pending invitation
+      await base44.entities.PendingInvitation.create({
+        email: inviteEmail,
+        role: inviteRole,
+        status: "pending"
+      });
+      
+      queryClient.invalidateQueries({ queryKey: ["pendingInvitations"] });
+      
       const roleLabel = inviteRole === "user" ? "Athlete" : inviteRole === "admin" ? "Coach" : "Parent";
       toast.success(`${roleLabel} invited successfully!`);
       setInviteEmail("");
@@ -136,6 +155,27 @@ export default function Athletes() {
         </div>
 
         <div className="grid gap-4">
+          {pendingInvitations.map((invite) => (
+            <Card key={invite.id} className="hover:shadow-lg transition-shadow dark:bg-gray-800 dark:border-gray-700 border-dashed opacity-75">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <p className="font-semibold text-slate-900 dark:text-gray-100">
+                        {invite.email}
+                      </p>
+                      <Badge variant="outline" className="text-xs bg-yellow-50 border-yellow-300 text-yellow-700 dark:bg-yellow-900/20 dark:border-yellow-700 dark:text-yellow-400">
+                        Pending Invitation
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-slate-600 dark:text-gray-400 mt-1">
+                      Invited as {invite.role === "user" ? "Athlete" : invite.role === "admin" ? "Coach" : "Parent"}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
           {athletes.map((athlete) => (
             <Card key={athlete.id} className="hover:shadow-lg transition-shadow dark:bg-gray-800 dark:border-gray-700">
               <CardContent className="p-4">
