@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Users, ChevronRight, UserPlus } from "lucide-react";
+import { MobileSelect } from "@/components/ui/mobile-select";
 import {
   Dialog,
   DialogContent,
@@ -22,6 +23,7 @@ export default function Athletes() {
   const [user, setUser] = useState(null);
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteOpen, setInviteOpen] = useState(false);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -37,6 +39,17 @@ export default function Athletes() {
   const { data: athletes = [] } = useQuery({
     queryKey: ["athletes"],
     queryFn: () => base44.entities.User.list(),
+  });
+
+  const roleUpdateMutation = useMutation({
+    mutationFn: ({ userId, newRole }) => base44.entities.User.update(userId, { role: newRole }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["athletes"] });
+      toast.success("Role updated successfully");
+    },
+    onError: () => {
+      toast.error("Failed to update role");
+    },
   });
 
   const handleInvite = async (e) => {
@@ -102,40 +115,52 @@ export default function Athletes() {
 
         <div className="grid gap-4">
           {athletes.map((athlete) => (
-            <Card
-              key={athlete.id}
-              className="hover:shadow-lg transition-shadow cursor-pointer"
-            >
+            <Card key={athlete.id} className="hover:shadow-lg transition-shadow">
               <CardContent className="p-4">
-                <Link
-                  to={`${createPageUrl("AthleteDetail")}?id=${athlete.id}`}
-                  className="flex items-center justify-between"
-                >
-                  <div>
-                    <p className="font-semibold text-slate-900">
-                      {athlete.full_name}
-                    </p>
-                    <p className="text-sm text-slate-600">{athlete.email}</p>
-                    {athlete.grade && (
-                      <Badge variant="outline" className="mt-2 text-xs capitalize">
-                        {athlete.grade}
-                      </Badge>
-                    )}
-                    {athlete.events && athlete.events.length > 0 && (
-                      <div className="flex gap-1 mt-2">
-                        {athlete.events.map((evt) => (
-                          <Badge
-                            key={evt}
-                            className="text-xs capitalize bg-blue-100 text-blue-700"
-                          >
-                            {evt}
-                          </Badge>
-                        ))}
-                      </div>
-                    )}
+                <div className="flex items-center justify-between gap-4">
+                  <Link
+                    to={`${createPageUrl("AthleteDetail")}?id=${athlete.id}`}
+                    className="flex-1 flex items-center justify-between cursor-pointer"
+                  >
+                    <div>
+                      <p className="font-semibold text-slate-900">
+                        {athlete.full_name}
+                      </p>
+                      <p className="text-sm text-slate-600">{athlete.email}</p>
+                      {athlete.grade && (
+                        <Badge variant="outline" className="mt-2 text-xs capitalize">
+                          {athlete.grade}
+                        </Badge>
+                      )}
+                      {athlete.events && athlete.events.length > 0 && (
+                        <div className="flex gap-1 mt-2">
+                          {athlete.events.map((evt) => (
+                            <Badge
+                              key={evt}
+                              className="text-xs capitalize bg-blue-100 text-blue-700"
+                            >
+                              {evt}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-slate-400" />
+                  </Link>
+                  <div className="min-w-[120px]" onClick={(e) => e.stopPropagation()}>
+                    <MobileSelect
+                      value={athlete.role}
+                      onValueChange={(newRole) =>
+                        roleUpdateMutation.mutate({ userId: athlete.id, newRole })
+                      }
+                      options={[
+                        { value: "user", label: "Athlete" },
+                        { value: "admin", label: "Coach" },
+                      ]}
+                      triggerClassName="text-sm"
+                    />
                   </div>
-                  <ChevronRight className="w-5 h-5 text-slate-400" />
-                </Link>
+                </div>
               </CardContent>
             </Card>
           ))}
