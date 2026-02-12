@@ -18,11 +18,11 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto dark:bg-gray-800 dark:border-gray-700">
         <DialogHeader>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <DialogTitle className="text-2xl">
+              <DialogTitle className="text-2xl dark:text-gray-100">
                 {format(date, "EEEE, MMMM d, yyyy")}
               </DialogTitle>
               <div className="flex items-center gap-2">
@@ -41,7 +41,7 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, 
             </div>
             {plan && <DayTypeBadge type={plan.day_type} />}
             {meet && (
-              <div className="flex items-center gap-2 text-red-600 font-semibold">
+              <div className="flex items-center gap-2 text-red-600 dark:text-red-400 font-semibold">
                 <Trophy className="w-4 h-4" />
                 <span>{meet.name}</span>
               </div>
@@ -52,9 +52,9 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, 
         {plan ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
             {/* Shot Put */}
-            <Card className="border-amber-200 bg-white">
-              <CardHeader className="bg-gradient-to-br from-amber-50 to-yellow-50 border-b border-amber-200 pb-3">
-                <CardTitle className="text-amber-900 flex items-center gap-2 text-base">
+            <Card className="border-amber-200 dark:border-amber-900 bg-white dark:bg-gray-900">
+              <CardHeader className="bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-amber-900/30 dark:to-yellow-900/30 border-b border-amber-200 dark:border-amber-800 pb-3">
+                <CardTitle className="text-amber-900 dark:text-amber-300 flex items-center gap-2 text-base">
                   🏋️ Shot Put
                 </CardTitle>
               </CardHeader>
@@ -63,16 +63,16 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, 
                   {plan.shot_text ? (
                     <PracticePlanText text={plan.shot_text} />
                   ) : (
-                    <p className="text-slate-400 italic">No plan</p>
+                    <p className="text-slate-400 dark:text-gray-500 italic">No plan</p>
                   )}
                 </div>
               </CardContent>
             </Card>
 
             {/* Discus */}
-            <Card className="border-cyan-200 bg-white">
-              <CardHeader className="bg-gradient-to-br from-cyan-50 to-blue-50 border-b border-cyan-200 pb-3">
-                <CardTitle className="text-cyan-900 flex items-center gap-2 text-base">
+            <Card className="border-cyan-200 dark:border-cyan-900 bg-white dark:bg-gray-900">
+              <CardHeader className="bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-900/30 dark:to-blue-900/30 border-b border-cyan-200 dark:border-cyan-800 pb-3">
+                <CardTitle className="text-cyan-900 dark:text-cyan-300 flex items-center gap-2 text-base">
                   🥏 Discus
                 </CardTitle>
               </CardHeader>
@@ -81,16 +81,16 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, 
                   {plan.discus_text ? (
                     <PracticePlanText text={plan.discus_text} />
                   ) : (
-                    <p className="text-slate-400 italic">No plan</p>
+                    <p className="text-slate-400 dark:text-gray-500 italic">No plan</p>
                   )}
                 </div>
               </CardContent>
             </Card>
 
             {/* Javelin */}
-            <Card className="border-rose-200 bg-white">
-              <CardHeader className="bg-gradient-to-br from-rose-50 to-pink-50 border-b border-rose-200 pb-3">
-                <CardTitle className="text-rose-900 flex items-center gap-2 text-base">
+            <Card className="border-rose-200 dark:border-rose-900 bg-white dark:bg-gray-900">
+              <CardHeader className="bg-gradient-to-br from-rose-50 to-pink-50 dark:from-rose-900/30 dark:to-pink-900/30 border-b border-rose-200 dark:border-rose-800 pb-3">
+                <CardTitle className="text-rose-900 dark:text-rose-300 flex items-center gap-2 text-base">
                   🎯 Javelin
                 </CardTitle>
               </CardHeader>
@@ -99,7 +99,7 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, 
                   {plan.javelin_text ? (
                     <PracticePlanText text={plan.javelin_text} />
                   ) : (
-                    <p className="text-slate-400 italic">No plan</p>
+                    <p className="text-slate-400 dark:text-gray-500 italic">No plan</p>
                   )}
                 </div>
               </CardContent>
@@ -107,18 +107,18 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, 
           </div>
         ) : (
           <div className="text-center py-8">
-            <Calendar className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-            <p className="text-slate-600">No plan for this day</p>
+            <Calendar className="w-12 h-12 text-slate-300 dark:text-gray-600 mx-auto mb-3" />
+            <p className="text-slate-600 dark:text-gray-300">No plan for this day</p>
           </div>
         )}
 
         {plan?.coach_notes && (
-          <Card className="border-blue-300 bg-blue-50 mt-4">
+          <Card className="border-blue-300 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/30 mt-4">
             <CardContent className="pt-4">
-              <p className="text-sm font-semibold text-blue-900 mb-1">
+              <p className="text-sm font-semibold text-blue-900 dark:text-blue-300 mb-1">
                 Coach Notes
               </p>
-              <p className="text-blue-800">{plan.coach_notes}</p>
+              <p className="text-blue-800 dark:text-blue-200">{plan.coach_notes}</p>
             </CardContent>
           </Card>
         )}

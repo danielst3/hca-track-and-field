@@ -7,7 +7,7 @@ export default function PracticePlanText({ text }) {
   const parts = parseDrillText(text);
 
   return (
-    <p className="text-slate-700 whitespace-pre-wrap">
+    <p className="text-slate-700 dark:text-gray-300 whitespace-pre-wrap">
       {parts.map((part, idx) => {
         if (part.type === 'drill') {
           return <DrillLink key={idx} drillKey={part.drillKey} displayText={part.displayText} />;
