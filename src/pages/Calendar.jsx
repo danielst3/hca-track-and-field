@@ -194,16 +194,16 @@ export default function Calendar() {
         </Tabs>
 
         {/* Event Filter */}
-        <div className="flex items-center gap-2 flex-wrap mb-6">
+        <div className="flex items-center gap-3 flex-wrap mb-6">
           {eventOptions.map(event => (
             <button
               key={event.id}
               onClick={() => toggleEvent(event.id)}
               className={cn(
-                "px-3 py-1 rounded-md font-medium transition-all",
+                "px-4 py-2 rounded-lg font-semibold transition-all border-2",
                 selectedEvents.includes(event.id)
-                  ? "bg-[var(--brand-primary)] text-white dark:bg-gray-700 font-bold"
-                  : "bg-white text-slate-700 dark:bg-gray-800 dark:text-gray-300 line-through"
+                  ? "bg-[var(--brand-primary)] text-white border-[var(--brand-primary)] dark:bg-gray-700 dark:border-gray-600"
+                  : "bg-slate-100 text-slate-500 border-slate-300 line-through dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400"
               )}
             >
               {event.label}
