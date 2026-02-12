@@ -31,7 +31,7 @@ export default function Progress() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800 p-4 pb-24">
       <div className="max-w-7xl mx-auto space-y-6">
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100">My Progress</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">My Progress</h1>
 
         <Tabs value={activeEvent} onValueChange={setActiveEvent}>
           <TabsList className="grid w-full grid-cols-3">
