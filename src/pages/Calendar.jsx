@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -49,8 +49,6 @@ export default function Calendar() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedEvents, setSelectedEvents] = useState(["shot", "discus", "javelin"]);
-
-  const queryClient = useQueryClient();
 
   React.useEffect(() => {
     const fetchUser = async () => {
@@ -161,12 +159,18 @@ export default function Calendar() {
     setEditDialogOpen(true);
   };
 
+  const updateSelectedEventsMutation = useMutation({
+    mutationFn: async (newEvents) => {
+      await base44.auth.updateMe({ default_events: newEvents });
+    },
+  });
+
   const toggleEvent = (eventId) => {
-    setSelectedEvents(prev =>
-      prev.includes(eventId)
-        ? prev.filter(e => e !== eventId)
-        : [...prev, eventId]
-    );
+    const newEvents = selectedEvents.includes(eventId)
+      ? selectedEvents.filter(e => e !== eventId)
+      : [...selectedEvents, eventId];
+    setSelectedEvents(newEvents);
+    updateSelectedEventsMutation.mutate(newEvents);
   };
 
   const getPlanContent = (plan) => {
