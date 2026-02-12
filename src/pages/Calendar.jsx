@@ -9,6 +9,8 @@ import DayDetailDialog from "../components/calendar/DayDetailDialog";
 import EditPlanDialog from "../components/calendar/EditPlanDialog";
 import AbbreviationsKey from "../components/shared/AbbreviationsKey";
 import { ChevronLeft, ChevronRight, Trophy } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import {
   format,
   startOfWeek,
@@ -23,6 +25,12 @@ import {
   isSameDay,
 } from "date-fns";
 
+const eventOptions = [
+  { id: "shot", label: "Shot Put", icon: "🏋️" },
+  { id: "discus", label: "Discus", icon: "🥏" },
+  { id: "javelin", label: "Javelin", icon: "🎯" }
+];
+
 export default function Calendar() {
   const [user, setUser] = React.useState(null);
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -30,6 +38,7 @@ export default function Calendar() {
   const [selectedDay, setSelectedDay] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedEvents, setSelectedEvents] = useState(["shot", "discus", "javelin"]);
 
   React.useEffect(() => {
     const fetchUser = async () => {
@@ -108,6 +117,22 @@ export default function Calendar() {
     setEditDialogOpen(true);
   };
 
+  const toggleEvent = (eventId) => {
+    setSelectedEvents(prev =>
+      prev.includes(eventId)
+        ? prev.filter(e => e !== eventId)
+        : [...prev, eventId]
+    );
+  };
+
+  const getPlanContent = (plan) => {
+    const content = [];
+    if (selectedEvents.includes("shot") && plan.shot_text) content.push("🏋️");
+    if (selectedEvents.includes("discus") && plan.discus_text) content.push("🥏");
+    if (selectedEvents.includes("javelin") && plan.javelin_text) content.push("🎯");
+    return content.join(" ");
+  };
+
   const selectedPlan = selectedDay ? getPlanForDate(selectedDay) : null;
   const selectedMeet = selectedDay ? getMeetForDate(selectedDay) : null;
 
@@ -127,6 +152,25 @@ export default function Calendar() {
             <TabsTrigger value="month">Month</TabsTrigger>
           </TabsList>
         </Tabs>
+
+        {/* Event Filter */}
+        <div className="flex items-center gap-2 flex-wrap mb-6">
+          {eventOptions.map(event => (
+            <Badge
+              key={event.id}
+              variant={selectedEvents.includes(event.id) ? "default" : "outline"}
+              className={cn(
+                "cursor-pointer transition-all dark:border-gray-600",
+                selectedEvents.includes(event.id)
+                  ? "bg-[var(--brand-primary)] text-white dark:bg-gray-700"
+                  : "bg-white text-slate-700 hover:bg-slate-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+              )}
+              onClick={() => toggleEvent(event.id)}
+            >
+              {event.icon} {event.label}
+            </Badge>
+          ))}
+        </div>
 
         {/* Navigation */}
         <div className="flex items-center justify-between mb-6">
@@ -200,6 +244,9 @@ export default function Calendar() {
                         }`}
                       >
                         {colors?.label}
+                      </p>
+                      <p className="text-xs mt-1">
+                        {getPlanContent(plan)}
                       </p>
                     </div>
                   )}

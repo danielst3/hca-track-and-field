@@ -50,14 +50,14 @@
 import AthleteDetail from './pages/AthleteDetail';
 import Athletes from './pages/Athletes';
 import Calendar from './pages/Calendar';
+import MyAthletes from './pages/MyAthletes';
 import Posts from './pages/Posts';
+import Privacy from './pages/Privacy';
 import Progress from './pages/Progress';
 import Resources from './pages/Resources';
+import Seasons from './pages/Seasons';
 import Settings from './pages/Settings';
 import Today from './pages/Today';
-import Privacy from './pages/Privacy';
-import MyAthletes from './pages/MyAthletes';
-import Seasons from './pages/Seasons';
 import __Layout from './Layout.jsx';
 
 
@@ -65,14 +65,14 @@ export const PAGES = {
     "AthleteDetail": AthleteDetail,
     "Athletes": Athletes,
     "Calendar": Calendar,
+    "MyAthletes": MyAthletes,
     "Posts": Posts,
+    "Privacy": Privacy,
     "Progress": Progress,
     "Resources": Resources,
+    "Seasons": Seasons,
     "Settings": Settings,
     "Today": Today,
-    "Privacy": Privacy,
-    "MyAthletes": MyAthletes,
-    "Seasons": Seasons,
 }
 
 export const pagesConfig = {
