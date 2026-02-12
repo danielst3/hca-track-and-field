@@ -206,7 +206,7 @@ export default function Calendar() {
                 "px-4 py-2 rounded-lg font-semibold transition-all border-2",
                 selectedEvents.includes(event.id)
                   ? "bg-[var(--brand-primary)] text-white border-[var(--brand-primary)] dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  : "bg-white text-black border-black line-through dark:bg-gray-900 dark:border-white dark:text-white"
+                  : "bg-gray-300 text-black border-black line-through dark:bg-gray-700 dark:border-white dark:text-white"
               )}
             >
               {event.label}
