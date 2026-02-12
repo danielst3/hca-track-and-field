@@ -193,9 +193,9 @@ export default function Today() {
                <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100 select-none">
                  {isSameDay(selectedDate, new Date()) ? "Today's Plan" : "Practice Plan"}
                </h1>
-               {user && user.role !== "admin" && isSameDay(selectedDate, new Date()) && (
-                 <LogActivityButton user={user} />
-               )}
+               {user && isSameDay(selectedDate, new Date()) && (
+                  <LogActivityButton user={user} />
+                )}
              </div>
              <div className="flex items-center gap-3 mt-2">
               <Button
