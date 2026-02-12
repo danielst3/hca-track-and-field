@@ -52,6 +52,7 @@ import Calendar from './pages/Calendar';
 import Progress from './pages/Progress';
 import Athletes from './pages/Athletes';
 import AthleteDetail from './pages/AthleteDetail';
+import Appendix from './pages/Appendix';
 import __Layout from './Layout.jsx';
 
 
@@ -61,6 +62,7 @@ export const PAGES = {
     "Progress": Progress,
     "Athletes": Athletes,
     "AthleteDetail": AthleteDetail,
+    "Appendix": Appendix,
 }
 
 export const pagesConfig = {
