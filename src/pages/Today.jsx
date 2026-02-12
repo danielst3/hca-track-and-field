@@ -5,12 +5,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DayTypeBadge from "../components/shared/DayTypeBadge";
 import AbbreviationsKey from "../components/shared/AbbreviationsKey";
 import LogThrowForm from "../components/tracking/LogThrowForm";
-import { Calendar, Trophy } from "lucide-react";
-import { format } from "date-fns";
+import { Calendar, Trophy, ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { format, isSameDay } from "date-fns";
 
 export default function Today() {
   const [user, setUser] = useState(null);
-  const today = format(new Date(), "yyyy-MM-dd");
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const dateStr = format(selectedDate, "yyyy-MM-dd");
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -21,20 +23,36 @@ export default function Today() {
   }, []);
 
   const { data: dailyPlan, isLoading: planLoading } = useQuery({
-    queryKey: ["dailyPlan", today],
+    queryKey: ["dailyPlan", dateStr],
     queryFn: async () => {
-      const plans = await base44.entities.DailyPlan.filter({ date: today });
+      const plans = await base44.entities.DailyPlan.filter({ date: dateStr });
       return plans[0] || null;
     },
   });
 
   const { data: meet } = useQuery({
-    queryKey: ["meet", today],
+    queryKey: ["meet", dateStr],
     queryFn: async () => {
-      const meets = await base44.entities.Meet.filter({ date: today });
+      const meets = await base44.entities.Meet.filter({ date: dateStr });
       return meets[0] || null;
     },
   });
+
+  const handlePrevDay = () => {
+    const newDate = new Date(selectedDate);
+    newDate.setDate(newDate.getDate() - 1);
+    setSelectedDate(newDate);
+  };
+
+  const handleNextDay = () => {
+    const newDate = new Date(selectedDate);
+    newDate.setDate(newDate.getDate() + 1);
+    setSelectedDate(newDate);
+  };
+
+  const handleToday = () => {
+    setSelectedDate(new Date());
+  };
 
   if (planLoading) {
     return (
@@ -52,11 +70,41 @@ export default function Today() {
       <div className="max-w-7xl mx-auto space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-slate-900">Today's Plan</h1>
-            <p className="text-slate-600 mt-1">
-              {format(new Date(), "EEEE, MMMM d, yyyy")}
-            </p>
+          <div className="flex-1">
+            <h1 className="text-3xl font-bold text-slate-900">
+              {isSameDay(selectedDate, new Date()) ? "Today's Plan" : "Practice Plan"}
+            </h1>
+            <div className="flex items-center gap-3 mt-2">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handlePrevDay}
+                className="h-8 w-8"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </Button>
+              <p className="text-slate-700 font-medium min-w-[200px] text-center">
+                {format(selectedDate, "EEEE, MMMM d, yyyy")}
+              </p>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handleNextDay}
+                className="h-8 w-8"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </Button>
+              {!isSameDay(selectedDate, new Date()) && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleToday}
+                  className="ml-2"
+                >
+                  Today
+                </Button>
+              )}
+            </div>
           </div>
           <AbbreviationsKey />
         </div>

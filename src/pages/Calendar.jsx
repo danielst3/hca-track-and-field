@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { getDayTypeColors } from "../components/shared/DayTypeBadge";
+import DayDetailDialog from "../components/calendar/DayDetailDialog";
 import { ChevronLeft, ChevronRight, Trophy } from "lucide-react";
 import {
   format,
@@ -23,6 +24,8 @@ import {
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState("week");
+  const [selectedDay, setSelectedDay] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const { data: plans = [] } = useQuery({
     queryKey: ["allPlans"],
@@ -66,6 +69,14 @@ export default function Calendar() {
   const handleNext = () => {
     setCurrentDate(view === "week" ? addWeeks(currentDate, 1) : addMonths(currentDate, 1));
   };
+
+  const handleDayClick = (day) => {
+    setSelectedDay(day);
+    setDialogOpen(true);
+  };
+
+  const selectedPlan = selectedDay ? getPlanForDate(selectedDay) : null;
+  const selectedMeet = selectedDay ? getMeetForDate(selectedDay) : null;
 
   const days = getDaysToShow();
 
@@ -126,6 +137,7 @@ export default function Calendar() {
             return (
               <Card
                 key={day.toISOString()}
+                onClick={() => handleDayClick(day)}
                 className={`${
                   colors ? colors.bg : "bg-white"
                 } border-2 ${isToday ? "border-blue-500" : "border-slate-200"} ${
@@ -166,6 +178,14 @@ export default function Calendar() {
             );
           })}
         </div>
+
+        <DayDetailDialog
+          date={selectedDay}
+          plan={selectedPlan}
+          meet={selectedMeet}
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
+        />
       </div>
     </div>
   );
