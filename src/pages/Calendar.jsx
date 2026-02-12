@@ -279,6 +279,7 @@ export default function Calendar() {
           onOpenChange={setDialogOpen}
           onEdit={handleEdit}
           isCoach={user?.role === "admin"}
+          selectedEvents={selectedEvents}
         />
 
         <EditPlanDialog
