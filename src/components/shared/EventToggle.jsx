@@ -4,17 +4,13 @@ export default function EventToggle({ event, isSelected, onClick }) {
   return (
     <button
       onClick={onClick}
-      className={cn(
-        "px-4 py-2 rounded-lg font-semibold transition-all border-2",
-        isSelected
-          ? "bg-[var(--brand-primary)] text-white border-[var(--brand-primary)]"
-          : "!bg-white !text-black !border-black line-through"
-      )}
+      className="px-4 py-2 rounded-lg font-semibold transition-all border-2"
       style={{
-        backgroundColor: isSelected ? "var(--brand-primary)" : "white",
-        color: isSelected ? "white" : "black",
-        borderColor: isSelected ? "var(--brand-primary)" : "black",
+        backgroundColor: isSelected ? "#551e1b" : "#f5f5f5",
+        color: isSelected ? "white" : "#1f2937",
+        borderColor: isSelected ? "#551e1b" : "#374151",
         minWidth: "120px",
+        textDecoration: isSelected ? "none" : "line-through",
       }}
     >
       {event.label}
