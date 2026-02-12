@@ -339,6 +339,12 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
           </div>
         </div>
       </DialogContent>
+
+      <CopyPlanDialog 
+        plan={plan}
+        open={copyDialogOpen}
+        onOpenChange={setCopyDialogOpen}
+      />
     </Dialog>
   );
 }
