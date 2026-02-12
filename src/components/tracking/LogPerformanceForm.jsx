@@ -17,7 +17,7 @@ import { Plus } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
-export default function LogPerformanceForm({ event, eventLabel, user }) {
+export default function LogPerformanceForm({ event, eventLabel, user, onClose }) {
   const [open, setOpen] = useState(false);
   const [logType, setLogType] = useState("distance");
   const [formData, setFormData] = useState({
@@ -59,6 +59,9 @@ export default function LogPerformanceForm({ event, eventLabel, user }) {
         value: "",
         notes: "",
       });
+      if (onClose) {
+        onClose();
+      }
     },
   });
 

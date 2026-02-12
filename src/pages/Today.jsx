@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DayTypeBadge from "../components/shared/DayTypeBadge";
 import AbbreviationsKey from "../components/shared/AbbreviationsKey";
-import LogPerformanceForm from "../components/tracking/LogPerformanceForm";
+import LogActivityButton from "../components/tracking/LogActivityButton";
 import QuickLogButton from "../components/tracking/QuickLogButton";
 import PracticePlanText from "../components/shared/PracticePlanText";
 import EventToggle from "../components/shared/EventToggle";
@@ -193,7 +193,7 @@ export default function Today() {
                  {isSameDay(selectedDate, new Date()) ? "Today's Plan" : "Practice Plan"}
                </h1>
                {user && user.role !== "admin" && isSameDay(selectedDate, new Date()) && (
-                 <LogPerformanceForm event="shot" eventLabel="Log Activity" user={user} />
+                 <LogActivityButton user={user} />
                )}
              </div>
              <div className="flex items-center gap-3 mt-2">
