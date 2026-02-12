@@ -41,7 +41,7 @@ export default function EventProgressCard({ event, logs }) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-2xl">{config.icon}</span>
-            <CardTitle className="text-lg dark:text-gray-100">{config.label}</CardTitle>
+            <CardTitle className="text-lg text-gray-900 dark:text-gray-100">{config.label}</CardTitle>
           </div>
           <Badge variant="outline" className="text-xs dark:border-gray-600 dark:text-gray-300">
             {logs.length} sessions
@@ -104,8 +104,8 @@ export default function EventProgressCard({ event, logs }) {
             )}
           </div>
         ) : (
-          <p className="text-center text-slate-500 dark:text-gray-400 py-6 text-sm">
-            No throws logged yet
+          <p className="text-center text-gray-900 dark:text-gray-400 py-6 text-sm">
+           No throws logged yet
           </p>
         )}
       </CardContent>

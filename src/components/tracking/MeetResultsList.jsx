@@ -12,7 +12,7 @@ export default function MeetResultsList({ logs }) {
   return (
     <Card className="shadow-lg dark:bg-gray-800 dark:border-gray-700">
       <CardHeader className="border-b dark:border-gray-700 pb-3">
-        <CardTitle className="text-lg dark:text-gray-100 flex items-center gap-2">
+        <CardTitle className="text-lg text-gray-900 dark:text-gray-100 flex items-center gap-2">
           <Trophy className="w-5 h-5 text-red-600 dark:text-red-400" />
           Meet Results
         </CardTitle>
@@ -28,7 +28,7 @@ export default function MeetResultsList({ logs }) {
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <Calendar className="w-3 h-3 text-slate-500 dark:text-gray-400" />
-                    <span className="text-sm font-medium text-slate-700 dark:text-gray-300">
+                    <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
                       {format(new Date(log.date), "MMM d, yyyy")}
                     </span>
                   </div>
@@ -36,7 +36,7 @@ export default function MeetResultsList({ logs }) {
                     {log.event}
                   </Badge>
                   {log.notes && (
-                    <p className="text-xs text-slate-500 dark:text-gray-400 mt-1">{log.notes}</p>
+                    <p className="text-xs text-gray-900 dark:text-gray-400 mt-1">{log.notes}</p>
                   )}
                 </div>
                 <div className="text-right">
@@ -44,7 +44,7 @@ export default function MeetResultsList({ logs }) {
                     {log.best_distance.toFixed(1)}'
                   </p>
                   {log.attempts && log.attempts.length > 0 && (
-                    <p className="text-xs text-slate-500 dark:text-gray-400">
+                    <p className="text-xs text-gray-900 dark:text-gray-400">
                       {log.attempts.length} attempts
                     </p>
                   )}
@@ -53,8 +53,8 @@ export default function MeetResultsList({ logs }) {
             ))}
           </div>
         ) : (
-          <p className="text-center text-slate-500 dark:text-gray-400 py-6 text-sm">
-            No meet results yet
+          <p className="text-center text-gray-900 dark:text-gray-400 py-6 text-sm">
+           No meet results yet
           </p>
         )}
       </CardContent>
