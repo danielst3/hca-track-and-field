@@ -54,7 +54,7 @@ export default function Layout({ children, currentPageName }) {
     return 'light';
   });
   const [requestAccessOpen, setRequestAccessOpen] = useState(false);
-  const [requestData, setRequestData] = useState({ email: "", full_name: "", notes: "" });
+  const [requestData, setRequestData] = useState({ email: "", full_name: "", role: "user", athlete_name: "", notes: "" });
 
   useEffect(() => {
     // Detect if on a sub-page
@@ -97,6 +97,8 @@ export default function Layout({ children, currentPageName }) {
         if (impersonating && currentUser?.role === "admin") {
           const impersonatedUser = JSON.parse(impersonating);
           setUser({ ...currentUser, ...impersonatedUser, isImpersonating: true, realRole: currentUser.role });
+        } else if (currentUser?.role === "admin" && currentUser?.is_parent && currentUser?.view_as_parent) {
+          setUser({ ...currentUser, role: "parent", isViewingAsParent: true });
         } else {
           setUser(currentUser);
         }
@@ -112,6 +114,15 @@ export default function Layout({ children, currentPageName }) {
   const handleStopImpersonating = () => {
     localStorage.removeItem("impersonating");
     window.location.reload();
+  };
+
+  const handleToggleParentView = async () => {
+    try {
+      await base44.auth.updateMe({ view_as_parent: !user.view_as_parent });
+      window.location.reload();
+    } catch (error) {
+      toast.error("Failed to toggle view");
+    }
   };
 
   const handleLogout = () => {
@@ -133,7 +144,7 @@ export default function Layout({ children, currentPageName }) {
     mutationFn: (data) => base44.entities.AccessRequest.create(data),
     onSuccess: () => {
       toast.success("Access request submitted! We'll review and get back to you soon.");
-      setRequestData({ email: "", full_name: "", notes: "" });
+      setRequestData({ email: "", full_name: "", role: "user", athlete_name: "", notes: "" });
       setRequestAccessOpen(false);
     },
     onError: () => {
@@ -143,6 +154,10 @@ export default function Layout({ children, currentPageName }) {
 
   const handleRequestAccess = (e) => {
     e.preventDefault();
+    if (requestData.role === "parent" && !requestData.athlete_name.trim()) {
+      toast.error("Please enter your athlete's name");
+      return;
+    }
     requestAccessMutation.mutate(requestData);
   };
 
@@ -245,11 +260,34 @@ export default function Layout({ children, currentPageName }) {
                   />
                 </div>
                 <div className="space-y-2">
+                  <Label className="dark:text-gray-200">I am a</Label>
+                  <select
+                    value={requestData.role}
+                    onChange={(e) => setRequestData({ ...requestData, role: e.target.value })}
+                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                    required
+                  >
+                    <option value="user">Athlete</option>
+                    <option value="parent">Parent</option>
+                  </select>
+                </div>
+                {requestData.role === "parent" && (
+                  <div className="space-y-2">
+                    <Label className="dark:text-gray-200">Athlete's Name</Label>
+                    <Input
+                      value={requestData.athlete_name}
+                      onChange={(e) => setRequestData({ ...requestData, athlete_name: e.target.value })}
+                      placeholder="Your athlete's full name"
+                      className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                    />
+                  </div>
+                )}
+                <div className="space-y-2">
                   <Label className="dark:text-gray-200">Notes (Optional)</Label>
                   <Textarea
                     value={requestData.notes}
                     onChange={(e) => setRequestData({ ...requestData, notes: e.target.value })}
-                    placeholder="Tell us about yourself (athlete, parent, etc.)"
+                    placeholder="Additional information"
                     rows={3}
                     className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
                   />
@@ -364,6 +402,18 @@ export default function Layout({ children, currentPageName }) {
                     >
                       <LogOut className="w-4 h-4 mr-2" />
                       Stop Viewing as Athlete
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator className="dark:bg-gray-700" />
+                  </>
+                )}
+                {user.realRole === "admin" && user.is_parent && (
+                  <>
+                    <DropdownMenuItem 
+                      onClick={handleToggleParentView}
+                      className="dark:text-gray-200 dark:hover:bg-gray-700 select-none bg-purple-50"
+                    >
+                      <Users className="w-4 h-4 mr-2" />
+                      {user.isViewingAsParent ? "Switch to Coach View" : "Switch to Parent View"}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator className="dark:bg-gray-700" />
                   </>

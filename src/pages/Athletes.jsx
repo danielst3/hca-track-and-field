@@ -6,7 +6,7 @@ import { createPageUrl } from "../utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, ChevronRight, UserPlus } from "lucide-react";
+import { Users, ChevronRight, UserPlus, Check, X } from "lucide-react";
 import { MobileSelect } from "@/components/ui/mobile-select";
 import { Label } from "@/components/ui/label";
 import {
@@ -47,6 +47,14 @@ export default function Athletes() {
     queryFn: async () => {
       const invites = await base44.entities.PendingInvitation.filter({ status: "pending" });
       return invites;
+    },
+  });
+
+  const { data: accessRequests = [] } = useQuery({
+    queryKey: ["accessRequests"],
+    queryFn: async () => {
+      const requests = await base44.entities.AccessRequest.filter({ status: "pending" });
+      return requests;
     },
   });
 
@@ -93,6 +101,44 @@ export default function Athletes() {
       setInviteOpen(false);
     } catch (error) {
       toast.error("Failed to invite user");
+    }
+  };
+
+  const handleApproveRequest = async (request) => {
+    try {
+      // Validate email domain for athletes
+      if (request.role === "user" && !request.email.toLowerCase().endsWith("@hcakc.org")) {
+        toast.error("Athletes must have an @hcakc.org email address");
+        return;
+      }
+
+      const apiRole = request.role === "admin" ? "admin" : "user";
+      await base44.users.inviteUser(request.email, apiRole);
+      
+      await base44.entities.PendingInvitation.create({
+        email: request.email,
+        role: request.role,
+        status: "pending"
+      });
+
+      await base44.entities.AccessRequest.update(request.id, { status: "approved" });
+      
+      queryClient.invalidateQueries({ queryKey: ["accessRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["pendingInvitations"] });
+      
+      toast.success("Access request approved and invitation sent!");
+    } catch (error) {
+      toast.error("Failed to approve request");
+    }
+  };
+
+  const handleDenyRequest = async (requestId) => {
+    try {
+      await base44.entities.AccessRequest.update(requestId, { status: "denied" });
+      queryClient.invalidateQueries({ queryKey: ["accessRequests"] });
+      toast.success("Access request denied");
+    } catch (error) {
+      toast.error("Failed to deny request");
     }
   };
 
@@ -158,6 +204,59 @@ export default function Athletes() {
         </div>
 
         <div className="grid gap-4">
+          {accessRequests.map((request) => (
+            <Card key={request.id} className="hover:shadow-lg transition-shadow dark:bg-gray-800 dark:border-gray-700 border-2 border-blue-300 dark:border-blue-700">
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <p className="font-semibold text-slate-900 dark:text-gray-100">
+                        {request.full_name}
+                      </p>
+                      <Badge className="text-xs bg-blue-100 border-blue-300 text-blue-700 dark:bg-blue-900/20 dark:border-blue-700 dark:text-blue-400">
+                        Access Request
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-slate-600 dark:text-gray-400 mt-1">
+                      {request.email}
+                    </p>
+                    <p className="text-sm text-slate-700 dark:text-gray-300 mt-1">
+                      Requesting: {request.role === "user" ? "Athlete" : "Parent"}
+                    </p>
+                    {request.athlete_name && (
+                      <p className="text-sm text-slate-600 dark:text-gray-400 mt-1">
+                        Athlete: {request.athlete_name}
+                      </p>
+                    )}
+                    {request.notes && (
+                      <p className="text-sm text-slate-600 dark:text-gray-400 mt-2 italic">
+                        "{request.notes}"
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      onClick={() => handleApproveRequest(request)}
+                      className="bg-green-600 hover:bg-green-700"
+                    >
+                      <Check className="w-4 h-4 mr-1" />
+                      Approve
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleDenyRequest(request.id)}
+                      className="text-red-600 border-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                    >
+                      <X className="w-4 h-4 mr-1" />
+                      Deny
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
           {pendingInvitations.map((invite) => (
             <Card key={invite.id} className="hover:shadow-lg transition-shadow dark:bg-gray-800 dark:border-gray-700 border-dashed opacity-75">
               <CardContent className="p-4">
