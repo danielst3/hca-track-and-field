@@ -9,7 +9,9 @@ import QuickLogButton from "../components/tracking/QuickLogButton";
 import PracticePlanText from "../components/shared/PracticePlanText";
 import { Calendar, Trophy, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { format, isSameDay } from "date-fns";
+import { format, isSameDay, addDays } from "date-fns";
+import AthleteCard from "../components/dashboard/AthleteCard";
+import EventProgressChart from "../components/dashboard/EventProgressChart";
 
 export default function Today() {
   const [user, setUser] = useState(null);
@@ -58,6 +60,51 @@ export default function Today() {
     enabled: !!activeSeason,
   });
 
+  const { data: nextMeet } = useQuery({
+    queryKey: ["nextMeet", activeSeason?.id, user?.role],
+    queryFn: async () => {
+      if (!activeSeason || user?.role === "admin") return null;
+      const today = format(new Date(), "yyyy-MM-dd");
+      const meets = await base44.entities.Meet.filter({
+        season_id: activeSeason.id
+      });
+      const future = meets.filter(m => m.date >= today).sort((a, b) => new Date(a.date) - new Date(b.date));
+      return future[0] || null;
+    },
+    enabled: !!activeSeason && !!user && user.role !== "admin",
+  });
+
+  const { data: recentPosts } = useQuery({
+    queryKey: ["recentPosts"],
+    queryFn: async () => {
+      const posts = await base44.entities.Post.list();
+      return posts.sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+    },
+  });
+
+  const { data: throwLogs } = useQuery({
+    queryKey: ["throwLogs", user?.email],
+    queryFn: async () => {
+      if (!user || user.role === "admin") return [];
+      const logs = await base44.entities.ThrowLog.filter({ 
+        athlete_email: user.email 
+      });
+      return logs.sort((a, b) => new Date(a.date) - new Date(b.date));
+    },
+    enabled: !!user && user.role !== "admin",
+  });
+
+  const getEventData = (event) => {
+    if (!throwLogs) return [];
+    return throwLogs
+      .filter(log => log.event === event)
+      .slice(-30)
+      .map(log => ({
+        date: format(new Date(log.date), "MMM d"),
+        distance: log.distance,
+      }));
+  };
+
   const handlePrevDay = () => {
     const newDate = new Date(selectedDate);
     newDate.setDate(newDate.getDate() - 1);
@@ -89,6 +136,27 @@ export default function Today() {
     <div className="min-h-screen bg-gradient-to-br from-[var(--brand-secondary)] to-[var(--brand-secondary-light)] p-4 pb-20">
       {user && user.role !== "admin" && <QuickLogButton user={user} />}
       <div className="max-w-7xl mx-auto space-y-4">
+        {/* Athlete Dashboard (only for athletes) */}
+        {user && user.role !== "admin" && isSameDay(selectedDate, new Date()) && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="lg:col-span-2 space-y-4">
+              {user.events && user.events.map(event => (
+                <EventProgressChart 
+                  key={event} 
+                  event={event} 
+                  data={getEventData(event)} 
+                />
+              ))}
+            </div>
+            <div>
+              <AthleteCard 
+                user={user} 
+                nextMeet={nextMeet} 
+                recentPosts={recentPosts} 
+              />
+            </div>
+          </div>
+        )}
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex-1">
