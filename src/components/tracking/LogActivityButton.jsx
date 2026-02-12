@@ -123,11 +123,13 @@ export default function LogActivityButton({ user }) {
       </Dialog>
 
       {/* Performance Logging Form */}
-      {formOpen && currentEvent && (
+      {currentEvent && (
         <LogPerformanceForm
           event={selectedEvent}
           eventLabel={currentEvent.label}
           user={currentUser}
+          open={formOpen}
+          onOpenChange={setFormOpen}
           onClose={handleFormClose}
         />
       )}
