@@ -30,7 +30,7 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, 
                   <Button
                     onClick={onEdit}
                     size="sm"
-                    className="bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] gap-2"
+                    className="bg-red-600 hover:bg-red-700 text-white gap-2"
                   >
                     <Edit className="w-4 h-4" />
                     Edit
