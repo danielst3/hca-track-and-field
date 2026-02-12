@@ -13,7 +13,7 @@ import DayTypeBadge from "../shared/DayTypeBadge";
 import AbbreviationsKey from "../shared/AbbreviationsKey";
 import PracticePlanText from "../shared/PracticePlanText";
 
-export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, onEdit, isCoach }) {
+export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, onEdit, isCoach, selectedEvents = ["shot", "discus", "javelin"] }) {
   if (!date) return null;
 
   return (
