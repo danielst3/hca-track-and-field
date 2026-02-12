@@ -26,6 +26,7 @@ export default function Athletes() {
   const [inviteOpen, setInviteOpen] = useState(false);
   const [editingAthlete, setEditingAthlete] = useState(null);
   const [editRoles, setEditRoles] = useState([]);
+  const [editEvents, setEditEvents] = useState([]);
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -61,18 +62,21 @@ export default function Athletes() {
   });
 
   const roleUpdateMutation = useMutation({
-   mutationFn: async ({ userId, newRoles }) => {
+   mutationFn: async ({ userId, newRoles, newEvents }) => {
      // Store roles as comma-separated string
-     return base44.entities.User.update(userId, { user_role_preference: newRoles.join(",") });
+     return base44.entities.User.update(userId, { 
+       user_role_preference: newRoles.join(","),
+       events: newEvents
+     });
    },
    onSuccess: () => {
      queryClient.invalidateQueries({ queryKey: ["athletes"] });
      setEditingAthlete(null);
-     toast.success("Role updated successfully");
+     toast.success("Updated successfully");
    },
    onError: (error) => {
-     console.error("Role update error:", error);
-     toast.error("Failed to update role");
+     console.error("Update error:", error);
+     toast.error("Failed to update");
    },
   });
 
@@ -176,6 +180,7 @@ export default function Athletes() {
     setEditingAthlete(athlete);
     const roles = athlete.user_role_preference ? athlete.user_role_preference.split(",") : ["user"];
     setEditRoles(roles);
+    setEditEvents(athlete.events || []);
   };
 
   const toggleRole = (role) => {
@@ -186,12 +191,20 @@ export default function Athletes() {
     );
   };
 
+  const toggleEvent = (event) => {
+    setEditEvents(prev =>
+      prev.includes(event)
+        ? prev.filter(e => e !== event)
+        : [...prev, event]
+    );
+  };
+
   const handleSaveRoles = () => {
     if (editRoles.length === 0) {
       toast.error("At least one role must be selected");
       return;
     }
-    roleUpdateMutation.mutate({ userId: editingAthlete.id, newRoles: editRoles });
+    roleUpdateMutation.mutate({ userId: editingAthlete.id, newRoles: editRoles, newEvents: editEvents });
   };
 
   if (!user || user.role !== "admin") return null;
@@ -316,26 +329,51 @@ export default function Athletes() {
                            </DialogTrigger>
                            <DialogContent>
                              <DialogHeader>
-                               <DialogTitle>Edit Roles for {athlete.full_name}</DialogTitle>
+                               <DialogTitle>Edit {athlete.full_name}</DialogTitle>
                              </DialogHeader>
-                             <div className="space-y-4 mt-4">
-                               <div className="space-y-3">
-                                 {[
-                                   { value: "user", label: "Athlete" },
-                                   { value: "admin", label: "Coach" },
-                                   { value: "parent", label: "Parent" }
-                                 ].map(role => (
-                                   <label key={role.value} className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-                                     <input
-                                       type="checkbox"
-                                       checked={editRoles.includes(role.value)}
-                                       onChange={() => toggleRole(role.value)}
-                                       className="w-4 h-4"
-                                     />
-                                     <span className="dark:text-gray-200">{role.label}</span>
-                                   </label>
-                                 ))}
+                             <div className="space-y-6 mt-4">
+                               <div>
+                                 <h3 className="font-semibold text-slate-900 dark:text-gray-100 mb-3">Roles</h3>
+                                 <div className="space-y-3">
+                                   {[
+                                     { value: "user", label: "Athlete" },
+                                     { value: "admin", label: "Coach" },
+                                     { value: "parent", label: "Parent" }
+                                   ].map(role => (
+                                     <label key={role.value} className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                                       <input
+                                         type="checkbox"
+                                         checked={editRoles.includes(role.value)}
+                                         onChange={() => toggleRole(role.value)}
+                                         className="w-4 h-4"
+                                       />
+                                       <span className="dark:text-gray-200">{role.label}</span>
+                                     </label>
+                                   ))}
+                                 </div>
                                </div>
+
+                               <div>
+                                 <h3 className="font-semibold text-slate-900 dark:text-gray-100 mb-3">Event Types</h3>
+                                 <div className="space-y-3">
+                                   {[
+                                     { value: "shot", label: "Shot Put" },
+                                     { value: "discus", label: "Discus" },
+                                     { value: "javelin", label: "Javelin" }
+                                   ].map(event => (
+                                     <label key={event.value} className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                                       <input
+                                         type="checkbox"
+                                         checked={editEvents.includes(event.value)}
+                                         onChange={() => toggleEvent(event.value)}
+                                         className="w-4 h-4"
+                                       />
+                                       <span className="dark:text-gray-200">{event.label}</span>
+                                     </label>
+                                   ))}
+                                 </div>
+                               </div>
+
                                <div className="flex justify-end gap-3">
                                  <Button
                                    type="button"
@@ -349,7 +387,7 @@ export default function Athletes() {
                                    disabled={roleUpdateMutation.isPending}
                                    className="bg-blue-600 hover:bg-blue-700"
                                  >
-                                   {roleUpdateMutation.isPending ? "Saving..." : "Save Roles"}
+                                   {roleUpdateMutation.isPending ? "Saving..." : "Save Changes"}
                                  </Button>
                                </div>
                              </div>
