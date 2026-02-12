@@ -243,7 +243,7 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
               <Button
                 onClick={handleSavePlan}
                 disabled={planMutation.isPending}
-                className="bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600"
+                className="bg-blue-600 hover:bg-blue-700 text-white"
               >
                 {planMutation.isPending ? "Saving..." : "Save Plan"}
               </Button>
