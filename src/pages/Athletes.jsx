@@ -156,6 +156,7 @@ export default function Athletes() {
                       options={[
                         { value: "user", label: "Athlete" },
                         { value: "admin", label: "Coach" },
+                        { value: "parent", label: "Parent" },
                       ]}
                       triggerClassName="text-sm"
                     />

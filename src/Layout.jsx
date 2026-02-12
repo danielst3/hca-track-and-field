@@ -191,6 +191,14 @@ export default function Layout({ children, currentPageName }) {
         { name: "Posts", icon: FileText, page: "Posts" },
         { name: "Resources", icon: BookOpen, page: "Resources" },
       ]
+    : user?.role === "parent"
+    ? [
+        { name: "Today", icon: Home, page: "Today" },
+        { name: "Calendar", icon: Calendar, page: "Calendar" },
+        { name: "Athletes", icon: Users, page: "MyAthletes" },
+        { name: "Posts", icon: FileText, page: "Posts" },
+        { name: "Resources", icon: BookOpen, page: "Resources" },
+      ]
     : [
         { name: "Today", icon: Home, page: "Today" },
         { name: "Calendar", icon: Calendar, page: "Calendar" },
@@ -226,7 +234,7 @@ export default function Layout({ children, currentPageName }) {
                 {canGoBack ? "" : "HCA Chargers Track & Field"}
               </h1>
               <p className="text-xs text-[var(--brand-secondary-light)] dark:text-gray-400">
-                {user.full_name} • {user.isImpersonating ? "Athlete (Viewing)" : (user.role === "admin" ? "Coach" : "Athlete")}
+                {user.full_name} • {user.isImpersonating ? "Athlete (Viewing)" : (user.role === "admin" ? "Coach" : user.role === "parent" ? "Parent" : "Athlete")}
               </p>
             </div>
           </div>

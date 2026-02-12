@@ -56,6 +56,7 @@ import Resources from './pages/Resources';
 import Settings from './pages/Settings';
 import Today from './pages/Today';
 import Privacy from './pages/Privacy';
+import MyAthletes from './pages/MyAthletes';
 import __Layout from './Layout.jsx';
 
 
@@ -69,6 +70,7 @@ export const PAGES = {
     "Settings": Settings,
     "Today": Today,
     "Privacy": Privacy,
+    "MyAthletes": MyAthletes,
 }
 
 export const pagesConfig = {
