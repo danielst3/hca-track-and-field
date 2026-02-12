@@ -185,11 +185,11 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
 
         <div className="space-y-6 mt-4">
           {/* Practice Plan Section */}
-          <div className="space-y-4 p-4 bg-slate-50 dark:bg-gray-900 rounded-lg">
-            <h3 className="font-semibold text-lg text-slate-900 dark:text-gray-100">Practice Plan</h3>
-            
+          <div className="space-y-4 p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 className="font-semibold text-lg text-gray-900 dark:text-gray-100">Practice Plan</h3>
+
             <div className="space-y-2">
-              <Label className="text-slate-900 dark:text-gray-200">Day Type</Label>
+              <Label className="text-gray-900 dark:text-gray-200">Day Type</Label>
               <MobileSelect
                 value={planData.day_type}
                 onValueChange={(value) =>
@@ -208,7 +208,7 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
             </div>
 
             <div className="space-y-2">
-              <Label className="text-slate-900 dark:text-gray-200">Shot Put Plan</Label>
+              <Label className="text-gray-900 dark:text-gray-200">Shot Put Plan</Label>
               <Textarea
                 value={planData.shot_text}
                 onChange={(e) =>
@@ -221,7 +221,7 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
             </div>
 
             <div className="space-y-2">
-              <Label className="text-slate-900 dark:text-gray-200">Discus Plan</Label>
+              <Label className="text-gray-900 dark:text-gray-200">Discus Plan</Label>
               <Textarea
                 value={planData.discus_text}
                 onChange={(e) =>
@@ -234,7 +234,7 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
             </div>
 
             <div className="space-y-2">
-              <Label className="text-slate-900 dark:text-gray-200">Javelin Plan</Label>
+              <Label className="text-gray-900 dark:text-gray-200">Javelin Plan</Label>
               <Textarea
                 value={planData.javelin_text}
                 onChange={(e) =>
@@ -247,7 +247,7 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
             </div>
 
             <div className="space-y-2">
-              <Label className="text-slate-900 dark:text-gray-200">Coach Notes</Label>
+              <Label className="text-gray-900 dark:text-gray-200">Coach Notes</Label>
               <Textarea
                 value={planData.coach_notes}
                 onChange={(e) =>
@@ -289,11 +289,11 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
           </div>
 
           {/* Meet Section */}
-          <div className="space-y-4 p-4 bg-red-50 dark:bg-gray-900 rounded-lg border border-red-200 dark:border-red-900">
-            <h3 className="font-semibold text-lg text-red-900 dark:text-red-400">Meet Information</h3>
-            
+          <div className="space-y-4 p-4 bg-white dark:bg-gray-900 rounded-lg border border-red-300 dark:border-red-900">
+            <h3 className="font-semibold text-lg text-red-700 dark:text-red-400">Meet Information</h3>
+
             <div className="space-y-2">
-              <Label className="text-slate-900 dark:text-gray-200">Meet Name</Label>
+              <Label className="text-gray-900 dark:text-gray-200">Meet Name</Label>
               <Input
                 value={meetData.name}
                 onChange={(e) =>
@@ -305,7 +305,7 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
             </div>
 
             <div className="space-y-2">
-              <Label className="text-slate-900 dark:text-gray-200">Meet Notes</Label>
+              <Label className="text-gray-900 dark:text-gray-200">Meet Notes</Label>
               <Textarea
                 value={meetData.notes}
                 onChange={(e) =>
