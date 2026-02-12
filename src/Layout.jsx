@@ -451,7 +451,7 @@ export default function Layout({ children, currentPageName }) {
                   <>
                     <DropdownMenuItem 
                       onClick={handleStopImpersonating}
-                      className="dark:text-gray-200 dark:hover:bg-gray-700 select-none bg-blue-50"
+                      className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none bg-blue-50"
                     >
                       <LogOut className="w-4 h-4 mr-2" />
                       Stop Viewing as Athlete
@@ -463,7 +463,7 @@ export default function Layout({ children, currentPageName }) {
                   <>
                     <DropdownMenuItem 
                       onClick={handleToggleParentView}
-                      className="dark:text-gray-200 dark:hover:bg-gray-700 select-none bg-purple-50"
+                      className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none bg-purple-50"
                     >
                       <Users className="w-4 h-4 mr-2" />
                       {user.isViewingAsParent ? "Switch to Coach View" : "Switch to Parent View"}
@@ -472,19 +472,19 @@ export default function Layout({ children, currentPageName }) {
                   </>
                 )}
                 <DropdownMenuItem asChild>
-                  <Link to={createPageUrl("Settings")} className="dark:text-gray-200 dark:hover:bg-gray-700 select-none cursor-pointer">
+                  <Link to={createPageUrl("Settings")} className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none cursor-pointer">
                     <Settings className="w-4 h-4 mr-2" />
                     Settings
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to={createPageUrl("Privacy")} className="dark:text-gray-200 dark:hover:bg-gray-700 select-none cursor-pointer">
+                  <Link to={createPageUrl("Privacy")} className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none cursor-pointer">
                     <FileText className="w-4 h-4 mr-2" />
                     Privacy Policy
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className="dark:bg-gray-700" />
-                <DropdownMenuItem onClick={handleLogout} className="dark:text-gray-200 dark:hover:bg-gray-700 select-none">
+                <DropdownMenuItem onClick={handleLogout} className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none">
                   <LogOut className="w-4 h-4 mr-2" />
                   Logout
                 </DropdownMenuItem>

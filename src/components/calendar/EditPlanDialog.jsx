@@ -178,7 +178,7 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto dark:bg-gray-800 dark:border-gray-700">
         <DialogHeader>
-          <DialogTitle className="dark:text-gray-100">
+          <DialogTitle className="text-gray-900 dark:text-gray-100">
             Edit Plan - {format(date, "EEEE, MMMM d, yyyy")}
           </DialogTitle>
         </DialogHeader>
