@@ -622,16 +622,16 @@ export default function Settings() {
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-slate-700 dark:text-gray-300">Event</Label>
                     <div className="relative">
-                      <select
-                        value={filters.event}
-                        onChange={(e) => setFilters({ ...filters, event: e.target.value })}
-                        className="flex h-9 w-full rounded-md border border-input bg-white dark:bg-gray-700 px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring dark:text-gray-200 dark:border-gray-600"
-                      >
-                        <option value="all">All Events</option>
-                        <option value="shot">Shot Put</option>
-                        <option value="discus">Discus</option>
-                        <option value="javelin">Javelin</option>
-                      </select>
+                        <select
+                          value={filters.event}
+                          onChange={(e) => setFilters({ ...filters, event: e.target.value })}
+                          className="flex h-9 w-full rounded-md border border-input bg-white dark:bg-gray-700 px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring dark:text-gray-200 dark:border-gray-600"
+                        >
+                          <option value="all">All Events</option>
+                          {eventTypes.map(event => (
+                            <option key={event.id} value={event.id}>{event.label}</option>
+                          ))}
+                        </select>
                       {filters.event !== "all" && (
                         <button
                           onClick={() => setFilters({ ...filters, event: "all" })}
