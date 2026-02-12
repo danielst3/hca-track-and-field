@@ -5,14 +5,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Trophy, Calendar } from "lucide-react";
+import { Trophy, Calendar, Edit } from "lucide-react";
 import { format } from "date-fns";
 import DayTypeBadge from "../shared/DayTypeBadge";
 import AbbreviationsKey from "../shared/AbbreviationsKey";
 import PracticePlanText from "../shared/PracticePlanText";
 
-export default function DayDetailDialog({ date, plan, meet, open, onOpenChange }) {
+export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, onEdit, isCoach }) {
   if (!date) return null;
 
   return (
@@ -24,7 +25,19 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange }
               <DialogTitle className="text-2xl">
                 {format(date, "EEEE, MMMM d, yyyy")}
               </DialogTitle>
-              <AbbreviationsKey />
+              <div className="flex items-center gap-2">
+                {isCoach && (
+                  <Button
+                    onClick={onEdit}
+                    size="sm"
+                    className="bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] gap-2"
+                  >
+                    <Edit className="w-4 h-4" />
+                    Edit
+                  </Button>
+                )}
+                <AbbreviationsKey />
+              </div>
             </div>
             {plan && <DayTypeBadge type={plan.day_type} />}
             {meet && (

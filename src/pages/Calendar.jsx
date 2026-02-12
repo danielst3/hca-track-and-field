@@ -84,11 +84,12 @@ export default function Calendar() {
 
   const handleDayClick = (day) => {
     setSelectedDay(day);
-    if (user?.role === "admin") {
-      setEditDialogOpen(true);
-    } else {
-      setDialogOpen(true);
-    }
+    setDialogOpen(true);
+  };
+
+  const handleEdit = () => {
+    setDialogOpen(false);
+    setEditDialogOpen(true);
   };
 
   const selectedPlan = selectedDay ? getPlanForDate(selectedDay) : null;
@@ -198,23 +199,23 @@ export default function Calendar() {
           })}
         </div>
 
-        {user?.role === "admin" ? (
-          <EditPlanDialog
-            date={selectedDay}
-            plan={selectedPlan}
-            meet={selectedMeet}
-            open={editDialogOpen}
-            onOpenChange={setEditDialogOpen}
-          />
-        ) : (
-          <DayDetailDialog
-            date={selectedDay}
-            plan={selectedPlan}
-            meet={selectedMeet}
-            open={dialogOpen}
-            onOpenChange={setDialogOpen}
-          />
-        )}
+        <DayDetailDialog
+          date={selectedDay}
+          plan={selectedPlan}
+          meet={selectedMeet}
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
+          onEdit={handleEdit}
+          isCoach={user?.role === "admin"}
+        />
+
+        <EditPlanDialog
+          date={selectedDay}
+          plan={selectedPlan}
+          meet={selectedMeet}
+          open={editDialogOpen}
+          onOpenChange={setEditDialogOpen}
+        />
       </div>
     </div>
   );
