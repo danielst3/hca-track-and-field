@@ -48,6 +48,7 @@ export default function Calendar() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedEvents, setSelectedEvents] = useState(["shot", "discus", "javelin"]);
+  const [selectedPlanTypes, setSelectedPlanTypes] = useState(["technical", "primary", "indoor", "tuneup", "meet", "recovery"]);
 
   React.useEffect(() => {
     const fetchUser = async () => {
