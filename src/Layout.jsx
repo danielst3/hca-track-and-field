@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "./utils";
 import { Button } from "@/components/ui/button";
-import { Home, Calendar, LogOut, Trophy, TrendingUp, Users, BookOpen, FileText, Trash2, RefreshCw, ArrowLeft, Settings, Moon, Sun, MoreHorizontal } from "lucide-react";
+import { Home, Calendar, Plus, LogOut, Trophy, TrendingUp, Users, BookOpen, FileText, Trash2, RefreshCw, ArrowLeft, Settings, Moon, Sun, MoreHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import UniversalSearch from "./components/shared/UniversalSearch";
 
