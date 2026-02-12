@@ -70,12 +70,12 @@ export default function Athletes() {
   if (!user || user.role !== "admin") return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 pb-24">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800 p-4 pb-24">
       <div className="max-w-5xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Users className="w-8 h-8 text-blue-600" />
-            <h1 className="text-3xl font-bold text-slate-900">Athletes</h1>
+            <Users className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100">Athletes</h1>
           </div>
           <Dialog open={inviteOpen} onOpenChange={setInviteOpen}>
             <DialogTrigger asChild>
@@ -130,7 +130,7 @@ export default function Athletes() {
 
         <div className="grid gap-4">
           {athletes.map((athlete) => (
-            <Card key={athlete.id} className="hover:shadow-lg transition-shadow">
+            <Card key={athlete.id} className="hover:shadow-lg transition-shadow dark:bg-gray-800 dark:border-gray-700">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between gap-4">
                   <Link
@@ -138,12 +138,12 @@ export default function Athletes() {
                     className="flex-1 flex items-center justify-between cursor-pointer"
                   >
                     <div>
-                      <p className="font-semibold text-slate-900">
+                      <p className="font-semibold text-slate-900 dark:text-gray-100">
                         {athlete.full_name}
                       </p>
-                      <p className="text-sm text-slate-600">{athlete.email}</p>
+                      <p className="text-sm text-slate-600 dark:text-gray-400">{athlete.email}</p>
                       {athlete.grade && (
-                        <Badge variant="outline" className="mt-2 text-xs capitalize">
+                        <Badge variant="outline" className="mt-2 text-xs capitalize dark:border-gray-600 dark:text-gray-300">
                           {athlete.grade}
                         </Badge>
                       )}
@@ -152,7 +152,7 @@ export default function Athletes() {
                           {athlete.events.map((evt) => (
                             <Badge
                               key={evt}
-                              className="text-xs capitalize bg-blue-100 text-blue-700"
+                              className="text-xs capitalize bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
                             >
                               {evt}
                             </Badge>
@@ -160,7 +160,7 @@ export default function Athletes() {
                         </div>
                       )}
                     </div>
-                    <ChevronRight className="w-5 h-5 text-slate-500 dark:text-slate-400" />
+                    <ChevronRight className="w-5 h-5 text-slate-500 dark:text-gray-400" />
                   </Link>
                   <div className="min-w-[120px]" onClick={(e) => e.stopPropagation()}>
                     <MobileSelect
@@ -182,11 +182,11 @@ export default function Athletes() {
           ))}
 
           {athletes.length === 0 && (
-            <Card>
+            <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardContent className="py-12 text-center">
-                <Users className="w-12 h-12 text-slate-400 dark:text-slate-300 mx-auto mb-3" />
-                <p className="text-slate-600">No athletes yet</p>
-                <p className="text-sm text-slate-500 mt-1">
+                <Users className="w-12 h-12 text-slate-400 dark:text-gray-500 mx-auto mb-3" />
+                <p className="text-slate-600 dark:text-gray-300">No athletes yet</p>
+                <p className="text-sm text-slate-500 dark:text-gray-400 mt-1">
                   Invite athletes to get started
                 </p>
               </CardContent>
