@@ -97,6 +97,65 @@ export default function Settings() {
     }
   };
 
+  const handleAddEventType = () => {
+    if (!newEventLabel.trim()) return;
+    const newId = newEventLabel.toLowerCase().replace(/\s+/g, "_");
+    if (eventTypes.some(e => e.id === newId)) {
+      toast.error("Event type already exists");
+      return;
+    }
+    setEventTypes([...eventTypes, { id: newId, label: newEventLabel }]);
+    setNewEventLabel("");
+  };
+
+  const handleRemoveEventType = (id) => {
+    if (eventTypes.length === 1) {
+      toast.error("You must have at least one event type");
+      return;
+    }
+    setEventTypes(eventTypes.filter(e => e.id !== id));
+  };
+
+  const handleAddPracticeType = () => {
+    if (!newPracticeLabel.trim()) return;
+    const newId = newPracticeLabel.toLowerCase().replace(/\s+/g, "_");
+    if (practiceTypes.some(p => p.id === newId)) {
+      toast.error("Practice type already exists");
+      return;
+    }
+    setPracticeTypes([...practiceTypes, { id: newId, label: newPracticeLabel }]);
+    setNewPracticeLabel("");
+  };
+
+  const handleRemovePracticeType = (id) => {
+    const defaults = ["technical", "primary", "indoor", "tuneup", "meet", "recovery"];
+    if (defaults.includes(id)) {
+      toast.error("Cannot remove default practice types");
+      return;
+    }
+    if (practiceTypes.length === 1) {
+      toast.error("You must have at least one practice type");
+      return;
+    }
+    setPracticeTypes(practiceTypes.filter(p => p.id !== id));
+  };
+
+  const handleSaveTypes = async () => {
+    try {
+      setIsSavingTypes(true);
+      await base44.auth.updateMe({ 
+        event_types: eventTypes,
+        practice_types: practiceTypes
+      });
+      setUser(prev => ({ ...prev, event_types: eventTypes, practice_types: practiceTypes }));
+      toast.success("Event and practice types updated!");
+    } catch (error) {
+      toast.error("Failed to update types");
+    } finally {
+      setIsSavingTypes(false);
+    }
+  };
+
   const downloadAthleteData = async () => {
     try {
       setDownloading(true);
