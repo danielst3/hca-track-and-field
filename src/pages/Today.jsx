@@ -253,21 +253,20 @@ export default function Today() {
         )}
 
         {/* Event Filter */}
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-3 flex-wrap">
           {eventOptions.map(event => (
-            <Badge
+            <button
               key={event.id}
-              variant={selectedEvents.includes(event.id) ? "default" : "outline"}
-              className={cn(
-                "cursor-pointer transition-all dark:border-gray-600",
-                selectedEvents.includes(event.id)
-                  ? "bg-[var(--brand-primary)] text-white dark:bg-gray-700"
-                  : "bg-white text-slate-700 hover:bg-slate-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-              )}
               onClick={() => toggleEvent(event.id)}
+              className={cn(
+                "px-4 py-2 rounded-lg font-semibold transition-all border-2",
+                selectedEvents.includes(event.id)
+                  ? "bg-[var(--brand-primary)] text-white border-[var(--brand-primary)] dark:bg-gray-700 dark:border-gray-600"
+                  : "bg-slate-100 text-slate-500 border-slate-300 line-through dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400"
+              )}
             >
-              {event.icon} {event.label}
-            </Badge>
+              {event.label}
+            </button>
           ))}
         </div>
 
