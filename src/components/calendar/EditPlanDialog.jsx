@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { MobileSelect } from "@/components/ui/mobile-select";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import CopyPlanDialog from "./CopyPlanDialog";
 
 export default function EditPlanDialog({ date, plan, meet, open, onOpenChange }) {
   const [planData, setPlanData] = useState({
