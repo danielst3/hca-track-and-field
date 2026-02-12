@@ -435,7 +435,7 @@ export default function Layout({ children, currentPageName }) {
               variant="ghost"
               size="sm"
               onClick={toggleTheme}
-              className="text-gray-700 hover:text-gray-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-gray-800 select-none"
+              className="text-gray-700 hover:text-gray-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-gray-700 select-none"
             >
               {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
             </Button>
@@ -444,7 +444,7 @@ export default function Layout({ children, currentPageName }) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-gray-700 hover:text-gray-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-gray-800 select-none"
+                  className="text-gray-700 hover:text-gray-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-gray-700 select-none"
                 >
                   <Settings className="w-4 h-4" />
                 </Button>
