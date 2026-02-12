@@ -26,11 +26,19 @@ export function MobileSelect({
   triggerClassName 
 }) {
   const [open, setOpen] = useState(false);
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 768);
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   if (!isMobile) {
     return (
-      <Select value={value} onValueChange={onValueChange}>
+      <Select value={value || ""} onValueChange={onValueChange}>
         <SelectTrigger className={triggerClassName}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
