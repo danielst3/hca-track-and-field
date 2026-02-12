@@ -326,11 +326,7 @@ export default function Settings() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
-                  {[
-                    { id: "shot", label: "Shot Put", icon: "🏋️" },
-                    { id: "discus", label: "Discus", icon: "🥏" },
-                    { id: "javelin", label: "Javelin", icon: "🎯" }
-                  ].map(event => (
+                  {eventTypes.map(event => (
                     <div key={event.id} className="space-y-2">
                       <label className="flex items-center gap-3 cursor-pointer">
                         <Checkbox
@@ -339,7 +335,7 @@ export default function Settings() {
                           className="dark:border-gray-600"
                         />
                         <span className="text-sm font-medium text-slate-700 dark:text-gray-200">
-                          {event.icon} {event.label}
+                          {event.label}
                         </span>
                       </label>
                       {selectedEvents.includes(event.id) && (
