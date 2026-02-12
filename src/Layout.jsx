@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "./utils";
 import { Button } from "@/components/ui/button";
-import { Home, Calendar, LogOut, Trophy, TrendingUp, Users, BookOpen, FileText, Trash2, RefreshCw, ArrowLeft } from "lucide-react";
+import { Home, Calendar, LogOut, Trophy, TrendingUp, Users, BookOpen, FileText, Trash2, RefreshCw, ArrowLeft, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import UniversalSearch from "./components/shared/UniversalSearch";
 import { AnimatePresence, motion } from "framer-motion";
@@ -41,7 +41,7 @@ export default function Layout({ children, currentPageName }) {
 
   useEffect(() => {
     // Detect if on a sub-page
-    const subPages = ["AthleteDetail"];
+    const subPages = ["AthleteDetail", "Settings"];
     setCanGoBack(subPages.includes(currentPageName));
   }, [currentPageName]);
 
@@ -209,10 +209,17 @@ export default function Layout({ children, currentPageName }) {
                   size="sm"
                   className="text-slate-300 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800 select-none"
                 >
-                  <LogOut className="w-4 h-4" />
+                  <Settings className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="dark:bg-gray-800 dark:border-gray-700">
+                <DropdownMenuItem asChild>
+                  <Link to={createPageUrl("Settings")} className="dark:text-gray-200 dark:hover:bg-gray-700 select-none cursor-pointer">
+                    <Settings className="w-4 h-4 mr-2" />
+                    Settings
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className="dark:bg-gray-700" />
                 <DropdownMenuItem onClick={handleLogout} className="dark:text-gray-200 dark:hover:bg-gray-700 select-none">
                   <LogOut className="w-4 h-4 mr-2" />
                   Logout

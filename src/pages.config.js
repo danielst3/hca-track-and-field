@@ -54,6 +54,7 @@ import Posts from './pages/Posts';
 import Progress from './pages/Progress';
 import Resources from './pages/Resources';
 import Today from './pages/Today';
+import Settings from './pages/Settings';
 import __Layout from './Layout.jsx';
 
 
@@ -65,6 +66,7 @@ export const PAGES = {
     "Progress": Progress,
     "Resources": Resources,
     "Today": Today,
+    "Settings": Settings,
 }
 
 export const pagesConfig = {
