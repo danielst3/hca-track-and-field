@@ -49,6 +49,8 @@ export default function Calendar() {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedEvents, setSelectedEvents] = useState(["shot", "discus", "javelin"]);
 
+  const queryClient = useQueryClient();
+
   React.useEffect(() => {
     const fetchUser = async () => {
       const currentUser = await base44.auth.me();
@@ -56,6 +58,35 @@ export default function Calendar() {
     };
     fetchUser();
   }, []);
+
+  // Auto-switch season on new year
+  useEffect(() => {
+    const autoSwitchSeason = async () => {
+      const today = new Date();
+      const year = today.getFullYear();
+      
+      // Check all seasons to find one that matches current year
+      const allSeasons = await base44.entities.Season.list();
+      const currentYearSeason = allSeasons.find(s => {
+        const startYear = new Date(s.start_date).getFullYear();
+        return startYear === year;
+      });
+
+      if (currentYearSeason) {
+        // Deactivate all seasons
+        await Promise.all(
+          allSeasons
+            .filter(s => s.is_active)
+            .map(s => base44.entities.Season.update(s.id, { is_active: false }))
+        );
+        // Activate the current year season
+        await base44.entities.Season.update(currentYearSeason.id, { is_active: true });
+        queryClient.invalidateQueries({ queryKey: ["activeSeason"] });
+      }
+    };
+
+    autoSwitchSeason();
+  }, [queryClient]);
 
   const { data: activeSeason } = useQuery({
     queryKey: ["activeSeason"],
