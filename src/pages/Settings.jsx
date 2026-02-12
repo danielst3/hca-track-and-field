@@ -16,7 +16,8 @@ import {
   FileText,
   Download,
   X,
-  CheckCircle2
+  CheckCircle2,
+  Download as DownloadApp
 } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -31,7 +32,9 @@ export default function Settings() {
     season: "all"
   });
   const [selectedEvents, setSelectedEvents] = useState([]);
+  const [defaultEvents, setDefaultEvents] = useState([]);
   const [isSavingEvents, setIsSavingEvents] = useState(false);
+  const [installPrompt, setInstallPrompt] = useState(null);
   const [eventTypes, setEventTypes] = useState([
     { id: "shot", label: "Shot Put" },
     { id: "discus", label: "Discus" },
@@ -56,8 +59,18 @@ export default function Settings() {
       if (currentUser?.events) {
         setSelectedEvents(currentUser.events);
       }
+      if (currentUser?.default_events) {
+        setDefaultEvents(currentUser.default_events);
+      }
     };
     fetchUser();
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      setInstallPrompt(e);
+    });
   }, []);
 
   const { data: athletes = [] } = useQuery({
@@ -80,6 +93,14 @@ export default function Settings() {
     );
   };
 
+  const handleToggleDefaultEvent = (event) => {
+    setDefaultEvents(prev => 
+      prev.includes(event)
+        ? prev.filter(e => e !== event)
+        : [...prev, event]
+    );
+  };
+
   const handleSaveEvents = async () => {
     if (selectedEvents.length === 0) {
       toast.error("Please select at least one event");
@@ -87,13 +108,24 @@ export default function Settings() {
     }
     try {
       setIsSavingEvents(true);
-      await base44.auth.updateMe({ events: selectedEvents });
-      setUser(prev => ({ ...prev, events: selectedEvents }));
+      await base44.auth.updateMe({ events: selectedEvents, default_events: defaultEvents });
+      setUser(prev => ({ ...prev, events: selectedEvents, default_events: defaultEvents }));
       toast.success("Events updated successfully!");
     } catch (error) {
       toast.error("Failed to update events");
     } finally {
       setIsSavingEvents(false);
+    }
+  };
+
+  const handleInstallApp = async () => {
+    if (installPrompt) {
+      installPrompt.prompt();
+      const { outcome } = await installPrompt.userChoice;
+      if (outcome === "accepted") {
+        toast.success("App installed!");
+      }
+      setInstallPrompt(null);
     }
   };
 
@@ -281,44 +313,83 @@ export default function Settings() {
 
         {/* Events Selection (Athletes Only) */}
         {!isCoach && (
-          <Card className="dark:bg-gray-800 dark:border-gray-700">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-gray-100">
-                <Trophy className="w-5 h-5" />
-                Your Events
-              </CardTitle>
-              <CardDescription className="text-slate-600 dark:text-gray-300">
-                Select which events you compete in
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-3">
-                {[
-                  { id: "shot", label: "Shot Put", icon: "🏋️" },
-                  { id: "discus", label: "Discus", icon: "🥏" },
-                  { id: "javelin", label: "Javelin", icon: "🎯" }
-                ].map(event => (
-                  <label key={event.id} className="flex items-center gap-3 cursor-pointer">
-                    <Checkbox
-                      checked={selectedEvents.includes(event.id)}
-                      onCheckedChange={() => handleToggleEvent(event.id)}
-                      className="dark:border-gray-600"
-                    />
-                    <span className="text-sm font-medium text-slate-700 dark:text-gray-200">
-                      {event.icon} {event.label}
-                    </span>
-                  </label>
-                ))}
-              </div>
-              <Button
-                onClick={handleSaveEvents}
-                disabled={isSavingEvents || selectedEvents.length === 0}
-                className="w-full bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600"
-              >
-                {isSavingEvents ? "Saving..." : "Save Events"}
-              </Button>
-            </CardContent>
-          </Card>
+          <>
+            <Card className="dark:bg-gray-800 dark:border-gray-700">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-gray-100">
+                  <Trophy className="w-5 h-5" />
+                  Your Events
+                </CardTitle>
+                <CardDescription className="text-slate-600 dark:text-gray-300">
+                  Select which events you compete in
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  {[
+                    { id: "shot", label: "Shot Put", icon: "🏋️" },
+                    { id: "discus", label: "Discus", icon: "🥏" },
+                    { id: "javelin", label: "Javelin", icon: "🎯" }
+                  ].map(event => (
+                    <div key={event.id} className="space-y-2">
+                      <label className="flex items-center gap-3 cursor-pointer">
+                        <Checkbox
+                          checked={selectedEvents.includes(event.id)}
+                          onCheckedChange={() => handleToggleEvent(event.id)}
+                          className="dark:border-gray-600"
+                        />
+                        <span className="text-sm font-medium text-slate-700 dark:text-gray-200">
+                          {event.icon} {event.label}
+                        </span>
+                      </label>
+                      {selectedEvents.includes(event.id) && (
+                        <label className="flex items-center gap-3 ml-8 cursor-pointer">
+                          <Checkbox
+                            checked={defaultEvents.includes(event.id)}
+                            onCheckedChange={() => handleToggleDefaultEvent(event.id)}
+                            className="dark:border-gray-600"
+                          />
+                          <span className="text-xs font-medium text-slate-600 dark:text-gray-300">
+                            Set as default
+                          </span>
+                        </label>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <Button
+                  onClick={handleSaveEvents}
+                  disabled={isSavingEvents || selectedEvents.length === 0}
+                  className="w-full bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600"
+                >
+                  {isSavingEvents ? "Saving..." : "Save Events"}
+                </Button>
+              </CardContent>
+            </Card>
+
+            {installPrompt && (
+              <Card className="dark:bg-gray-800 dark:border-gray-700 border-[var(--brand-primary)]">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-gray-100">
+                    <DownloadApp className="w-5 h-5" />
+                    Install App
+                  </CardTitle>
+                  <CardDescription className="text-slate-600 dark:text-gray-300">
+                    Install HCA Track & Field app on your device
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button
+                    onClick={handleInstallApp}
+                    className="w-full bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600"
+                  >
+                    <DownloadApp className="w-4 h-4 mr-2" />
+                    Install App
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+          </>
         )}
 
         {/* Coach-only Settings */}
