@@ -31,6 +31,15 @@ const eventOptions = [
   { id: "javelin", label: "Javelin", icon: "🎯" }
 ];
 
+const planTypeOptions = [
+  { id: "technical", label: "Technical", color: "bg-blue-100 text-blue-800" },
+  { id: "primary", label: "Primary", color: "bg-green-100 text-green-800" },
+  { id: "indoor", label: "Indoor", color: "bg-orange-100 text-orange-800" },
+  { id: "tuneup", label: "Tune-up", color: "bg-purple-100 text-purple-800" },
+  { id: "meet", label: "Meet", color: "bg-red-100 text-red-800" },
+  { id: "recovery", label: "Recovery", color: "bg-gray-100 text-gray-800" }
+];
+
 export default function Calendar() {
   const [user, setUser] = React.useState(null);
   const [currentDate, setCurrentDate] = useState(new Date());
