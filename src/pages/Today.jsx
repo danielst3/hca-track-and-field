@@ -7,6 +7,7 @@ import AbbreviationsKey from "../components/shared/AbbreviationsKey";
 import LogThrowForm from "../components/tracking/LogThrowForm";
 import QuickLogButton from "../components/tracking/QuickLogButton";
 import PracticePlanText from "../components/shared/PracticePlanText";
+import EventToggle from "../components/shared/EventToggle";
 import { Calendar, Trophy, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
