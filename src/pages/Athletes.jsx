@@ -197,16 +197,16 @@ export default function Athletes() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Role</Label>
-                  <MobileSelect
-                    value={inviteRole}
-                    onValueChange={setInviteRole}
-                    options={[
-                      { value: "user", label: "Athlete" },
-                      { value: "admin", label: "Coach" },
-                      { value: "parent", label: "Parent" },
-                    ]}
-                  />
+                   <Label>Role</Label>
+                   <select
+                     value={inviteRole}
+                     onChange={(e) => setInviteRole(e.target.value)}
+                     className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                   >
+                     <option value="user">Athlete</option>
+                     <option value="admin">Coach</option>
+                     <option value="parent">Parent</option>
+                   </select>
                 </div>
                 <div className="flex justify-end gap-3">
                   <Button
@@ -274,18 +274,15 @@ export default function Athletes() {
                           Graduate
                         </Button>
                         <div className="min-w-[120px]" onClick={(e) => e.stopPropagation()}>
-                          <MobileSelect
-                            value={athlete.role}
-                            onValueChange={(newRole) =>
-                              roleUpdateMutation.mutate({ userId: athlete.id, newRole })
-                            }
-                            options={[
-                              { value: "user", label: "Athlete" },
-                              { value: "admin", label: "Coach" },
-                              { value: "parent", label: "Parent" },
-                            ]}
-                            triggerClassName="text-sm"
-                          />
+                          <select
+                            value={athlete.role || "user"}
+                            onChange={(e) => roleUpdateMutation.mutate({ userId: athlete.id, newRole: e.target.value })}
+                            className="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                          >
+                            <option value="user">Athlete</option>
+                            <option value="admin">Coach</option>
+                            <option value="parent">Parent</option>
+                          </select>
                         </div>
                       </div>
                     </div>
