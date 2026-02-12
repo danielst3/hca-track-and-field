@@ -64,7 +64,13 @@ export default function Layout({ children, currentPageName }) {
     const fetchUser = async () => {
       try {
         const currentUser = await base44.auth.me();
-        setUser(currentUser);
+        const impersonating = localStorage.getItem("impersonating");
+        if (impersonating && currentUser?.role === "admin") {
+          const impersonatedUser = JSON.parse(impersonating);
+          setUser({ ...currentUser, ...impersonatedUser, isImpersonating: true, realRole: currentUser.role });
+        } else {
+          setUser(currentUser);
+        }
       } catch (error) {
         setUser(null);
       } finally {
@@ -74,7 +80,13 @@ export default function Layout({ children, currentPageName }) {
     fetchUser();
   }, []);
 
+  const handleStopImpersonating = () => {
+    localStorage.removeItem("impersonating");
+    window.location.reload();
+  };
+
   const handleLogout = () => {
+    localStorage.removeItem("impersonating");
     base44.auth.logout();
   };
 
@@ -153,7 +165,7 @@ export default function Layout({ children, currentPageName }) {
     );
   }
 
-  const navItems = user?.role === "admin"
+  const navItems = (user?.realRole === "admin" || user?.role === "admin") && !user?.isImpersonating
     ? [
         { name: "Today", icon: Home, page: "Today" },
         { name: "Calendar", icon: Calendar, page: "Calendar" },
@@ -196,7 +208,7 @@ export default function Layout({ children, currentPageName }) {
                 {canGoBack ? "" : "HCA Chargers Track & Field"}
               </h1>
               <p className="text-xs text-[var(--brand-secondary-light)] dark:text-gray-400">
-                {user.full_name} • {user.role === "admin" ? "Coach" : "Athlete"}
+                {user.full_name} • {user.isImpersonating ? "Athlete (Viewing)" : (user.role === "admin" ? "Coach" : "Athlete")}
               </p>
             </div>
           </div>
@@ -213,10 +225,28 @@ export default function Layout({ children, currentPageName }) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="dark:bg-gray-800 dark:border-gray-700">
+                {user.isImpersonating && (
+                  <>
+                    <DropdownMenuItem 
+                      onClick={handleStopImpersonating}
+                      className="dark:text-gray-200 dark:hover:bg-gray-700 select-none bg-blue-50"
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Stop Viewing as Athlete
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator className="dark:bg-gray-700" />
+                  </>
+                )}
                 <DropdownMenuItem asChild>
                   <Link to={createPageUrl("Settings")} className="dark:text-gray-200 dark:hover:bg-gray-700 select-none cursor-pointer">
                     <Settings className="w-4 h-4 mr-2" />
                     Settings
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to={createPageUrl("Privacy")} className="dark:text-gray-200 dark:hover:bg-gray-700 select-none cursor-pointer">
+                    <FileText className="w-4 h-4 mr-2" />
+                    Privacy Policy
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className="dark:bg-gray-700" />

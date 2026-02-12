@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft } from "lucide-react";
+import { UserCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import EventProgressCard from "../components/tracking/EventProgressCard";
 import MeetResultsList from "../components/tracking/MeetResultsList";
 import WeeklyVolumeCard from "../components/tracking/WeeklyVolumeCard";
+import { toast } from "sonner";
 
 export default function AthleteDetail() {
   const [user, setUser] = useState(null);
@@ -46,6 +47,16 @@ export default function AthleteDetail() {
 
   const getLogsForEvent = (event) => logs.filter((l) => l.event === event);
 
+  const handleImpersonate = () => {
+    localStorage.setItem("impersonating", JSON.stringify({
+      id: athlete.id,
+      email: athlete.email,
+      full_name: athlete.full_name
+    }));
+    toast.success(`Now viewing as ${athlete.full_name}`);
+    window.location.href = createPageUrl("Today");
+  };
+
   if (!user || user.role !== "admin" || !athlete) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -57,11 +68,20 @@ export default function AthleteDetail() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[var(--brand-secondary)] to-[var(--brand-secondary-light)] dark:from-gray-900 dark:to-gray-800 p-4 pb-24">
       <div className="max-w-7xl mx-auto space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100">
-            {athlete.full_name}
-          </h1>
-          <p className="text-slate-600 dark:text-gray-400">{athlete.email}</p>
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100">
+              {athlete.full_name}
+            </h1>
+            <p className="text-slate-600 dark:text-gray-400">{athlete.email}</p>
+          </div>
+          <Button
+            onClick={handleImpersonate}
+            className="bg-blue-600 hover:bg-blue-700 text-white gap-2"
+          >
+            <UserCircle className="w-4 h-4" />
+            View as Athlete
+          </Button>
         </div>
 
         <Tabs value={activeEvent} onValueChange={setActiveEvent}>
