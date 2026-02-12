@@ -196,19 +196,18 @@ export default function Calendar() {
         {/* Event Filter */}
         <div className="flex items-center gap-2 flex-wrap mb-6">
           {eventOptions.map(event => (
-            <Badge
+            <button
               key={event.id}
-              variant={selectedEvents.includes(event.id) ? "default" : "outline"}
-              className={cn(
-                "cursor-pointer transition-all dark:border-gray-600",
-                selectedEvents.includes(event.id)
-                  ? "bg-[var(--brand-primary)] text-white dark:bg-gray-700"
-                  : "bg-white text-slate-700 hover:bg-slate-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-              )}
               onClick={() => toggleEvent(event.id)}
+              className={cn(
+                "px-3 py-1 rounded-md font-medium transition-all",
+                selectedEvents.includes(event.id)
+                  ? "bg-[var(--brand-primary)] text-white dark:bg-gray-700 font-bold"
+                  : "bg-white text-slate-700 dark:bg-gray-800 dark:text-gray-300 line-through"
+              )}
             >
               {event.label}
-            </Badge>
+            </button>
           ))}
         </div>
 
