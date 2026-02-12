@@ -4,11 +4,21 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DayTypeBadge from "../components/shared/DayTypeBadge";
 import AbbreviationsKey from "../components/shared/AbbreviationsKey";
+import LogThrowForm from "../components/tracking/LogThrowForm";
 import { Calendar, Trophy } from "lucide-react";
 import { format } from "date-fns";
 
 export default function Today() {
+  const [user, setUser] = useState(null);
   const today = format(new Date(), "yyyy-MM-dd");
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const currentUser = await base44.auth.me();
+      setUser(currentUser);
+    };
+    fetchUser();
+  }, []);
 
   const { data: dailyPlan, isLoading: planLoading } = useQuery({
     queryKey: ["dailyPlan", today],
@@ -94,9 +104,14 @@ export default function Today() {
             {/* Shot Put */}
             <Card className="border-amber-200 bg-white shadow-lg">
               <CardHeader className="bg-gradient-to-br from-amber-50 to-yellow-50 border-b border-amber-200">
-                <CardTitle className="text-amber-900 flex items-center gap-2">
-                  🏋️ Shot Put
-                </CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-amber-900 flex items-center gap-2">
+                    🏋️ Shot Put
+                  </CardTitle>
+                  {user && user.role !== "admin" && (
+                    <LogThrowForm event="shot" eventLabel="Shot" user={user} />
+                  )}
+                </div>
               </CardHeader>
               <CardContent className="pt-4">
                 <div className="prose prose-sm max-w-none">
@@ -114,9 +129,14 @@ export default function Today() {
             {/* Discus */}
             <Card className="border-cyan-200 bg-white shadow-lg">
               <CardHeader className="bg-gradient-to-br from-cyan-50 to-blue-50 border-b border-cyan-200">
-                <CardTitle className="text-cyan-900 flex items-center gap-2">
-                  🥏 Discus
-                </CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-cyan-900 flex items-center gap-2">
+                    🥏 Discus
+                  </CardTitle>
+                  {user && user.role !== "admin" && (
+                    <LogThrowForm event="discus" eventLabel="Discus" user={user} />
+                  )}
+                </div>
               </CardHeader>
               <CardContent className="pt-4">
                 <div className="prose prose-sm max-w-none">
@@ -134,9 +154,14 @@ export default function Today() {
             {/* Javelin */}
             <Card className="border-rose-200 bg-white shadow-lg">
               <CardHeader className="bg-gradient-to-br from-rose-50 to-pink-50 border-b border-rose-200">
-                <CardTitle className="text-rose-900 flex items-center gap-2">
-                  🎯 Javelin
-                </CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-rose-900 flex items-center gap-2">
+                    🎯 Javelin
+                  </CardTitle>
+                  {user && user.role !== "admin" && (
+                    <LogThrowForm event="javelin" eventLabel="Javelin" user={user} />
+                  )}
+                </div>
               </CardHeader>
               <CardContent className="pt-4">
                 <div className="prose prose-sm max-w-none">

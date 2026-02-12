@@ -49,12 +49,18 @@
  */
 import Today from './pages/Today';
 import Calendar from './pages/Calendar';
+import Progress from './pages/Progress';
+import Athletes from './pages/Athletes';
+import AthleteDetail from './pages/AthleteDetail';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "Today": Today,
     "Calendar": Calendar,
+    "Progress": Progress,
+    "Athletes": Athletes,
+    "AthleteDetail": AthleteDetail,
 }
 
 export const pagesConfig = {

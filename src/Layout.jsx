@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "./utils";
 import { Button } from "@/components/ui/button";
-import { Home, Calendar, LogOut, Trophy } from "lucide-react";
+import { Home, Calendar, LogOut, Trophy, TrendingUp, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function Layout({ children, currentPageName }) {
@@ -60,10 +60,17 @@ export default function Layout({ children, currentPageName }) {
     );
   }
 
-  const navItems = [
-    { name: "Today", icon: Home, page: "Today" },
-    { name: "Calendar", icon: Calendar, page: "Calendar" },
-  ];
+  const navItems = user?.role === "admin"
+    ? [
+        { name: "Today", icon: Home, page: "Today" },
+        { name: "Calendar", icon: Calendar, page: "Calendar" },
+        { name: "Athletes", icon: Users, page: "Athletes" },
+      ]
+    : [
+        { name: "Today", icon: Home, page: "Today" },
+        { name: "Calendar", icon: Calendar, page: "Calendar" },
+        { name: "Progress", icon: TrendingUp, page: "Progress" },
+      ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
