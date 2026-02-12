@@ -23,7 +23,7 @@ export default function AthleteDetail() {
     const fetchUser = async () => {
       const currentUser = await base44.auth.me();
       setUser(currentUser);
-      if (currentUser.role !== "admin") {
+      if (currentUser.role !== "admin" && currentUser.role !== "parent") {
         window.location.href = createPageUrl("Today");
       }
     };
@@ -34,9 +34,15 @@ export default function AthleteDetail() {
     queryKey: ["athlete", athleteId],
     queryFn: async () => {
       const users = await base44.entities.User.filter({ id: athleteId });
-      return users[0];
+      const fetchedAthlete = users[0];
+      // Check if parent has access to this athlete
+      if (user?.role === "parent" && fetchedAthlete?.parent_email !== user.email) {
+        window.location.href = createPageUrl("MyAthletes");
+        return null;
+      }
+      return fetchedAthlete;
     },
-    enabled: !!athleteId,
+    enabled: !!athleteId && !!user,
   });
 
   const { data: logs = [] } = useQuery({
@@ -57,7 +63,7 @@ export default function AthleteDetail() {
     window.location.href = createPageUrl("Today");
   };
 
-  if (!user || user.role !== "admin" || !athlete) {
+  if (!user || (user.role !== "admin" && user.role !== "parent") || !athlete) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
@@ -75,13 +81,15 @@ export default function AthleteDetail() {
             </h1>
             <p className="text-slate-600 dark:text-gray-400">{athlete.email}</p>
           </div>
-          <Button
-            onClick={handleImpersonate}
-            className="bg-blue-600 hover:bg-blue-700 text-white gap-2"
-          >
-            <UserCircle className="w-4 h-4" />
-            View as Athlete
-          </Button>
+          {user.role === "admin" && (
+            <Button
+              onClick={handleImpersonate}
+              className="bg-blue-600 hover:bg-blue-700 text-white gap-2"
+            >
+              <UserCircle className="w-4 h-4" />
+              View as Athlete
+            </Button>
+          )}
         </div>
 
         <Tabs value={activeEvent} onValueChange={setActiveEvent}>

@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Users, ChevronRight, UserPlus } from "lucide-react";
 import { MobileSelect } from "@/components/ui/mobile-select";
+import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
@@ -22,6 +23,7 @@ import { toast } from "sonner";
 export default function Athletes() {
   const [user, setUser] = useState(null);
   const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteRole, setInviteRole] = useState("user");
   const [inviteOpen, setInviteOpen] = useState(false);
   const queryClient = useQueryClient();
 
@@ -55,12 +57,14 @@ export default function Athletes() {
   const handleInvite = async (e) => {
     e.preventDefault();
     try {
-      await base44.users.inviteUser(inviteEmail, "user");
-      toast.success("Athlete invited successfully!");
+      await base44.users.inviteUser(inviteEmail, inviteRole);
+      const roleLabel = inviteRole === "user" ? "Athlete" : inviteRole === "admin" ? "Coach" : "Parent";
+      toast.success(`${roleLabel} invited successfully!`);
       setInviteEmail("");
+      setInviteRole("user");
       setInviteOpen(false);
     } catch (error) {
-      toast.error("Failed to invite athlete");
+      toast.error("Failed to invite user");
     }
   };
 
@@ -78,12 +82,12 @@ export default function Athletes() {
             <DialogTrigger asChild>
               <Button className="bg-blue-600 hover:bg-blue-700 gap-2">
                 <UserPlus className="w-4 h-4" />
-                Invite Athlete
+                Invite User
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Invite New Athlete</DialogTitle>
+                <DialogTitle>Invite New User</DialogTitle>
               </DialogHeader>
               <form onSubmit={handleInvite} className="space-y-4 mt-4">
                 <div className="space-y-2">
@@ -92,8 +96,20 @@ export default function Athletes() {
                     type="email"
                     value={inviteEmail}
                     onChange={(e) => setInviteEmail(e.target.value)}
-                    placeholder="athlete@example.com"
+                    placeholder="user@example.com"
                     required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Role</Label>
+                  <MobileSelect
+                    value={inviteRole}
+                    onValueChange={setInviteRole}
+                    options={[
+                      { value: "user", label: "Athlete" },
+                      { value: "admin", label: "Coach" },
+                      { value: "parent", label: "Parent" },
+                    ]}
                   />
                 </div>
                 <div className="flex justify-end gap-3">
