@@ -294,27 +294,68 @@ export default function Athletes() {
                         <ChevronRight className="w-5 h-5 text-slate-500 dark:text-gray-400" />
                       </Link>
                       <div className="flex gap-2 items-center">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => graduateMutation.mutate({ userId: athlete.id })}
-                          className="gap-1 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
-                        >
-                          <GraduationCap className="w-4 h-4" />
-                          Graduate
-                        </Button>
-                        <div className="min-w-[120px]" onClick={(e) => e.stopPropagation()}>
-                          <select
-                            value={athlete.user_role_preference || "user"}
-                            onChange={(e) => roleUpdateMutation.mutate({ userId: athlete.id, newRole: e.target.value })}
-                            className="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
-                          >
-                            <option value="user">Athlete</option>
-                            <option value="admin">Coach</option>
-                            <option value="parent">Parent</option>
-                          </select>
-                        </div>
-                      </div>
+                         <Button
+                           size="sm"
+                           variant="outline"
+                           onClick={() => graduateMutation.mutate({ userId: athlete.id })}
+                           className="gap-1 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                         >
+                           <GraduationCap className="w-4 h-4" />
+                           Graduate
+                         </Button>
+                         <Dialog open={editingAthlete?.id === athlete.id} onOpenChange={(open) => !open && setEditingAthlete(null)}>
+                           <DialogTrigger asChild>
+                             <Button
+                               size="sm"
+                               variant="outline"
+                               onClick={() => openEditDialog(athlete)}
+                               className="dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                             >
+                               Edit Roles
+                             </Button>
+                           </DialogTrigger>
+                           <DialogContent>
+                             <DialogHeader>
+                               <DialogTitle>Edit Roles for {athlete.full_name}</DialogTitle>
+                             </DialogHeader>
+                             <div className="space-y-4 mt-4">
+                               <div className="space-y-3">
+                                 {[
+                                   { value: "user", label: "Athlete" },
+                                   { value: "admin", label: "Coach" },
+                                   { value: "parent", label: "Parent" }
+                                 ].map(role => (
+                                   <label key={role.value} className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                                     <input
+                                       type="checkbox"
+                                       checked={editRoles.includes(role.value)}
+                                       onChange={() => toggleRole(role.value)}
+                                       className="w-4 h-4"
+                                     />
+                                     <span className="dark:text-gray-200">{role.label}</span>
+                                   </label>
+                                 ))}
+                               </div>
+                               <div className="flex justify-end gap-3">
+                                 <Button
+                                   type="button"
+                                   variant="outline"
+                                   onClick={() => setEditingAthlete(null)}
+                                 >
+                                   Cancel
+                                 </Button>
+                                 <Button 
+                                   onClick={handleSaveRoles}
+                                   disabled={roleUpdateMutation.isPending}
+                                   className="bg-blue-600 hover:bg-blue-700"
+                                 >
+                                   {roleUpdateMutation.isPending ? "Saving..." : "Save Roles"}
+                                 </Button>
+                               </div>
+                             </div>
+                           </DialogContent>
+                         </Dialog>
+                       </div>
                     </div>
                   </CardContent>
                 </Card>
