@@ -101,11 +101,11 @@ export default function Athletes() {
     }
     
     try {
-      // For inviteUser API, use "user" for both athletes and parents
-      const apiRole = inviteRole === "admin" ? "admin" : "user";
-      
-      // Send the invitation
-      await base44.users.inviteUser(inviteEmail, apiRole);
+       // For inviteUser API, map roles: parent -> user, others stay same
+       const apiRole = inviteRole === "admin" ? "admin" : "user";
+
+       // Send the invitation
+       await base44.users.inviteUser(inviteEmail, apiRole);
       
       // Track the pending invitation with the actual role
       await base44.entities.PendingInvitation.create({
@@ -135,7 +135,8 @@ export default function Athletes() {
       }
 
       const apiRole = request.role === "admin" ? "admin" : "user";
-      await base44.users.inviteUser(request.email, apiRole);
+       // Parents are treated as "user" role in the API
+       await base44.users.inviteUser(request.email, apiRole);
       
       await base44.entities.PendingInvitation.create({
         email: request.email,
