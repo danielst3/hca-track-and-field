@@ -31,6 +31,7 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
   });
 
   const [activeSeason, setActiveSeason] = useState(null);
+  const [copyDialogOpen, setCopyDialogOpen] = useState(false);
 
   const queryClient = useQueryClient();
 
