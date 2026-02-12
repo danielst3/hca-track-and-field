@@ -31,13 +31,13 @@ export default function WeeklyVolumeCard({ logs, event }) {
   const currentVolume = getWeekVolume(currentWeek);
 
   return (
-    <Card className="shadow-lg">
-      <CardHeader className="border-b pb-3">
-        <CardTitle className="text-lg flex items-center gap-2">
-          <BarChart3 className="w-5 h-5 text-purple-600" />
+    <Card className="shadow-lg dark:bg-gray-800 dark:border-gray-700">
+      <CardHeader className="border-b dark:border-gray-700 pb-3">
+        <CardTitle className="text-lg dark:text-gray-100 flex items-center gap-2">
+          <BarChart3 className="w-5 h-5 text-purple-600 dark:text-purple-400" />
           Weekly Throw Volume
           {event === "javelin" && (
-            <span className="text-xs text-red-600 font-normal ml-auto">
+            <span className="text-xs text-red-600 dark:text-red-400 font-normal ml-auto">
               (Arm Management)
             </span>
           )}
@@ -54,7 +54,7 @@ export default function WeeklyVolumeCard({ logs, event }) {
         </div>
 
         <div className="space-y-2">
-          <p className="text-xs font-semibold text-slate-600 uppercase tracking-wide">
+          <p className="text-xs font-semibold text-slate-600 dark:text-gray-400 uppercase tracking-wide">
             Last 4 Weeks
           </p>
           {weeks.map((weekStart) => {
@@ -62,12 +62,12 @@ export default function WeeklyVolumeCard({ logs, event }) {
             return (
               <div
                 key={weekStart.toISOString()}
-                className="flex items-center justify-between py-2 border-b border-slate-100"
+                className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-gray-700"
               >
-                <span className="text-sm text-slate-600">
+                <span className="text-sm text-slate-600 dark:text-gray-400">
                   {format(weekStart, "MMM d")}
                 </span>
-                <span className="text-sm font-semibold text-slate-900">
+                <span className="text-sm font-semibold text-slate-900 dark:text-gray-100">
                   {volume} throws
                 </span>
               </div>

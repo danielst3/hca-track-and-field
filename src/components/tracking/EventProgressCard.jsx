@@ -36,14 +36,14 @@ export default function EventProgressCard({ event, logs }) {
   }, 0);
 
   return (
-    <Card className="shadow-lg">
-      <CardHeader className="pb-3 border-b">
+    <Card className="shadow-lg dark:bg-gray-800 dark:border-gray-700">
+      <CardHeader className="pb-3 border-b dark:border-gray-700">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-2xl">{config.icon}</span>
-            <CardTitle className="text-lg">{config.label}</CardTitle>
+            <CardTitle className="text-lg dark:text-gray-100">{config.label}</CardTitle>
           </div>
-          <Badge variant="outline" className="text-xs">
+          <Badge variant="outline" className="text-xs dark:border-gray-600 dark:text-gray-300">
             {logs.length} sessions
           </Badge>
         </div>
@@ -104,7 +104,7 @@ export default function EventProgressCard({ event, logs }) {
             )}
           </div>
         ) : (
-          <p className="text-center text-slate-500 py-6 text-sm">
+          <p className="text-center text-slate-500 dark:text-gray-400 py-6 text-sm">
             No throws logged yet
           </p>
         )}

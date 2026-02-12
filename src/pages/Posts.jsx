@@ -83,23 +83,23 @@ export default function Posts() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800 p-4 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
-          <p className="text-slate-600">Loading posts...</p>
+          <p className="text-slate-600 dark:text-gray-300">Loading posts...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800 p-4 pb-20">
       <div className="max-w-4xl mx-auto space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">Posts</h1>
-            <p className="text-slate-600 mt-1">Shared materials and references</p>
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100">Posts</h1>
+            <p className="text-slate-600 dark:text-gray-300 mt-1">Shared materials and references</p>
           </div>
           {user?.role === "admin" && (
             <Dialog open={open} onOpenChange={setOpen}>
@@ -115,7 +115,7 @@ export default function Posts() {
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <label className="text-sm font-semibold text-slate-700 mb-1 block">
+                    <label className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-1 block">
                       Title *
                     </label>
                     <Input
@@ -126,7 +126,7 @@ export default function Posts() {
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-semibold text-slate-700 mb-1 block">
+                    <label className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-1 block">
                       Description
                     </label>
                     <Textarea
@@ -137,7 +137,7 @@ export default function Posts() {
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-semibold text-slate-700 mb-1 block">
+                    <label className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-1 block">
                       Upload File (Photo, PDF, etc.)
                     </label>
                     <div className="flex items-center gap-3">
@@ -163,7 +163,7 @@ export default function Posts() {
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-semibold text-slate-700 mb-1 block">
+                    <label className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-1 block">
                       Link or YouTube URL
                     </label>
                     <Input
@@ -189,21 +189,21 @@ export default function Posts() {
 
         {/* Posts List */}
         {resources.length === 0 ? (
-          <Card>
+          <Card className="dark:bg-gray-800 dark:border-gray-700">
             <CardContent className="pt-12 pb-12 text-center">
-              <FileText className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-              <p className="text-slate-600">No posts yet</p>
+              <FileText className="w-12 h-12 text-slate-300 dark:text-gray-600 mx-auto mb-3" />
+              <p className="text-slate-600 dark:text-gray-300">No posts yet</p>
             </CardContent>
           </Card>
         ) : (
           <div className="space-y-4">
             {resources.map((resource) => (
-              <Card key={resource.id} className="overflow-hidden">
-                <CardHeader className="bg-slate-50 border-b border-slate-200">
+              <Card key={resource.id} className="overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+                <CardHeader className="bg-slate-50 dark:bg-gray-900 border-b border-slate-200 dark:border-gray-700">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h3 className="text-lg font-bold text-slate-900">{resource.title}</h3>
-                      <p className="text-sm text-slate-500 mt-1">
+                      <h3 className="text-lg font-bold text-slate-900 dark:text-gray-100">{resource.title}</h3>
+                      <p className="text-sm text-slate-500 dark:text-gray-400 mt-1">
                         Posted by {resource.created_by} • {format(new Date(resource.created_date), "MMM d, yyyy")}
                       </p>
                     </div>
@@ -211,7 +211,7 @@ export default function Posts() {
                 </CardHeader>
                 <CardContent className="pt-4">
                   {resource.content && (
-                    <p className="text-slate-700 mb-4 whitespace-pre-wrap">{resource.content}</p>
+                    <p className="text-slate-700 dark:text-gray-300 mb-4 whitespace-pre-wrap">{resource.content}</p>
                   )}
 
                   {/* File Attachments */}

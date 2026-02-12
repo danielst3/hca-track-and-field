@@ -203,33 +203,33 @@ export default function Resources() {
   };
 
   const renderDrillCard = (drill, index) => (
-    <div key={index} className="border border-slate-200 rounded-lg overflow-hidden">
+    <div key={index} className="border border-slate-200 dark:border-gray-700 rounded-lg overflow-hidden">
       <button
         onClick={() => setExpandedDrill(expandedDrill === index ? null : index)}
-        className="w-full p-4 bg-slate-50 hover:bg-slate-100 transition-colors text-left"
+        className="w-full p-4 bg-slate-50 dark:bg-gray-900 hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors text-left"
       >
-        <h3 className="text-lg font-bold text-slate-900">{drill.name}</h3>
+        <h3 className="text-lg font-bold text-slate-900 dark:text-gray-100">{drill.name}</h3>
         {drill.purpose && (
-          <p className="text-sm text-slate-600 mt-1">{drill.purpose}</p>
+          <p className="text-sm text-slate-600 dark:text-gray-300 mt-1">{drill.purpose}</p>
         )}
       </button>
       
       {expandedDrill === index && (
-        <div className="p-4 space-y-4 bg-white">
+        <div className="p-4 space-y-4 bg-white dark:bg-gray-800">
           {drill.setup && (
             <div>
-              <p className="text-sm font-semibold text-slate-700 mb-1">Setup:</p>
-              <p className="text-sm text-slate-600">{drill.setup}</p>
+              <p className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-1">Setup:</p>
+              <p className="text-sm text-slate-600 dark:text-gray-400">{drill.setup}</p>
             </div>
           )}
           
           {drill.executionSteps && drill.executionSteps.length > 0 && (
             <div>
-              <p className="text-sm font-semibold text-slate-700 mb-2">Execution:</p>
+              <p className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">Execution:</p>
               <ol className="space-y-2">
                 {drill.executionSteps.map((step, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-sm text-slate-600">
-                    <span className="font-semibold text-blue-600 min-w-[20px]">{idx + 1}.</span>
+                  <li key={idx} className="flex items-start gap-2 text-sm text-slate-600 dark:text-gray-400">
+                    <span className="font-semibold text-blue-600 dark:text-blue-400 min-w-[20px]">{idx + 1}.</span>
                     <span>{step}</span>
                   </li>
                 ))}
@@ -239,12 +239,12 @@ export default function Resources() {
           
           {drill.cues && drill.cues.length > 0 && (
             <div>
-              <p className="text-sm font-semibold text-slate-700 mb-2">Coaching Cues:</p>
+              <p className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">Coaching Cues:</p>
               <div className="flex flex-wrap gap-2">
                 {drill.cues.map((cue, idx) => (
                   <span
                     key={idx}
-                    className="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full font-medium"
+                    className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-sm rounded-full font-medium"
                   >
                     "{cue}"
                   </span>
@@ -255,11 +255,11 @@ export default function Resources() {
           
           {drill.commonFaultsFixes && drill.commonFaultsFixes.length > 0 && (
             <div>
-              <p className="text-sm font-semibold text-slate-700 mb-2">Common Faults & Fixes:</p>
+              <p className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">Common Faults & Fixes:</p>
               <div className="space-y-2">
                 {drill.commonFaultsFixes.map((item, idx) => (
-                  <div key={idx} className="p-2 bg-red-50 rounded border border-red-200 text-sm">
-                    <span className="text-slate-700">{item}</span>
+                  <div key={idx} className="p-2 bg-red-50 dark:bg-red-900/30 rounded border border-red-200 dark:border-red-800 text-sm">
+                    <span className="text-slate-700 dark:text-gray-300">{item}</span>
                   </div>
                 ))}
               </div>
@@ -271,17 +271,17 @@ export default function Resources() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800 pb-20">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-gradient-to-r from-slate-900 to-slate-800 p-6 mb-6">
+        <div className="bg-gradient-to-r from-slate-900 to-slate-800 dark:from-gray-950 dark:to-gray-900 p-6 mb-6">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-3">
-                <Scroll className="w-8 h-8 text-blue-400" />
-                <h1 className="text-3xl font-bold text-white">Resources</h1>
+                <Scroll className="w-8 h-8 text-blue-400 dark:text-blue-300" />
+                <h1 className="text-3xl font-bold text-white dark:text-gray-100">Resources</h1>
               </div>
-              <p className="text-slate-300 mt-2">Training reference guide and drill library</p>
+              <p className="text-slate-300 dark:text-gray-400 mt-2">Training reference guide and drill library</p>
             </div>
             {isCoach && (
               <Button
@@ -298,9 +298,9 @@ export default function Resources() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 px-4">
           {/* Navigation Sidebar */}
           <div className="lg:col-span-1">
-            <Card className="sticky top-20">
+            <Card className="sticky top-20 dark:bg-gray-800 dark:border-gray-700">
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm text-slate-600 uppercase tracking-wide">
+                <CardTitle className="text-sm text-slate-600 dark:text-gray-400 uppercase tracking-wide">
                   Contents
                 </CardTitle>
               </CardHeader>
@@ -314,8 +314,8 @@ export default function Resources() {
                       className={cn(
                         "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all",
                         activeSection === section.id
-                          ? "bg-blue-600 text-white shadow-md"
-                          : "text-slate-700 hover:bg-slate-100"
+                          ? "bg-blue-600 text-white shadow-md dark:bg-blue-700"
+                          : "text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-700"
                       )}
                     >
                       <Icon className="w-4 h-4 flex-shrink-0" />
@@ -329,9 +329,9 @@ export default function Resources() {
 
           {/* Content Area */}
           <div className="lg:col-span-3">
-            <Card>
-              <CardHeader className="border-b">
-                <CardTitle className="text-2xl">
+            <Card className="dark:bg-gray-800 dark:border-gray-700">
+              <CardHeader className="border-b dark:border-gray-700">
+                <CardTitle className="text-2xl dark:text-gray-100">
                   {sections.find(s => s.id === activeSection)?.title}
                 </CardTitle>
               </CardHeader>
@@ -341,10 +341,10 @@ export default function Resources() {
                   <div className="space-y-4">
                     {customResources.length === 0 ? (
                       <div className="text-center py-12">
-                        <FileText className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                        <p className="text-slate-600">No custom resources yet</p>
+                        <FileText className="w-12 h-12 text-slate-300 dark:text-gray-600 mx-auto mb-3" />
+                        <p className="text-slate-600 dark:text-gray-300">No custom resources yet</p>
                         {isCoach && (
-                          <p className="text-sm text-slate-500 mt-1">
+                          <p className="text-sm text-slate-500 dark:text-gray-400 mt-1">
                             Click "Add Resource" to create your first one
                           </p>
                         )}
@@ -413,17 +413,17 @@ export default function Resources() {
                     {abbreviations.map((item) => (
                       <div
                         key={item.term}
-                        className="p-4 bg-slate-50 rounded-lg border border-slate-200"
+                        className="p-4 bg-slate-50 dark:bg-gray-900 rounded-lg border border-slate-200 dark:border-gray-700"
                       >
                         <div className="flex items-baseline gap-3 mb-1">
-                          <span className="font-mono text-lg font-bold text-blue-600">
+                          <span className="font-mono text-lg font-bold text-blue-600 dark:text-blue-400">
                             {item.term}
                           </span>
-                          <span className="text-slate-700 font-semibold">
+                          <span className="text-slate-700 dark:text-gray-300 font-semibold">
                             {item.definition}
                           </span>
                         </div>
-                        <p className="text-sm text-slate-600 ml-1">{item.description}</p>
+                        <p className="text-sm text-slate-600 dark:text-gray-400 ml-1">{item.description}</p>
                       </div>
                     ))}
                   </div>
@@ -471,7 +471,7 @@ export default function Resources() {
                   <div className="space-y-6">
                     {implementSpecs.map((item) => (
                       <div key={item.event} className="space-y-3">
-                        <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <h3 className="text-xl font-bold text-slate-900 dark:text-gray-100 flex items-center gap-2">
                           {item.event === "Shot Put" && "🏋️"}
                           {item.event === "Discus" && "🥏"}
                           {item.event === "Javelin" && "🎯"}
@@ -481,10 +481,10 @@ export default function Resources() {
                           {item.specs.map((spec, idx) => (
                             <li
                               key={idx}
-                              className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg"
+                              className="flex items-start gap-3 p-3 bg-slate-50 dark:bg-gray-900 rounded-lg"
                             >
-                              <span className="text-blue-600 font-bold">•</span>
-                              <span className="text-slate-700">{spec}</span>
+                              <span className="text-blue-600 dark:text-blue-400 font-bold">•</span>
+                              <span className="text-slate-700 dark:text-gray-300">{spec}</span>
                             </li>
                           ))}
                         </ul>
@@ -499,12 +499,12 @@ export default function Resources() {
                     {principles.map((item) => (
                       <div
                         key={item.principle}
-                        className="p-4 bg-slate-50 rounded-lg border border-slate-200"
+                        className="p-4 bg-slate-50 dark:bg-gray-900 rounded-lg border border-slate-200 dark:border-gray-700"
                       >
-                        <h3 className="text-lg font-bold text-slate-900 mb-2">
+                        <h3 className="text-lg font-bold text-slate-900 dark:text-gray-100 mb-2">
                           {item.principle}
                         </h3>
-                        <p className="text-slate-700">{item.description}</p>
+                        <p className="text-slate-700 dark:text-gray-300">{item.description}</p>
                       </div>
                     ))}
                   </div>
@@ -515,7 +515,7 @@ export default function Resources() {
                   <div className="space-y-6">
                     {safety.map((item) => (
                       <div key={item.category} className="space-y-3">
-                        <h3 className="text-xl font-bold text-red-900 flex items-center gap-2">
+                        <h3 className="text-xl font-bold text-red-900 dark:text-red-400 flex items-center gap-2">
                           <Shield className="w-5 h-5" />
                           {item.category}
                         </h3>
@@ -523,10 +523,10 @@ export default function Resources() {
                           {item.rules.map((rule, idx) => (
                             <li
                               key={idx}
-                              className="flex items-start gap-3 p-3 bg-red-50 rounded-lg border border-red-200"
+                              className="flex items-start gap-3 p-3 bg-red-50 dark:bg-red-900/30 rounded-lg border border-red-200 dark:border-red-800"
                             >
-                              <span className="text-red-600 font-bold">•</span>
-                              <span className="text-slate-700">{rule}</span>
+                              <span className="text-red-600 dark:text-red-400 font-bold">•</span>
+                              <span className="text-slate-700 dark:text-gray-300">{rule}</span>
                             </li>
                           ))}
                         </ul>
