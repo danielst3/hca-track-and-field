@@ -186,12 +186,17 @@ export default function Today() {
           </div>
         )}
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100 select-none">
-              {isSameDay(selectedDate, new Date()) ? "Today's Plan" : "Practice Plan"}
-            </h1>
-            <div className="flex items-center gap-3 mt-2">
+         <div className="flex items-center justify-between">
+           <div className="flex-1">
+             <div className="flex items-center justify-between">
+               <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100 select-none">
+                 {isSameDay(selectedDate, new Date()) ? "Today's Plan" : "Practice Plan"}
+               </h1>
+               {user && user.role !== "admin" && isSameDay(selectedDate, new Date()) && (
+                 <LogPerformanceForm event="shot" eventLabel="Log Activity" user={user} />
+               )}
+             </div>
+             <div className="flex items-center gap-3 mt-2">
               <Button
                 variant="outline"
                 size="icon"
