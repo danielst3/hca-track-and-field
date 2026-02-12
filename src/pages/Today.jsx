@@ -194,7 +194,9 @@ export default function Today() {
                  {isSameDay(selectedDate, new Date()) ? "Today's Plan" : "Practice Plan"}
                </h1>
                {user && isSameDay(selectedDate, new Date()) && (
-                  <LogActivityButton user={user} />
+                  <div className="flex justify-center py-6">
+                    <LogActivityButton user={user} />
+                  </div>
                 )}
              </div>
              <div className="flex items-center gap-3 mt-2">

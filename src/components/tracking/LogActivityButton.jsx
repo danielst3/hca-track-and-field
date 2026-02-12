@@ -93,7 +93,7 @@ export default function LogActivityButton({ user }) {
     return (
       <Dialog open={athleteDialogOpen} onOpenChange={setAthleteDialogOpen}>
         <DialogTrigger asChild>
-          <Button size="sm" className="gap-2 bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600">
+          <Button size="sm" className="gap-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800">
             <Plus className="w-4 h-4" />
             Log Activity
           </Button>
