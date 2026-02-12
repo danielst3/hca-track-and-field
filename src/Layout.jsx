@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Home, Calendar, LogOut, Trophy, TrendingUp, Users, BookOpen, FileText, Trash2, RefreshCw, ArrowLeft, Settings, Moon, Sun, MoreHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import UniversalSearch from "./components/shared/UniversalSearch";
-import LogActivityButton from "./components/tracking/LogActivityButton";
+
 import { AnimatePresence, motion } from "framer-motion";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import {
@@ -375,6 +375,7 @@ export default function Layout({ children, currentPageName }) {
     ? [
         { name: "Today", icon: Home, page: "Today" },
         { name: "Calendar", icon: Calendar, page: "Calendar" },
+        { name: "Log Activity", icon: Plus, page: "LogActivity" },
         { name: "Athletes", icon: Users, page: "Athletes" },
         { name: "Seasons", icon: Trophy, page: "Seasons" },
         { name: "Posts", icon: FileText, page: "Posts" },
@@ -391,6 +392,7 @@ export default function Layout({ children, currentPageName }) {
     : [
         { name: "Today", icon: Home, page: "Today" },
         { name: "Calendar", icon: Calendar, page: "Calendar" },
+        { name: "Log Activity", icon: Plus, page: "LogActivity" },
         { name: "Progress", icon: TrendingUp, page: "Progress" },
         { name: "Posts", icon: FileText, page: "Posts" },
         { name: "Resources", icon: BookOpen, page: "Resources" },
@@ -429,7 +431,6 @@ export default function Layout({ children, currentPageName }) {
           </div>
           <div className="flex items-center gap-3">
             <UniversalSearch />
-            {user && <LogActivityButton user={user} />}
             <Button
               variant="ghost"
               size="sm"
