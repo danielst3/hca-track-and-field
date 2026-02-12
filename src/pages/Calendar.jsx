@@ -84,7 +84,10 @@ export default function Calendar() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 pb-20">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-slate-900 mb-6">Calendar</h1>
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-3xl font-bold text-slate-900">Calendar</h1>
+          <AbbreviationsKey />
+        </div>
 
         <Tabs value={view} onValueChange={setView} className="mb-4">
           <TabsList>
