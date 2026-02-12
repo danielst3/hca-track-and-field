@@ -7,7 +7,7 @@ import { Home, Calendar, LogOut, Trophy, TrendingUp, Users, BookOpen, FileText, 
 import { cn } from "@/lib/utils";
 import UniversalSearch from "./components/shared/UniversalSearch";
 import { AnimatePresence, motion } from "framer-motion";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,6 +18,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,6 +53,8 @@ export default function Layout({ children, currentPageName }) {
     }
     return 'light';
   });
+  const [requestAccessOpen, setRequestAccessOpen] = useState(false);
+  const [requestData, setRequestData] = useState({ email: "", full_name: "", notes: "" });
 
   useEffect(() => {
     // Detect if on a sub-page
@@ -118,6 +129,23 @@ export default function Layout({ children, currentPageName }) {
     }
   };
 
+  const requestAccessMutation = useMutation({
+    mutationFn: (data) => base44.entities.AccessRequest.create(data),
+    onSuccess: () => {
+      toast.success("Access request submitted! We'll review and get back to you soon.");
+      setRequestData({ email: "", full_name: "", notes: "" });
+      setRequestAccessOpen(false);
+    },
+    onError: () => {
+      toast.error("Failed to submit request. Please try again.");
+    },
+  });
+
+  const handleRequestAccess = (e) => {
+    e.preventDefault();
+    requestAccessMutation.mutate(requestData);
+  };
+
   const handleTouchStart = (e) => {
     const container = scrollContainerRef.current;
     if (container && container.scrollTop === 0) {
@@ -171,13 +199,81 @@ export default function Layout({ children, currentPageName }) {
           <p className="text-[var(--brand-secondary-light)] dark:text-gray-400 mb-8">
             High School Track & Field Throws Program
           </p>
-          <Button
-            onClick={() => base44.auth.redirectToLogin(createPageUrl("Today"))}
-            size="lg"
-            className="w-full bg-[var(--brand-secondary)] hover:bg-[var(--brand-secondary-dark)] text-[var(--brand-primary)] font-bold dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-100 select-none"
-          >
-            Sign In
-          </Button>
+          <div className="space-y-3">
+            <Button
+              onClick={() => base44.auth.redirectToLogin(createPageUrl("Today"))}
+              size="lg"
+              className="w-full bg-[var(--brand-secondary)] hover:bg-[var(--brand-secondary-dark)] text-[var(--brand-primary)] font-bold dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-100 select-none"
+            >
+              Sign In
+            </Button>
+            <Button
+              onClick={() => setRequestAccessOpen(true)}
+              size="lg"
+              variant="outline"
+              className="w-full border-[var(--brand-secondary)] text-[var(--brand-secondary)] hover:bg-[var(--brand-secondary)]/10 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 select-none"
+            >
+              Request Access
+            </Button>
+          </div>
+
+          <Dialog open={requestAccessOpen} onOpenChange={setRequestAccessOpen}>
+            <DialogContent className="dark:bg-gray-800 dark:border-gray-700">
+              <DialogHeader>
+                <DialogTitle className="dark:text-gray-100">Request Access</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleRequestAccess} className="space-y-4 mt-4">
+                <div className="space-y-2">
+                  <Label className="dark:text-gray-200">Full Name</Label>
+                  <Input
+                    value={requestData.full_name}
+                    onChange={(e) => setRequestData({ ...requestData, full_name: e.target.value })}
+                    placeholder="Your full name"
+                    required
+                    className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="dark:text-gray-200">Email</Label>
+                  <Input
+                    type="email"
+                    value={requestData.email}
+                    onChange={(e) => setRequestData({ ...requestData, email: e.target.value })}
+                    placeholder="your.email@example.com"
+                    required
+                    className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="dark:text-gray-200">Notes (Optional)</Label>
+                  <Textarea
+                    value={requestData.notes}
+                    onChange={(e) => setRequestData({ ...requestData, notes: e.target.value })}
+                    placeholder="Tell us about yourself (athlete, parent, etc.)"
+                    rows={3}
+                    className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                  />
+                </div>
+                <div className="flex justify-end gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setRequestAccessOpen(false)}
+                    className="dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    type="submit" 
+                    disabled={requestAccessMutation.isPending}
+                    className="bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600"
+                  >
+                    {requestAccessMutation.isPending ? "Submitting..." : "Submit Request"}
+                  </Button>
+                </div>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     );
