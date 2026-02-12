@@ -216,7 +216,7 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
                 }
                 placeholder="Theme, drills, cues..."
                 rows={3}
-                className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 break-words"
+                className="text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 break-words"
               />
             </div>
 
@@ -229,7 +229,7 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
                 }
                 placeholder="Theme, drills, cues..."
                 rows={3}
-                className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 break-words"
+                className="text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 break-words"
               />
             </div>
 
@@ -242,7 +242,7 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
                 }
                 placeholder="Theme, drills, cues..."
                 rows={3}
-                className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 break-words"
+                className="text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 break-words"
               />
             </div>
 
@@ -255,7 +255,7 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
                 }
                 placeholder="Additional notes for the team..."
                 rows={2}
-                className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 break-words"
+                className="text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 break-words"
               />
             </div>
 
@@ -313,7 +313,7 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
                 }
                 placeholder="Location, start time, special instructions..."
                 rows={2}
-                className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 break-words"
+                className="text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 break-words"
               />
             </div>
 
