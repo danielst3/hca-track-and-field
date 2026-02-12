@@ -71,10 +71,13 @@ export default function Athletes() {
     }
     
     try {
-      // Send the invitation
-      await base44.users.inviteUser(inviteEmail, inviteRole);
+      // For inviteUser API, use "user" for both athletes and parents
+      const apiRole = inviteRole === "admin" ? "admin" : "user";
       
-      // Track the pending invitation
+      // Send the invitation
+      await base44.users.inviteUser(inviteEmail, apiRole);
+      
+      // Track the pending invitation with the actual role
       await base44.entities.PendingInvitation.create({
         email: inviteEmail,
         role: inviteRole,
