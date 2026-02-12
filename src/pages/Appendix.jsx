@@ -69,7 +69,7 @@ const abbreviations = [
   { term: "Lift-P", definition: "Power Lift Day", description: "Explosive/power emphasis in weight room" },
 ];
 
-const implements = [
+const implementSpecs = [
   { 
     event: "Shot Put",
     specs: [
@@ -346,7 +346,7 @@ export default function Appendix() {
                 {/* Implements */}
                 {activeSection === "implements" && (
                   <div className="space-y-6">
-                    {implements.map((item) => (
+                    {implementSpecs.map((item) => (
                       <div key={item.event} className="space-y-3">
                         <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
                           {item.event === "Shot Put" && "🏋️"}
