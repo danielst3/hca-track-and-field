@@ -145,7 +145,7 @@ export default function Athletes() {
                         </div>
                       )}
                     </div>
-                    <ChevronRight className="w-5 h-5 text-slate-400" />
+                    <ChevronRight className="w-5 h-5 text-slate-500 dark:text-slate-400" />
                   </Link>
                   <div className="min-w-[120px]" onClick={(e) => e.stopPropagation()}>
                     <MobileSelect
@@ -168,7 +168,7 @@ export default function Athletes() {
           {athletes.length === 0 && (
             <Card>
               <CardContent className="py-12 text-center">
-                <Users className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                <Users className="w-12 h-12 text-slate-400 dark:text-slate-300 mx-auto mb-3" />
                 <p className="text-slate-600">No athletes yet</p>
                 <p className="text-sm text-slate-500 mt-1">
                   Invite athletes to get started

@@ -219,7 +219,7 @@ export default function Layout({ children, currentPageName }) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-slate-300 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800 select-none"
+                  className="text-slate-700 hover:text-white hover:bg-slate-700 dark:text-slate-300 dark:hover:text-white dark:hover:bg-gray-800 select-none"
                 >
                   <Settings className="w-4 h-4" />
                 </Button>

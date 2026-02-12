@@ -169,7 +169,7 @@ export default function Today() {
                   {dailyPlan.shot_text ? (
                     <PracticePlanText text={dailyPlan.shot_text} />
                   ) : (
-                    <p className="text-slate-400 italic">No plan for today</p>
+                    <p className="text-slate-500 dark:text-slate-400 italic">No plan for today</p>
                   )}
                 </div>
               </CardContent>
@@ -192,7 +192,7 @@ export default function Today() {
                   {dailyPlan.discus_text ? (
                     <PracticePlanText text={dailyPlan.discus_text} />
                   ) : (
-                    <p className="text-slate-400 italic">No plan for today</p>
+                    <p className="text-slate-500 dark:text-slate-400 italic">No plan for today</p>
                   )}
                 </div>
               </CardContent>
@@ -215,7 +215,7 @@ export default function Today() {
                   {dailyPlan.javelin_text ? (
                     <PracticePlanText text={dailyPlan.javelin_text} />
                   ) : (
-                    <p className="text-slate-400 italic">No plan for today</p>
+                    <p className="text-slate-500 dark:text-slate-400 italic">No plan for today</p>
                   )}
                 </div>
               </CardContent>
