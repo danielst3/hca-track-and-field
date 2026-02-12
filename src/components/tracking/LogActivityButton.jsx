@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
@@ -82,6 +83,7 @@ export default function LogActivityButton({ user }) {
         <DialogContent className="max-w-sm dark:bg-gray-800 dark:border-gray-700">
           <DialogHeader>
             <DialogTitle className="dark:text-gray-100">Select Athlete</DialogTitle>
+            <DialogDescription>Choose an athlete to log activity for</DialogDescription>
           </DialogHeader>
           <div className="space-y-2 max-h-96 overflow-y-auto">
             {athletes?.map((athlete) => (
@@ -105,6 +107,7 @@ export default function LogActivityButton({ user }) {
             <DialogTitle className="dark:text-gray-100">
               {isCoach && selectedAthlete ? `Select Event for ${selectedAthlete.full_name}` : "Select Event"}
             </DialogTitle>
+            <DialogDescription>Choose an event to log</DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-3 gap-3">
             {events.map((event) => (
