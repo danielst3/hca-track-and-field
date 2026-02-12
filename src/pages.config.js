@@ -50,6 +50,7 @@
 import AthleteDetail from './pages/AthleteDetail';
 import Athletes from './pages/Athletes';
 import Calendar from './pages/Calendar';
+import LogActivity from './pages/LogActivity';
 import MyAthletes from './pages/MyAthletes';
 import Posts from './pages/Posts';
 import Privacy from './pages/Privacy';
@@ -58,7 +59,6 @@ import Resources from './pages/Resources';
 import Seasons from './pages/Seasons';
 import Settings from './pages/Settings';
 import Today from './pages/Today';
-import LogActivity from './pages/LogActivity';
 import __Layout from './Layout.jsx';
 
 
@@ -66,6 +66,7 @@ export const PAGES = {
     "AthleteDetail": AthleteDetail,
     "Athletes": Athletes,
     "Calendar": Calendar,
+    "LogActivity": LogActivity,
     "MyAthletes": MyAthletes,
     "Posts": Posts,
     "Privacy": Privacy,
@@ -74,7 +75,6 @@ export const PAGES = {
     "Seasons": Seasons,
     "Settings": Settings,
     "Today": Today,
-    "LogActivity": LogActivity,
 }
 
 export const pagesConfig = {

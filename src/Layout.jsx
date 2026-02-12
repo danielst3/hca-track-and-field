@@ -71,10 +71,24 @@ export default function Layout({ children, currentPageName }) {
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
+
+  useEffect(() => {
+    // Listen for PWA install prompt
+    const handleBeforeInstallPrompt = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setCanInstall(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+  }, []);
   const [requestAccessOpen, setRequestAccessOpen] = useState(false);
   const [requestData, setRequestData] = useState({ email: "", full_name: "", role: "user", athlete_name: "", notes: "" });
   const [showOverflow, setShowOverflow] = useState(false);
   const navRef = useRef(null);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [canInstall, setCanInstall] = useState(false);
 
   useEffect(() => {
     // Detect if on a sub-page
@@ -173,6 +187,18 @@ export default function Layout({ children, currentPageName }) {
       base44.auth.logout();
     } catch (error) {
       toast.error("Failed to delete account");
+    }
+  };
+
+  const handleInstallPWA = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        toast.success("App installed successfully!");
+      }
+      setDeferredPrompt(null);
+      setCanInstall(false);
     }
   };
 
