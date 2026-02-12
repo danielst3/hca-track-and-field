@@ -263,15 +263,15 @@ export default function Layout({ children, currentPageName }) {
             alt="HCA Chargers" 
             className="w-32 h-32 object-contain mx-auto mb-6"
           />
-          <h1 className="text-4xl font-bold text-white dark:text-gray-100 mb-3">HCA Chargers Track & Field</h1>
-          <p className="text-[var(--brand-secondary-light)] dark:text-gray-400 mb-8">
+          <h1 className="text-4xl font-bold text-black dark:text-gray-100 mb-3">HCA Chargers Track & Field</h1>
+          <p className="text-black dark:text-gray-400 mb-8">
             High School Track & Field Throws Program
           </p>
           <div className="space-y-3">
             <Button
               onClick={() => base44.auth.redirectToLogin(createPageUrl("Today"))}
               size="lg"
-              className="w-full bg-[var(--brand-secondary)] hover:bg-[var(--brand-secondary-dark)] text-[var(--brand-primary)] font-bold dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-100 select-none"
+              className="w-full bg-[var(--brand-secondary)] hover:bg-[var(--brand-secondary-dark)] text-black font-bold dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-100 select-none"
             >
               Sign In
             </Button>
@@ -279,7 +279,7 @@ export default function Layout({ children, currentPageName }) {
               onClick={() => setRequestAccessOpen(true)}
               size="lg"
               variant="outline"
-              className="w-full border-[var(--brand-secondary)] text-[var(--brand-secondary)] hover:bg-[var(--brand-secondary)]/10 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 select-none"
+              className="w-full border-black text-black hover:bg-black/5 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 select-none"
             >
               Request Access
             </Button>
@@ -406,7 +406,7 @@ export default function Layout({ children, currentPageName }) {
                 variant="ghost"
                 size="icon"
                 onClick={() => window.history.back()}
-                className="text-white hover:bg-white/10"
+                className="text-black dark:text-white hover:bg-white/10"
               >
                 <ArrowLeft className="w-5 h-5" />
               </Button>
@@ -418,10 +418,10 @@ export default function Layout({ children, currentPageName }) {
               />
             )}
             <div>
-              <h1 className="text-lg font-bold text-white dark:text-gray-100">
+              <h1 className="text-lg font-bold text-black dark:text-gray-100">
                 {canGoBack ? "" : "HCA Chargers Track & Field"}
               </h1>
-              <p className="text-xs text-[var(--brand-secondary-light)] dark:text-gray-400">
+              <p className="text-xs text-black dark:text-gray-400">
                 {user.full_name} • {user.isImpersonating ? "Athlete (Viewing)" : (user.role === "admin" ? "Coach" : user.role === "parent" ? "Parent" : "Athlete")}
               </p>
             </div>
@@ -432,7 +432,7 @@ export default function Layout({ children, currentPageName }) {
               variant="ghost"
               size="sm"
               onClick={toggleTheme}
-              className="text-slate-700 hover:text-white hover:bg-slate-700 dark:text-slate-300 dark:hover:text-white dark:hover:bg-gray-800 select-none"
+              className="text-black hover:text-black hover:bg-slate-200 dark:text-slate-300 dark:hover:text-white dark:hover:bg-gray-800 select-none"
             >
               {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
             </Button>
@@ -441,7 +441,7 @@ export default function Layout({ children, currentPageName }) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-slate-700 hover:text-white hover:bg-slate-700 dark:text-slate-300 dark:hover:text-white dark:hover:bg-gray-800 select-none"
+                  className="text-black hover:text-black hover:bg-slate-200 dark:text-slate-300 dark:hover:text-white dark:hover:bg-gray-800 select-none"
                 >
                   <Settings className="w-4 h-4" />
                 </Button>
@@ -568,8 +568,8 @@ export default function Layout({ children, currentPageName }) {
                   className={cn(
                     "flex flex-col items-center gap-1 h-auto py-2 px-4 select-none",
                     isActive
-                      ? "text-[var(--brand-primary)] bg-[var(--brand-secondary)] dark:text-gray-100 dark:bg-gray-800"
-                      : "text-slate-600 hover:text-[var(--brand-primary)] hover:bg-[var(--brand-secondary)] dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800"
+                      ? "text-black bg-slate-200 dark:text-gray-100 dark:bg-gray-800"
+                      : "text-black hover:text-black hover:bg-slate-200 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800"
                   )}
                 >
                   <Icon className="w-5 h-5" />
@@ -583,7 +583,7 @@ export default function Layout({ children, currentPageName }) {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="flex flex-col items-center gap-1 h-auto py-2 px-4 select-none text-slate-600 hover:text-[var(--brand-primary)] hover:bg-[var(--brand-secondary)] dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800"
+                  className="flex flex-col items-center gap-1 h-auto py-2 px-4 select-none text-black hover:text-black hover:bg-slate-200 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800"
                 >
                   <MoreHorizontal className="w-5 h-5" />
                   <span className="text-xs font-medium">More</span>
