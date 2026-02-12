@@ -55,20 +55,13 @@ export default function AthleteDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 pb-24">
+    <div className="min-h-screen bg-gradient-to-br from-[var(--brand-secondary)] to-[var(--brand-secondary-light)] dark:from-gray-900 dark:to-gray-800 p-4 pb-24">
       <div className="max-w-7xl mx-auto space-y-6">
-        <div className="flex items-center gap-4">
-          <Link to={createPageUrl("Athletes")}>
-            <Button variant="ghost" size="icon">
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-          </Link>
-          <div>
-            <h1 className="text-3xl font-bold text-slate-900">
-              {athlete.full_name}
-            </h1>
-            <p className="text-slate-600">{athlete.email}</p>
-          </div>
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100">
+            {athlete.full_name}
+          </h1>
+          <p className="text-slate-600 dark:text-gray-400">{athlete.email}</p>
         </div>
 
         <Tabs value={activeEvent} onValueChange={setActiveEvent}>

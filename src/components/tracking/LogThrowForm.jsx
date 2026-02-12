@@ -12,13 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { MobileSelect } from "@/components/ui/mobile-select";
 import { Plus } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -97,7 +91,7 @@ export default function LogThrowForm({ event, eventLabel, user }) {
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Date</Label>
+              <Label className="dark:text-gray-200">Date</Label>
               <Input
                 type="date"
                 value={formData.date}
@@ -108,26 +102,23 @@ export default function LogThrowForm({ event, eventLabel, user }) {
               />
             </div>
             <div className="space-y-2">
-              <Label>Session Type</Label>
-              <Select
+              <Label className="dark:text-gray-200">Session Type</Label>
+              <MobileSelect
                 value={formData.session_type}
                 onValueChange={(value) =>
                   setFormData({ ...formData, session_type: value })
                 }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="practice">Practice</SelectItem>
-                  <SelectItem value="meet">Meet</SelectItem>
-                </SelectContent>
-              </Select>
+                options={[
+                  { value: "practice", label: "Practice" },
+                  { value: "meet", label: "Meet" }
+                ]}
+                label="Session Type"
+              />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label>Best Distance (feet)</Label>
+            <Label className="dark:text-gray-200">Best Distance (feet)</Label>
             <Input
               type="number"
               step="0.01"
@@ -141,7 +132,7 @@ export default function LogThrowForm({ event, eventLabel, user }) {
           </div>
 
           <div className="space-y-2">
-            <Label>Implement Weight (optional)</Label>
+            <Label className="dark:text-gray-200">Implement Weight (optional)</Label>
             <Input
               value={formData.implement_weight}
               onChange={(e) =>
@@ -152,7 +143,7 @@ export default function LogThrowForm({ event, eventLabel, user }) {
           </div>
 
           <div className="space-y-2">
-            <Label>All Attempts (optional, comma-separated)</Label>
+            <Label className="dark:text-gray-200">All Attempts (optional, comma-separated)</Label>
             <Input
               value={formData.attempts}
               onChange={(e) =>
@@ -163,7 +154,7 @@ export default function LogThrowForm({ event, eventLabel, user }) {
           </div>
 
           <div className="space-y-2">
-            <Label>Notes (optional)</Label>
+            <Label className="dark:text-gray-200">Notes (optional)</Label>
             <Textarea
               value={formData.notes}
               onChange={(e) =>
@@ -186,7 +177,7 @@ export default function LogThrowForm({ event, eventLabel, user }) {
             <Button
               type="submit"
               disabled={logMutation.isPending}
-              className="bg-[#551e1b] hover:bg-[#6b2622] select-none dark:bg-gray-700 dark:hover:bg-gray-600"
+              className="bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] select-none dark:bg-gray-700 dark:hover:bg-gray-600"
             >
               {logMutation.isPending ? "Saving..." : "Save Throw"}
             </Button>

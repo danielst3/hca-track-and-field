@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "./utils";
 import { Button } from "@/components/ui/button";
-import { Home, Calendar, LogOut, Trophy, TrendingUp, Users, BookOpen, FileText, Trash2, RefreshCw } from "lucide-react";
+import { Home, Calendar, LogOut, Trophy, TrendingUp, Users, BookOpen, FileText, Trash2, RefreshCw, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import UniversalSearch from "./components/shared/UniversalSearch";
 import { AnimatePresence, motion } from "framer-motion";
@@ -36,6 +36,29 @@ export default function Layout({ children, currentPageName }) {
   const touchStartY = useRef(0);
   const scrollContainerRef = useRef(null);
   const queryClient = useQueryClient();
+  const scrollPositions = useRef({});
+  const [canGoBack, setCanGoBack] = useState(false);
+
+  useEffect(() => {
+    // Detect if on a sub-page
+    const subPages = ["AthleteDetail"];
+    setCanGoBack(subPages.includes(currentPageName));
+  }, [currentPageName]);
+
+  useEffect(() => {
+    // Restore scroll position when page changes
+    const container = scrollContainerRef.current;
+    if (container && scrollPositions.current[currentPageName] !== undefined) {
+      container.scrollTop = scrollPositions.current[currentPageName];
+    }
+
+    return () => {
+      // Save scroll position when leaving page
+      if (container) {
+        scrollPositions.current[currentPageName] = container.scrollTop;
+      }
+    };
+  }, [currentPageName]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -98,7 +121,7 @@ export default function Layout({ children, currentPageName }) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#BDA5A5] mx-auto mb-4" />
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--brand-secondary)] mx-auto mb-4" />
           <p className="text-white">Loading...</p>
         </div>
       </div>
@@ -107,7 +130,7 @@ export default function Layout({ children, currentPageName }) {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#551e1b] to-[#6b2622] dark:from-gray-950 dark:to-gray-900 p-4">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[var(--brand-primary)] to-[var(--brand-primary-dark)] dark:from-gray-950 dark:to-gray-900 p-4">
         <div className="text-center max-w-md">
           <img 
             src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698de82661ea1d1ad2bf86f9/785163a71_HorseLogoOfficial1.png" 
@@ -115,13 +138,13 @@ export default function Layout({ children, currentPageName }) {
             className="w-32 h-32 object-contain mx-auto mb-6"
           />
           <h1 className="text-4xl font-bold text-white dark:text-gray-100 mb-3">HCA Chargers Track & Field</h1>
-          <p className="text-[#d4bebe] dark:text-gray-400 mb-8">
+          <p className="text-[var(--brand-secondary-light)] dark:text-gray-400 mb-8">
             High School Track & Field Throws Program
           </p>
           <Button
             onClick={() => base44.auth.redirectToLogin(createPageUrl("Today"))}
             size="lg"
-            className="w-full bg-[#BDA5A5] hover:bg-[#a89191] text-[#551e1b] font-bold dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-100 select-none"
+            className="w-full bg-[var(--brand-secondary)] hover:bg-[var(--brand-secondary-dark)] text-[var(--brand-primary)] font-bold dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-100 select-none"
           >
             Sign In
           </Button>
@@ -147,19 +170,32 @@ export default function Layout({ children, currentPageName }) {
       ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#BDA5A5] to-[#d4bebe] dark:from-gray-900 dark:to-gray-800 overscroll-none" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
+    <div className="min-h-screen bg-gradient-to-br from-[var(--brand-secondary)] to-[var(--brand-secondary-light)] dark:from-gray-900 dark:to-gray-800 overscroll-none" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
       {/* Top Bar */}
-      <div className="bg-gradient-to-r from-[#551e1b] to-[#6b2622] dark:from-gray-950 dark:to-gray-900 border-b border-[#441611] dark:border-gray-700 sticky top-0 z-50 select-none">
+      <div className="bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-primary-dark)] dark:from-gray-950 dark:to-gray-900 border-b border-[var(--brand-primary-darker)] dark:border-gray-700 sticky top-0 z-50 select-none">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <img 
-              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698de82661ea1d1ad2bf86f9/785163a71_HorseLogoOfficial1.png" 
-              alt="HCA Chargers" 
-              className="w-10 h-10 object-contain"
-            />
+            {canGoBack ? (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => window.history.back()}
+                className="text-white hover:bg-white/10"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </Button>
+            ) : (
+              <img 
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698de82661ea1d1ad2bf86f9/785163a71_HorseLogoOfficial1.png" 
+                alt="HCA Chargers" 
+                className="w-10 h-10 object-contain"
+              />
+            )}
             <div>
-              <h1 className="text-lg font-bold text-white dark:text-gray-100">HCA Chargers Track & Field</h1>
-              <p className="text-xs text-[#d4bebe] dark:text-gray-400">
+              <h1 className="text-lg font-bold text-white dark:text-gray-100">
+                {canGoBack ? "" : "HCA Chargers Track & Field"}
+              </h1>
+              <p className="text-xs text-[var(--brand-secondary-light)] dark:text-gray-400">
                 {user.full_name} • {user.role === "admin" ? "Coach" : "Athlete"}
               </p>
             </div>
@@ -201,7 +237,7 @@ export default function Layout({ children, currentPageName }) {
           className="fixed top-16 left-1/2 transform -translate-x-1/2 z-40"
           style={{ opacity: pullDistance / 60 }}
         >
-          <RefreshCw className={cn("w-6 h-6 text-[#551e1b] dark:text-gray-300", isRefreshing && "animate-spin")} />
+          <RefreshCw className={cn("w-6 h-6 text-[var(--brand-primary)] dark:text-gray-300", isRefreshing && "animate-spin")} />
         </div>
       )}
 
@@ -261,8 +297,8 @@ export default function Layout({ children, currentPageName }) {
                   className={cn(
                     "flex flex-col items-center gap-1 h-auto py-2 px-4 select-none",
                     isActive
-                      ? "text-[#551e1b] bg-[#BDA5A5] dark:text-gray-100 dark:bg-gray-800"
-                      : "text-slate-600 hover:text-[#551e1b] hover:bg-[#BDA5A5] dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800"
+                      ? "text-[var(--brand-primary)] bg-[var(--brand-secondary)] dark:text-gray-100 dark:bg-gray-800"
+                      : "text-slate-600 hover:text-[var(--brand-primary)] hover:bg-[var(--brand-secondary)] dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800"
                   )}
                 >
                   <Icon className="w-5 h-5" />

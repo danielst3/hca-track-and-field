@@ -61,7 +61,7 @@ export default function DrillLink({ drillKey, displayText }) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-1 text-[#551e1b] hover:text-[#6b2622] font-semibold underline decoration-dotted cursor-pointer"
+        className="inline-flex items-center gap-1 text-[var(--brand-primary)] hover:text-[var(--brand-primary-dark)] font-semibold underline decoration-dotted cursor-pointer"
       >
         {displayText}
         <Info className="w-3 h-3" />
@@ -91,8 +91,8 @@ export default function DrillLink({ drillKey, displayText }) {
                 <p className="text-sm font-semibold text-slate-700 mb-2">Execution:</p>
                 <ol className="space-y-2">
                   {drill.executionSteps.map((step, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-sm text-slate-600">
-                      <span className="font-semibold text-[#551e1b] min-w-[20px]">{idx + 1}.</span>
+                    <li key={idx} className="flex items-start gap-2 text-sm text-slate-600 dark:text-gray-300">
+                      <span className="font-semibold text-[var(--brand-primary)] min-w-[20px]">{idx + 1}.</span>
                       <span>{step}</span>
                     </li>
                   ))}
@@ -107,7 +107,7 @@ export default function DrillLink({ drillKey, displayText }) {
                   {drill.cues.map((cue, idx) => (
                     <span
                       key={idx}
-                      className="px-3 py-1 bg-[#BDA5A5] text-[#551e1b] text-sm rounded-full font-medium"
+                      className="px-3 py-1 bg-[var(--brand-secondary)] text-[var(--brand-primary)] text-sm rounded-full font-medium dark:bg-gray-700 dark:text-gray-200"
                     >
                       "{cue}"
                     </span>
