@@ -49,10 +49,27 @@ export default function Layout({ children, currentPageName }) {
   const [canGoBack, setCanGoBack] = useState(false);
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('theme') || 'light';
+      const saved = localStorage.getItem('theme');
+      if (saved) return saved;
+      
+      // Detect system preference
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
     return 'light';
   });
+
+  useEffect(() => {
+    // Listen for system theme changes
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e) => {
+      const newTheme = e.matches ? 'dark' : 'light';
+      setTheme(newTheme);
+      localStorage.removeItem('theme'); // Clear saved preference to follow system
+    };
+    
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
   const [requestAccessOpen, setRequestAccessOpen] = useState(false);
   const [requestData, setRequestData] = useState({ email: "", full_name: "", role: "user", athlete_name: "", notes: "" });
   const [showOverflow, setShowOverflow] = useState(false);
