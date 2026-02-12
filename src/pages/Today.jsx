@@ -8,6 +8,7 @@ import LogActivityButton from "../components/tracking/LogActivityButton";
 import QuickLogButton from "../components/tracking/QuickLogButton";
 import PracticePlanText from "../components/shared/PracticePlanText";
 import EventToggle from "../components/shared/EventToggle";
+import LogPerformanceForm from "../components/tracking/LogPerformanceForm";
 import { Calendar, Trophy, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
