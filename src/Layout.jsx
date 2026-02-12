@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "./utils";
 import { Button } from "@/components/ui/button";
-import { Home, Calendar, Plus, LogOut, Trophy, TrendingUp, Users, BookOpen, FileText, Trash2, RefreshCw, ArrowLeft, Settings, Moon, Sun, MoreHorizontal } from "lucide-react";
+import { Home, Calendar, Plus, LogOut, Trophy, TrendingUp, Users, BookOpen, FileText, Trash2, RefreshCw, ArrowLeft, Settings, Moon, Sun, MoreHorizontal, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 import UniversalSearch from "./components/shared/UniversalSearch";
 
@@ -513,6 +513,15 @@ export default function Layout({ children, currentPageName }) {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className="dark:bg-gray-700" />
+                {canInstall && (
+                  <>
+                    <DropdownMenuItem onClick={handleInstallPWA} className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none">
+                      <Download className="w-4 h-4 mr-2" />
+                      Install App
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator className="dark:bg-gray-700" />
+                  </>
+                )}
                 <DropdownMenuItem onClick={handleLogout} className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none">
                   <LogOut className="w-4 h-4 mr-2" />
                   Logout
