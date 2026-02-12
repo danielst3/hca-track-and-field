@@ -39,14 +39,30 @@ export default function Calendar() {
     fetchUser();
   }, []);
 
+  const { data: activeSeason } = useQuery({
+    queryKey: ["activeSeason"],
+    queryFn: async () => {
+      const seasons = await base44.entities.Season.filter({ is_active: true });
+      return seasons[0] || null;
+    },
+  });
+
   const { data: plans = [] } = useQuery({
-    queryKey: ["allPlans"],
-    queryFn: () => base44.entities.DailyPlan.list(),
+    queryKey: ["allPlans", activeSeason?.id],
+    queryFn: async () => {
+      if (!activeSeason) return [];
+      return base44.entities.DailyPlan.filter({ season_id: activeSeason.id });
+    },
+    enabled: !!activeSeason,
   });
 
   const { data: meets = [] } = useQuery({
-    queryKey: ["allMeets"],
-    queryFn: () => base44.entities.Meet.list(),
+    queryKey: ["allMeets", activeSeason?.id],
+    queryFn: async () => {
+      if (!activeSeason) return [];
+      return base44.entities.Meet.filter({ season_id: activeSeason.id });
+    },
+    enabled: !!activeSeason,
   });
 
   const getDaysToShow = () => {

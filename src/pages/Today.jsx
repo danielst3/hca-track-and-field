@@ -24,20 +24,38 @@ export default function Today() {
     fetchUser();
   }, []);
 
-  const { data: dailyPlan, isLoading: planLoading } = useQuery({
-    queryKey: ["dailyPlan", dateStr],
+  const { data: activeSeason } = useQuery({
+    queryKey: ["activeSeason"],
     queryFn: async () => {
-      const plans = await base44.entities.DailyPlan.filter({ date: dateStr });
-      return plans[0] || null;
+      const seasons = await base44.entities.Season.filter({ is_active: true });
+      return seasons[0] || null;
     },
   });
 
-  const { data: meet } = useQuery({
-    queryKey: ["meet", dateStr],
+  const { data: dailyPlan, isLoading: planLoading } = useQuery({
+    queryKey: ["dailyPlan", dateStr, activeSeason?.id],
     queryFn: async () => {
-      const meets = await base44.entities.Meet.filter({ date: dateStr });
+      if (!activeSeason) return null;
+      const plans = await base44.entities.DailyPlan.filter({ 
+        date: dateStr,
+        season_id: activeSeason.id 
+      });
+      return plans[0] || null;
+    },
+    enabled: !!activeSeason,
+  });
+
+  const { data: meet } = useQuery({
+    queryKey: ["meet", dateStr, activeSeason?.id],
+    queryFn: async () => {
+      if (!activeSeason) return null;
+      const meets = await base44.entities.Meet.filter({ 
+        date: dateStr,
+        season_id: activeSeason.id 
+      });
       return meets[0] || null;
     },
+    enabled: !!activeSeason,
   });
 
   const handlePrevDay = () => {
