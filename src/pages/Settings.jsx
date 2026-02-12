@@ -106,6 +106,18 @@ export default function Settings() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
+                <Link to={createPageUrl("Seasons")}>
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-between dark:text-gray-200 dark:hover:bg-gray-700"
+                  >
+                    <span className="flex items-center gap-3">
+                      <Trophy className="w-5 h-5" />
+                      Manage Seasons
+                    </span>
+                    <ChevronRight className="w-5 h-5" />
+                  </Button>
+                </Link>
                 <Link to={createPageUrl("Calendar")}>
                   <Button 
                     variant="ghost" 
