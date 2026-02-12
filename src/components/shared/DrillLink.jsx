@@ -68,7 +68,7 @@ export default function DrillLink({ drillKey, displayText }) {
       </button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-          <DialogHeader>
+          <DialogHeader className="pr-8">
             <DialogTitle className="text-xl">{drill.name}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 mt-4">
