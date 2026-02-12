@@ -259,18 +259,12 @@ export default function Today() {
         {/* Event Filter */}
         <div className="flex items-center gap-3 flex-wrap">
           {eventOptions.map(event => (
-            <button
+            <EventToggle
               key={event.id}
+              event={event}
+              isSelected={selectedEvents.includes(event.id)}
               onClick={() => toggleEvent(event.id)}
-              className={cn(
-                "px-4 py-2 rounded-lg font-semibold transition-all border-2",
-                selectedEvents.includes(event.id)
-                  ? "bg-[var(--brand-primary)] text-white border-[var(--brand-primary)]"
-                  : "bg-white text-black border-black line-through"
-              )}
-            >
-              {event.label}
-            </button>
+            />
           ))}
         </div>
 
