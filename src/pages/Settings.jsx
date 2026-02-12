@@ -396,6 +396,108 @@ export default function Settings() {
 
             <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
+                <CardTitle className="text-slate-900 dark:text-gray-100">Event Types</CardTitle>
+                <CardDescription className="text-slate-600 dark:text-gray-300">
+                  Add or remove throwing events
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  {eventTypes.map(event => (
+                    <div key={event.id} className="flex items-center justify-between bg-slate-50 dark:bg-gray-700 p-3 rounded-lg">
+                      <span className="text-sm font-medium text-slate-700 dark:text-gray-200">{event.label}</span>
+                      {eventTypes.length > 1 && (
+                        <button
+                          onClick={() => handleRemoveEventType(event.id)}
+                          className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={newEventLabel}
+                    onChange={(e) => setNewEventLabel(e.target.value)}
+                    placeholder="New event name"
+                    onKeyPress={(e) => e.key === "Enter" && handleAddEventType()}
+                    className="flex-1 px-3 py-2 text-sm rounded-md border border-input bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                  />
+                  <Button
+                    onClick={handleAddEventType}
+                    disabled={!newEventLabel.trim()}
+                    className="bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-600 dark:hover:bg-gray-500"
+                    size="sm"
+                  >
+                    Add
+                  </Button>
+                </div>
+                <Button
+                  onClick={handleSaveTypes}
+                  disabled={isSavingTypes}
+                  className="w-full bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600"
+                >
+                  {isSavingTypes ? "Saving..." : "Save Event Types"}
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="dark:bg-gray-800 dark:border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-slate-900 dark:text-gray-100">Practice Types</CardTitle>
+                <CardDescription className="text-slate-600 dark:text-gray-300">
+                  Add or remove practice plan types
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  {practiceTypes.map(practice => (
+                    <div key={practice.id} className="flex items-center justify-between bg-slate-50 dark:bg-gray-700 p-3 rounded-lg">
+                      <span className="text-sm font-medium text-slate-700 dark:text-gray-200">{practice.label}</span>
+                      {!["technical", "primary", "indoor", "tuneup", "meet", "recovery"].includes(practice.id) && practiceTypes.length > 1 && (
+                        <button
+                          onClick={() => handleRemovePracticeType(practice.id)}
+                          className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={newPracticeLabel}
+                    onChange={(e) => setNewPracticeLabel(e.target.value)}
+                    placeholder="New practice type name"
+                    onKeyPress={(e) => e.key === "Enter" && handleAddPracticeType()}
+                    className="flex-1 px-3 py-2 text-sm rounded-md border border-input bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                  />
+                  <Button
+                    onClick={handleAddPracticeType}
+                    disabled={!newPracticeLabel.trim()}
+                    className="bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-600 dark:hover:bg-gray-500"
+                    size="sm"
+                  >
+                    Add
+                  </Button>
+                </div>
+                <Button
+                  onClick={handleSaveTypes}
+                  disabled={isSavingTypes}
+                  className="w-full bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600"
+                >
+                  {isSavingTypes ? "Saving..." : "Save Practice Types"}
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="dark:bg-gray-800 dark:border-gray-700">
+              <CardHeader>
                 <CardTitle className="text-slate-900 dark:text-gray-100">Communication</CardTitle>
                 <CardDescription className="text-slate-600 dark:text-gray-300">
                   Manage team posts and announcements
