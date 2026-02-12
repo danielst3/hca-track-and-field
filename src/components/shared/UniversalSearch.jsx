@@ -186,7 +186,7 @@ export default function UniversalSearch() {
                       {searchResults.drills.map((drill) => (
                         <Link
                           key={drill.code}
-                          to={createPageUrl("Appendix")}
+                          to={createPageUrl("Resources")}
                           onClick={handleClear}
                           className="block p-3 bg-blue-50 hover:bg-blue-100 rounded-lg border border-blue-200 transition-colors"
                         >

@@ -66,15 +66,15 @@ export default function Layout({ children, currentPageName }) {
         { name: "Today", icon: Home, page: "Today" },
         { name: "Calendar", icon: Calendar, page: "Calendar" },
         { name: "Athletes", icon: Users, page: "Athletes" },
+        { name: "Posts", icon: FileText, page: "Posts" },
         { name: "Resources", icon: BookOpen, page: "Resources" },
-        { name: "Appendix", icon: BookOpen, page: "Appendix" },
       ]
     : [
         { name: "Today", icon: Home, page: "Today" },
         { name: "Calendar", icon: Calendar, page: "Calendar" },
         { name: "Progress", icon: TrendingUp, page: "Progress" },
+        { name: "Posts", icon: FileText, page: "Posts" },
         { name: "Resources", icon: BookOpen, page: "Resources" },
-        { name: "Appendix", icon: BookOpen, page: "Appendix" },
       ];
 
   return (
