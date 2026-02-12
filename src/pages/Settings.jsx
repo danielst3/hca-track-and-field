@@ -116,11 +116,11 @@ export default function Settings() {
         {/* Profile Section */}
         <Card className="dark:bg-gray-800 dark:border-gray-700">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 dark:text-gray-100">
+            <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-gray-100">
               <User className="w-5 h-5" />
               Profile
             </CardTitle>
-            <CardDescription className="dark:text-gray-300">
+            <CardDescription className="text-slate-600 dark:text-gray-300">
               View and update your personal information
             </CardDescription>
           </CardHeader>
@@ -145,8 +145,8 @@ export default function Settings() {
           <>
             <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
-                <CardTitle className="dark:text-gray-100">Team Management</CardTitle>
-                <CardDescription className="dark:text-gray-300">
+                <CardTitle className="text-slate-900 dark:text-gray-100">Team Management</CardTitle>
+                <CardDescription className="text-slate-600 dark:text-gray-300">
                   Manage athletes and team settings
                 </CardDescription>
               </CardHeader>
@@ -154,7 +154,7 @@ export default function Settings() {
                 <Link to={createPageUrl("Athletes")}>
                   <Button 
                     variant="ghost" 
-                    className="w-full justify-between dark:text-gray-200 dark:hover:bg-gray-700"
+                    className="w-full justify-between text-slate-700 hover:text-slate-900 dark:text-gray-200 dark:hover:bg-gray-700"
                   >
                     <span className="flex items-center gap-3">
                       <Users className="w-5 h-5" />
@@ -168,8 +168,8 @@ export default function Settings() {
 
             <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
-                <CardTitle className="dark:text-gray-100">Practice & Training</CardTitle>
-                <CardDescription className="dark:text-gray-300">
+                <CardTitle className="text-slate-900 dark:text-gray-100">Practice & Training</CardTitle>
+                <CardDescription className="text-slate-600 dark:text-gray-300">
                   Manage practice plans and resources
                 </CardDescription>
               </CardHeader>
@@ -177,7 +177,7 @@ export default function Settings() {
                 <Link to={createPageUrl("Seasons")}>
                   <Button 
                     variant="ghost" 
-                    className="w-full justify-between dark:text-gray-200 dark:hover:bg-gray-700"
+                    className="w-full justify-between text-slate-700 hover:text-slate-900 dark:text-gray-200 dark:hover:bg-gray-700"
                   >
                     <span className="flex items-center gap-3">
                       <Trophy className="w-5 h-5" />
@@ -189,7 +189,7 @@ export default function Settings() {
                 <Link to={createPageUrl("Calendar")}>
                   <Button 
                     variant="ghost" 
-                    className="w-full justify-between dark:text-gray-200 dark:hover:bg-gray-700"
+                    className="w-full justify-between text-slate-700 hover:text-slate-900 dark:text-gray-200 dark:hover:bg-gray-700"
                   >
                     <span className="flex items-center gap-3">
                       <Calendar className="w-5 h-5" />
@@ -201,7 +201,7 @@ export default function Settings() {
                 <Link to={createPageUrl("Resources")}>
                   <Button 
                     variant="ghost" 
-                    className="w-full justify-between dark:text-gray-200 dark:hover:bg-gray-700"
+                    className="w-full justify-between text-slate-700 hover:text-slate-900 dark:text-gray-200 dark:hover:bg-gray-700"
                   >
                     <span className="flex items-center gap-3">
                       <BookOpen className="w-5 h-5" />
@@ -215,8 +215,8 @@ export default function Settings() {
 
             <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
-                <CardTitle className="dark:text-gray-100">Communication</CardTitle>
-                <CardDescription className="dark:text-gray-300">
+                <CardTitle className="text-slate-900 dark:text-gray-100">Communication</CardTitle>
+                <CardDescription className="text-slate-600 dark:text-gray-300">
                   Manage team posts and announcements
                 </CardDescription>
               </CardHeader>
@@ -224,7 +224,7 @@ export default function Settings() {
                 <Link to={createPageUrl("Posts")}>
                   <Button 
                     variant="ghost" 
-                    className="w-full justify-between dark:text-gray-200 dark:hover:bg-gray-700"
+                    className="w-full justify-between text-slate-700 hover:text-slate-900 dark:text-gray-200 dark:hover:bg-gray-700"
                   >
                     <span className="flex items-center gap-3">
                       <FileText className="w-5 h-5" />
@@ -238,8 +238,8 @@ export default function Settings() {
 
             <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
-                <CardTitle className="dark:text-gray-100">Export Data</CardTitle>
-                <CardDescription className="dark:text-gray-300">
+                <CardTitle className="text-slate-900 dark:text-gray-100">Export Data</CardTitle>
+                <CardDescription className="text-slate-600 dark:text-gray-300">
                   Download team throwing history
                 </CardDescription>
               </CardHeader>
@@ -262,8 +262,8 @@ export default function Settings() {
           <>
             <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
-                <CardTitle className="dark:text-gray-100">My Progress</CardTitle>
-                <CardDescription className="dark:text-gray-300">
+                <CardTitle className="text-slate-900 dark:text-gray-100">My Progress</CardTitle>
+                <CardDescription className="text-slate-600 dark:text-gray-300">
                   View your training and performance data
                 </CardDescription>
               </CardHeader>
@@ -271,7 +271,7 @@ export default function Settings() {
                 <Link to={createPageUrl("Progress")}>
                   <Button 
                     variant="ghost" 
-                    className="w-full justify-between dark:text-gray-200 dark:hover:bg-gray-700"
+                    className="w-full justify-between text-slate-700 hover:text-slate-900 dark:text-gray-200 dark:hover:bg-gray-700"
                   >
                     <span className="flex items-center gap-3">
                       <Trophy className="w-5 h-5" />
@@ -285,8 +285,8 @@ export default function Settings() {
 
             <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
-                <CardTitle className="dark:text-gray-100">Export Data</CardTitle>
-                <CardDescription className="dark:text-gray-300">
+                <CardTitle className="text-slate-900 dark:text-gray-100">Export Data</CardTitle>
+                <CardDescription className="text-slate-600 dark:text-gray-300">
                   Download your throwing history
                 </CardDescription>
               </CardHeader>
