@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { useQuery } from "@tanstack/react-query";
 import { 
   User, 
   Calendar, 
@@ -12,7 +14,8 @@ import {
   Trophy,
   ChevronRight,
   FileText,
-  Download
+  Download,
+  X
 } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -20,6 +23,11 @@ import { format } from "date-fns";
 export default function Settings() {
   const [user, setUser] = useState(null);
   const [downloading, setDownloading] = useState(false);
+  const [filters, setFilters] = useState({
+    athlete: "all",
+    event: "all",
+    season: "all"
+  });
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -28,6 +36,18 @@ export default function Settings() {
     };
     fetchUser();
   }, []);
+
+  const { data: athletes = [] } = useQuery({
+    queryKey: ["athletes"],
+    queryFn: () => base44.entities.User.filter({ role: "user" }),
+    enabled: !!user && user.role === "admin",
+  });
+
+  const { data: seasons = [] } = useQuery({
+    queryKey: ["seasons"],
+    queryFn: () => base44.entities.Season.list(),
+    enabled: !!user && user.role === "admin",
+  });
 
   const downloadAthleteData = async () => {
     try {
@@ -64,10 +84,21 @@ export default function Settings() {
   const downloadAllAthleteData = async () => {
     try {
       setDownloading(true);
-      const logs = await base44.entities.ThrowLog.list();
+      let logs = await base44.entities.ThrowLog.list();
+      
+      // Apply filters
+      if (filters.athlete !== "all") {
+        logs = logs.filter(log => log.athlete_email === filters.athlete);
+      }
+      if (filters.event !== "all") {
+        logs = logs.filter(log => log.event === filters.event);
+      }
+      if (filters.season !== "all") {
+        logs = logs.filter(log => log.season_id === filters.season);
+      }
       
       if (logs.length === 0) {
-        toast.error("No data to download");
+        toast.error("No data matches the selected filters");
         return;
       }
 
@@ -81,7 +112,8 @@ export default function Settings() {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `all_athletes_throwing_history_${format(new Date(), 'yyyy-MM-dd')}.csv`;
+      const filterSuffix = filters.athlete !== "all" || filters.event !== "all" || filters.season !== "all" ? "_filtered" : "";
+      a.download = `all_athletes_throwing_history${filterSuffix}_${format(new Date(), 'yyyy-MM-dd')}.csv`;
       a.click();
       window.URL.revokeObjectURL(url);
       
@@ -243,14 +275,102 @@ export default function Settings() {
                   Download team throwing history
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-slate-700 dark:text-gray-300">Athlete</Label>
+                    <div className="relative">
+                      <select
+                        value={filters.athlete}
+                        onChange={(e) => setFilters({ ...filters, athlete: e.target.value })}
+                        className="flex h-9 w-full rounded-md border border-input bg-white dark:bg-gray-700 px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring dark:text-gray-200 dark:border-gray-600"
+                      >
+                        <option value="all">All Athletes</option>
+                        {athletes.map(athlete => (
+                          <option key={athlete.id} value={athlete.email}>{athlete.full_name}</option>
+                        ))}
+                      </select>
+                      {filters.athlete !== "all" && (
+                        <button
+                          onClick={() => setFilters({ ...filters, athlete: "all" })}
+                          className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-gray-500 dark:hover:text-gray-300"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-slate-700 dark:text-gray-300">Event</Label>
+                    <div className="relative">
+                      <select
+                        value={filters.event}
+                        onChange={(e) => setFilters({ ...filters, event: e.target.value })}
+                        className="flex h-9 w-full rounded-md border border-input bg-white dark:bg-gray-700 px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring dark:text-gray-200 dark:border-gray-600"
+                      >
+                        <option value="all">All Events</option>
+                        <option value="shot">Shot Put</option>
+                        <option value="discus">Discus</option>
+                        <option value="javelin">Javelin</option>
+                      </select>
+                      {filters.event !== "all" && (
+                        <button
+                          onClick={() => setFilters({ ...filters, event: "all" })}
+                          className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-gray-500 dark:hover:text-gray-300"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-slate-700 dark:text-gray-300">Season</Label>
+                    <div className="relative">
+                      <select
+                        value={filters.season}
+                        onChange={(e) => setFilters({ ...filters, season: e.target.value })}
+                        className="flex h-9 w-full rounded-md border border-input bg-white dark:bg-gray-700 px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring dark:text-gray-200 dark:border-gray-600"
+                      >
+                        <option value="all">All Seasons</option>
+                        {seasons.map(season => (
+                          <option key={season.id} value={season.id}>{season.name}</option>
+                        ))}
+                      </select>
+                      {filters.season !== "all" && (
+                        <button
+                          onClick={() => setFilters({ ...filters, season: "all" })}
+                          className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-gray-500 dark:hover:text-gray-300"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {(filters.athlete !== "all" || filters.event !== "all" || filters.season !== "all") && (
+                  <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-gray-400">
+                    <span>Filters active</span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setFilters({ athlete: "all", event: "all", season: "all" })}
+                      className="h-7 text-xs"
+                    >
+                      Clear all
+                    </Button>
+                  </div>
+                )}
+
                 <Button 
                   onClick={downloadAllAthleteData}
                   disabled={downloading}
                   className="w-full bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600"
                 >
                   <Download className="w-4 h-4 mr-2" />
-                  {downloading ? "Downloading..." : "Download All Athletes Data (CSV)"}
+                  {downloading ? "Downloading..." : "Download Data (CSV)"}
                 </Button>
               </CardContent>
             </Card>
