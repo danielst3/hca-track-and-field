@@ -78,11 +78,11 @@ export default function UniversalSearch() {
       <Button
         variant="outline"
         onClick={() => setOpen(true)}
-        className="gap-2 bg-white/90 hover:bg-white"
+        className="gap-2 bg-white/90 hover:bg-white text-slate-900 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200"
       >
         <Search className="w-4 h-4" />
         <span className="hidden sm:inline">Search</span>
-        <kbd className="hidden sm:inline-flex items-center gap-1 px-1.5 py-0.5 text-xs bg-slate-100 rounded">
+        <kbd className="hidden sm:inline-flex items-center gap-1 px-1.5 py-0.5 text-xs bg-slate-100 rounded dark:bg-gray-600 dark:text-gray-300">
           ⌘K
         </kbd>
       </Button>
