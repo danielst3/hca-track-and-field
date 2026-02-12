@@ -6,7 +6,7 @@ import { createPageUrl } from "../utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, ChevronRight, UserPlus, Check, X } from "lucide-react";
+import { Users, ChevronRight, UserPlus, Check, X, GraduationCap } from "lucide-react";
 import { MobileSelect } from "@/components/ui/mobile-select";
 import { Label } from "@/components/ui/label";
 import {
@@ -66,6 +66,28 @@ export default function Athletes() {
     },
     onError: () => {
       toast.error("Failed to update role");
+    },
+  });
+
+  const graduateMutation = useMutation({
+    mutationFn: ({ userId }) => base44.entities.User.update(userId, { graduated: true }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["athletes"] });
+      toast.success("Student graduated successfully");
+    },
+    onError: () => {
+      toast.error("Failed to graduate student");
+    },
+  });
+
+  const ungraduateMutation = useMutation({
+    mutationFn: ({ userId }) => base44.entities.User.update(userId, { graduated: false }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["athletes"] });
+      toast.success("Student re-activated");
+    },
+    onError: () => {
+      toast.error("Failed to re-activate student");
     },
   });
 
@@ -204,7 +226,136 @@ export default function Athletes() {
         </div>
 
         <div className="grid gap-4">
-          {accessRequests.map((request) => (
+          {/* Active Athletes Section */}
+          <div>
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-gray-100 mb-4">Current Roster</h2>
+            <div className="grid gap-4">
+              {athletes.filter(a => !a.graduated).map((athlete) => (
+                <Card key={athlete.id} className="hover:shadow-lg transition-shadow dark:bg-gray-800 dark:border-gray-700">
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between gap-4">
+                      <Link
+                        to={`${createPageUrl("AthleteDetail")}?id=${athlete.id}`}
+                        className="flex-1 flex items-center justify-between cursor-pointer"
+                      >
+                        <div>
+                          <p className="font-semibold text-slate-900 dark:text-gray-100">
+                            {athlete.full_name}
+                          </p>
+                          <p className="text-sm text-slate-600 dark:text-gray-400">{athlete.email}</p>
+                          {athlete.grade && (
+                            <Badge variant="outline" className="mt-2 text-xs capitalize dark:border-gray-600 dark:text-gray-300">
+                              {athlete.grade}
+                            </Badge>
+                          )}
+                          {athlete.events && athlete.events.length > 0 && (
+                            <div className="flex gap-1 mt-2">
+                              {athlete.events.map((evt) => (
+                                <Badge
+                                  key={evt}
+                                  className="text-xs capitalize bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                                >
+                                  {evt}
+                                </Badge>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                        <ChevronRight className="w-5 h-5 text-slate-500 dark:text-gray-400" />
+                      </Link>
+                      <div className="flex gap-2 items-center">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => graduateMutation.mutate({ userId: athlete.id })}
+                          className="gap-1 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                        >
+                          <GraduationCap className="w-4 h-4" />
+                          Graduate
+                        </Button>
+                        <div className="min-w-[120px]" onClick={(e) => e.stopPropagation()}>
+                          <MobileSelect
+                            value={athlete.role}
+                            onValueChange={(newRole) =>
+                              roleUpdateMutation.mutate({ userId: athlete.id, newRole })
+                            }
+                            options={[
+                              { value: "user", label: "Athlete" },
+                              { value: "admin", label: "Coach" },
+                              { value: "parent", label: "Parent" },
+                            ]}
+                            triggerClassName="text-sm"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+              {athletes.filter(a => !a.graduated).length === 0 && (
+                <Card className="dark:bg-gray-800 dark:border-gray-700">
+                  <CardContent className="py-12 text-center">
+                    <Users className="w-12 h-12 text-slate-400 dark:text-gray-500 mx-auto mb-3" />
+                    <p className="text-slate-600 dark:text-gray-300">No active athletes</p>
+                    <p className="text-sm text-slate-500 dark:text-gray-400 mt-1">
+                      Invite athletes to get started
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          </div>
+
+          {/* Graduated Athletes Section */}
+          {athletes.some(a => a.graduated) && (
+            <div>
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-gray-100 mb-4 mt-6">Graduated Students</h2>
+              <div className="grid gap-4">
+                {athletes.filter(a => a.graduated).map((athlete) => (
+                  <Card key={athlete.id} className="opacity-75 hover:shadow-lg transition-shadow dark:bg-gray-800 dark:border-gray-700 border border-slate-300 dark:border-gray-600">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <p className="font-semibold text-slate-900 dark:text-gray-100">
+                              {athlete.full_name}
+                            </p>
+                            <Badge className="bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-300 text-xs">
+                              Graduated
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-slate-600 dark:text-gray-400">{athlete.email}</p>
+                          {athlete.events && athlete.events.length > 0 && (
+                            <div className="flex gap-1 mt-2">
+                              {athlete.events.map((evt) => (
+                                <Badge
+                                  key={evt}
+                                  className="text-xs capitalize bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                                >
+                                  {evt}
+                                </Badge>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => ungraduateMutation.mutate({ userId: athlete.id })}
+                          className="gap-1 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                        >
+                          Undo
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Access Requests and Pending Invitations */}
+           {accessRequests.map((request) => (
             <Card key={request.id} className="hover:shadow-lg transition-shadow dark:bg-gray-800 dark:border-gray-700 border-2 border-blue-300 dark:border-blue-700">
               <CardContent className="p-4">
                 <div className="flex items-start justify-between gap-4">
@@ -278,69 +429,7 @@ export default function Athletes() {
               </CardContent>
             </Card>
           ))}
-          {athletes.map((athlete) => (
-            <Card key={athlete.id} className="hover:shadow-lg transition-shadow dark:bg-gray-800 dark:border-gray-700">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between gap-4">
-                  <Link
-                    to={`${createPageUrl("AthleteDetail")}?id=${athlete.id}`}
-                    className="flex-1 flex items-center justify-between cursor-pointer"
-                  >
-                    <div>
-                      <p className="font-semibold text-slate-900 dark:text-gray-100">
-                        {athlete.full_name}
-                      </p>
-                      <p className="text-sm text-slate-600 dark:text-gray-400">{athlete.email}</p>
-                      {athlete.grade && (
-                        <Badge variant="outline" className="mt-2 text-xs capitalize dark:border-gray-600 dark:text-gray-300">
-                          {athlete.grade}
-                        </Badge>
-                      )}
-                      {athlete.events && athlete.events.length > 0 && (
-                        <div className="flex gap-1 mt-2">
-                          {athlete.events.map((evt) => (
-                            <Badge
-                              key={evt}
-                              className="text-xs capitalize bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
-                            >
-                              {evt}
-                            </Badge>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                    <ChevronRight className="w-5 h-5 text-slate-500 dark:text-gray-400" />
-                  </Link>
-                  <div className="min-w-[120px]" onClick={(e) => e.stopPropagation()}>
-                    <MobileSelect
-                      value={athlete.role}
-                      onValueChange={(newRole) =>
-                        roleUpdateMutation.mutate({ userId: athlete.id, newRole })
-                      }
-                      options={[
-                        { value: "user", label: "Athlete" },
-                        { value: "admin", label: "Coach" },
-                        { value: "parent", label: "Parent" },
-                      ]}
-                      triggerClassName="text-sm"
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
 
-          {athletes.length === 0 && (
-            <Card className="dark:bg-gray-800 dark:border-gray-700">
-              <CardContent className="py-12 text-center">
-                <Users className="w-12 h-12 text-slate-400 dark:text-gray-500 mx-auto mb-3" />
-                <p className="text-slate-600 dark:text-gray-300">No athletes yet</p>
-                <p className="text-sm text-slate-500 dark:text-gray-400 mt-1">
-                  Invite athletes to get started
-                </p>
-              </CardContent>
-            </Card>
-          )}
         </div>
       </div>
     </div>
