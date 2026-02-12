@@ -15,10 +15,12 @@ import {
   ChevronRight,
   FileText,
   Download,
-  X
+  X,
+  CheckCircle2
 } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function Settings() {
   const [user, setUser] = useState(null);
@@ -28,11 +30,16 @@ export default function Settings() {
     event: "all",
     season: "all"
   });
+  const [selectedEvents, setSelectedEvents] = useState([]);
+  const [isSavingEvents, setIsSavingEvents] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
       const currentUser = await base44.auth.me();
       setUser(currentUser);
+      if (currentUser?.events) {
+        setSelectedEvents(currentUser.events);
+      }
     };
     fetchUser();
   }, []);
@@ -48,6 +55,31 @@ export default function Settings() {
     queryFn: () => base44.entities.Season.list(),
     enabled: !!user && user.role === "admin",
   });
+
+  const handleToggleEvent = (event) => {
+    setSelectedEvents(prev => 
+      prev.includes(event) 
+        ? prev.filter(e => e !== event)
+        : [...prev, event]
+    );
+  };
+
+  const handleSaveEvents = async () => {
+    if (selectedEvents.length === 0) {
+      toast.error("Please select at least one event");
+      return;
+    }
+    try {
+      setIsSavingEvents(true);
+      await base44.auth.updateMe({ events: selectedEvents });
+      setUser(prev => ({ ...prev, events: selectedEvents }));
+      toast.success("Events updated successfully!");
+    } catch (error) {
+      toast.error("Failed to update events");
+    } finally {
+      setIsSavingEvents(false);
+    }
+  };
 
   const downloadAthleteData = async () => {
     try {
@@ -171,6 +203,48 @@ export default function Settings() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Events Selection (Athletes Only) */}
+        {!isCoach && (
+          <Card className="dark:bg-gray-800 dark:border-gray-700">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-gray-100">
+                <Trophy className="w-5 h-5" />
+                Your Events
+              </CardTitle>
+              <CardDescription className="text-slate-600 dark:text-gray-300">
+                Select which events you compete in
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-3">
+                {[
+                  { id: "shot", label: "Shot Put", icon: "🏋️" },
+                  { id: "discus", label: "Discus", icon: "🥏" },
+                  { id: "javelin", label: "Javelin", icon: "🎯" }
+                ].map(event => (
+                  <label key={event.id} className="flex items-center gap-3 cursor-pointer">
+                    <Checkbox
+                      checked={selectedEvents.includes(event.id)}
+                      onCheckedChange={() => handleToggleEvent(event.id)}
+                      className="dark:border-gray-600"
+                    />
+                    <span className="text-sm font-medium text-slate-700 dark:text-gray-200">
+                      {event.icon} {event.label}
+                    </span>
+                  </label>
+                ))}
+              </div>
+              <Button
+                onClick={handleSaveEvents}
+                disabled={isSavingEvents || selectedEvents.length === 0}
+                className="w-full bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600"
+              >
+                {isSavingEvents ? "Saving..." : "Save Events"}
+              </Button>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Coach-only Settings */}
         {isCoach && (
