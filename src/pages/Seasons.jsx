@@ -28,6 +28,7 @@ import { Calendar, Plus, Copy, CheckCircle2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { createPageUrl } from "../utils";
+import ImportPlansDialog from "../components/seasons/ImportPlansDialog";
 
 export default function Seasons() {
   const [user, setUser] = useState(null);
@@ -330,6 +331,7 @@ export default function Seasons() {
                         Set Active
                       </Button>
                     )}
+                    <ImportPlansDialog seasonId={season.id} />
                     <Button
                       size="sm"
                       variant="outline"
