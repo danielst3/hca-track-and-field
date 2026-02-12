@@ -16,22 +16,29 @@ import { cn } from "@/lib/utils";
 import AthleteCard from "../components/dashboard/AthleteCard";
 import EventProgressChart from "../components/dashboard/EventProgressChart";
 
-const eventOptions = [
-  { id: "shot", label: "Shot Put", icon: "🏋️" },
-  { id: "discus", label: "Discus", icon: "🥏" },
-  { id: "javelin", label: "Javelin", icon: "🎯" }
-];
-
 export default function Today() {
   const [user, setUser] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedEvents, setSelectedEvents] = useState(["shot", "discus", "javelin"]);
+  const [eventOptions, setEventOptions] = useState([]);
   const dateStr = format(selectedDate, "yyyy-MM-dd");
 
   useEffect(() => {
     const fetchUser = async () => {
       const currentUser = await base44.auth.me();
       setUser(currentUser);
+      
+      // Build event options from user's event_types
+      if (currentUser?.event_types && currentUser.event_types.length > 0) {
+        const icons = { shot: "🏋️", discus: "🥏", javelin: "🎯" };
+        const options = currentUser.event_types.map(event => ({
+          id: event.id,
+          label: event.label,
+          icon: icons[event.id] || "🎯"
+        }));
+        setEventOptions(options);
+      }
+      
       if (currentUser?.default_events && currentUser.default_events.length > 0) {
         setSelectedEvents(currentUser.default_events);
       }
