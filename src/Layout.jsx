@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "./utils";
 import { Button } from "@/components/ui/button";
-import { Home, Calendar, LogOut, Trophy, TrendingUp, Users, BookOpen, FileText, Trash2, RefreshCw, ArrowLeft, Settings, Moon, Sun } from "lucide-react";
+import { Home, Calendar, LogOut, Trophy, TrendingUp, Users, BookOpen, FileText, Trash2, RefreshCw, ArrowLeft, Settings, Moon, Sun, MoreHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import UniversalSearch from "./components/shared/UniversalSearch";
 import { AnimatePresence, motion } from "framer-motion";
@@ -55,12 +55,30 @@ export default function Layout({ children, currentPageName }) {
   });
   const [requestAccessOpen, setRequestAccessOpen] = useState(false);
   const [requestData, setRequestData] = useState({ email: "", full_name: "", role: "user", athlete_name: "", notes: "" });
+  const [showOverflow, setShowOverflow] = useState(false);
+  const navRef = useRef(null);
 
   useEffect(() => {
     // Detect if on a sub-page
     const subPages = ["AthleteDetail", "Settings"];
     setCanGoBack(subPages.includes(currentPageName));
   }, [currentPageName]);
+
+  useEffect(() => {
+    // Check if nav items overflow
+    const checkOverflow = () => {
+      if (navRef.current) {
+        const containerWidth = navRef.current.offsetWidth;
+        const itemCount = navItems.length;
+        const minItemWidth = 80; // minimum width per nav item
+        setShowOverflow(containerWidth < itemCount * minItemWidth);
+      }
+    };
+
+    checkOverflow();
+    window.addEventListener('resize', checkOverflow);
+    return () => window.removeEventListener('resize', checkOverflow);
+  }, [user]);
 
   useEffect(() => {
     // Apply theme
@@ -503,9 +521,9 @@ export default function Layout({ children, currentPageName }) {
       </AlertDialog>
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-slate-200 dark:border-gray-700 shadow-lg z-50 select-none" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+      <div ref={navRef} className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-slate-200 dark:border-gray-700 shadow-lg z-50 select-none" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-around">
-          {navItems.map((item) => {
+          {(showOverflow ? navItems.slice(0, 3) : navItems).map((item) => {
             const Icon = item.icon;
             const isActive = currentPageName === item.page;
             return (
@@ -525,6 +543,39 @@ export default function Layout({ children, currentPageName }) {
               </Link>
             );
           })}
+          {showOverflow && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="flex flex-col items-center gap-1 h-auto py-2 px-4 select-none text-slate-600 hover:text-[var(--brand-primary)] hover:bg-[var(--brand-secondary)] dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800"
+                >
+                  <MoreHorizontal className="w-5 h-5" />
+                  <span className="text-xs font-medium">More</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="dark:bg-gray-800 dark:border-gray-700 mb-2">
+                {navItems.slice(3).map((item) => {
+                  const Icon = item.icon;
+                  const isActive = currentPageName === item.page;
+                  return (
+                    <DropdownMenuItem key={item.page} asChild>
+                      <Link 
+                        to={createPageUrl(item.page)}
+                        className={cn(
+                          "cursor-pointer dark:text-gray-200 dark:hover:bg-gray-700",
+                          isActive && "bg-[var(--brand-secondary)] dark:bg-gray-700"
+                        )}
+                      >
+                        <Icon className="w-4 h-4 mr-2" />
+                        {item.name}
+                      </Link>
+                    </DropdownMenuItem>
+                  );
+                })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </div>
     </div>
