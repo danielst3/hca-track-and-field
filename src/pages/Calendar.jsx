@@ -8,6 +8,7 @@ import { getDayTypeColors } from "../components/shared/DayTypeBadge";
 import DayDetailDialog from "../components/calendar/DayDetailDialog";
 import EditPlanDialog from "../components/calendar/EditPlanDialog";
 import AbbreviationsKey from "../components/shared/AbbreviationsKey";
+import EventToggle from "../components/shared/EventToggle";
 import { ChevronLeft, ChevronRight, Trophy } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
