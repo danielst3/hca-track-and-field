@@ -55,6 +55,13 @@ export default function Athletes() {
 
   const handleInvite = async (e) => {
     e.preventDefault();
+    
+    // Validate email domain for athletes
+    if (inviteRole === "user" && !inviteEmail.toLowerCase().endsWith("@hcakc.org")) {
+      toast.error("Athletes must have an @hcakc.org email address");
+      return;
+    }
+    
     try {
       await base44.users.inviteUser(inviteEmail, inviteRole);
       const roleLabel = inviteRole === "user" ? "Athlete" : inviteRole === "admin" ? "Coach" : "Parent";
