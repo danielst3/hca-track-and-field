@@ -1,10 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { base44 } from "@/api/base44Client";
+import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Scroll, Book, Dumbbell, Info, Shield, Target, Activity } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Scroll, Book, Dumbbell, Info, Shield, Target, Activity, Plus, ExternalLink, FileText, Edit } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { drillsDatabase } from "../components/data/drillsDatabase";
+import EditResourceDialog from "../components/resources/EditResourceDialog";
+
+const customSection = {
+  id: "custom-resources",
+  title: "Team Resources",
+  icon: FileText,
+};
 
 const sections = [
+  customSection,
   {
     id: "abbreviations",
     title: "Abbreviations & Terminology",
@@ -156,8 +167,36 @@ const safety = [
 ];
 
 export default function Resources() {
+  const [user, setUser] = useState(null);
   const [activeSection, setActiveSection] = useState("abbreviations");
   const [expandedDrill, setExpandedDrill] = useState(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedResource, setSelectedResource] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const currentUser = await base44.auth.me();
+      setUser(currentUser);
+    };
+    fetchUser();
+  }, []);
+
+  const { data: customResources = [] } = useQuery({
+    queryKey: ["resources"],
+    queryFn: () => base44.entities.Resource.list(),
+  });
+
+  const isCoach = user?.role === "admin";
+
+  const handleAddResource = () => {
+    setSelectedResource(null);
+    setEditDialogOpen(true);
+  };
+
+  const handleEditResource = (resource) => {
+    setSelectedResource(resource);
+    setEditDialogOpen(true);
+  };
 
   const getDrillsByCategory = (category) => {
     return drillsDatabase.filter(d => d.category === category);
@@ -236,11 +275,24 @@ export default function Resources() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="bg-gradient-to-r from-slate-900 to-slate-800 p-6 mb-6">
-          <div className="flex items-center gap-3">
-            <Scroll className="w-8 h-8 text-blue-400" />
-            <h1 className="text-3xl font-bold text-white">Resources</h1>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-3">
+                <Scroll className="w-8 h-8 text-blue-400" />
+                <h1 className="text-3xl font-bold text-white">Resources</h1>
+              </div>
+              <p className="text-slate-300 mt-2">Training reference guide and drill library</p>
+            </div>
+            {isCoach && (
+              <Button
+                onClick={handleAddResource}
+                className="bg-blue-600 hover:bg-blue-700 gap-2"
+              >
+                <Plus className="w-4 h-4" />
+                Add Resource
+              </Button>
+            )}
           </div>
-          <p className="text-slate-300 mt-2">Training reference guide and drill library</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 px-4">
@@ -284,6 +336,77 @@ export default function Resources() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-6">
+                {/* Custom Resources */}
+                {activeSection === "custom-resources" && (
+                  <div className="space-y-4">
+                    {customResources.length === 0 ? (
+                      <div className="text-center py-12">
+                        <FileText className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                        <p className="text-slate-600">No custom resources yet</p>
+                        {isCoach && (
+                          <p className="text-sm text-slate-500 mt-1">
+                            Click "Add Resource" to create your first one
+                          </p>
+                        )}
+                      </div>
+                    ) : (
+                      customResources.map((resource) => (
+                        <div
+                          key={resource.id}
+                          className="p-4 bg-slate-50 dark:bg-gray-900 rounded-lg border border-slate-200 dark:border-gray-700"
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <h3 className="font-bold text-lg text-slate-900 dark:text-gray-100 mb-2">
+                                {resource.title}
+                              </h3>
+                              {resource.content && (
+                                <p className="text-sm text-slate-600 dark:text-gray-300 mb-3 whitespace-pre-wrap">
+                                  {resource.content}
+                                </p>
+                              )}
+                              <div className="flex gap-2">
+                                {resource.link_url && (
+                                  <a
+                                    href={resource.link_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-sm text-blue-600 hover:underline flex items-center gap-1"
+                                  >
+                                    <ExternalLink className="w-3 h-3" />
+                                    Open Link
+                                  </a>
+                                )}
+                                {resource.file_url && (
+                                  <a
+                                    href={resource.file_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-sm text-blue-600 hover:underline flex items-center gap-1"
+                                  >
+                                    <FileText className="w-3 h-3" />
+                                    View File
+                                  </a>
+                                )}
+                              </div>
+                            </div>
+                            {isCoach && (
+                              <Button
+                                onClick={() => handleEditResource(resource)}
+                                size="sm"
+                                variant="ghost"
+                                className="ml-2 dark:text-gray-300 dark:hover:bg-gray-800"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                )}
+
                 {/* Abbreviations */}
                 {activeSection === "abbreviations" && (
                   <div className="space-y-4">
@@ -415,6 +538,12 @@ export default function Resources() {
             </Card>
           </div>
         </div>
+
+        <EditResourceDialog
+          resource={selectedResource}
+          open={editDialogOpen}
+          onOpenChange={setEditDialogOpen}
+        />
       </div>
     </div>
   );

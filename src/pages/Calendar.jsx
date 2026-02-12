@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { getDayTypeColors } from "../components/shared/DayTypeBadge";
 import DayDetailDialog from "../components/calendar/DayDetailDialog";
+import EditPlanDialog from "../components/calendar/EditPlanDialog";
 import AbbreviationsKey from "../components/shared/AbbreviationsKey";
 import { ChevronLeft, ChevronRight, Trophy } from "lucide-react";
 import {
@@ -23,10 +24,20 @@ import {
 } from "date-fns";
 
 export default function Calendar() {
+  const [user, setUser] = React.useState(null);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState("week");
   const [selectedDay, setSelectedDay] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+
+  React.useEffect(() => {
+    const fetchUser = async () => {
+      const currentUser = await base44.auth.me();
+      setUser(currentUser);
+    };
+    fetchUser();
+  }, []);
 
   const { data: plans = [] } = useQuery({
     queryKey: ["allPlans"],
@@ -73,7 +84,11 @@ export default function Calendar() {
 
   const handleDayClick = (day) => {
     setSelectedDay(day);
-    setDialogOpen(true);
+    if (user?.role === "admin") {
+      setEditDialogOpen(true);
+    } else {
+      setDialogOpen(true);
+    }
   };
 
   const selectedPlan = selectedDay ? getPlanForDate(selectedDay) : null;
@@ -183,13 +198,23 @@ export default function Calendar() {
           })}
         </div>
 
-        <DayDetailDialog
-          date={selectedDay}
-          plan={selectedPlan}
-          meet={selectedMeet}
-          open={dialogOpen}
-          onOpenChange={setDialogOpen}
-        />
+        {user?.role === "admin" ? (
+          <EditPlanDialog
+            date={selectedDay}
+            plan={selectedPlan}
+            meet={selectedMeet}
+            open={editDialogOpen}
+            onOpenChange={setEditDialogOpen}
+          />
+        ) : (
+          <DayDetailDialog
+            date={selectedDay}
+            plan={selectedPlan}
+            meet={selectedMeet}
+            open={dialogOpen}
+            onOpenChange={setDialogOpen}
+          />
+        )}
       </div>
     </div>
   );
