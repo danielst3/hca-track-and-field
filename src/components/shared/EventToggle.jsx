@@ -13,7 +13,8 @@ export default function EventToggle({ event, isSelected, onClick }) {
       style={{
         backgroundColor: isSelected ? "var(--brand-primary)" : "white",
         color: isSelected ? "white" : "black",
-        borderColor: "black",
+        borderColor: isSelected ? "var(--brand-primary)" : "black",
+        minWidth: "120px",
       }}
     >
       {event.label}
