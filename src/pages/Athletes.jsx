@@ -59,14 +59,19 @@ export default function Athletes() {
   });
 
   const roleUpdateMutation = useMutation({
-    mutationFn: ({ userId, newRole }) => base44.entities.User.update(userId, { role: newRole }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["athletes"] });
-      toast.success("Role updated successfully");
-    },
-    onError: () => {
-      toast.error("Failed to update role");
-    },
+   mutationFn: async ({ userId, newRole }) => {
+     // Role is managed via the built-in user system, not entity fields
+     // Store role preference in a custom field instead
+     return base44.entities.User.update(userId, { user_role_preference: newRole });
+   },
+   onSuccess: () => {
+     queryClient.invalidateQueries({ queryKey: ["athletes"] });
+     toast.success("Role updated successfully");
+   },
+   onError: (error) => {
+     console.error("Role update error:", error);
+     toast.error("Failed to update role");
+   },
   });
 
   const graduateMutation = useMutation({
@@ -276,7 +281,7 @@ export default function Athletes() {
                         </Button>
                         <div className="min-w-[120px]" onClick={(e) => e.stopPropagation()}>
                           <select
-                            value={athlete.role || "user"}
+                            value={athlete.user_role_preference || "user"}
                             onChange={(e) => roleUpdateMutation.mutate({ userId: athlete.id, newRole: e.target.value })}
                             className="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
                           >
