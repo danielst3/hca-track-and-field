@@ -485,14 +485,14 @@ export default function Settings() {
                   ))}
                 </div>
                 <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={newEventLabel}
-                    onChange={(e) => setNewEventLabel(e.target.value)}
-                    placeholder="New event name"
-                    onKeyPress={(e) => e.key === "Enter" && handleAddEventType()}
-                    className="flex-1 px-3 py-2 text-sm rounded-md border border-input bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
-                  />
+                   <input
+                     type="text"
+                     value={newEventLabel}
+                     onChange={(e) => setNewEventLabel(e.target.value)}
+                     placeholder="New event name"
+                     onKeyPress={(e) => e.key === "Enter" && handleAddEventType()}
+                     className="flex-1 px-3 py-2 text-sm rounded-md border border-input bg-white text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                   />
                   <Button
                     onClick={handleAddEventType}
                     disabled={!newEventLabel.trim()}
@@ -536,14 +536,14 @@ export default function Settings() {
                   ))}
                 </div>
                 <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={newPracticeLabel}
-                    onChange={(e) => setNewPracticeLabel(e.target.value)}
-                    placeholder="New practice type name"
-                    onKeyPress={(e) => e.key === "Enter" && handleAddPracticeType()}
-                    className="flex-1 px-3 py-2 text-sm rounded-md border border-input bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
-                  />
+                   <input
+                     type="text"
+                     value={newPracticeLabel}
+                     onChange={(e) => setNewPracticeLabel(e.target.value)}
+                     placeholder="New practice type name"
+                     onKeyPress={(e) => e.key === "Enter" && handleAddPracticeType()}
+                     className="flex-1 px-3 py-2 text-sm rounded-md border border-input bg-white text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                   />
                   <Button
                     onClick={handleAddPracticeType}
                     disabled={!newPracticeLabel.trim()}
