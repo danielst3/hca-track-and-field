@@ -32,6 +32,22 @@ export default function Settings() {
   });
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [isSavingEvents, setIsSavingEvents] = useState(false);
+  const [eventTypes, setEventTypes] = useState([
+    { id: "shot", label: "Shot Put" },
+    { id: "discus", label: "Discus" },
+    { id: "javelin", label: "Javelin" }
+  ]);
+  const [practiceTypes, setPracticeTypes] = useState([
+    { id: "technical", label: "Technical" },
+    { id: "primary", label: "Primary" },
+    { id: "indoor", label: "Indoor" },
+    { id: "tuneup", label: "Tune-up" },
+    { id: "meet", label: "Meet" },
+    { id: "recovery", label: "Recovery" }
+  ]);
+  const [newEventLabel, setNewEventLabel] = useState("");
+  const [newPracticeLabel, setNewPracticeLabel] = useState("");
+  const [isSavingTypes, setIsSavingTypes] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
