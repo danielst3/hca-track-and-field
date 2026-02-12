@@ -7,58 +7,54 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Info } from "lucide-react";
+import { drillsDatabase } from "../data/drillsDatabase";
 
-const drillDatabase = {
-  "PP": {
-    name: "Power Position",
-    fullName: "Power Position Throws",
-    events: ["Shot", "Discus"],
-    description: "Start from final power position, focus on block and drive through release. Builds explosive power and proper finish mechanics."
-  },
-  "FT": {
-    name: "Full Throw",
-    fullName: "Full Throw",
-    events: ["Shot", "Discus", "Javelin"],
-    description: "Complete throwing motion from start to finish. Focus on rhythm and coordination throughout the entire movement."
-  },
-  "SA": {
-    name: "South African",
-    fullName: "South Africans",
-    events: ["Shot"],
-    description: "Standing throw with feet together, emphasizing chest drive and arm extension. Develops upper body power and coordination."
-  },
-  "IS": {
-    name: "Impulse Step",
-    fullName: "Impulse Steps",
-    events: ["Discus"],
-    description: "Quick rhythm steps to build momentum and timing. Helps develop smooth transitions in the throwing motion."
-  },
-  "MB": {
-    name: "Medicine Ball",
-    fullName: "Medicine Ball Work",
-    events: ["Shot", "Discus", "Javelin"],
-    description: "Overhead throws, chest passes, rotational throws. Develops core strength and explosive power."
-  },
-  "ER": {
-    name: "External Rotation",
-    fullName: "External Rotation Series",
-    events: ["Javelin"],
-    description: "Shoulder strengthening and mobility exercises. Critical for arm health and throwing efficiency."
-  },
-  "TQ": {
-    name: "Technical Quality",
-    fullName: "Technical Quality throws",
-    events: ["Shot", "Discus", "Javelin"],
-    description: "Focus on form over distance. Controlled throws emphasizing proper mechanics and consistency."
-  },
+// Build searchable drill map from database
+const buildDrillMap = () => {
+  const map = {};
+  
+  drillsDatabase.forEach(drill => {
+    // Add by full name (case insensitive key)
+    const key = drill.name.toLowerCase();
+    map[key] = drill;
+    
+    // Add common abbreviations
+    if (drill.name.includes("PP")) map["pp"] = drill;
+    if (drill.name.includes("Power Position")) map["power position"] = drill;
+    if (drill.name.includes("Full Throw")) map["ft"] = drill;
+    if (drill.name.includes("South African")) map["sa"] = drill;
+    if (drill.name.includes("Impulse Step")) map["is"] = drill;
+    if (drill.name.includes("Medicine Ball")) map["mb"] = drill;
+    if (drill.name.includes("External Rotation")) map["er"] = drill;
+    if (drill.name.includes("Technical Quality")) map["tq"] = drill;
+    if (drill.name.includes("Step-In")) map["step-in"] = drill;
+    if (drill.name.includes("Block Freeze")) map["block freeze"] = drill;
+    if (drill.name.includes("Stand Throw")) map["stand throw"] = drill;
+    if (drill.name.includes("Finish Freeze")) map["finish freeze"] = drill;
+    if (drill.name.includes("Wheel")) map["wheel"] = drill;
+    if (drill.name.includes("3-Step")) map["3-step"] = drill;
+    if (drill.name.includes("Carry")) map["carry"] = drill;
+    if (drill.name.includes("Rhythm Runs")) map["rhythm runs"] = drill;
+    if (drill.name.includes("Trap Bar Jump")) map["trap bar jump"] = drill;
+    if (drill.name.includes("Push Press")) map["push press"] = drill;
+    if (drill.name.includes("Back Squat")) map["back squat"] = drill;
+    if (drill.name.includes("Front Squat")) map["front squat"] = drill;
+    if (drill.name.includes("RDL") || drill.name.includes("Romanian Deadlift")) map["rdl"] = drill;
+    if (drill.name.includes("Copenhagen")) map["copenhagen"] = drill;
+    if (drill.name.includes("Scap Row")) map["scap row"] = drill;
+  });
+  
+  return map;
 };
 
-export default function DrillLink({ code, children }) {
+const drillMap = buildDrillMap();
+
+export default function DrillLink({ drillKey, displayText }) {
   const [open, setOpen] = useState(false);
-  const drill = drillDatabase[code];
+  const drill = drillMap[drillKey.toLowerCase()];
 
   if (!drill) {
-    return <span>{children || code}</span>;
+    return <span>{displayText}</span>;
   }
 
   return (
@@ -67,36 +63,71 @@ export default function DrillLink({ code, children }) {
         onClick={() => setOpen(true)}
         className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 font-semibold underline decoration-dotted cursor-pointer"
       >
-        {children || code}
+        {displayText}
         <Info className="w-3 h-3" />
       </button>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <span className="font-mono text-blue-600">{code}</span>
-              <span>•</span>
-              <span>{drill.name}</span>
-            </DialogTitle>
+            <DialogTitle className="text-xl">{drill.name}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 mt-4">
-            <div>
-              <p className="text-sm font-semibold text-slate-600 mb-2">Events:</p>
-              <div className="flex gap-2">
-                {drill.events.map((event) => (
-                  <span
-                    key={event}
-                    className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full font-medium"
-                  >
-                    {event}
-                  </span>
-                ))}
+            {drill.purpose && (
+              <div>
+                <p className="text-sm font-semibold text-slate-700 mb-1">Purpose:</p>
+                <p className="text-slate-600">{drill.purpose}</p>
               </div>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-slate-600 mb-2">Description:</p>
-              <p className="text-slate-700">{drill.description}</p>
-            </div>
+            )}
+            
+            {drill.setup && (
+              <div>
+                <p className="text-sm font-semibold text-slate-700 mb-1">Setup:</p>
+                <p className="text-slate-600">{drill.setup}</p>
+              </div>
+            )}
+            
+            {drill.executionSteps && drill.executionSteps.length > 0 && (
+              <div>
+                <p className="text-sm font-semibold text-slate-700 mb-2">Execution:</p>
+                <ol className="space-y-2">
+                  {drill.executionSteps.map((step, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-sm text-slate-600">
+                      <span className="font-semibold text-blue-600 min-w-[20px]">{idx + 1}.</span>
+                      <span>{step}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+            
+            {drill.cues && drill.cues.length > 0 && (
+              <div>
+                <p className="text-sm font-semibold text-slate-700 mb-2">Coaching Cues:</p>
+                <div className="flex flex-wrap gap-2">
+                  {drill.cues.map((cue, idx) => (
+                    <span
+                      key={idx}
+                      className="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full font-medium"
+                    >
+                      "{cue}"
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {drill.commonFaultsFixes && drill.commonFaultsFixes.length > 0 && (
+              <div>
+                <p className="text-sm font-semibold text-slate-700 mb-2">Common Faults & Fixes:</p>
+                <div className="space-y-2">
+                  {drill.commonFaultsFixes.map((item, idx) => (
+                    <div key={idx} className="p-2 bg-red-50 rounded border border-red-200 text-sm">
+                      <span className="text-slate-700">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </DialogContent>
       </Dialog>
@@ -105,10 +136,14 @@ export default function DrillLink({ code, children }) {
 }
 
 export function parseDrillText(text) {
-  if (!text) return text;
+  if (!text) return [{ type: 'text', content: '' }];
   
-  const drillCodes = Object.keys(drillDatabase);
-  const pattern = new RegExp(`\\b(${drillCodes.join('|')})\\b`, 'g');
+  // Create pattern for all drill keys
+  const drillKeys = Object.keys(drillMap);
+  // Sort by length (longest first) to match longer phrases before shorter ones
+  drillKeys.sort((a, b) => b.length - a.length);
+  
+  const pattern = new RegExp(`\\b(${drillKeys.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})\\b`, 'gi');
   
   const parts = [];
   let lastIndex = 0;
@@ -118,7 +153,7 @@ export function parseDrillText(text) {
     if (match.index > lastIndex) {
       parts.push({ type: 'text', content: text.slice(lastIndex, match.index) });
     }
-    parts.push({ type: 'drill', code: match[0] });
+    parts.push({ type: 'drill', drillKey: match[0], displayText: match[0] });
     lastIndex = match.index + match[0].length;
   }
   
