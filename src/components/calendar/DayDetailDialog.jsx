@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Trophy, Calendar } from "lucide-react";
 import { format } from "date-fns";
 import DayTypeBadge from "../shared/DayTypeBadge";
+import AbbreviationsKey from "../shared/AbbreviationsKey";
 
 export default function DayDetailDialog({ date, plan, meet, open, onOpenChange }) {
   if (!date) return null;
@@ -18,9 +19,12 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange }
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="space-y-2">
-            <DialogTitle className="text-2xl">
-              {format(date, "EEEE, MMMM d, yyyy")}
-            </DialogTitle>
+            <div className="flex items-center justify-between">
+              <DialogTitle className="text-2xl">
+                {format(date, "EEEE, MMMM d, yyyy")}
+              </DialogTitle>
+              <AbbreviationsKey />
+            </div>
             {plan && <DayTypeBadge type={plan.day_type} />}
             {meet && (
               <div className="flex items-center gap-2 text-red-600 font-semibold">

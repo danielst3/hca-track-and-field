@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { getDayTypeColors } from "../components/shared/DayTypeBadge";
 import DayDetailDialog from "../components/calendar/DayDetailDialog";
+import AbbreviationsKey from "../components/shared/AbbreviationsKey";
 import { ChevronLeft, ChevronRight, Trophy } from "lucide-react";
 import {
   format,
