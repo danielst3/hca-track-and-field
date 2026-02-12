@@ -24,6 +24,8 @@ export default function Athletes() {
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState("user");
   const [inviteOpen, setInviteOpen] = useState(false);
+  const [editingAthlete, setEditingAthlete] = useState(null);
+  const [editRoles, setEditRoles] = useState([]);
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -59,13 +61,13 @@ export default function Athletes() {
   });
 
   const roleUpdateMutation = useMutation({
-   mutationFn: async ({ userId, newRole }) => {
-     // Role is managed via the built-in user system, not entity fields
-     // Store role preference in a custom field instead
-     return base44.entities.User.update(userId, { user_role_preference: newRole });
+   mutationFn: async ({ userId, newRoles }) => {
+     // Store roles as comma-separated string
+     return base44.entities.User.update(userId, { user_role_preference: newRoles.join(",") });
    },
    onSuccess: () => {
      queryClient.invalidateQueries({ queryKey: ["athletes"] });
+     setEditingAthlete(null);
      toast.success("Role updated successfully");
    },
    onError: (error) => {
@@ -168,6 +170,28 @@ export default function Athletes() {
     } catch (error) {
       toast.error("Failed to deny request");
     }
+  };
+
+  const openEditDialog = (athlete) => {
+    setEditingAthlete(athlete);
+    const roles = athlete.user_role_preference ? athlete.user_role_preference.split(",") : ["user"];
+    setEditRoles(roles);
+  };
+
+  const toggleRole = (role) => {
+    setEditRoles(prev =>
+      prev.includes(role)
+        ? prev.filter(r => r !== role)
+        : [...prev, role]
+    );
+  };
+
+  const handleSaveRoles = () => {
+    if (editRoles.length === 0) {
+      toast.error("At least one role must be selected");
+      return;
+    }
+    roleUpdateMutation.mutate({ userId: editingAthlete.id, newRoles: editRoles });
   };
 
   if (!user || user.role !== "admin") return null;
