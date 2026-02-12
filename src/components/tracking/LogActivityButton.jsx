@@ -13,6 +13,7 @@ import { Plus } from "lucide-react";
 import LogPerformanceForm from "./LogPerformanceForm";
 
 export default function LogActivityButton({ user }) {
+  const [athleteDialogOpen, setAthleteDialogOpen] = useState(false);
   const [selectedAthlete, setSelectedAthlete] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
 
@@ -34,10 +35,63 @@ export default function LogActivityButton({ user }) {
     { id: "javelin", label: "Javelin", icon: "🎯" },
   ];
 
-  // For coaches: show athlete selection, then event selection
-  if (isCoach && !selectedAthlete) {
+  const handleAthleteSelect = (athlete) => {
+    setSelectedAthlete(athlete);
+    setAthleteDialogOpen(false);
+  };
+
+  const handleEventSelect = (eventId) => {
+    setSelectedEvent(eventId);
+  };
+
+  const handleFormClose = () => {
+    setSelectedEvent(null);
+    setSelectedAthlete(null);
+  };
+
+  // For coaches: show athlete selection then event selection
+  if (isCoach) {
+    if (selectedAthlete && selectedEvent) {
+      const event = events.find((e) => e.id === selectedEvent);
+      return (
+        <LogPerformanceForm
+          event={selectedEvent}
+          eventLabel={event.label}
+          user={selectedAthlete}
+          onClose={handleFormClose}
+        />
+      );
+    }
+
+    if (selectedAthlete && !selectedEvent) {
+      return (
+        <div className="flex gap-2">
+          {events.map((event) => (
+            <Button
+              key={event.id}
+              size="sm"
+              onClick={() => handleEventSelect(event.id)}
+              variant="outline"
+              className="gap-2 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600"
+            >
+              <span>{event.icon}</span>
+              <span className="hidden sm:inline">{event.label.split(' ')[0]}</span>
+            </Button>
+          ))}
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => setSelectedAthlete(null)}
+            className="dark:text-gray-300"
+          >
+            Back
+          </Button>
+        </div>
+      );
+    }
+
     return (
-      <Dialog>
+      <Dialog open={athleteDialogOpen} onOpenChange={setAthleteDialogOpen}>
         <DialogTrigger asChild>
           <Button size="sm" className="gap-2 bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600">
             <Plus className="w-4 h-4" />
@@ -52,7 +106,7 @@ export default function LogActivityButton({ user }) {
             {athletes?.map((athlete) => (
               <Button
                 key={athlete.id}
-                onClick={() => setSelectedAthlete(athlete)}
+                onClick={() => handleAthleteSelect(athlete)}
                 variant="outline"
                 className="w-full justify-start dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600"
               >
@@ -65,58 +119,26 @@ export default function LogActivityButton({ user }) {
     );
   }
 
-  // For coaches after selecting athlete: show event selection
-  if (isCoach && selectedAthlete && !selectedEvent) {
-    return (
-      <Dialog open={!!selectedAthlete}>
-        <DialogContent className="max-w-sm dark:bg-gray-800 dark:border-gray-700">
-          <DialogHeader>
-            <DialogTitle className="dark:text-gray-100">
-              Select Event for {selectedAthlete.full_name}
-            </DialogTitle>
-          </DialogHeader>
-          <div className="grid grid-cols-3 gap-3">
-            {events.map((event) => (
-              <Button
-                key={event.id}
-                onClick={() => setSelectedEvent(event.id)}
-                variant="outline"
-                className="h-auto flex-col py-4 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600"
-              >
-                <span className="text-2xl mb-2">{event.icon}</span>
-                <span className="text-xs font-medium">{event.label.split(' ')[0]}</span>
-              </Button>
-            ))}
-          </div>
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
-  // For coaches after selecting event: show form
-  if (isCoach && selectedAthlete && selectedEvent) {
+  // For athletes: show event buttons directly
+  if (selectedEvent) {
     const event = events.find((e) => e.id === selectedEvent);
     return (
       <LogPerformanceForm
         event={selectedEvent}
         eventLabel={event.label}
-        user={selectedAthlete}
-        onClose={() => {
-          setSelectedAthlete(null);
-          setSelectedEvent(null);
-        }}
+        user={user}
+        onClose={() => setSelectedEvent(null)}
       />
     );
   }
 
-  // For athletes: show event buttons
   return (
     <div className="flex gap-2">
       {events.map((event) => (
         <Button
           key={event.id}
           size="sm"
-          onClick={() => setSelectedEvent(event.id)}
+          onClick={() => handleEventSelect(event.id)}
           variant="outline"
           className="gap-2 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600"
         >
@@ -124,14 +146,6 @@ export default function LogActivityButton({ user }) {
           <span className="hidden sm:inline">Log</span>
         </Button>
       ))}
-      {selectedEvent && (
-        <LogPerformanceForm
-          event={selectedEvent}
-          eventLabel={events.find((e) => e.id === selectedEvent)?.label}
-          user={user}
-          onClose={() => setSelectedEvent(null)}
-        />
-      )}
     </div>
   );
 }
