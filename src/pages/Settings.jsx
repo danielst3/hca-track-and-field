@@ -11,11 +11,15 @@ import {
   BookOpen, 
   Trophy,
   ChevronRight,
-  FileText
+  FileText,
+  Download
 } from "lucide-react";
+import { toast } from "sonner";
+import { format } from "date-fns";
 
 export default function Settings() {
   const [user, setUser] = useState(null);
+  const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -24,6 +28,70 @@ export default function Settings() {
     };
     fetchUser();
   }, []);
+
+  const downloadAthleteData = async () => {
+    try {
+      setDownloading(true);
+      const logs = await base44.entities.ThrowLog.filter({ athlete_email: user.email });
+      
+      if (logs.length === 0) {
+        toast.error("No data to download");
+        return;
+      }
+
+      const csvHeader = "Date,Event,Distance,Implement,Notes,Is PR,Is Meet\n";
+      const csvRows = logs.map(log => 
+        `${log.date},"${log.event}",${log.distance},"${log.implement || ''}","${(log.notes || '').replace(/"/g, '""')}",${log.is_pr ? 'Yes' : 'No'},${log.is_meet ? 'Yes' : 'No'}`
+      ).join("\n");
+      
+      const csv = csvHeader + csvRows;
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${user.full_name.replace(/\s/g, '_')}_throwing_history_${format(new Date(), 'yyyy-MM-dd')}.csv`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      
+      toast.success("Download started!");
+    } catch (error) {
+      toast.error("Failed to download data");
+    } finally {
+      setDownloading(false);
+    }
+  };
+
+  const downloadAllAthleteData = async () => {
+    try {
+      setDownloading(true);
+      const logs = await base44.entities.ThrowLog.list();
+      
+      if (logs.length === 0) {
+        toast.error("No data to download");
+        return;
+      }
+
+      const csvHeader = "Athlete,Email,Date,Event,Distance,Implement,Notes,Is PR,Is Meet\n";
+      const csvRows = logs.map(log => 
+        `"${log.athlete_name}","${log.athlete_email}",${log.date},"${log.event}",${log.distance},"${log.implement || ''}","${(log.notes || '').replace(/"/g, '""')}",${log.is_pr ? 'Yes' : 'No'},${log.is_meet ? 'Yes' : 'No'}`
+      ).join("\n");
+      
+      const csv = csvHeader + csvRows;
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `all_athletes_throwing_history_${format(new Date(), 'yyyy-MM-dd')}.csv`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      
+      toast.success("Download started!");
+    } catch (error) {
+      toast.error("Failed to download data");
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   if (!user) {
     return (
@@ -167,33 +235,73 @@ export default function Settings() {
                 </Link>
               </CardContent>
             </Card>
+
+            <Card className="dark:bg-gray-800 dark:border-gray-700">
+              <CardHeader>
+                <CardTitle className="dark:text-gray-100">Export Data</CardTitle>
+                <CardDescription className="dark:text-gray-400">
+                  Download team throwing history
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button 
+                  onClick={downloadAllAthleteData}
+                  disabled={downloading}
+                  className="w-full bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  {downloading ? "Downloading..." : "Download All Athletes Data (CSV)"}
+                </Button>
+              </CardContent>
+            </Card>
           </>
         )}
 
         {/* Athlete-only Settings */}
         {!isCoach && (
-          <Card className="dark:bg-gray-800 dark:border-gray-700">
-            <CardHeader>
-              <CardTitle className="dark:text-gray-100">My Progress</CardTitle>
-              <CardDescription className="dark:text-gray-400">
-                View your training and performance data
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <Link to={createPageUrl("Progress")}>
+          <>
+            <Card className="dark:bg-gray-800 dark:border-gray-700">
+              <CardHeader>
+                <CardTitle className="dark:text-gray-100">My Progress</CardTitle>
+                <CardDescription className="dark:text-gray-400">
+                  View your training and performance data
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <Link to={createPageUrl("Progress")}>
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-between dark:text-gray-200 dark:hover:bg-gray-700"
+                  >
+                    <span className="flex items-center gap-3">
+                      <Trophy className="w-5 h-5" />
+                      View My Stats
+                    </span>
+                    <ChevronRight className="w-5 h-5" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="dark:bg-gray-800 dark:border-gray-700">
+              <CardHeader>
+                <CardTitle className="dark:text-gray-100">Export Data</CardTitle>
+                <CardDescription className="dark:text-gray-400">
+                  Download your throwing history
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
                 <Button 
-                  variant="ghost" 
-                  className="w-full justify-between dark:text-gray-200 dark:hover:bg-gray-700"
+                  onClick={downloadAthleteData}
+                  disabled={downloading}
+                  className="w-full bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600"
                 >
-                  <span className="flex items-center gap-3">
-                    <Trophy className="w-5 h-5" />
-                    View My Stats
-                  </span>
-                  <ChevronRight className="w-5 h-5" />
+                  <Download className="w-4 h-4 mr-2" />
+                  {downloading ? "Downloading..." : "Download My History (CSV)"}
                 </Button>
-              </Link>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </>
         )}
       </div>
     </div>
