@@ -52,58 +52,64 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, 
         {plan ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
             {/* Shot Put */}
-            <Card className="border-amber-200 dark:border-amber-900 bg-white dark:bg-gray-900">
-              <CardHeader className="bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-amber-900/30 dark:to-yellow-900/30 border-b border-amber-200 dark:border-amber-800 pb-3">
-                <CardTitle className="text-amber-900 dark:text-amber-300 flex items-center gap-2 text-base">
-                  🏋️ Shot Put
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pt-4">
-                <div className="text-sm">
-                  {plan.shot_text ? (
-                    <PracticePlanText text={plan.shot_text} />
-                  ) : (
-                    <p className="text-slate-400 dark:text-gray-500 italic">No plan</p>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+            {selectedEvents.includes("shot") && (
+              <Card className="border-amber-200 dark:border-amber-900 bg-white dark:bg-gray-900">
+                <CardHeader className="bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-amber-900/30 dark:to-yellow-900/30 border-b border-amber-200 dark:border-amber-800 pb-3">
+                  <CardTitle className="text-amber-900 dark:text-amber-300 flex items-center gap-2 text-base">
+                    🏋️ Shot Put
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="text-sm">
+                    {plan.shot_text ? (
+                      <PracticePlanText text={plan.shot_text} />
+                    ) : (
+                      <p className="text-slate-400 dark:text-gray-500 italic">No plan</p>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Discus */}
-            <Card className="border-cyan-200 dark:border-cyan-900 bg-white dark:bg-gray-900">
-              <CardHeader className="bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-900/30 dark:to-blue-900/30 border-b border-cyan-200 dark:border-cyan-800 pb-3">
-                <CardTitle className="text-cyan-900 dark:text-cyan-300 flex items-center gap-2 text-base">
-                  🥏 Discus
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pt-4">
-                <div className="text-sm">
-                  {plan.discus_text ? (
-                    <PracticePlanText text={plan.discus_text} />
-                  ) : (
-                    <p className="text-slate-400 dark:text-gray-500 italic">No plan</p>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+            {selectedEvents.includes("discus") && (
+              <Card className="border-cyan-200 dark:border-cyan-900 bg-white dark:bg-gray-900">
+                <CardHeader className="bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-900/30 dark:to-blue-900/30 border-b border-cyan-200 dark:border-cyan-800 pb-3">
+                  <CardTitle className="text-cyan-900 dark:text-cyan-300 flex items-center gap-2 text-base">
+                    🥏 Discus
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="text-sm">
+                    {plan.discus_text ? (
+                      <PracticePlanText text={plan.discus_text} />
+                    ) : (
+                      <p className="text-slate-400 dark:text-gray-500 italic">No plan</p>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Javelin */}
-            <Card className="border-rose-200 dark:border-rose-900 bg-white dark:bg-gray-900">
-              <CardHeader className="bg-gradient-to-br from-rose-50 to-pink-50 dark:from-rose-900/30 dark:to-pink-900/30 border-b border-rose-200 dark:border-rose-800 pb-3">
-                <CardTitle className="text-rose-900 dark:text-rose-300 flex items-center gap-2 text-base">
-                  🎯 Javelin
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pt-4">
-                <div className="text-sm">
-                  {plan.javelin_text ? (
-                    <PracticePlanText text={plan.javelin_text} />
-                  ) : (
-                    <p className="text-slate-400 dark:text-gray-500 italic">No plan</p>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+            {selectedEvents.includes("javelin") && (
+              <Card className="border-rose-200 dark:border-rose-900 bg-white dark:bg-gray-900">
+                <CardHeader className="bg-gradient-to-br from-rose-50 to-pink-50 dark:from-rose-900/30 dark:to-pink-900/30 border-b border-rose-200 dark:border-rose-800 pb-3">
+                  <CardTitle className="text-rose-900 dark:text-rose-300 flex items-center gap-2 text-base">
+                    🎯 Javelin
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="text-sm">
+                    {plan.javelin_text ? (
+                      <PracticePlanText text={plan.javelin_text} />
+                    ) : (
+                      <p className="text-slate-400 dark:text-gray-500 italic">No plan</p>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
         ) : (
           <div className="text-center py-8">
