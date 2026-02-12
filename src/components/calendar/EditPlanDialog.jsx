@@ -259,7 +259,7 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
               />
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               <Button
                 onClick={handleSavePlan}
                 disabled={planMutation.isPending}
@@ -268,13 +268,22 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
                 {planMutation.isPending ? "Saving..." : "Save Plan"}
               </Button>
               {plan && (
-                <Button
-                  onClick={handleDeletePlan}
-                  disabled={deletePlanMutation.isPending}
-                  variant="destructive"
-                >
-                  Delete Plan
-                </Button>
+                <>
+                  <Button
+                    onClick={() => setCopyDialogOpen(true)}
+                    variant="outline"
+                    className="dark:border-gray-600 dark:text-gray-200"
+                  >
+                    Copy Plan
+                  </Button>
+                  <Button
+                    onClick={handleDeletePlan}
+                    disabled={deletePlanMutation.isPending}
+                    variant="destructive"
+                  >
+                    Delete Plan
+                  </Button>
+                </>
               )}
             </div>
           </div>
