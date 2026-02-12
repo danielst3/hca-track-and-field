@@ -11,6 +11,7 @@ import AbbreviationsKey from "../components/shared/AbbreviationsKey";
 import EventToggle from "../components/shared/EventToggle";
 import { ChevronLeft, ChevronRight, Trophy } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { MobileSelect } from "@/components/ui/mobile-select";
 import { cn } from "@/lib/utils";
 import {
   format,
@@ -62,38 +63,14 @@ export default function Calendar() {
     fetchUser();
   }, []);
 
-  // Auto-switch season on new year
-  useEffect(() => {
-    const autoSwitchSeason = async () => {
-      try {
-        const today = new Date();
-        const year = today.getFullYear();
-        
-        // Check all seasons to find one that matches current year
-        const allSeasons = await base44.entities.Season.list();
-        const currentYearSeason = allSeasons.find(s => {
-          const startYear = new Date(s.start_date).getFullYear();
-          return startYear === year;
-        });
 
-        if (currentYearSeason) {
-          // Deactivate all seasons
-          await Promise.all(
-            allSeasons
-              .filter(s => s.is_active)
-              .map(s => base44.entities.Season.update(s.id, { is_active: false }))
-          );
-          // Activate the current year season
-          await base44.entities.Season.update(currentYearSeason.id, { is_active: true });
-          queryClient.invalidateQueries({ queryKey: ["activeSeason"] });
-        }
-      } catch (error) {
-        // Silently fail if there's an issue with season switching
-      }
-    };
 
-    autoSwitchSeason();
-  }, [queryClient]);
+  const { data: allSeasons = [] } = useQuery({
+    queryKey: ["allSeasons"],
+    queryFn: async () => {
+      return await base44.entities.Season.list();
+    },
+  });
 
   const { data: activeSeason } = useQuery({
     queryKey: ["activeSeason"],
@@ -102,6 +79,21 @@ export default function Calendar() {
       return seasons[0] || null;
     },
   });
+
+  const handleSeasonChange = async (seasonId) => {
+    const newActiveSeason = allSeasons.find(s => s.id === seasonId);
+    if (newActiveSeason) {
+      // Deactivate all seasons
+      await Promise.all(
+        allSeasons
+          .filter(s => s.is_active)
+          .map(s => base44.entities.Season.update(s.id, { is_active: false }))
+      );
+      // Activate the selected season
+      await base44.entities.Season.update(seasonId, { is_active: true });
+      queryClient.invalidateQueries({ queryKey: ["activeSeason"] });
+    }
+  };
 
   const { data: plans = [] } = useQuery({
     queryKey: ["allPlans", activeSeason?.id],
@@ -196,7 +188,17 @@ export default function Calendar() {
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100">Calendar</h1>
-          <AbbreviationsKey />
+          <div className="flex items-center gap-3">
+            {allSeasons.length > 0 && (
+              <MobileSelect
+                value={activeSeason?.id || ""}
+                onValueChange={handleSeasonChange}
+                options={allSeasons.map(s => ({ value: s.id, label: s.name }))}
+                label="Season"
+              />
+            )}
+            <AbbreviationsKey />
+          </div>
         </div>
 
         <Tabs value={view} onValueChange={setView} className="mb-4">
