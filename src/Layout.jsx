@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "./utils";
 import { Button } from "@/components/ui/button";
-import { Home, Calendar, LogOut, Trophy, TrendingUp, Users, BookOpen } from "lucide-react";
+import { Home, Calendar, LogOut, Trophy, TrendingUp, Users, BookOpen, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import UniversalSearch from "./components/shared/UniversalSearch";
 
@@ -66,12 +66,14 @@ export default function Layout({ children, currentPageName }) {
         { name: "Today", icon: Home, page: "Today" },
         { name: "Calendar", icon: Calendar, page: "Calendar" },
         { name: "Athletes", icon: Users, page: "Athletes" },
+        { name: "Resources", icon: BookOpen, page: "Resources" },
         { name: "Appendix", icon: BookOpen, page: "Appendix" },
       ]
     : [
         { name: "Today", icon: Home, page: "Today" },
         { name: "Calendar", icon: Calendar, page: "Calendar" },
         { name: "Progress", icon: TrendingUp, page: "Progress" },
+        { name: "Resources", icon: BookOpen, page: "Resources" },
         { name: "Appendix", icon: BookOpen, page: "Appendix" },
       ];
 

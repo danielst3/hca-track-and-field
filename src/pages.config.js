@@ -53,6 +53,7 @@ import Athletes from './pages/Athletes';
 import Calendar from './pages/Calendar';
 import Progress from './pages/Progress';
 import Today from './pages/Today';
+import Resources from './pages/Resources';
 import __Layout from './Layout.jsx';
 
 
@@ -63,6 +64,7 @@ export const PAGES = {
     "Calendar": Calendar,
     "Progress": Progress,
     "Today": Today,
+    "Resources": Resources,
 }
 
 export const pagesConfig = {
