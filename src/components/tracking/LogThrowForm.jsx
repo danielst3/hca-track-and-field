@@ -38,6 +38,16 @@ export default function LogThrowForm({ event, eventLabel, user }) {
 
   const logMutation = useMutation({
     mutationFn: (data) => base44.entities.ThrowLog.create(data),
+    onMutate: async (newLog) => {
+      await queryClient.cancelQueries({ queryKey: ["throwLogs"] });
+      const previousLogs = queryClient.getQueryData(["throwLogs"]);
+      queryClient.setQueryData(["throwLogs"], (old) => [...(old || []), { ...newLog, id: 'temp-' + Date.now() }]);
+      return { previousLogs };
+    },
+    onError: (err, newLog, context) => {
+      queryClient.setQueryData(["throwLogs"], context.previousLogs);
+      toast.error("Failed to log throw");
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["throwLogs"] });
       toast.success("Throw logged successfully!");
@@ -73,16 +83,16 @@ export default function LogThrowForm({ event, eventLabel, user }) {
   };
 
   return (
-    <Dialog open={open} onValueChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" variant="outline" className="gap-2">
+        <Button size="sm" variant="outline" className="gap-2 select-none dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-700">
           <Plus className="w-4 h-4" />
           Log {eventLabel}
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md dark:bg-gray-800 dark:border-gray-700">
         <DialogHeader>
-          <DialogTitle>Log {eventLabel} Throw</DialogTitle>
+          <DialogTitle className="dark:text-gray-100">Log {eventLabel} Throw</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="grid grid-cols-2 gap-4">
@@ -169,13 +179,14 @@ export default function LogThrowForm({ event, eventLabel, user }) {
               type="button"
               variant="outline"
               onClick={() => setOpen(false)}
+              className="select-none dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={logMutation.isPending}
-              className="bg-blue-600 hover:bg-blue-700"
+              className="bg-[#551e1b] hover:bg-[#6b2622] select-none dark:bg-gray-700 dark:hover:bg-gray-600"
             >
               {logMutation.isPending ? "Saving..." : "Save Throw"}
             </Button>

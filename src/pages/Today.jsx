@@ -72,7 +72,7 @@ export default function Today() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-slate-900">
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100 select-none">
               {isSameDay(selectedDate, new Date()) ? "Today's Plan" : "Practice Plan"}
             </h1>
             <div className="flex items-center gap-3 mt-2">
@@ -80,18 +80,18 @@ export default function Today() {
                 variant="outline"
                 size="icon"
                 onClick={handlePrevDay}
-                className="h-8 w-8"
+                className="h-8 w-8 select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
               >
                 <ChevronLeft className="w-4 h-4" />
               </Button>
-              <p className="text-slate-700 font-medium min-w-[200px] text-center">
+              <p className="text-slate-700 dark:text-gray-300 font-medium min-w-[200px] text-center select-none">
                 {format(selectedDate, "EEEE, MMMM d, yyyy")}
               </p>
               <Button
                 variant="outline"
                 size="icon"
                 onClick={handleNextDay}
-                className="h-8 w-8"
+                className="h-8 w-8 select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
               >
                 <ChevronRight className="w-4 h-4" />
               </Button>
@@ -100,7 +100,7 @@ export default function Today() {
                   variant="ghost"
                   size="sm"
                   onClick={handleToday}
-                  className="ml-2"
+                  className="ml-2 select-none dark:text-gray-300 dark:hover:bg-gray-800"
                 >
                   Today
                 </Button>
@@ -151,10 +151,10 @@ export default function Today() {
         {dailyPlan ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Shot Put */}
-            <Card className="border-amber-200 bg-white shadow-lg">
-              <CardHeader className="bg-gradient-to-br from-amber-50 to-yellow-50 border-b border-amber-200">
+            <Card className="border-amber-200 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-lg">
+              <CardHeader className="bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-gray-900 dark:to-gray-800 border-b border-amber-200 dark:border-gray-700">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-amber-900 flex items-center gap-2">
+                  <CardTitle className="text-amber-900 dark:text-amber-300 flex items-center gap-2 select-none">
                     🏋️ Shot Put
                   </CardTitle>
                   {user && user.role !== "admin" && (
@@ -174,10 +174,10 @@ export default function Today() {
             </Card>
 
             {/* Discus */}
-            <Card className="border-cyan-200 bg-white shadow-lg">
-              <CardHeader className="bg-gradient-to-br from-cyan-50 to-blue-50 border-b border-cyan-200">
+            <Card className="border-cyan-200 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-lg">
+              <CardHeader className="bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 border-b border-cyan-200 dark:border-gray-700">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-cyan-900 flex items-center gap-2">
+                  <CardTitle className="text-cyan-900 dark:text-cyan-300 flex items-center gap-2 select-none">
                     🥏 Discus
                   </CardTitle>
                   {user && user.role !== "admin" && (
@@ -197,10 +197,10 @@ export default function Today() {
             </Card>
 
             {/* Javelin */}
-            <Card className="border-rose-200 bg-white shadow-lg">
-              <CardHeader className="bg-gradient-to-br from-rose-50 to-pink-50 border-b border-rose-200">
+            <Card className="border-rose-200 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-lg">
+              <CardHeader className="bg-gradient-to-br from-rose-50 to-pink-50 dark:from-gray-900 dark:to-gray-800 border-b border-rose-200 dark:border-gray-700">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-rose-900 flex items-center gap-2">
+                  <CardTitle className="text-rose-900 dark:text-rose-300 flex items-center gap-2 select-none">
                     🎯 Javelin
                   </CardTitle>
                   {user && user.role !== "admin" && (
