@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Home, Calendar, LogOut, Trophy, TrendingUp, Users, BookOpen, FileText, Trash2, RefreshCw, ArrowLeft, Settings, Moon, Sun, MoreHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import UniversalSearch from "./components/shared/UniversalSearch";
+import LogActivityButton from "./components/tracking/LogActivityButton";
 import { AnimatePresence, motion } from "framer-motion";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import {
@@ -428,6 +429,7 @@ export default function Layout({ children, currentPageName }) {
           </div>
           <div className="flex items-center gap-3">
             <UniversalSearch />
+            {user && <LogActivityButton user={user} />}
             <Button
               variant="ghost"
               size="sm"

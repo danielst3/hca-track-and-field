@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DayTypeBadge from "../components/shared/DayTypeBadge";
 import AbbreviationsKey from "../components/shared/AbbreviationsKey";
-import LogActivityButton from "../components/tracking/LogActivityButton";
+
 import QuickLogButton from "../components/tracking/QuickLogButton";
 import PracticePlanText from "../components/shared/PracticePlanText";
 import EventToggle from "../components/shared/EventToggle";
@@ -193,11 +193,7 @@ export default function Today() {
                <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100 select-none">
                  {isSameDay(selectedDate, new Date()) ? "Today's Plan" : "Practice Plan"}
                </h1>
-               {user && isSameDay(selectedDate, new Date()) && (
-                  <div className="flex justify-center py-6">
-                    <LogActivityButton user={user} />
-                  </div>
-                )}
+
              </div>
              <div className="flex items-center gap-3 mt-2">
               <Button
