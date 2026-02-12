@@ -17,8 +17,7 @@ import { Plus } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
-export default function LogPerformanceForm({ event, eventLabel, user, onClose }) {
-  const [open, setOpen] = useState(false);
+export default function LogPerformanceForm({ event, eventLabel, user, onClose, open = true, onOpenChange }) {
   const [logType, setLogType] = useState("distance");
   const [formData, setFormData] = useState({
     date: format(new Date(), "yyyy-MM-dd"),
@@ -52,7 +51,9 @@ export default function LogPerformanceForm({ event, eventLabel, user, onClose })
       const key = logType === "distance" ? ["throwLogs"] : ["trainingLogs"];
       queryClient.invalidateQueries({ queryKey: key });
       toast.success("Performance logged successfully!");
-      setOpen(false);
+      if (onOpenChange) {
+        onOpenChange(false);
+      }
       setFormData({
         date: format(new Date(), "yyyy-MM-dd"),
         session_type: "practice",
@@ -89,14 +90,17 @@ export default function LogPerformanceForm({ event, eventLabel, user, onClose })
     }
   };
 
+  const handleClose = (newOpen) => {
+    if (onOpenChange) {
+      onOpenChange(newOpen);
+    }
+    if (!newOpen && onClose) {
+      onClose();
+    }
+  };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button size="sm" variant="outline" className="gap-2 select-none dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-700">
-          <Plus className="w-4 h-4" />
-          Log {eventLabel}
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="max-w-md dark:bg-gray-800 dark:border-gray-700">
         <DialogHeader>
           <DialogTitle className="dark:text-gray-100">Log {eventLabel} Performance</DialogTitle>
@@ -178,7 +182,7 @@ export default function LogPerformanceForm({ event, eventLabel, user, onClose })
             <Button
               type="button"
               variant="outline"
-              onClick={() => setOpen(false)}
+              onClick={() => handleClose(false)}
               className="select-none dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
             >
               Cancel
