@@ -5,6 +5,7 @@ import { createPageUrl } from "./utils";
 import { Button } from "@/components/ui/button";
 import { Home, Calendar, LogOut, Trophy, TrendingUp, Users, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
+import UniversalSearch from "./components/shared/UniversalSearch";
 
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
@@ -78,7 +79,7 @@ export default function Layout({ children, currentPageName }) {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Top Bar */}
       <div className="bg-gradient-to-r from-slate-900 to-slate-800 border-b border-slate-700 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Trophy className="w-6 h-6 text-blue-400" />
             <div>
@@ -88,15 +89,18 @@ export default function Layout({ children, currentPageName }) {
               </p>
             </div>
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleLogout}
-            className="text-slate-300 hover:text-white hover:bg-slate-700"
-          >
-            <LogOut className="w-4 h-4 mr-2" />
-            Logout
-          </Button>
+          <div className="flex items-center gap-3">
+            <UniversalSearch />
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleLogout}
+              className="text-slate-300 hover:text-white hover:bg-slate-700"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Logout
+            </Button>
+          </div>
         </div>
       </div>
 

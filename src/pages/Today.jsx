@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DayTypeBadge from "../components/shared/DayTypeBadge";
 import AbbreviationsKey from "../components/shared/AbbreviationsKey";
 import LogThrowForm from "../components/tracking/LogThrowForm";
+import PracticePlanText from "../components/shared/PracticePlanText";
 import { Calendar, Trophy, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { format, isSameDay } from "date-fns";
@@ -164,9 +165,7 @@ export default function Today() {
               <CardContent className="pt-4">
                 <div className="prose prose-sm max-w-none">
                   {dailyPlan.shot_text ? (
-                    <p className="text-slate-700 whitespace-pre-wrap">
-                      {dailyPlan.shot_text}
-                    </p>
+                    <PracticePlanText text={dailyPlan.shot_text} />
                   ) : (
                     <p className="text-slate-400 italic">No plan for today</p>
                   )}
@@ -189,9 +188,7 @@ export default function Today() {
               <CardContent className="pt-4">
                 <div className="prose prose-sm max-w-none">
                   {dailyPlan.discus_text ? (
-                    <p className="text-slate-700 whitespace-pre-wrap">
-                      {dailyPlan.discus_text}
-                    </p>
+                    <PracticePlanText text={dailyPlan.discus_text} />
                   ) : (
                     <p className="text-slate-400 italic">No plan for today</p>
                   )}
@@ -214,9 +211,7 @@ export default function Today() {
               <CardContent className="pt-4">
                 <div className="prose prose-sm max-w-none">
                   {dailyPlan.javelin_text ? (
-                    <p className="text-slate-700 whitespace-pre-wrap">
-                      {dailyPlan.javelin_text}
-                    </p>
+                    <PracticePlanText text={dailyPlan.javelin_text} />
                   ) : (
                     <p className="text-slate-400 italic">No plan for today</p>
                   )}

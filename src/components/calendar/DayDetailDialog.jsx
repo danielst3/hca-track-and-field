@@ -10,6 +10,7 @@ import { Trophy, Calendar } from "lucide-react";
 import { format } from "date-fns";
 import DayTypeBadge from "../shared/DayTypeBadge";
 import AbbreviationsKey from "../shared/AbbreviationsKey";
+import PracticePlanText from "../shared/PracticePlanText";
 
 export default function DayDetailDialog({ date, plan, meet, open, onOpenChange }) {
   if (!date) return null;
@@ -45,13 +46,13 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange }
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-4">
-                {plan.shot_text ? (
-                  <p className="text-sm text-slate-700 whitespace-pre-wrap">
-                    {plan.shot_text}
-                  </p>
-                ) : (
-                  <p className="text-slate-400 italic text-sm">No plan</p>
-                )}
+                <div className="text-sm">
+                  {plan.shot_text ? (
+                    <PracticePlanText text={plan.shot_text} />
+                  ) : (
+                    <p className="text-slate-400 italic">No plan</p>
+                  )}
+                </div>
               </CardContent>
             </Card>
 
@@ -63,13 +64,13 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange }
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-4">
-                {plan.discus_text ? (
-                  <p className="text-sm text-slate-700 whitespace-pre-wrap">
-                    {plan.discus_text}
-                  </p>
-                ) : (
-                  <p className="text-slate-400 italic text-sm">No plan</p>
-                )}
+                <div className="text-sm">
+                  {plan.discus_text ? (
+                    <PracticePlanText text={plan.discus_text} />
+                  ) : (
+                    <p className="text-slate-400 italic">No plan</p>
+                  )}
+                </div>
               </CardContent>
             </Card>
 
@@ -81,13 +82,13 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange }
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-4">
-                {plan.javelin_text ? (
-                  <p className="text-sm text-slate-700 whitespace-pre-wrap">
-                    {plan.javelin_text}
-                  </p>
-                ) : (
-                  <p className="text-slate-400 italic text-sm">No plan</p>
-                )}
+                <div className="text-sm">
+                  {plan.javelin_text ? (
+                    <PracticePlanText text={plan.javelin_text} />
+                  ) : (
+                    <p className="text-slate-400 italic">No plan</p>
+                  )}
+                </div>
               </CardContent>
             </Card>
           </div>
