@@ -50,10 +50,10 @@
 import AthleteDetail from './pages/AthleteDetail';
 import Athletes from './pages/Athletes';
 import Calendar from './pages/Calendar';
-import Progress from './pages/Progress';
-import Today from './pages/Today';
-import Resources from './pages/Resources';
 import Posts from './pages/Posts';
+import Progress from './pages/Progress';
+import Resources from './pages/Resources';
+import Today from './pages/Today';
 import __Layout from './Layout.jsx';
 
 
@@ -61,10 +61,10 @@ export const PAGES = {
     "AthleteDetail": AthleteDetail,
     "Athletes": Athletes,
     "Calendar": Calendar,
-    "Progress": Progress,
-    "Today": Today,
-    "Resources": Resources,
     "Posts": Posts,
+    "Progress": Progress,
+    "Resources": Resources,
+    "Today": Today,
 }
 
 export const pagesConfig = {
