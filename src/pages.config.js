@@ -53,8 +53,9 @@ import Calendar from './pages/Calendar';
 import Posts from './pages/Posts';
 import Progress from './pages/Progress';
 import Resources from './pages/Resources';
-import Today from './pages/Today';
 import Settings from './pages/Settings';
+import Today from './pages/Today';
+import Privacy from './pages/Privacy';
 import __Layout from './Layout.jsx';
 
 
@@ -65,8 +66,9 @@ export const PAGES = {
     "Posts": Posts,
     "Progress": Progress,
     "Resources": Resources,
-    "Today": Today,
     "Settings": Settings,
+    "Today": Today,
+    "Privacy": Privacy,
 }
 
 export const pagesConfig = {
