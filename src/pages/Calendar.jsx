@@ -55,6 +55,9 @@ export default function Calendar() {
     const fetchUser = async () => {
       const currentUser = await base44.auth.me();
       setUser(currentUser);
+      if (currentUser?.default_events && currentUser.default_events.length > 0) {
+        setSelectedEvents(currentUser.default_events);
+      }
     };
     fetchUser();
   }, []);
