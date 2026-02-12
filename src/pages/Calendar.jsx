@@ -121,14 +121,14 @@ export default function Calendar() {
   const getDaysToShow = () => {
     if (view === "week") {
       return eachDayOfInterval({
-        start: startOfWeek(currentDate, { weekStartsOn: 1 }),
-        end: endOfWeek(currentDate, { weekStartsOn: 1 }),
+        start: startOfWeek(currentDate, { weekStartsOn: 0 }),
+        end: endOfWeek(currentDate, { weekStartsOn: 0 }),
       });
     } else {
       const start = startOfMonth(currentDate);
       const end = endOfMonth(currentDate);
-      const calStart = startOfWeek(start, { weekStartsOn: 1 });
-      const calEnd = endOfWeek(end, { weekStartsOn: 1 });
+      const calStart = startOfWeek(start, { weekStartsOn: 0 });
+      const calEnd = endOfWeek(end, { weekStartsOn: 0 });
       return eachDayOfInterval({ start: calStart, end: calEnd });
     }
   };
@@ -215,9 +215,9 @@ export default function Calendar() {
             <ChevronLeft className="w-4 h-4" />
           </Button>
           <h2 className="text-xl font-semibold text-slate-800 dark:text-gray-200">
-            {view === "week"
-              ? `Week of ${format(startOfWeek(currentDate, { weekStartsOn: 1 }), "MMM d, yyyy")}`
-              : format(currentDate, "MMMM yyyy")}
+           {view === "week"
+             ? `Week of ${format(startOfWeek(currentDate, { weekStartsOn: 0 }), "MMM d, yyyy")}`
+             : format(currentDate, "MMMM yyyy")}
           </h2>
           <Button variant="outline" onClick={handleNext}>
             <ChevronRight className="w-4 h-4" />
