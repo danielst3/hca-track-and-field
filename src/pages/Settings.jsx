@@ -23,6 +23,7 @@ import {
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { Checkbox } from "@/components/ui/checkbox";
+import RoleManagement from "../components/settings/RoleManagement";
 
 export default function Settings() {
   const [user, setUser] = useState(null);
@@ -624,6 +625,8 @@ export default function Settings() {
                 </Link>
               </CardContent>
             </Card>
+
+            <RoleManagement />
 
             <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
