@@ -181,6 +181,16 @@ export default function Athletes() {
     }
   };
 
+  const handleRemoveInvitation = async (invitationId) => {
+    try {
+      await base44.entities.PendingInvitation.delete(invitationId);
+      queryClient.invalidateQueries({ queryKey: ["pendingInvitations"] });
+      toast.success("Invitation removed");
+    } catch (error) {
+      toast.error("Failed to remove invitation");
+    }
+  };
+
   const openEditDialog = (athlete) => {
     setEditingAthlete(athlete);
     const roles = athlete.user_role_preference ? athlete.user_role_preference.split(",") : ["user"];
@@ -538,6 +548,15 @@ export default function Athletes() {
                       Invited as {invite.role === "user" ? "Athlete" : invite.role === "admin" ? "Admin" : invite.role === "coach" ? "Coach" : "Parent"}
                     </p>
                   </div>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleRemoveInvitation(invite.id)}
+                    className="text-red-600 border-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                  >
+                    <X className="w-4 h-4 mr-1" />
+                    Remove
+                  </Button>
                 </div>
               </CardContent>
             </Card>
