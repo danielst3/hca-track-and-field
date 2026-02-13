@@ -112,7 +112,7 @@ export default function Athletes() {
     }
 
     try {
-       const apiRole = inviteRole === "admin" ? "admin" : "user";
+       const apiRole = (inviteRole === "admin" || inviteRole === "coach") ? "admin" : "user";
        await base44.users.inviteUser(inviteEmail, apiRole);
 
       await base44.entities.PendingInvitation.create({
@@ -123,7 +123,7 @@ export default function Athletes() {
 
       queryClient.invalidateQueries({ queryKey: ["pendingInvitations"] });
 
-      const roleLabel = inviteRole === "user" ? "Athlete" : inviteRole === "admin" ? "Coach" : "Parent";
+      const roleLabel = inviteRole === "user" ? "Athlete" : inviteRole === "admin" ? "Admin" : inviteRole === "coach" ? "Coach" : "Parent";
       toast.success(`${roleLabel} invited successfully!`);
       setInviteEmail("");
       setInviteRole("user");
@@ -146,7 +146,7 @@ export default function Athletes() {
         return;
       }
 
-      const apiRole = request.role === "admin" ? "admin" : "user";
+      const apiRole = (request.role === "admin" || request.role === "coach") ? "admin" : "user";
       await base44.users.inviteUser(request.email, apiRole);
 
       await base44.entities.PendingInvitation.create({
@@ -252,7 +252,8 @@ export default function Athletes() {
                      className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
                    >
                      <option value="user">Athlete</option>
-                     <option value="admin">Coach</option>
+                     <option value="coach">Coach</option>
+                     <option value="admin">Admin</option>
                      <option value="parent">Parent</option>
                    </select>
                 </div>

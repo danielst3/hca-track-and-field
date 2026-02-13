@@ -208,7 +208,7 @@ export default function Layout({ children, currentPageName }) {
       
       // Notify all coaches
       const admins = await base44.entities.User.filter({ role: "admin" });
-      const roleLabel = data.role === "user" ? "Athlete" : "Parent";
+      const roleLabel = data.role === "user" ? "Athlete" : data.role === "coach" ? "Coach" : "Parent";
       const athleteInfo = data.athlete_name ? `\nAthlete: ${data.athlete_name}` : "";
       const notesInfo = data.notes ? `\n\nNotes: ${data.notes}` : "";
       
@@ -348,6 +348,7 @@ export default function Layout({ children, currentPageName }) {
                     required
                   >
                     <option value="user">Athlete</option>
+                    <option value="coach">Coach</option>
                     <option value="parent">Parent</option>
                   </select>
                 </div>
@@ -397,7 +398,7 @@ export default function Layout({ children, currentPageName }) {
     );
   }
 
-  const navItems = (user?.realRole === "admin" || user?.role === "admin") && !user?.isImpersonating
+  const navItems = (user?.realRole === "admin" || user?.role === "admin" || user?.realRole === "coach" || user?.role === "coach") && !user?.isImpersonating
     ? [
         { name: "Today", icon: Home, page: "Today" },
         { name: "Calendar", icon: Calendar, page: "Calendar" },
@@ -451,7 +452,7 @@ export default function Layout({ children, currentPageName }) {
                 {canGoBack ? "" : "HCA Chargers Track & Field"}
               </h1>
               <p className="text-xs text-gray-700 dark:text-gray-400">
-                {user.full_name} • {user.isImpersonating ? "Athlete (Viewing)" : (user.role === "admin" ? "Coach" : user.role === "parent" ? "Parent" : "Athlete")}
+                    {user.full_name} • {user.isImpersonating ? "Athlete (Viewing)" : (user.role === "admin" ? "Admin" : user.role === "coach" ? "Coach" : user.role === "parent" ? "Parent" : "Athlete")}
               </p>
             </div>
           </div>

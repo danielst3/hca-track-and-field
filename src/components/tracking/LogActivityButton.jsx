@@ -20,7 +20,7 @@ export default function LogActivityButton({ user }) {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [formOpen, setFormOpen] = useState(false);
 
-  const isCoach = user?.role === "admin";
+  const isCoach = user?.role === "admin" || user?.role === "coach";
 
   const { data: athletes } = useQuery({
     queryKey: ["athletes"],
