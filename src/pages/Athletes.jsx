@@ -129,7 +129,12 @@ export default function Athletes() {
       setInviteRole("user");
       setInviteOpen(false);
     } catch (error) {
-      toast.error("Failed to invite user");
+      const errorMessage = error?.message || error?.detail || "Failed to invite user";
+      if (errorMessage.includes("must be registered on Base44")) {
+        toast.error("To invite a coach, they must first create a Base44 account at base44.com");
+      } else {
+        toast.error(errorMessage);
+      }
     }
   };
 
@@ -157,7 +162,12 @@ export default function Athletes() {
 
       toast.success("Access request approved and invitation sent!");
     } catch (error) {
-      toast.error("Failed to approve request");
+      const errorMessage = error?.message || error?.detail || "Failed to approve request";
+      if (errorMessage.includes("must be registered on Base44")) {
+        toast.error("To invite a coach, they must first create a Base44 account at base44.com");
+      } else {
+        toast.error(errorMessage);
+      }
     }
   };
 
