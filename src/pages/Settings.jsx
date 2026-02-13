@@ -64,6 +64,12 @@ export default function Settings() {
       if (currentUser?.default_events) {
         setDefaultEvents(currentUser.default_events);
       }
+      if (currentUser?.event_types) {
+        setEventTypes(currentUser.event_types);
+      }
+      if (currentUser?.practice_types) {
+        setPracticeTypes(currentUser.practice_types);
+      }
     };
     fetchUser();
   }, []);
