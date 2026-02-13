@@ -113,7 +113,7 @@ export default function Athletes() {
 
     try {
        const apiRole = (inviteRole === "admin" || inviteRole === "coach") ? "admin" : "user";
-       await base44.users.inviteUser(inviteEmail, apiRole);
+       await base44.auth.inviteUser(inviteEmail, apiRole);
 
       await base44.entities.PendingInvitation.create({
         email: inviteEmail,
@@ -147,7 +147,7 @@ export default function Athletes() {
       }
 
       const apiRole = (request.role === "admin" || request.role === "coach") ? "admin" : "user";
-      await base44.users.inviteUser(request.email, apiRole);
+      await base44.auth.inviteUser(request.email, apiRole);
 
       await base44.entities.PendingInvitation.create({
         email: request.email,
