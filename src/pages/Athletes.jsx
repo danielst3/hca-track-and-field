@@ -104,18 +104,17 @@ export default function Athletes() {
 
   const inviteUserMutation = useMutation({
     mutationFn: async ({ email, role }) => {
-      // Track the invitation request
+      // Only admins get admin role, everyone else gets user role
+      const apiRole = role === "admin" ? "admin" : "user";
+      
+      // Send the invitation through Base44
+      await base44.users.inviteUser(email, apiRole);
+      
+      // Track the invitation with the actual requested role
       const pendingInvite = await base44.entities.PendingInvitation.create({
         email: email,
         role: role,
         status: "pending"
-      });
-      
-      // Send email notification to the invitee with instructions
-      await base44.integrations.Core.SendEmail({
-        to: email,
-        subject: "You've been invited to HCA Chargers Track & Field",
-        body: `You've been invited to join the HCA Chargers Track & Field app as a ${role === "user" ? "Athlete" : role === "coach" ? "Coach" : role === "admin" ? "Admin" : "Parent"}.\n\nPlease visit the app to create your account and get started.\n\nIf you have any questions, please contact your coach.`
       });
       
       return { pendingInvite, role };
@@ -172,6 +171,12 @@ export default function Athletes() {
 
   const approveRequestMutation = useMutation({
     mutationFn: async (request) => {
+      // Only admins get admin role, everyone else gets user role
+      const apiRole = request.role === "admin" ? "admin" : "user";
+      
+      // Send invitation
+      await base44.users.inviteUser(request.email, apiRole);
+      
       // Create pending invitation record
       await base44.entities.PendingInvitation.create({
         email: request.email,
@@ -181,13 +186,6 @@ export default function Athletes() {
       
       // Update request status
       await base44.entities.AccessRequest.update(request.id, { status: "approved" });
-      
-      // Send email notification
-      await base44.integrations.Core.SendEmail({
-        to: request.email,
-        subject: "Your access request has been approved!",
-        body: `Good news! Your request to join HCA Chargers Track & Field as a ${request.role === "user" ? "Athlete" : request.role === "coach" ? "Coach" : request.role === "admin" ? "Admin" : "Parent"} has been approved.\n\nPlease visit the app to create your account and get started.\n\nIf you have any questions, please contact your coach.`
-      });
       
       return request;
     },
