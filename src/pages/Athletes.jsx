@@ -33,7 +33,7 @@ export default function Athletes() {
     const fetchUser = async () => {
       const currentUser = await base44.auth.me();
       setUser(currentUser);
-      if (currentUser.role !== "admin") {
+      if (currentUser.role !== "admin" && currentUser.role !== "coach") {
         window.location.href = createPageUrl("Today");
       }
     };
@@ -212,7 +212,7 @@ export default function Athletes() {
     roleUpdateMutation.mutate({ userId: editingAthlete.id, newRoles: editRoles, newEvents: editEvents });
   };
 
-  if (!user || user.role !== "admin") return null;
+  if (!user || (user.role !== "admin" && user.role !== "coach")) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800 p-4 pb-24">
@@ -343,7 +343,8 @@ export default function Athletes() {
                                  <div className="space-y-3">
                                    {[
                                      { value: "user", label: "Athlete" },
-                                     { value: "admin", label: "Coach" },
+                                     { value: "coach", label: "Coach" },
+                                     { value: "admin", label: "Admin" },
                                      { value: "parent", label: "Parent" }
                                    ].map(role => (
                                      <label key={role.value} className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
@@ -484,7 +485,7 @@ export default function Athletes() {
                       {request.email}
                     </p>
                     <p className="text-sm text-slate-700 dark:text-gray-300 mt-1">
-                      Requesting: {request.role === "user" ? "Athlete" : "Parent"}
+                      Requesting: {request.role === "user" ? "Athlete" : request.role === "coach" ? "Coach" : request.role === "admin" ? "Admin" : "Parent"}
                     </p>
                     {request.athlete_name && (
                       <p className="text-sm text-slate-600 dark:text-gray-400 mt-1">
@@ -534,7 +535,7 @@ export default function Athletes() {
                       </Badge>
                     </div>
                     <p className="text-sm text-slate-600 dark:text-gray-400 mt-1">
-                      Invited as {invite.role === "user" ? "Athlete" : invite.role === "admin" ? "Coach" : "Parent"}
+                      Invited as {invite.role === "user" ? "Athlete" : invite.role === "admin" ? "Admin" : invite.role === "coach" ? "Coach" : "Parent"}
                     </p>
                   </div>
                 </div>
