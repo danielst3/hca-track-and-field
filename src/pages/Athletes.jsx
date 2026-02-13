@@ -414,15 +414,17 @@ export default function Athletes() {
                         <ChevronRight className="w-5 h-5 text-slate-500 dark:text-gray-400" />
                       </Link>
                       <div className="flex gap-2 items-center">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleOpenAssignParent(athlete)}
-                          className="gap-1 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
-                        >
-                          <Users className="w-4 h-4" />
-                          Parents
-                        </Button>
+                        {(athlete.role === "user" || athlete.user_role_preference?.includes("user")) && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleOpenAssignParent(athlete)}
+                            className="gap-1 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                          >
+                            <Users className="w-4 h-4" />
+                            Parents
+                          </Button>
+                        )}
                         <Button
                           size="sm"
                           variant="outline"
