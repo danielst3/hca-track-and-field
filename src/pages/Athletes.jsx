@@ -102,8 +102,49 @@ export default function Athletes() {
     },
   });
 
+  const inviteUserMutation = useMutation({
+    mutationFn: async ({ email, role }) => {
+      // Determine the API role - Base44 only supports "admin" or "user"
+      const apiRole = (role === "admin" || role === "coach") ? "admin" : "user";
+      
+      // Send the invitation through Base44
+      await base44.auth.inviteUser(email, apiRole);
+      
+      // Track the invitation with the actual requested role
+      const pendingInvite = await base44.entities.PendingInvitation.create({
+        email: email,
+        role: role,
+        status: "pending"
+      });
+      
+      return { pendingInvite, role };
+    },
+    onSuccess: ({ role }) => {
+      queryClient.invalidateQueries({ queryKey: ["pendingInvitations"] });
+      queryClient.invalidateQueries({ queryKey: ["athletes"] });
+      
+      const roleLabel = role === "user" ? "Athlete" : role === "admin" ? "Admin" : role === "coach" ? "Coach" : "Parent";
+      toast.success(`${roleLabel} invited successfully!`);
+      
+      setInviteEmail("");
+      setInviteRole("user");
+      setInviteOpen(false);
+    },
+    onError: (error) => {
+      console.error("Invite error:", error);
+      const errorMessage = error?.message || error?.detail || String(error) || "Failed to send invitation";
+      toast.error(errorMessage);
+    }
+  });
+
   const handleInvite = async (e) => {
     e.preventDefault();
+
+    // Validate email
+    if (!inviteEmail || !inviteEmail.includes("@")) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
 
     // Validate email domain for athletes
     if (inviteRole === "user" && !inviteEmail.toLowerCase().endsWith("@hcakc.org")) {
@@ -111,56 +152,70 @@ export default function Athletes() {
       return;
     }
 
-    try {
-       const apiRole = (inviteRole === "admin" || inviteRole === "coach") ? "admin" : "user";
-       await base44.auth.inviteUser(inviteEmail, apiRole);
-
-      await base44.entities.PendingInvitation.create({
-        email: inviteEmail,
-        role: inviteRole,
-        status: "pending"
-      });
-
-      queryClient.invalidateQueries({ queryKey: ["pendingInvitations"] });
-
-      const roleLabel = inviteRole === "user" ? "Athlete" : inviteRole === "admin" ? "Admin" : inviteRole === "coach" ? "Coach" : "Parent";
-      toast.success(`${roleLabel} invited successfully!`);
-      setInviteEmail("");
-      setInviteRole("user");
-      setInviteOpen(false);
-    } catch (error) {
-      const errorMessage = error?.message || error?.detail || "Failed to invite user";
-      toast.error(errorMessage);
+    // Check if user already exists
+    const existingUser = athletes.find(a => a.email.toLowerCase() === inviteEmail.toLowerCase());
+    if (existingUser) {
+      toast.error("A user with this email already exists");
+      return;
     }
+
+    // Check if invitation already pending
+    const existingInvite = pendingInvitations.find(inv => inv.email.toLowerCase() === inviteEmail.toLowerCase());
+    if (existingInvite) {
+      toast.error("An invitation to this email is already pending");
+      return;
+    }
+
+    inviteUserMutation.mutate({ email: inviteEmail, role: inviteRole });
   };
 
-  const handleApproveRequest = async (request) => {
-    try {
-      // Validate email domain for athletes
-      if (request.role === "user" && !request.email.toLowerCase().endsWith("@hcakc.org")) {
-        toast.error("Athletes must have an @hcakc.org email address");
-        return;
-      }
-
+  const approveRequestMutation = useMutation({
+    mutationFn: async (request) => {
       const apiRole = (request.role === "admin" || request.role === "coach") ? "admin" : "user";
+      
+      // Send invitation
       await base44.auth.inviteUser(request.email, apiRole);
-
+      
+      // Create pending invitation record
       await base44.entities.PendingInvitation.create({
         email: request.email,
         role: request.role,
         status: "pending"
       });
-
+      
+      // Update request status
       await base44.entities.AccessRequest.update(request.id, { status: "approved" });
-
+      
+      return request;
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["accessRequests"] });
       queryClient.invalidateQueries({ queryKey: ["pendingInvitations"] });
-
+      queryClient.invalidateQueries({ queryKey: ["athletes"] });
       toast.success("Access request approved and invitation sent!");
-    } catch (error) {
-      const errorMessage = error?.message || error?.detail || "Failed to approve request";
+    },
+    onError: (error) => {
+      console.error("Approve error:", error);
+      const errorMessage = error?.message || error?.detail || String(error) || "Failed to approve request";
       toast.error(errorMessage);
     }
+  });
+
+  const handleApproveRequest = async (request) => {
+    // Validate email domain for athletes
+    if (request.role === "user" && !request.email.toLowerCase().endsWith("@hcakc.org")) {
+      toast.error("Athletes must have an @hcakc.org email address");
+      return;
+    }
+
+    // Check if user already exists
+    const existingUser = athletes.find(a => a.email.toLowerCase() === request.email.toLowerCase());
+    if (existingUser) {
+      toast.error("A user with this email already exists");
+      return;
+    }
+
+    approveRequestMutation.mutate(request);
   };
 
   const handleDenyRequest = async (requestId) => {
@@ -307,8 +362,12 @@ export default function Athletes() {
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
-                    Send Invite
+                  <Button 
+                    type="submit" 
+                    disabled={inviteUserMutation.isPending}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    {inviteUserMutation.isPending ? "Sending..." : "Send Invite"}
                   </Button>
                 </div>
               </form>
@@ -553,10 +612,11 @@ export default function Athletes() {
                     <Button
                       size="sm"
                       onClick={() => handleApproveRequest(request)}
+                      disabled={approveRequestMutation.isPending}
                       className="bg-green-600 hover:bg-green-700"
                     >
                       <Check className="w-4 h-4 mr-1" />
-                      Approve
+                      {approveRequestMutation.isPending ? "Approving..." : "Approve"}
                     </Button>
                     <Button
                       size="sm"
