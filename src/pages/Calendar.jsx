@@ -27,11 +27,7 @@ import {
   isSameDay,
 } from "date-fns";
 
-const eventOptions = [
-  { id: "shot", label: "Shot Put", icon: "🏋️" },
-  { id: "discus", label: "Discus", icon: "🥏" },
-  { id: "javelin", label: "Javelin", icon: "🎯" }
-];
+
 
 const planTypeOptions = [
   { id: "technical", label: "Technical", color: "bg-blue-100 text-blue-800" },
@@ -51,11 +47,30 @@ export default function Calendar() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedEvents, setSelectedEvents] = useState(["shot", "discus", "javelin"]);
+  const [eventOptions, setEventOptions] = useState([]);
 
   React.useEffect(() => {
     const fetchUser = async () => {
       const currentUser = await base44.auth.me();
       setUser(currentUser);
+      
+      // Build event options from user's event_types
+      if (currentUser?.event_types && currentUser.event_types.length > 0) {
+        const options = currentUser.event_types.map(event => ({
+          id: event.id,
+          label: event.label,
+          icon: event.icon || "🎯"
+        }));
+        setEventOptions(options);
+      } else {
+        // Fallback to default events
+        setEventOptions([
+          { id: "shot", label: "Shot Put", icon: "🏋️" },
+          { id: "discus", label: "Discus", icon: "🥏" },
+          { id: "javelin", label: "Javelin", icon: "🎯" }
+        ]);
+      }
+      
       if (currentUser?.default_events && currentUser.default_events.length > 0) {
         setSelectedEvents(currentUser.default_events);
       }
