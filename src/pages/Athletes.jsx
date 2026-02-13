@@ -222,6 +222,46 @@ export default function Athletes() {
     roleUpdateMutation.mutate({ userId: editingAthlete.id, newRoles: editRoles, newEvents: editEvents });
   };
 
+  const [assignParentOpen, setAssignParentOpen] = useState(false);
+  const [selectedAthleteForAssign, setSelectedAthleteForAssign] = useState(null);
+  const [selectedParentId, setSelectedParentId] = useState("");
+
+  const assignAthleteMutation = useMutation({
+    mutationFn: async ({ parentId, athleteId }) => {
+      const parent = athletes.find(a => a.id === parentId);
+      const currentAssigned = parent?.assigned_athletes || [];
+      if (currentAssigned.includes(athleteId)) {
+        // Remove athlete
+        return base44.entities.User.update(parentId, {
+          assigned_athletes: currentAssigned.filter(id => id !== athleteId)
+        });
+      } else {
+        // Add athlete
+        return base44.entities.User.update(parentId, {
+          assigned_athletes: [...currentAssigned, athleteId]
+        });
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["athletes"] });
+      toast.success("Assignment updated");
+    },
+    onError: () => {
+      toast.error("Failed to update assignment");
+    },
+  });
+
+  const handleOpenAssignParent = (athlete) => {
+    setSelectedAthleteForAssign(athlete);
+    setAssignParentOpen(true);
+  };
+
+  const handleAssignToggle = (parentId) => {
+    assignAthleteMutation.mutate({ parentId, athleteId: selectedAthleteForAssign.id });
+  };
+
+  const parents = athletes.filter(a => a.role === "parent" || (a.user_role_preference && a.user_role_preference.includes("parent")));
+
   if (!user || (user.role !== "admin" && user.role !== "coach")) return null;
 
   return (
@@ -323,26 +363,35 @@ export default function Athletes() {
                         <ChevronRight className="w-5 h-5 text-slate-500 dark:text-gray-400" />
                       </Link>
                       <div className="flex gap-2 items-center">
-                         <Button
-                           size="sm"
-                           variant="outline"
-                           onClick={() => graduateMutation.mutate({ userId: athlete.id })}
-                           className="gap-1 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
-                         >
-                           <GraduationCap className="w-4 h-4" />
-                           Graduate
-                         </Button>
-                         <Dialog open={editingAthlete?.id === athlete.id} onOpenChange={(open) => !open && setEditingAthlete(null)}>
-                           <DialogTrigger asChild>
-                             <Button
-                               size="sm"
-                               variant="outline"
-                               onClick={() => openEditDialog(athlete)}
-                               className="dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
-                             >
-                               Edit Roles
-                             </Button>
-                           </DialogTrigger>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleOpenAssignParent(athlete)}
+                          className="gap-1 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                        >
+                          <Users className="w-4 h-4" />
+                          Parents
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => graduateMutation.mutate({ userId: athlete.id })}
+                          className="gap-1 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                        >
+                          <GraduationCap className="w-4 h-4" />
+                          Graduate
+                        </Button>
+                        <Dialog open={editingAthlete?.id === athlete.id} onOpenChange={(open) => !open && setEditingAthlete(null)}>
+                          <DialogTrigger asChild>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => openEditDialog(athlete)}
+                              className="dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                            >
+                              Edit Roles
+                            </Button>
+                          </DialogTrigger>
                            <DialogContent>
                              <DialogHeader>
                                <DialogTitle>Edit {athlete.full_name}</DialogTitle>
@@ -563,6 +612,48 @@ export default function Athletes() {
           ))}
 
         </div>
+
+        {/* Assign Parent Dialog */}
+        <Dialog open={assignParentOpen} onOpenChange={setAssignParentOpen}>
+          <DialogContent className="dark:bg-gray-800 dark:border-gray-700">
+            <DialogHeader>
+              <DialogTitle className="dark:text-gray-100">Assign Parents to {selectedAthleteForAssign?.full_name}</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-3 mt-4 max-h-96 overflow-y-auto">
+              {parents.length === 0 ? (
+                <p className="text-sm text-slate-600 dark:text-gray-400 text-center py-4">
+                  No parents in the system yet
+                </p>
+              ) : (
+                parents.map((parent) => {
+                  const isAssigned = parent.assigned_athletes?.includes(selectedAthleteForAssign?.id);
+                  return (
+                    <label
+                      key={parent.id}
+                      className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition border border-slate-200 dark:border-gray-600"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isAssigned}
+                        onChange={() => handleAssignToggle(parent.id)}
+                        className="w-4 h-4"
+                      />
+                      <div className="flex-1">
+                        <p className="font-medium text-slate-900 dark:text-gray-100">{parent.full_name}</p>
+                        <p className="text-xs text-slate-600 dark:text-gray-400">{parent.email}</p>
+                      </div>
+                    </label>
+                  );
+                })
+              )}
+            </div>
+            <div className="flex justify-end mt-4">
+              <Button variant="outline" onClick={() => setAssignParentOpen(false)}>
+                Done
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
