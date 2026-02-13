@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Users, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
-import EventProgressChart from "../components/tracking/EventProgressChart";
+import EventProgressCard from "../components/tracking/EventProgressCard";
 
 export default function MyAthletes() {
   const [user, setUser] = useState(null);
@@ -142,7 +142,7 @@ export default function MyAthletes() {
             <div className="grid gap-4">
               <h2 className="text-xl font-semibold text-slate-900 dark:text-gray-100">Recent Progress</h2>
               {selectedAthlete.events?.map((event) => (
-                <EventProgressChart
+                <EventProgressCard
                   key={event}
                   event={event}
                   athleteEmail={selectedAthlete.email}
