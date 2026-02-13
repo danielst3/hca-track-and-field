@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "./utils";
 import { Button } from "@/components/ui/button";
-import { Home, Calendar, Plus, LogOut, Trophy, TrendingUp, Users, BookOpen, FileText, Trash2, RefreshCw, ArrowLeft, Settings, Moon, Sun, MoreHorizontal, Download } from "lucide-react";
+import { Home, Calendar, Plus, LogOut, Trophy, TrendingUp, Users, BookOpen, FileText, Trash2, RefreshCw, ArrowLeft, Settings, Moon, Sun, MoreHorizontal, Download, Shield } from "lucide-react";
 import { cn } from "@/lib/utils";
 import UniversalSearch from "./components/shared/UniversalSearch";
 
@@ -405,6 +405,7 @@ export default function Layout({ children, currentPageName }) {
         { name: "Log Activity", icon: Plus, page: "LogActivity" },
         { name: "Athletes", icon: Users, page: "Athletes" },
         { name: "Seasons", icon: Trophy, page: "Seasons" },
+        { name: "FERPA", icon: Shield, page: "FERPACompliance" },
         { name: "Posts", icon: FileText, page: "Posts" },
         { name: "Resources", icon: BookOpen, page: "Resources" },
       ]

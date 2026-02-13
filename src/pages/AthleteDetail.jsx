@@ -40,6 +40,17 @@ export default function AthleteDetail() {
         window.location.href = createPageUrl("MyAthletes");
         return null;
       }
+      
+      // Log access for audit trail
+      if (user?.role === "admin" || user?.role === "parent") {
+        await base44.entities.AuditLog.create({
+          user_email: user.email,
+          action_type: "view_athlete",
+          target_email: fetchedAthlete.email,
+          details: `Viewed athlete profile: ${fetchedAthlete.full_name}`
+        });
+      }
+      
       return fetchedAthlete;
     },
     enabled: !!athleteId && !!user,
@@ -53,7 +64,15 @@ export default function AthleteDetail() {
 
   const getLogsForEvent = (event) => logs.filter((l) => l.event === event);
 
-  const handleImpersonate = () => {
+  const handleImpersonate = async () => {
+    // Log impersonation
+    await base44.entities.AuditLog.create({
+      user_email: user.email,
+      action_type: "view_athlete",
+      target_email: athlete.email,
+      details: `Started viewing as athlete: ${athlete.full_name}`
+    });
+    
     localStorage.setItem("impersonating", JSON.stringify({
       id: athlete.id,
       email: athlete.email,
