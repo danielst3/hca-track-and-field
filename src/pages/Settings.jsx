@@ -17,7 +17,8 @@ import {
   Download,
   X,
   CheckCircle2,
-  Download as DownloadApp
+  Download as DownloadApp,
+  Shield
 } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -193,6 +194,14 @@ export default function Settings() {
       setDownloading(true);
       const logs = await base44.entities.ThrowLog.filter({ athlete_email: user.email });
       
+      // Log data export
+      await base44.entities.AuditLog.create({
+        user_email: user.email,
+        action_type: "export_data",
+        target_email: user.email,
+        details: "Athlete exported their own data"
+      });
+      
       if (logs.length === 0) {
         toast.error("No data to download");
         return;
@@ -235,6 +244,13 @@ export default function Settings() {
       if (filters.season !== "all") {
         logs = logs.filter(log => log.season_id === filters.season);
       }
+      
+      // Log data export
+      await base44.entities.AuditLog.create({
+        user_email: user.email,
+        action_type: "export_data",
+        details: `Coach exported data - Filters: Athlete=${filters.athlete}, Event=${filters.event}, Season=${filters.season}`
+      });
       
       if (logs.length === 0) {
         toast.error("No data matches the selected filters");
@@ -579,6 +595,29 @@ export default function Settings() {
                     <span className="flex items-center gap-3">
                       <FileText className="w-5 h-5" />
                       Manage Posts
+                    </span>
+                    <ChevronRight className="w-5 h-5" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="dark:bg-gray-800 dark:border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-slate-900 dark:text-gray-100">FERPA & Data Management</CardTitle>
+                <CardDescription className="text-slate-600 dark:text-gray-300">
+                  Privacy compliance, consent, and data export
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <Link to={createPageUrl("FERPACompliance")}>
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-between text-slate-700 hover:text-slate-900 dark:text-gray-200 dark:hover:bg-gray-700"
+                  >
+                    <span className="flex items-center gap-3">
+                      <Shield className="w-5 h-5" />
+                      FERPA Compliance
                     </span>
                     <ChevronRight className="w-5 h-5" />
                   </Button>
