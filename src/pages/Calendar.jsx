@@ -305,7 +305,7 @@ export default function Calendar() {
                   <div className="flex items-center justify-between mb-2">
                     <span
                       className={`text-sm font-bold ${
-                        isToday ? "text-blue-600 dark:text-blue-400" : "text-slate-900 dark:text-gray-300"
+                        isToday ? "text-blue-600 dark:text-blue-400" : "text-slate-900 dark:text-gray-100"
                       }`}
                     >
                       {format(day, view === "week" ? "EEE, MMM d" : "d")}
