@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 export default function EventToggle({ event, isSelected, onClick }) {
   return (
     <button
+      type="button"
       onClick={onClick}
       className="px-4 py-2 rounded-lg font-semibold transition-all border-2"
       style={{
