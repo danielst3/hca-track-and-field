@@ -6,41 +6,63 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 import { FileText, Link as LinkIcon, Upload, Youtube, Image as ImageIcon, Plus, ExternalLink } from "lucide-react";
 import { format } from "date-fns";
+import EventToggle from "../components/shared/EventToggle";
 
 export default function Posts() {
   const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
   const queryClient = useQueryClient();
+  const [eventOptions, setEventOptions] = useState([]);
+  const [filterEvents, setFilterEvents] = useState([]);
 
   const [formData, setFormData] = useState({
     title: "",
     content: "",
     file_url: "",
     link_url: "",
+    event_tags: [],
   });
 
   useEffect(() => {
     const fetchUser = async () => {
       const currentUser = await base44.auth.me();
       setUser(currentUser);
+      
+      // Build event options from user's event_types
+      if (currentUser?.event_types && currentUser.event_types.length > 0) {
+        const options = currentUser.event_types.map(event => ({
+          id: event.id,
+          label: event.label,
+          icon: event.icon || "🎯"
+        }));
+        setEventOptions(options);
+      } else {
+        // Fallback to default events
+        setEventOptions([
+          { id: "shot", label: "Shot Put", icon: "🏋️" },
+          { id: "discus", label: "Discus", icon: "🥏" },
+          { id: "javelin", label: "Javelin", icon: "🎯" }
+        ]);
+      }
     };
     fetchUser();
   }, []);
 
-  const { data: resources = [], isLoading } = useQuery({
-    queryKey: ["resources"],
-    queryFn: () => base44.entities.Resource.list("-created_date"),
+  const { data: posts = [], isLoading } = useQuery({
+    queryKey: ["posts"],
+    queryFn: () => base44.entities.Post.list("-created_date"),
   });
 
   const createMutation = useMutation({
-    mutationFn: (data) => base44.entities.Resource.create(data),
+    mutationFn: (data) => base44.entities.Post.create({ ...data, author_email: user.email }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["resources"] });
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
       setOpen(false);
-      setFormData({ title: "", content: "", file_url: "", link_url: "" });
+      setFormData({ title: "", content: "", file_url: "", link_url: "", event_tags: [] });
     },
   });
 
@@ -63,6 +85,26 @@ export default function Posts() {
     e.preventDefault();
     createMutation.mutate(formData);
   };
+
+  const toggleFormEvent = (eventId) => {
+    const newEvents = formData.event_tags.includes(eventId)
+      ? formData.event_tags.filter(e => e !== eventId)
+      : [...formData.event_tags, eventId];
+    setFormData({ ...formData, event_tags: newEvents });
+  };
+
+  const toggleFilterEvent = (eventId) => {
+    const newEvents = filterEvents.includes(eventId)
+      ? filterEvents.filter(e => e !== eventId)
+      : [...filterEvents, eventId];
+    setFilterEvents(newEvents);
+  };
+
+  const filteredPosts = filterEvents.length === 0 
+    ? posts 
+    : posts.filter(post => 
+        post.event_tags && post.event_tags.some(tag => filterEvents.includes(tag))
+      );
 
   const getYouTubeEmbedUrl = (url) => {
     const videoIdMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
@@ -96,10 +138,10 @@ export default function Posts() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800 p-4 pb-20">
       <div className="max-w-4xl mx-auto space-y-4">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100">Posts</h1>
-            <p className="text-slate-600 dark:text-gray-300 mt-1">Shared materials and references</p>
+            <p className="text-slate-600 dark:text-gray-300 mt-1">Team updates and announcements</p>
           </div>
           {user?.role === "admin" && (
             <Dialog open={open} onOpenChange={setOpen}>
@@ -173,6 +215,21 @@ export default function Posts() {
                       type="url"
                     />
                   </div>
+                  <div>
+                    <label className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-1 block">
+                      Event Tags
+                    </label>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {eventOptions.map(event => (
+                        <EventToggle
+                          key={event.id}
+                          event={event}
+                          isSelected={formData.event_tags.includes(event.id)}
+                          onClick={() => toggleFormEvent(event.id)}
+                        />
+                      ))}
+                    </div>
+                  </div>
                   <div className="flex gap-3 pt-2">
                     <Button type="button" variant="outline" onClick={() => setOpen(false)}>
                       Cancel
@@ -187,8 +244,20 @@ export default function Posts() {
           )}
         </div>
 
+        {/* Event Filter */}
+        <div className="flex items-center gap-3 flex-wrap">
+          {eventOptions.map(event => (
+            <EventToggle
+              key={event.id}
+              event={event}
+              isSelected={filterEvents.includes(event.id)}
+              onClick={() => toggleFilterEvent(event.id)}
+            />
+          ))}
+        </div>
+
         {/* Posts List */}
-        {resources.length === 0 ? (
+        {filteredPosts.length === 0 ? (
           <Card className="dark:bg-gray-800 dark:border-gray-700">
             <CardContent className="pt-12 pb-12 text-center">
               <FileText className="w-12 h-12 text-slate-300 dark:text-gray-600 mx-auto mb-3" />
@@ -197,37 +266,49 @@ export default function Posts() {
           </Card>
         ) : (
           <div className="space-y-4">
-            {resources.map((resource) => (
-              <Card key={resource.id} className="overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+            {filteredPosts.map((post) => (
+              <Card key={post.id} className="overflow-hidden dark:bg-gray-800 dark:border-gray-700">
                 <CardHeader className="bg-slate-50 dark:bg-gray-900 border-b border-slate-200 dark:border-gray-700">
                   <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="text-lg font-bold text-slate-900 dark:text-gray-100">{resource.title}</h3>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold text-slate-900 dark:text-gray-100">{post.title}</h3>
                       <p className="text-sm text-slate-500 dark:text-gray-400 mt-1">
-                        Posted by {resource.created_by} • {format(new Date(resource.created_date), "MMM d, yyyy")}
+                        Posted by {post.created_by} • {format(new Date(post.created_date), "MMM d, yyyy")}
                       </p>
+                      {post.event_tags && post.event_tags.length > 0 && (
+                        <div className="flex gap-2 mt-2 flex-wrap">
+                          {post.event_tags.map((tag) => {
+                            const eventOption = eventOptions.find(e => e.id === tag);
+                            return (
+                              <Badge key={tag} variant="outline" className="text-xs">
+                                {eventOption?.icon} {eventOption?.label || tag}
+                              </Badge>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent className="pt-4">
-                  {resource.content && (
-                    <p className="text-slate-700 dark:text-gray-300 mb-4 whitespace-pre-wrap">{resource.content}</p>
+                  {post.content && (
+                    <p className="text-slate-700 dark:text-gray-300 mb-4 whitespace-pre-wrap">{post.content}</p>
                   )}
 
                   {/* File Attachments */}
-                  {resource.file_url && (
+                  {post.file_url && (
                     <div className="mb-4">
-                      {isImageUrl(resource.file_url) ? (
+                      {isImageUrl(post.file_url) ? (
                         <div className="rounded-lg overflow-hidden border border-slate-200">
                           <img
-                            src={resource.file_url}
-                            alt={resource.title}
+                            src={post.file_url}
+                            alt={post.title}
                             className="w-full max-h-96 object-contain bg-slate-50"
                           />
                         </div>
-                      ) : isPdfUrl(resource.file_url) ? (
+                      ) : isPdfUrl(post.file_url) ? (
                         <a
-                          href={resource.file_url}
+                          href={post.file_url}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 transition-colors"
@@ -241,7 +322,7 @@ export default function Posts() {
                         </a>
                       ) : (
                         <a
-                          href={resource.file_url}
+                          href={post.file_url}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center gap-3 p-4 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 transition-colors"
@@ -258,12 +339,12 @@ export default function Posts() {
                   )}
 
                   {/* Links */}
-                  {resource.link_url && (
+                  {post.link_url && (
                     <div>
-                      {isYouTubeUrl(resource.link_url) && getYouTubeEmbedUrl(resource.link_url) ? (
+                      {isYouTubeUrl(post.link_url) && getYouTubeEmbedUrl(post.link_url) ? (
                         <div className="rounded-lg overflow-hidden border border-slate-200">
                           <iframe
-                            src={getYouTubeEmbedUrl(resource.link_url)}
+                            src={getYouTubeEmbedUrl(post.link_url)}
                             className="w-full aspect-video"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
@@ -271,7 +352,7 @@ export default function Posts() {
                         </div>
                       ) : (
                         <a
-                          href={resource.link_url}
+                          href={post.link_url}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors"
@@ -279,7 +360,7 @@ export default function Posts() {
                           <LinkIcon className="w-6 h-6 text-blue-600" />
                           <div className="flex-1 min-w-0">
                             <p className="font-semibold text-blue-900">External Link</p>
-                            <p className="text-sm text-blue-600 truncate">{resource.link_url}</p>
+                            <p className="text-sm text-blue-600 truncate">{post.link_url}</p>
                           </div>
                           <ExternalLink className="w-4 h-4 text-blue-600 flex-shrink-0" />
                         </a>

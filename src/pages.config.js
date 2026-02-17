@@ -50,6 +50,7 @@
 import AthleteDetail from './pages/AthleteDetail';
 import Athletes from './pages/Athletes';
 import Calendar from './pages/Calendar';
+import FERPACompliance from './pages/FERPACompliance';
 import LogActivity from './pages/LogActivity';
 import MyAthletes from './pages/MyAthletes';
 import Posts from './pages/Posts';
@@ -59,7 +60,6 @@ import Resources from './pages/Resources';
 import Seasons from './pages/Seasons';
 import Settings from './pages/Settings';
 import Today from './pages/Today';
-import FERPACompliance from './pages/FERPACompliance';
 import __Layout from './Layout.jsx';
 
 
@@ -67,6 +67,7 @@ export const PAGES = {
     "AthleteDetail": AthleteDetail,
     "Athletes": Athletes,
     "Calendar": Calendar,
+    "FERPACompliance": FERPACompliance,
     "LogActivity": LogActivity,
     "MyAthletes": MyAthletes,
     "Posts": Posts,
@@ -76,7 +77,6 @@ export const PAGES = {
     "Seasons": Seasons,
     "Settings": Settings,
     "Today": Today,
-    "FERPACompliance": FERPACompliance,
 }
 
 export const pagesConfig = {
