@@ -9,13 +9,15 @@ import QuickLogButton from "../components/tracking/QuickLogButton";
 import PracticePlanText from "../components/shared/PracticePlanText";
 import EventToggle from "../components/shared/EventToggle";
 import LogPerformanceForm from "../components/tracking/LogPerformanceForm";
-import { Calendar, Trophy, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { Calendar, Trophy, ChevronLeft, ChevronRight, X, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { format, isSameDay, addDays } from "date-fns";
 import { cn } from "@/lib/utils";
 import AthleteCard from "../components/dashboard/AthleteCard";
 import EventProgressChart from "../components/dashboard/EventProgressChart";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "../utils";
 
 export default function Today() {
   const [user, setUser] = useState(null);
@@ -101,11 +103,11 @@ export default function Today() {
     enabled: !!activeSeason && !!user && user.role !== "admin",
   });
 
-  const { data: recentPosts } = useQuery({
+  const { data: recentPosts = [] } = useQuery({
     queryKey: ["recentPosts"],
     queryFn: async () => {
-      const posts = await base44.entities.Post.list();
-      return posts.sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+      const posts = await base44.entities.Post.list("-created_date", 3);
+      return posts;
     },
   });
 
@@ -191,6 +193,48 @@ export default function Today() {
               />
             </div>
           </div>
+        )}
+
+        {/* Recent Posts */}
+        {recentPosts.length > 0 && (
+          <Card className="bg-white dark:bg-gray-800 dark:border-gray-700">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="flex items-center gap-2 dark:text-gray-100">
+                  <FileText className="w-5 h-5" />
+                  Recent Posts
+                </CardTitle>
+                <Link to={createPageUrl("Posts")}>
+                  <Button variant="outline" size="sm" className="dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">View All</Button>
+                </Link>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {recentPosts.map((post) => (
+                <div key={post.id} className="p-4 bg-slate-50 dark:bg-gray-900 rounded-lg border border-slate-200 dark:border-gray-700">
+                  <h3 className="font-semibold text-slate-900 dark:text-gray-100">{post.title}</h3>
+                  <p className="text-sm text-slate-600 dark:text-gray-400 mt-1">
+                    {post.created_by} • {format(new Date(post.created_date), "MMM d")}
+                  </p>
+                  {post.event_tags && post.event_tags.length > 0 && (
+                    <div className="flex gap-2 mt-2 flex-wrap">
+                      {post.event_tags.map((tag) => {
+                        const eventOption = eventOptions.find(e => e.id === tag);
+                        return (
+                          <Badge key={tag} variant="outline" className="text-xs">
+                            {eventOption?.icon} {eventOption?.label || tag}
+                          </Badge>
+                        );
+                      })}
+                    </div>
+                  )}
+                  {post.content && (
+                    <p className="text-sm text-slate-700 dark:text-gray-300 mt-2 line-clamp-2">{post.content}</p>
+                  )}
+                </div>
+              ))}
+            </CardContent>
+          </Card>
         )}
         {/* Header */}
          <div className="flex items-center justify-between">
