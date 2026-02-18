@@ -60,6 +60,7 @@ import Resources from './pages/Resources';
 import Seasons from './pages/Seasons';
 import Settings from './pages/Settings';
 import Today from './pages/Today';
+import Support from './pages/Support';
 import __Layout from './Layout.jsx';
 
 
@@ -77,6 +78,7 @@ export const PAGES = {
     "Seasons": Seasons,
     "Settings": Settings,
     "Today": Today,
+    "Support": Support,
 }
 
 export const pagesConfig = {
