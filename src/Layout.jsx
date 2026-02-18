@@ -408,6 +408,7 @@ export default function Layout({ children, currentPageName }) {
         { name: "FERPA", icon: Shield, page: "FERPACompliance" },
         { name: "Posts", icon: FileText, page: "Posts" },
         { name: "Resources", icon: BookOpen, page: "Resources" },
+        { name: "Support", icon: MessageSquare, page: "Support" },
       ]
     : user?.role === "parent"
     ? [
@@ -416,6 +417,7 @@ export default function Layout({ children, currentPageName }) {
         { name: "Athletes", icon: Users, page: "MyAthletes" },
         { name: "Posts", icon: FileText, page: "Posts" },
         { name: "Resources", icon: BookOpen, page: "Resources" },
+        { name: "Support", icon: MessageSquare, page: "Support" },
       ]
     : [
         { name: "Today", icon: Home, page: "Today" },
@@ -424,6 +426,7 @@ export default function Layout({ children, currentPageName }) {
         { name: "Progress", icon: TrendingUp, page: "Progress" },
         { name: "Posts", icon: FileText, page: "Posts" },
         { name: "Resources", icon: BookOpen, page: "Resources" },
+        { name: "Support", icon: MessageSquare, page: "Support" },
       ];
 
   return (
