@@ -298,9 +298,9 @@ export default function FERPACompliance() {
                   {consents.map((consent) => (
                     <Card key={consent.id} className="dark:bg-gray-700 dark:border-gray-600">
                       <CardContent className="p-4">
-                        <div className="flex items-start justify-between">
+                        <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                           <div className="space-y-1">
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 flex-wrap">
                               <p className="font-medium text-gray-900 dark:text-gray-100">
                                 {athletes.find(a => a.email === consent.athlete_email)?.full_name || consent.athlete_email}
                               </p>
@@ -323,7 +323,7 @@ export default function FERPACompliance() {
                               size="sm"
                               variant="outline"
                               onClick={() => updateConsentMutation.mutate({ id: consent.id, status: "revoked" })}
-                              className="dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200"
+                              className="dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200 self-start"
                             >
                               Revoke
                             </Button>
