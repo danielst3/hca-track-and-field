@@ -161,24 +161,24 @@ export default function FERPACompliance() {
         </div>
 
         <Tabs defaultValue="consent" className="space-y-6">
-          <TabsList className="dark:bg-gray-800">
-            <TabsTrigger value="consent" className="dark:data-[state=active]:bg-gray-700">
-              <Users className="w-4 h-4 mr-2" />
-              Parental Consent
+          <TabsList className="dark:bg-gray-800 flex flex-wrap h-auto gap-1">
+            <TabsTrigger value="consent" className="dark:data-[state=active]:bg-gray-700 flex-1 min-w-[120px]">
+              <Users className="w-4 h-4 mr-1 hidden sm:block" />
+              Consent
             </TabsTrigger>
             {user.role === "admin" && (
               <>
-                <TabsTrigger value="audit" className="dark:data-[state=active]:bg-gray-700">
-                  <Eye className="w-4 h-4 mr-2" />
-                  Audit Logs
+                <TabsTrigger value="audit" className="dark:data-[state=active]:bg-gray-700 flex-1 min-w-[100px]">
+                  <Eye className="w-4 h-4 mr-1 hidden sm:block" />
+                  Audit
                 </TabsTrigger>
-                <TabsTrigger value="retention" className="dark:data-[state=active]:bg-gray-700">
-                  <Clock className="w-4 h-4 mr-2" />
-                  Data Retention
+                <TabsTrigger value="retention" className="dark:data-[state=active]:bg-gray-700 flex-1 min-w-[100px]">
+                  <Clock className="w-4 h-4 mr-1 hidden sm:block" />
+                  Retention
                 </TabsTrigger>
-                <TabsTrigger value="info" className="dark:data-[state=active]:bg-gray-700">
-                  <FileText className="w-4 h-4 mr-2" />
-                  Information
+                <TabsTrigger value="info" className="dark:data-[state=active]:bg-gray-700 flex-1 min-w-[100px]">
+                  <FileText className="w-4 h-4 mr-1 hidden sm:block" />
+                  Info
                 </TabsTrigger>
               </>
             )}
