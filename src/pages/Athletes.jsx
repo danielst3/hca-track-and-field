@@ -417,20 +417,18 @@ export default function Athletes() {
                       <div className="flex gap-2 items-center flex-wrap">
                         {(athlete.role === "user" || athlete.user_role_preference?.includes("user")) && (
                           <Button
-                            size="sm"
                             variant="outline"
                             onClick={() => handleOpenAssignParent(athlete)}
-                            className="gap-1 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                            className="gap-1 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 h-10 px-4"
                           >
                             <Users className="w-4 h-4" />
                             Parents
                           </Button>
                         )}
                         <Button
-                          size="sm"
                           variant="outline"
                           onClick={() => graduateMutation.mutate({ userId: athlete.id })}
-                          className="gap-1 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                          className="gap-1 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 h-10 px-4"
                         >
                           <GraduationCap className="w-4 h-4" />
                           Graduate
@@ -438,10 +436,9 @@ export default function Athletes() {
                         <Dialog open={editingAthlete?.id === athlete.id} onOpenChange={(open) => !open && setEditingAthlete(null)}>
                           <DialogTrigger asChild>
                             <Button
-                              size="sm"
                               variant="outline"
                               onClick={() => openEditDialog(athlete)}
-                              className="dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                              className="dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 h-10 px-4"
                             >
                               Edit Roles
                             </Button>
