@@ -384,10 +384,10 @@ export default function Athletes() {
               {athletes.filter(a => !a.graduated).map((athlete) => (
                 <Card key={athlete.id} className="hover:shadow-lg transition-shadow dark:bg-gray-800 dark:border-gray-700">
                   <CardContent className="p-4">
-                    <div className="flex items-center justify-between gap-4">
+                    <div className="flex flex-col gap-3">
                       <Link
                         to={`${createPageUrl("AthleteDetail")}?id=${athlete.id}`}
-                        className="flex-1 flex items-center justify-between cursor-pointer"
+                        className="flex items-center justify-between cursor-pointer"
                       >
                         <div>
                           <p className="font-semibold text-slate-900 dark:text-gray-100">
@@ -400,7 +400,7 @@ export default function Athletes() {
                             </Badge>
                           )}
                           {athlete.events && athlete.events.length > 0 && (
-                            <div className="flex gap-1 mt-2">
+                            <div className="flex gap-1 mt-2 flex-wrap">
                               {athlete.events.map((evt) => (
                                 <Badge
                                   key={evt}
@@ -414,7 +414,7 @@ export default function Athletes() {
                         </div>
                         <ChevronRight className="w-5 h-5 text-slate-500 dark:text-gray-400" />
                       </Link>
-                      <div className="flex gap-2 items-center">
+                      <div className="flex gap-2 items-center flex-wrap">
                         {(athlete.role === "user" || athlete.user_role_preference?.includes("user")) && (
                           <Button
                             size="sm"
