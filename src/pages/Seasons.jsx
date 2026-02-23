@@ -323,35 +323,32 @@ export default function Seasons() {
                   <div className="flex gap-2 flex-wrap mt-2 sm:mt-0">
                     {!season.is_active && (
                       <Button
-                        size="sm"
                         variant="outline"
                         onClick={() => setActiveSeasonMutation.mutate(season.id)}
-                        className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                        className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 h-10 px-4"
                       >
                         Set Active
                       </Button>
                     )}
                     <ImportPlansDialog seasonId={season.id} />
                     <Button
-                      size="sm"
                       variant="outline"
                       onClick={() => {
                         setSelectedSeason(season);
                         setCopyDialogOpen(true);
                       }}
-                      className="gap-2 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                      className="gap-2 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 h-10 px-4"
                     >
                       <Copy className="w-4 h-4" />
                       Copy Plans
                     </Button>
                     <Button
-                      size="sm"
                       variant="outline"
                       onClick={() => {
                         setSelectedSeason(season);
                         setDeleteDialogOpen(true);
                       }}
-                      className="gap-2 text-red-600 dark:text-red-400 dark:bg-gray-700 dark:border-gray-600"
+                      className="gap-2 text-red-600 dark:text-red-400 dark:bg-gray-700 dark:border-gray-600 h-10 px-4"
                     >
                       <Trash2 className="w-4 h-4" />
                       Delete
