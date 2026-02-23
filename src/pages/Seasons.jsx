@@ -312,7 +312,7 @@ export default function Seasons() {
             >
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 flex-wrap">
                     <CardTitle className="dark:text-gray-100">{season.name}</CardTitle>
                     {season.is_active && (
                       <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
@@ -320,7 +320,7 @@ export default function Seasons() {
                       </Badge>
                     )}
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 flex-wrap mt-2 sm:mt-0">
                     {!season.is_active && (
                       <Button
                         size="sm"
