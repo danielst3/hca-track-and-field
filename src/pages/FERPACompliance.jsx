@@ -353,23 +353,23 @@ export default function FERPACompliance() {
                   <CardContent>
                     <div className="space-y-2">
                       {auditLogs.map((log) => (
-                        <div key={log.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                          <div className="flex-1">
-                            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                        <div key={log.id} className="flex flex-col gap-1 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                          <div className="flex items-start justify-between gap-2">
+                            <p className="text-sm font-medium text-gray-900 dark:text-gray-100 break-all">
                               {log.user_email} • {log.action_type.replace("_", " ")}
                             </p>
-                            {log.target_email && (
-                              <p className="text-xs text-gray-600 dark:text-gray-400">
-                                Target: {athletes.find(a => a.email === log.target_email)?.full_name || log.target_email}
-                              </p>
-                            )}
-                            {log.details && (
-                              <p className="text-xs text-gray-500 dark:text-gray-500">{log.details}</p>
-                            )}
+                            <p className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap flex-shrink-0">
+                              {moment(log.created_date).format("MMM D, h:mm A")}
+                            </p>
                           </div>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
-                            {moment(log.created_date).format("MMM D, h:mm A")}
-                          </p>
+                          {log.target_email && (
+                            <p className="text-xs text-gray-600 dark:text-gray-400">
+                              Target: {athletes.find(a => a.email === log.target_email)?.full_name || log.target_email}
+                            </p>
+                          )}
+                          {log.details && (
+                            <p className="text-xs text-gray-500 dark:text-gray-500">{log.details}</p>
+                          )}
                         </div>
                       ))}
                       {auditLogs.length === 0 && (
