@@ -295,9 +295,33 @@ export default function Resources() {
           </div>
         </div>
 
+        {/* Mobile: horizontal scroll nav */}
+        <div className="lg:hidden px-4 mb-4">
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+            {sections.map((section) => {
+              const Icon = section.icon;
+              return (
+                <button
+                  key={section.id}
+                  onClick={() => setActiveSection(section.id)}
+                  className={cn(
+                    "flex items-center gap-2 px-3 py-2 rounded-lg text-left transition-all whitespace-nowrap flex-shrink-0",
+                    activeSection === section.id
+                      ? "bg-blue-600 text-white shadow-md dark:bg-blue-700"
+                      : "text-slate-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700"
+                  )}
+                >
+                  <Icon className="w-4 h-4 flex-shrink-0" />
+                  <span className="text-sm font-medium">{section.title}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 px-4">
-          {/* Navigation Sidebar */}
-          <div className="lg:col-span-1">
+          {/* Navigation Sidebar - desktop only */}
+          <div className="hidden lg:block lg:col-span-1">
             <Card className="sticky top-20 dark:bg-gray-800 dark:border-gray-700">
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm text-slate-600 dark:text-gray-400 uppercase tracking-wide">
