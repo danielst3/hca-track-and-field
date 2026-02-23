@@ -93,17 +93,17 @@ export default function AthleteDetail() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[var(--brand-secondary)] to-[var(--brand-secondary-light)] dark:from-gray-900 dark:to-gray-800 p-4 pb-24">
       <div className="max-w-7xl mx-auto space-y-6">
-        <div className="flex items-start justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100">
               {athlete.full_name}
             </h1>
-            <p className="text-slate-600 dark:text-gray-400">{athlete.email}</p>
+            <p className="text-slate-600 dark:text-gray-400 break-all">{athlete.email}</p>
           </div>
           {user.role === "admin" && (
             <Button
               onClick={handleImpersonate}
-              className="bg-blue-600 hover:bg-blue-700 text-white gap-2"
+              className="bg-blue-600 hover:bg-blue-700 text-white gap-2 self-start"
             >
               <UserCircle className="w-4 h-4" />
               View as Athlete
