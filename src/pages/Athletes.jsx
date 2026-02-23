@@ -610,19 +610,17 @@ export default function Athletes() {
                   </div>
                   <div className="flex gap-2">
                     <Button
-                      size="sm"
                       onClick={() => handleApproveRequest(request)}
                       disabled={approveRequestMutation.isPending}
-                      className="bg-green-600 hover:bg-green-700"
+                      className="bg-green-600 hover:bg-green-700 h-10 px-4"
                     >
                       <Check className="w-4 h-4 mr-1" />
                       {approveRequestMutation.isPending ? "Approving..." : "Approve"}
                     </Button>
                     <Button
-                      size="sm"
                       variant="outline"
                       onClick={() => handleDenyRequest(request.id)}
-                      className="text-red-600 border-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                      className="text-red-600 border-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 h-10 px-4"
                     >
                       <X className="w-4 h-4 mr-1" />
                       Deny
