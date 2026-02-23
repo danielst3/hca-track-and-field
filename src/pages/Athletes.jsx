@@ -648,10 +648,9 @@ export default function Athletes() {
                     </p>
                   </div>
                   <Button
-                    size="sm"
                     variant="outline"
                     onClick={() => handleRemoveInvitation(invite.id)}
-                    className="text-red-600 border-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                    className="text-red-600 border-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 h-10 px-4"
                   >
                     <X className="w-4 h-4 mr-1" />
                     Remove
