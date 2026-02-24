@@ -277,7 +277,7 @@ export default function Calendar() {
               {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
                 <div
                   key={day}
-                  className="text-center text-xs font-semibold text-slate-600 dark:text-gray-400 py-2"
+                  className="text-center text-xs font-semibold text-slate-600 dark:text-gray-100 py-2"
                 >
                   {day}
                 </div>
