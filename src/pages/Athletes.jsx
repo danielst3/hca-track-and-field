@@ -450,7 +450,7 @@ export default function Athletes() {
                           </DialogTrigger>
                            <DialogContent>
                              <DialogHeader>
-                               <DialogTitle>Edit {athlete.full_name}</DialogTitle>
+                               <DialogTitle>Edit {athlete.first_name && athlete.last_name ? `${athlete.first_name} ${athlete.last_name}` : athlete.full_name}</DialogTitle>
                              </DialogHeader>
                              <div className="space-y-6 mt-4">
                                <div>
@@ -569,7 +569,7 @@ export default function Athletes() {
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
                             <p className="font-semibold text-slate-900 dark:text-gray-100">
-                              {athlete.full_name}
+                             {athlete.first_name && athlete.last_name ? `${athlete.first_name} ${athlete.last_name}` : athlete.full_name}
                             </p>
                             <Badge className="bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-300 text-xs">
                               Graduated
@@ -694,7 +694,7 @@ export default function Athletes() {
         <Dialog open={assignParentOpen} onOpenChange={setAssignParentOpen}>
           <DialogContent className="dark:bg-gray-800 dark:border-gray-700">
             <DialogHeader>
-              <DialogTitle className="dark:text-gray-100">Assign Parents to {selectedAthleteForAssign?.full_name}</DialogTitle>
+              <DialogTitle className="dark:text-gray-100">Assign Parents to {selectedAthleteForAssign?.first_name && selectedAthleteForAssign?.last_name ? `${selectedAthleteForAssign.first_name} ${selectedAthleteForAssign.last_name}` : selectedAthleteForAssign?.full_name}</DialogTitle>
             </DialogHeader>
             <div className="space-y-3 mt-4 max-h-96 overflow-y-auto">
               {parents.length === 0 ? (
