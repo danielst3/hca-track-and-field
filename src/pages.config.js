@@ -55,7 +55,6 @@ import LogActivity from './pages/LogActivity';
 import MyAthletes from './pages/MyAthletes';
 import Posts from './pages/Posts';
 import Privacy from './pages/Privacy';
-import Progress from './pages/Progress';
 import Resources from './pages/Resources';
 import Seasons from './pages/Seasons';
 import Settings from './pages/Settings';
@@ -73,7 +72,6 @@ export const PAGES = {
     "MyAthletes": MyAthletes,
     "Posts": Posts,
     "Privacy": Privacy,
-    "Progress": Progress,
     "Resources": Resources,
     "Seasons": Seasons,
     "Settings": Settings,
