@@ -404,7 +404,7 @@ export default function Athletes() {
                               {athlete.events.map((evt) => (
                                 <Badge
                                   key={evt}
-                                  className="text-xs capitalize bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                                  className="text-xs capitalize bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
                                 >
                                   {evt}
                                 </Badge>
@@ -553,7 +553,7 @@ export default function Athletes() {
                               {athlete.events.map((evt) => (
                                 <Badge
                                   key={evt}
-                                  className="text-xs capitalize bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                                  className="text-xs capitalize bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
                                 >
                                   {evt}
                                 </Badge>
