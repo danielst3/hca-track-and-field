@@ -150,7 +150,7 @@ export default function LogActivity() {
                     const athlete = athletes.find(a => a.id === athleteId);
                     setSelectedAthlete(athlete);
                   }}
-                  options={athletes.map(a => ({ value: a.id, label: a.full_name }))}
+                  options={athletes.map(a => ({ value: a.id, label: (a.first_name && a.last_name) ? `${a.first_name} ${a.last_name}` : a.full_name }))}
                   label="Athlete"
                 />
               </CardContent>
