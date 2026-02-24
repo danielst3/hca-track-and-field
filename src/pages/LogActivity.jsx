@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { MobileSelect } from "@/components/ui/mobile-select";
-import { Plus, Check, Dumbbell, Disc3, Zap } from "lucide-react";
+import { Plus, Check, Circle, Disc3, Zap } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -29,7 +29,7 @@ export default function LogActivity() {
   const isCoach = user?.role === "admin";
 
   const events = [
-    { id: "shot", label: "Shot Put", Icon: Dumbbell },
+    { id: "shot", label: "Shot Put", Icon: Circle },
     { id: "discus", label: "Discus", Icon: Disc3 },
     { id: "javelin", label: "Javelin", Icon: Zap },
   ];

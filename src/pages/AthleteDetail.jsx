@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
-import { UserCircle, Dumbbell, Disc3, Zap, BarChart2 } from "lucide-react";
+import { UserCircle, Circle, Disc3, Zap, BarChart2 } from "lucide-react";
 import { createPageUrl } from "../utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +13,7 @@ import ConsistencyChart from "../components/analytics/ConsistencyChart";
 import SessionHistory from "../components/analytics/SessionHistory";
 
 const EVENT_OPTIONS = [
-  { value: "shot", label: "Shot Put", icon: Dumbbell, color: "text-amber-500 border-amber-400 bg-amber-50 dark:bg-amber-950/30" },
+  { value: "shot", label: "Shot Put", icon: Circle, color: "text-amber-500 border-amber-400 bg-amber-50 dark:bg-amber-950/30" },
   { value: "discus", label: "Discus", icon: Disc3, color: "text-cyan-500 border-cyan-400 bg-cyan-50 dark:bg-cyan-950/30" },
   { value: "javelin", label: "Javelin", icon: Zap, color: "text-rose-500 border-rose-400 bg-rose-50 dark:bg-rose-950/30" },
 ];
