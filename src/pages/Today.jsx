@@ -327,7 +327,7 @@ export default function Today() {
                 <CardHeader className="bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 border-b border-cyan-200 dark:border-gray-700">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-cyan-900 dark:text-cyan-300 flex items-center gap-2 select-none">
-                      🥏 Discus
+                     <Disc3 className="w-5 h-5" /> Discus
                     </CardTitle>
                     {user && user.role !== "admin" && (
                       <LogPerformanceForm event="discus" eventLabel="Discus" user={user} />
