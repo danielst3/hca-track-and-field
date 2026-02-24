@@ -334,9 +334,11 @@ export default function Calendar() {
                       >
                         {colors?.label}
                       </p>
-                      <p className="text-xs mt-1">
-                        {getPlanContent(plan)}
-                      </p>
+                      <div className="flex gap-1 mt-1">
+                        {getPlanContent(plan).map(evt => (
+                          <span key={evt}>{EVENT_ICON_MAP[evt]}</span>
+                        ))}
+                      </div>
                     </div>
                   )}
 
