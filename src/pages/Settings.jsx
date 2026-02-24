@@ -335,18 +335,43 @@ export default function Settings() {
               View and update your personal information
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-3">
-            <div>
-              <p className="text-sm text-slate-700 dark:text-gray-300 font-medium">Name</p>
-              <p className="font-medium text-slate-900 dark:text-gray-100">{user.full_name}</p>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <Label className="text-sm text-slate-700 dark:text-gray-300">First Name</Label>
+                <Input
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  placeholder="First name"
+                  className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-sm text-slate-700 dark:text-gray-300">Last Name</Label>
+                <Input
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  placeholder="Last name"
+                  className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                />
+              </div>
             </div>
-            <div>
-              <p className="text-sm text-slate-700 dark:text-gray-300 font-medium">Email</p>
-              <p className="font-medium text-slate-900 dark:text-gray-100">{user.email}</p>
-            </div>
-            <div>
-              <p className="text-sm text-slate-700 dark:text-gray-300 font-medium">Role</p>
-              <p className="font-medium text-slate-900 dark:text-gray-100">{isCoach ? "Coach" : "Athlete"}</p>
+            <Button
+              onClick={handleSaveName}
+              disabled={isSavingName}
+              className="w-full bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600"
+            >
+              {isSavingName ? "Saving..." : "Save Name"}
+            </Button>
+            <div className="pt-2 border-t dark:border-gray-700 space-y-2">
+              <div>
+                <p className="text-sm text-slate-700 dark:text-gray-300 font-medium">Email</p>
+                <p className="font-medium text-slate-900 dark:text-gray-100">{user.email}</p>
+              </div>
+              <div>
+                <p className="text-sm text-slate-700 dark:text-gray-300 font-medium">Role</p>
+                <p className="font-medium text-slate-900 dark:text-gray-100">{isCoach ? "Coach" : "Athlete"}</p>
+              </div>
             </div>
           </CardContent>
         </Card>
