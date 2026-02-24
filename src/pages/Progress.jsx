@@ -3,6 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { subDays, isAfter, parseISO } from "date-fns";
+import { Dumbbell, Disc3, Zap, BarChart2 } from "lucide-react";
 import StatsOverview from "../components/analytics/StatsOverview";
 import ProgressChart from "../components/analytics/ProgressChart";
 import ConsistencyChart from "../components/analytics/ConsistencyChart";
