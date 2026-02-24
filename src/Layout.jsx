@@ -426,6 +426,7 @@ export default function Layout({ children, currentPageName }) {
         { name: "Calendar", icon: Calendar, page: "Calendar" },
         { name: "Log Activity", icon: Plus, page: "LogActivity" },
         { name: "Athletes", icon: Users, page: "Athletes" },
+        { name: "Meet Entry", icon: Trophy, page: "BulkMeetEntry" },
         { name: "Seasons", icon: Trophy, page: "Seasons" },
         { name: "FERPA", icon: Shield, page: "FERPACompliance" },
         { name: "Posts", icon: FileText, page: "Posts" },
