@@ -765,21 +765,27 @@ export default function Settings() {
           <>
             <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
-                <CardTitle className="text-slate-900 dark:text-gray-100">My Progress</CardTitle>
+                <CardTitle className="text-slate-900 dark:text-gray-100">Quick Links</CardTitle>
                 <CardDescription className="text-slate-600 dark:text-gray-300">
-                  View your training and performance data
+                  Access other sections of the app
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
                 <Link to={createPageUrl("Progress")}>
-                  <Button 
-                    variant="ghost" 
-                    className="w-full justify-between text-slate-700 hover:text-slate-900 dark:text-gray-200 dark:hover:bg-gray-700"
-                  >
-                    <span className="flex items-center gap-3">
-                      <Trophy className="w-5 h-5" />
-                      View My Stats
-                    </span>
+                  <Button variant="ghost" className="w-full justify-between text-slate-700 hover:text-slate-900 dark:text-gray-200 dark:hover:bg-gray-700">
+                    <span className="flex items-center gap-3"><TrendingUp className="w-5 h-5" />My Progress</span>
+                    <ChevronRight className="w-5 h-5" />
+                  </Button>
+                </Link>
+                <Link to={createPageUrl("Resources")}>
+                  <Button variant="ghost" className="w-full justify-between text-slate-700 hover:text-slate-900 dark:text-gray-200 dark:hover:bg-gray-700">
+                    <span className="flex items-center gap-3"><BookOpen className="w-5 h-5" />Resources</span>
+                    <ChevronRight className="w-5 h-5" />
+                  </Button>
+                </Link>
+                <Link to={createPageUrl("Support")}>
+                  <Button variant="ghost" className="w-full justify-between text-slate-700 hover:text-slate-900 dark:text-gray-200 dark:hover:bg-gray-700">
+                    <span className="flex items-center gap-3"><MessageSquare className="w-5 h-5" />Support</span>
                     <ChevronRight className="w-5 h-5" />
                   </Button>
                 </Link>
