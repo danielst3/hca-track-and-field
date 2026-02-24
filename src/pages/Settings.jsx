@@ -19,7 +19,9 @@ import {
   X,
   CheckCircle2,
   Download as DownloadApp,
-  Shield
+  Shield,
+  MessageSquare,
+  TrendingUp
 } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
