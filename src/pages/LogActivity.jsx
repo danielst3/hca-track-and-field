@@ -10,6 +10,7 @@ import { MobileSelect } from "@/components/ui/mobile-select";
 import { Plus, Check, Circle, Disc3, Zap, Trophy } from "lucide-react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
+import { createPageUrl } from "../utils";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
