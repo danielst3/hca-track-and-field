@@ -42,7 +42,6 @@ export default function Today() {
         const options = currentUser.event_types.map(event => ({
           id: event.id,
           label: event.label,
-          icon: event.icon || "🎯"
         }));
         setEventOptions(options);
       } else {
