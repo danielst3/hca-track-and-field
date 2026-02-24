@@ -27,6 +27,9 @@ import RoleManagement from "../components/settings/RoleManagement";
 
 export default function Settings() {
   const [user, setUser] = useState(null);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [isSavingName, setIsSavingName] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [filters, setFilters] = useState({
     athlete: "all",
