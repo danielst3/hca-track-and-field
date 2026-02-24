@@ -59,15 +59,13 @@ export default function Calendar() {
         const options = currentUser.event_types.map(event => ({
           id: event.id,
           label: event.label,
-          icon: event.icon || "🎯"
         }));
         setEventOptions(options);
       } else {
-        // Fallback to default events
         setEventOptions([
-          { id: "shot", label: "Shot Put", icon: "🏋️" },
-          { id: "discus", label: "Discus", icon: "🥏" },
-          { id: "javelin", label: "Javelin", icon: "🎯" }
+          { id: "shot", label: "Shot Put" },
+          { id: "discus", label: "Discus" },
+          { id: "javelin", label: "Javelin" }
         ]);
       }
       
