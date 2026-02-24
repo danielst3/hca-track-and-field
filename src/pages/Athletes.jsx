@@ -246,6 +246,8 @@ export default function Athletes() {
     const roles = athlete.user_role_preference ? athlete.user_role_preference.split(",") : ["user"];
     setEditRoles(roles);
     setEditEvents(athlete.events || []);
+    setEditFirstName(athlete.first_name || "");
+    setEditLastName(athlete.last_name || "");
   };
 
   const toggleRole = (role) => {
