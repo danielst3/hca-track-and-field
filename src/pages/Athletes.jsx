@@ -396,7 +396,7 @@ export default function Athletes() {
                       >
                         <div>
                           <p className="font-semibold text-slate-900 dark:text-gray-100">
-                            {athlete.full_name}
+                            {athlete.first_name && athlete.last_name ? `${athlete.first_name} ${athlete.last_name}` : athlete.full_name}
                           </p>
                           <p className="text-sm text-slate-600 dark:text-gray-400">{athlete.email}</p>
                           {athlete.grade && (
