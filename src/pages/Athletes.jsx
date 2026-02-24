@@ -366,7 +366,7 @@ export default function Athletes() {
                   <Button 
                     type="submit" 
                     disabled={inviteUserMutation.isPending}
-                    className="bg-blue-600 hover:bg-blue-700"
+                    className="bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600"
                   >
                     {inviteUserMutation.isPending ? "Sending..." : "Send Invite"}
                   </Button>
