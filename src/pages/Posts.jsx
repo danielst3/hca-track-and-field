@@ -355,14 +355,14 @@ export default function Posts() {
                           href={post.link_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors"
+                          className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                         >
-                          <LinkIcon className="w-6 h-6 text-blue-600" />
+                          <LinkIcon className="w-6 h-6 text-gray-600 dark:text-gray-400" />
                           <div className="flex-1 min-w-0">
-                            <p className="font-semibold text-blue-900">External Link</p>
-                            <p className="text-sm text-blue-600 truncate">{post.link_url}</p>
+                            <p className="font-semibold text-gray-900 dark:text-gray-100">External Link</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 truncate">{post.link_url}</p>
                           </div>
-                          <ExternalLink className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <ExternalLink className="w-4 h-4 text-gray-600 dark:text-gray-400 flex-shrink-0" />
                         </a>
                       )}
                     </div>
