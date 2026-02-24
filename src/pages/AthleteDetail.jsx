@@ -135,30 +135,58 @@ export default function AthleteDetail() {
           )}
         </div>
 
-        <Tabs value={activeEvent} onValueChange={setActiveEvent}>
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="shot">🏋️ Shot</TabsTrigger>
-            <TabsTrigger value="discus">🥏 Discus</TabsTrigger>
-            <TabsTrigger value="javelin">🎯 Javelin</TabsTrigger>
-          </TabsList>
+        {/* Event Filter */}
+        <div className="flex gap-2 flex-wrap">
+          {EVENT_OPTIONS.map((opt) => (
+            <button
+              key={opt.value}
+              onClick={() => setActiveEvent(opt.value)}
+              className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-all ${
+                activeEvent === opt.value
+                  ? opt.color
+                  : "border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800"
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
 
-          <TabsContent value="shot" className="space-y-6 mt-6">
-            <EventProgressCard event="shot" logs={getLogsForEvent("shot")} />
-            <WeeklyVolumeCard logs={logs} event="shot" />
-          </TabsContent>
+        {/* Date Range Filter */}
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Range:</span>
+          <div className="flex gap-1">
+            {DATE_RANGES.map(({ label, days }) => (
+              <button
+                key={label}
+                onClick={() => setDateRange(days)}
+                className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${
+                  dateRange === days
+                    ? "bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900"
+                    : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <Badge variant="outline" className="ml-auto text-xs dark:border-gray-600 dark:text-gray-400">
+            {filteredLogs.length} sessions
+          </Badge>
+        </div>
 
-          <TabsContent value="discus" className="space-y-6 mt-6">
-            <EventProgressCard event="discus" logs={getLogsForEvent("discus")} />
-            <WeeklyVolumeCard logs={logs} event="discus" />
-          </TabsContent>
+        {filteredLogs.length > 0 && <StatsOverview logs={filteredLogs} />}
+        <ProgressChart logs={filteredLogs} event={activeEvent} />
+        <ConsistencyChart logs={filteredLogs} event={activeEvent} />
+        <SessionHistory logs={filteredLogs} />
 
-          <TabsContent value="javelin" className="space-y-6 mt-6">
-            <EventProgressCard event="javelin" logs={getLogsForEvent("javelin")} />
-            <WeeklyVolumeCard logs={logs} event="javelin" />
-          </TabsContent>
-        </Tabs>
-
-        <MeetResultsList logs={logs} />
+        {filteredLogs.length === 0 && (
+          <div className="text-center py-16 text-gray-400 dark:text-gray-500">
+            <p className="text-4xl mb-3">📊</p>
+            <p className="font-medium">No data for this filter</p>
+            <p className="text-sm mt-1">Try a different date range or log some throws!</p>
+          </div>
+        )}
       </div>
     </div>
   );
