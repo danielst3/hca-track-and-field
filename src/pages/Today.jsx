@@ -406,8 +406,8 @@ export default function Today() {
                       {post.event_tags.map((tag) => {
                         const eventOption = eventOptions.find(e => e.id === tag);
                         return (
-                          <Badge key={tag} variant="outline" className="text-xs">
-                            {eventOption?.icon} {eventOption?.label || tag}
+                          <Badge key={tag} variant="outline" className="text-xs flex items-center gap-1">
+                           {EVENT_ICONS[tag] || null} {eventOption?.label || tag}
                           </Badge>
                         );
                       })}
