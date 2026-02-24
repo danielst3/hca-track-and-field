@@ -427,7 +427,7 @@ export default function Layout({ children, currentPageName }) {
         { name: "Calendar", icon: Calendar, page: "Calendar" },
         { name: "Log Activity", icon: Plus, page: "LogActivity" },
         { name: "Athletes", icon: Users, page: "Athletes" },
-        { name: "Resources", icon: BookOpen, page: "Resources" },
+        { name: "Seasons", icon: Trophy, page: "Seasons" },
       ]
     : user?.role === "parent"
     ? [
