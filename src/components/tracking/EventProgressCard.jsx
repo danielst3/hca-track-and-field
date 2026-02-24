@@ -14,7 +14,7 @@ import {
 } from "recharts";
 
 const eventConfig = {
-  shot: { label: "Shot Put", color: "#f59e0b", Icon: Dumbbell },
+  shot: { label: "Shot Put", color: "#f59e0b", Icon: Circle },
   discus: { label: "Discus", color: "#06b6d4", Icon: Disc3 },
   javelin: { label: "Javelin", color: "#f43f5e", Icon: Zap },
 };
