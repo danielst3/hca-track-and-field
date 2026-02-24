@@ -181,6 +181,13 @@ export default function Layout({ children, currentPageName }) {
     window.location.reload();
   };
 
+  const handleSwitchRole = (role) => {
+    localStorage.setItem(`activeRole_${user.id}`, role);
+    setUser(prev => ({ ...prev, role }));
+    const roleLabel = role === "admin" ? "Admin" : role === "coach" ? "Coach" : role === "parent" ? "Parent" : "Athlete";
+    toast.success(`Switched to ${roleLabel} view`);
+  };
+
   const handleToggleParentView = async () => {
     try {
       await base44.auth.updateMe({ view_as_parent: !user.view_as_parent });
