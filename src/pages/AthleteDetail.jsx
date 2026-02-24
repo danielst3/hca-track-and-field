@@ -78,7 +78,14 @@ export default function AthleteDetail() {
     enabled: !!athlete,
   });
 
-  const getLogsForEvent = (event) => logs.filter((l) => l.event === event);
+  const filteredLogs = useMemo(() => {
+    let result = logs.filter((l) => l.event === activeEvent);
+    if (dateRange) {
+      const cutoff = subDays(new Date(), dateRange);
+      result = result.filter((l) => isAfter(parseISO(l.date), cutoff));
+    }
+    return result;
+  }, [logs, activeEvent, dateRange]);
 
   const handleImpersonate = async () => {
     // Log impersonation
