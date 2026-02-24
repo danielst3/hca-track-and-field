@@ -5,6 +5,7 @@ import { createPageUrl } from "../utils";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { useQuery } from "@tanstack/react-query";
 import { 
   User, 
