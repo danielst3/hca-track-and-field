@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp, Award, Target } from "lucide-react";
+import { TrendingUp, Award, Target, Dumbbell, Disc3, Zap } from "lucide-react";
 import { format } from "date-fns";
 import {
   LineChart,
