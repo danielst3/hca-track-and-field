@@ -139,6 +139,16 @@ export default function Layout({ children, currentPageName }) {
     };
   }, [currentPageName]);
 
+  const getActiveRole = (currentUser) => {
+    return localStorage.getItem(`activeRole_${currentUser.id}`) || currentUser.role;
+  };
+
+  const getUserRoles = (currentUser) => {
+    if (!currentUser?.user_role_preference) return [currentUser.role];
+    const roles = currentUser.user_role_preference.split(",").filter(Boolean);
+    return roles.length > 0 ? roles : [currentUser.role];
+  };
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -147,10 +157,15 @@ export default function Layout({ children, currentPageName }) {
         if (impersonating && currentUser?.role === "admin") {
           const impersonatedUser = JSON.parse(impersonating);
           setUser({ ...currentUser, ...impersonatedUser, isImpersonating: true, realRole: currentUser.role });
-        } else if (currentUser?.role === "admin" && currentUser?.is_parent && currentUser?.view_as_parent) {
-          setUser({ ...currentUser, role: "parent", isViewingAsParent: true });
         } else {
-          setUser(currentUser);
+          const roles = getUserRoles(currentUser);
+          if (roles.length > 1) {
+            const savedRole = getActiveRole(currentUser);
+            const activeRole = roles.includes(savedRole) ? savedRole : roles[0];
+            setUser({ ...currentUser, role: activeRole, availableRoles: roles });
+          } else {
+            setUser(currentUser);
+          }
         }
       } catch (error) {
         setUser(null);
