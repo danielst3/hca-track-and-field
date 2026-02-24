@@ -454,6 +454,29 @@ export default function Athletes() {
                              </DialogHeader>
                              <div className="space-y-6 mt-4">
                                <div>
+                                 <h3 className="font-semibold text-slate-900 dark:text-gray-100 mb-3">Name</h3>
+                                 <div className="grid grid-cols-2 gap-3">
+                                   <div className="space-y-1">
+                                     <Label className="text-sm text-slate-600 dark:text-gray-400">First Name</Label>
+                                     <Input
+                                       value={editFirstName}
+                                       onChange={(e) => setEditFirstName(e.target.value)}
+                                       placeholder="First name"
+                                       className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                                     />
+                                   </div>
+                                   <div className="space-y-1">
+                                     <Label className="text-sm text-slate-600 dark:text-gray-400">Last Name</Label>
+                                     <Input
+                                       value={editLastName}
+                                       onChange={(e) => setEditLastName(e.target.value)}
+                                       placeholder="Last name"
+                                       className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                                     />
+                                   </div>
+                                 </div>
+                               </div>
+                               <div>
                                  <h3 className="font-semibold text-slate-900 dark:text-gray-100 mb-3">Roles</h3>
                                  <div className="space-y-3">
                                    {[
