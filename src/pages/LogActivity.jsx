@@ -134,7 +134,17 @@ export default function LogActivity() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#111] p-4 pb-20">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-4xl font-bold text-slate-900 dark:text-gray-100 mb-2">Log Activity</h1>
+        <div className="flex items-start justify-between mb-2">
+          <h1 className="text-4xl font-bold text-slate-900 dark:text-gray-100">Log Activity</h1>
+          {(user?.role === "admin" || user?.role === "coach") && (
+            <Link to={createPageUrl("BulkMeetEntry")}>
+              <Button variant="outline" className="gap-2 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
+                <Trophy className="w-4 h-4" />
+                Bulk Meet Entry
+              </Button>
+            </Link>
+          )}
+        </div>
         <p className="text-slate-600 dark:text-gray-400 mb-8">Record your performance data</p>
 
         <div className="space-y-6">
