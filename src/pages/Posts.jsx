@@ -146,7 +146,7 @@ export default function Posts() {
           {user?.role === "admin" && (
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-blue-600 hover:bg-blue-700">
+                <Button className="bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600">
                   <Plus className="w-4 h-4 mr-2" />
                   New Post
                 </Button>
