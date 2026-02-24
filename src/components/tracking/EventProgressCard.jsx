@@ -14,9 +14,9 @@ import {
 } from "recharts";
 
 const eventConfig = {
-  shot: { label: "Shot Put", color: "#f59e0b", icon: "🏋️" },
-  discus: { label: "Discus", color: "#06b6d4", icon: "🥏" },
-  javelin: { label: "Javelin", color: "#f43f5e", icon: "🎯" },
+  shot: { label: "Shot Put", color: "#f59e0b", Icon: Dumbbell },
+  discus: { label: "Discus", color: "#06b6d4", Icon: Disc3 },
+  javelin: { label: "Javelin", color: "#f43f5e", Icon: Zap },
 };
 
 export default function EventProgressCard({ event, logs = [] }) {
