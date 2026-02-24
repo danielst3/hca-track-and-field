@@ -30,6 +30,7 @@ export default function AthleteDetail() {
   const [user, setUser] = useState(null);
   const [athleteId, setAthleteId] = useState(null);
   const [activeEvent, setActiveEvent] = useState("shot");
+  const [dateRange, setDateRange] = useState(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
