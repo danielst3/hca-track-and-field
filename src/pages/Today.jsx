@@ -170,7 +170,7 @@ export default function Today() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[var(--brand-secondary)] to-[var(--brand-secondary-light)] p-4 pb-20">
+    <div className="min-h-screen bg-[var(--brand-secondary)] dark:bg-[#111] p-4 pb-20">
       {user && user.role !== "admin" && <QuickLogButton user={user} />}
       <div className="max-w-7xl mx-auto space-y-4">
         {/* Athlete Dashboard (only for athletes) */}
