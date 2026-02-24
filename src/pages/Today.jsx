@@ -48,9 +48,9 @@ export default function Today() {
       } else {
         // Fallback to default events
         setEventOptions([
-          { id: "shot", label: "Shot Put", icon: "🏋️" },
-          { id: "discus", label: "Discus", icon: "🥏" },
-          { id: "javelin", label: "Javelin", icon: "🎯" }
+          { id: "shot", label: "Shot Put" },
+          { id: "discus", label: "Discus" },
+          { id: "javelin", label: "Javelin" }
         ]);
       }
       
