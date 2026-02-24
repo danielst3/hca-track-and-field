@@ -137,19 +137,22 @@ export default function AthleteDetail() {
 
         {/* Event Filter */}
         <div className="flex gap-2 flex-wrap">
-          {EVENT_OPTIONS.map((opt) => (
-            <button
-              key={opt.value}
-              onClick={() => setActiveEvent(opt.value)}
-              className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-all ${
-                activeEvent === opt.value
-                  ? opt.color
-                  : "border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800"
-              }`}
-            >
-              {opt.label}
-            </button>
-          ))}
+          {EVENT_OPTIONS.map((opt) => {
+            const Icon = opt.icon;
+            return (
+              <button
+                key={opt.value}
+                onClick={() => setActiveEvent(opt.value)}
+                className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-all flex items-center gap-1.5 ${
+                  activeEvent === opt.value
+                    ? opt.color
+                    : "border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800"
+                }`}
+              >
+                <Icon className="w-3.5 h-3.5" /> {opt.label}
+              </button>
+            );
+          })}
         </div>
 
         {/* Date Range Filter */}
