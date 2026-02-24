@@ -352,7 +352,7 @@ export default function Today() {
                 <CardHeader className="bg-gradient-to-br from-rose-50 to-pink-50 dark:from-gray-900 dark:to-gray-800 border-b border-rose-200 dark:border-gray-700">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-rose-900 dark:text-rose-300 flex items-center gap-2 select-none">
-                      🎯 Javelin
+                     <Zap className="w-5 h-5" /> Javelin
                     </CardTitle>
                     {user && user.role !== "admin" && (
                       <LogPerformanceForm event="javelin" eventLabel="Javelin" user={user} />
