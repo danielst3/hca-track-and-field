@@ -567,6 +567,31 @@ export default function Layout({ children, currentPageName }) {
         </div>
       </div>
 
+      {/* Role Switcher Bar */}
+      {user?.availableRoles && user.availableRoles.length > 1 && (
+        <div className="bg-[var(--brand-primary-dark)] dark:bg-gray-900 border-b border-[var(--brand-primary-darker)] dark:border-gray-700 px-4 py-1.5 flex items-center gap-2 select-none overflow-x-auto">
+          <span className="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap mr-1">View as:</span>
+          {user.availableRoles.map(role => {
+            const label = role === "admin" ? "Admin" : role === "coach" ? "Coach" : role === "parent" ? "Parent" : "Athlete";
+            const isActive = user.role === role;
+            return (
+              <button
+                key={role}
+                onClick={() => handleSwitchRole(role)}
+                className={cn(
+                  "text-xs px-3 py-1 rounded-full font-medium transition-colors whitespace-nowrap",
+                  isActive
+                    ? "bg-white text-[var(--brand-primary)] dark:bg-gray-200 dark:text-gray-900"
+                    : "text-gray-300 hover:text-white hover:bg-white/10 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700"
+                )}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       {/* Pull to Refresh Indicator */}
       {pullDistance > 0 && (
         <div 
