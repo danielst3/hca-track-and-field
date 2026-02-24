@@ -73,12 +73,13 @@ export default function AthleteDetail() {
       details: `Started viewing as athlete: ${athlete.full_name}`
     });
     
+    const displayName = athlete.first_name && athlete.last_name ? `${athlete.first_name} ${athlete.last_name}` : athlete.full_name;
     localStorage.setItem("impersonating", JSON.stringify({
       id: athlete.id,
       email: athlete.email,
-      full_name: athlete.full_name
+      full_name: displayName
     }));
-    toast.success(`Now viewing as ${athlete.full_name}`);
+    toast.success(`Now viewing as ${displayName}`);
     window.location.href = createPageUrl("Today");
   };
 
@@ -96,7 +97,7 @@ export default function AthleteDetail() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100">
-              {athlete.full_name}
+              {athlete.first_name && athlete.last_name ? `${athlete.first_name} ${athlete.last_name}` : athlete.full_name}
             </h1>
             <p className="text-slate-600 dark:text-gray-400 break-all">{athlete.email}</p>
           </div>
