@@ -478,7 +478,7 @@ export default function Layout({ children, currentPageName }) {
                 {canGoBack ? "" : "HCA Chargers Track & Field"}
               </h1>
               <p className="text-xs text-gray-700 dark:text-gray-400">
-                    {user.full_name} • {user.isImpersonating ? "Athlete (Viewing)" : (user.role === "admin" ? "Admin" : user.role === "coach" ? "Coach" : user.role === "parent" ? "Parent" : "Athlete")}
+                    {(user.first_name && user.last_name) ? `${user.first_name} ${user.last_name}` : user.full_name} • {user.isImpersonating ? "Athlete (Viewing)" : (user.role === "admin" ? "Admin" : user.role === "coach" ? "Coach" : user.role === "parent" ? "Parent" : "Athlete")}
               </p>
             </div>
           </div>

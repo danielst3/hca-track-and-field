@@ -47,7 +47,7 @@ export default function AthleteDetail() {
           user_email: user.email,
           action_type: "view_athlete",
           target_email: fetchedAthlete.email,
-          details: `Viewed athlete profile: ${fetchedAthlete.full_name}`
+          details: `Viewed athlete profile: ${fetchedAthlete.first_name && fetchedAthlete.last_name ? `${fetchedAthlete.first_name} ${fetchedAthlete.last_name}` : fetchedAthlete.full_name}`
         });
       }
       
@@ -70,7 +70,7 @@ export default function AthleteDetail() {
       user_email: user.email,
       action_type: "view_athlete",
       target_email: athlete.email,
-      details: `Started viewing as athlete: ${athlete.full_name}`
+      details: `Started viewing as athlete: ${athlete.first_name && athlete.last_name ? `${athlete.first_name} ${athlete.last_name}` : athlete.full_name}`
     });
     
     const displayName = athlete.first_name && athlete.last_name ? `${athlete.first_name} ${athlete.last_name}` : athlete.full_name;

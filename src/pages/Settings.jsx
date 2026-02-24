@@ -241,7 +241,8 @@ export default function Settings() {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${user.full_name.replace(/\s/g, '_')}_throwing_history_${format(new Date(), 'yyyy-MM-dd')}.csv`;
+      const displayName = user.first_name && user.last_name ? `${user.first_name} ${user.last_name}` : user.full_name;
+      a.download = `${displayName.replace(/\s/g, '_')}_throwing_history_${format(new Date(), 'yyyy-MM-dd')}.csv`;
       a.click();
       window.URL.revokeObjectURL(url);
       
