@@ -579,7 +579,7 @@ export default function Athletes() {
 
           {/* Access Requests and Pending Invitations */}
            {accessRequests.map((request) => (
-            <Card key={request.id} className="hover:shadow-lg transition-shadow dark:bg-gray-800 dark:border-gray-700 border-2 border-blue-300 dark:border-blue-700">
+            <Card key={request.id} className="hover:shadow-lg transition-shadow dark:bg-gray-800 dark:border-gray-700 border-2 border-gray-300 dark:border-gray-600">
               <CardContent className="p-4">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
