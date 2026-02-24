@@ -19,9 +19,9 @@ const eventConfig = {
   javelin: { label: "Javelin", color: "#f43f5e", icon: "🎯" },
 };
 
-export default function EventProgressCard({ event, logs }) {
+export default function EventProgressCard({ event, logs = [] }) {
   const config = eventConfig[event];
-  const sortedLogs = [...logs].sort((a, b) => new Date(a.date) - new Date(b.date));
+  const sortedLogs = [...(logs || [])].sort((a, b) => new Date(a.date) - new Date(b.date));
 
   const pr = logs.length > 0 ? Math.max(...logs.map((l) => l.best_distance)) : 0;
   const seasonBest = pr;
