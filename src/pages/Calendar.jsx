@@ -297,7 +297,7 @@ export default function Calendar() {
                 onClick={() => handleDayClick(day)}
                 className={`${
                   colors ? colors.bg : "bg-white dark:bg-gray-800"
-                } border-2 ${isToday ? "border-blue-500" : "border-slate-200 dark:border-gray-700"} ${
+                } border-2 ${isToday ? "border-[var(--brand-primary)]" : "border-slate-200 dark:border-gray-700"} ${
                   view === "month" ? "min-h-24" : "min-h-32"
                 } hover:shadow-lg transition-shadow cursor-pointer`}
               >
