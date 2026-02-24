@@ -40,7 +40,7 @@ export default function EventProgressCard({ event, logs = [] }) {
       <CardHeader className="pb-3 border-b dark:border-gray-700">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-2xl">{config.icon}</span>
+            <config.Icon className="w-5 h-5" style={{ color: config.color }} />
             <CardTitle className="text-lg text-gray-900 dark:text-gray-100">{config.label}</CardTitle>
           </div>
           <Badge variant="outline" className="text-xs dark:border-gray-600 dark:text-gray-300">
