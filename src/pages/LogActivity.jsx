@@ -29,9 +29,9 @@ export default function LogActivity() {
   const isCoach = user?.role === "admin";
 
   const events = [
-    { id: "shot", label: "Shot Put", icon: "🏋️" },
-    { id: "discus", label: "Discus", icon: "🥏" },
-    { id: "javelin", label: "Javelin", icon: "🎯" },
+    { id: "shot", label: "Shot Put", Icon: Dumbbell },
+    { id: "discus", label: "Discus", Icon: Disc3 },
+    { id: "javelin", label: "Javelin", Icon: Zap },
   ];
 
   useEffect(() => {
