@@ -9,10 +9,10 @@ import QuickLogButton from "../components/tracking/QuickLogButton";
 import PracticePlanText from "../components/shared/PracticePlanText";
 import EventToggle from "../components/shared/EventToggle";
 import LogPerformanceForm from "../components/tracking/LogPerformanceForm";
-import { Calendar, Trophy, ChevronLeft, ChevronRight, X, FileText, Dumbbell, Disc3, Zap } from "lucide-react";
+import { Calendar, Trophy, ChevronLeft, ChevronRight, X, FileText, Circle, Disc3, Zap } from "lucide-react";
 
 const EVENT_ICONS = {
-  shot: <Dumbbell className="w-4 h-4" />,
+  shot: <Circle className="w-4 h-4" />,
   discus: <Disc3 className="w-4 h-4" />,
   javelin: <Zap className="w-4 h-4" />,
 };
