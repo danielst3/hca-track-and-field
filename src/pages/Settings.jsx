@@ -98,6 +98,18 @@ export default function Settings() {
     enabled: !!user && user.role === "admin",
   });
 
+  const handleSaveName = async () => {
+    if (!firstName.trim() || !lastName.trim()) {
+      toast.error("Please enter both first and last name");
+      return;
+    }
+    setIsSavingName(true);
+    await base44.auth.updateMe({ first_name: firstName.trim(), last_name: lastName.trim() });
+    setUser(prev => ({ ...prev, first_name: firstName.trim(), last_name: lastName.trim() }));
+    toast.success("Name updated!");
+    setIsSavingName(false);
+  };
+
   const handleToggleEvent = (event) => {
     setSelectedEvents(prev => 
       prev.includes(event) 
