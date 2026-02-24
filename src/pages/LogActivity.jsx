@@ -175,7 +175,7 @@ export default function LogActivity() {
                         : "border-slate-200 dark:border-gray-600 hover:border-slate-300 dark:hover:border-gray-500"
                     )}
                   >
-                    <span className="text-2xl">{event.icon}</span>
+                    <event.Icon className="w-6 h-6 text-slate-700 dark:text-gray-200" />
                     <span className="text-xs font-medium text-slate-700 dark:text-gray-200">{event.label.split(' ')[0]}</span>
                   </button>
                 ))}
