@@ -427,7 +427,7 @@ export default function Layout({ children, currentPageName }) {
         { name: "Calendar", icon: Calendar, page: "Calendar" },
         { name: "Log Activity", icon: Plus, page: "LogActivity" },
         { name: "Athletes", icon: Users, page: "Athletes" },
-        { name: "Posts", icon: FileText, page: "Posts" },
+        { name: "Resources", icon: BookOpen, page: "Resources" },
       ]
     : user?.role === "parent"
     ? [
@@ -435,13 +435,14 @@ export default function Layout({ children, currentPageName }) {
         { name: "Calendar", icon: Calendar, page: "Calendar" },
         { name: "Athletes", icon: Users, page: "MyAthletes" },
         { name: "Posts", icon: FileText, page: "Posts" },
+        { name: "Resources", icon: BookOpen, page: "Resources" },
       ]
     : [
         { name: "Today", icon: Home, page: "Today" },
         { name: "Calendar", icon: Calendar, page: "Calendar" },
         { name: "Log Activity", icon: Plus, page: "LogActivity" },
         { name: "Progress", icon: TrendingUp, page: "Progress" },
-        { name: "Posts", icon: FileText, page: "Posts" },
+        { name: "Resources", icon: BookOpen, page: "Resources" },
       ];
 
   return (

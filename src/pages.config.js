@@ -49,38 +49,38 @@
  */
 import AthleteDetail from './pages/AthleteDetail';
 import Athletes from './pages/Athletes';
+import BulkMeetEntry from './pages/BulkMeetEntry';
 import Calendar from './pages/Calendar';
 import FERPACompliance from './pages/FERPACompliance';
 import LogActivity from './pages/LogActivity';
 import MyAthletes from './pages/MyAthletes';
 import Posts from './pages/Posts';
 import Privacy from './pages/Privacy';
+import Progress from './pages/Progress';
 import Resources from './pages/Resources';
 import Seasons from './pages/Seasons';
 import Settings from './pages/Settings';
 import Support from './pages/Support';
 import Today from './pages/Today';
-import Progress from './pages/Progress';
-import BulkMeetEntry from './pages/BulkMeetEntry';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "AthleteDetail": AthleteDetail,
     "Athletes": Athletes,
+    "BulkMeetEntry": BulkMeetEntry,
     "Calendar": Calendar,
     "FERPACompliance": FERPACompliance,
     "LogActivity": LogActivity,
     "MyAthletes": MyAthletes,
     "Posts": Posts,
     "Privacy": Privacy,
+    "Progress": Progress,
     "Resources": Resources,
     "Seasons": Seasons,
     "Settings": Settings,
     "Support": Support,
     "Today": Today,
-    "Progress": Progress,
-    "BulkMeetEntry": BulkMeetEntry,
 }
 
 export const pagesConfig = {
