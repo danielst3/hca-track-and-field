@@ -61,6 +61,7 @@ import Settings from './pages/Settings';
 import Support from './pages/Support';
 import Today from './pages/Today';
 import Progress from './pages/Progress';
+import BulkMeetEntry from './pages/BulkMeetEntry';
 import __Layout from './Layout.jsx';
 
 
@@ -79,6 +80,7 @@ export const PAGES = {
     "Support": Support,
     "Today": Today,
     "Progress": Progress,
+    "BulkMeetEntry": BulkMeetEntry,
 }
 
 export const pagesConfig = {
