@@ -50,7 +50,11 @@ export default function LogActivity() {
     queryFn: async () => {
       if (!isCoach) return [];
       const allUsers = await base44.entities.User.filter({ role: "user" });
-      return allUsers.sort((a, b) => a.full_name.localeCompare(b.full_name));
+      return allUsers.sort((a, b) => {
+        const nameA = (a.first_name && a.last_name) ? `${a.first_name} ${a.last_name}` : a.full_name;
+        const nameB = (b.first_name && b.last_name) ? `${b.first_name} ${b.last_name}` : b.full_name;
+        return nameA.localeCompare(nameB);
+      });
     },
     enabled: isCoach,
   });
