@@ -61,6 +61,8 @@ export default function Settings() {
     const fetchUser = async () => {
       const currentUser = await base44.auth.me();
       setUser(currentUser);
+      if (currentUser?.first_name) setFirstName(currentUser.first_name);
+      if (currentUser?.last_name) setLastName(currentUser.last_name);
       if (currentUser?.events) {
         setSelectedEvents(currentUser.events);
       }
