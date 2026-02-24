@@ -502,7 +502,7 @@ export default function Athletes() {
                                  <Button 
                                    onClick={handleSaveRoles}
                                    disabled={roleUpdateMutation.isPending}
-                                   className="bg-blue-600 hover:bg-blue-700"
+                                   className="bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600"
                                  >
                                    {roleUpdateMutation.isPending ? "Saving..." : "Save Changes"}
                                  </Button>
