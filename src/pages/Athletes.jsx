@@ -322,7 +322,7 @@ export default function Athletes() {
           </div>
           <Dialog open={inviteOpen} onOpenChange={setInviteOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-blue-600 hover:bg-blue-700 gap-2">
+              <Button className="bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600 gap-2">
                 <UserPlus className="w-4 h-4" />
                 Invite User
               </Button>
