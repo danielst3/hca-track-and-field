@@ -301,7 +301,7 @@ export default function Today() {
                 <CardHeader className="bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-gray-900 dark:to-gray-800 border-b border-amber-200 dark:border-gray-700">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-amber-900 dark:text-amber-300 flex items-center gap-2 select-none">
-                     <Dumbbell className="w-5 h-5" /> Shot Put
+                    <Circle className="w-5 h-5" /> Shot Put
                     </CardTitle>
                     {user && user.role !== "admin" && (
                       <LogPerformanceForm event="shot" eventLabel="Shot" user={user} />
