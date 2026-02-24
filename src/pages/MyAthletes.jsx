@@ -105,7 +105,7 @@ export default function MyAthletes() {
                   onClick={() => selectAthleteMutation.mutate(athlete.id)}
                   className="h-auto py-3 flex flex-col items-start gap-1"
                 >
-                  <span className="font-semibold">{athlete.full_name}</span>
+                  <span className="font-semibold">{athlete.first_name && athlete.last_name ? `${athlete.first_name} ${athlete.last_name}` : athlete.full_name}</span>
                   <span className="text-xs opacity-80">{athlete.grade}</span>
                 </Button>
               ))}
@@ -118,7 +118,7 @@ export default function MyAthletes() {
             {/* Athlete Info */}
             <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
-                <CardTitle className="dark:text-gray-100">{selectedAthlete.full_name}</CardTitle>
+                <CardTitle className="dark:text-gray-100">{selectedAthlete.first_name && selectedAthlete.last_name ? `${selectedAthlete.first_name} ${selectedAthlete.last_name}` : selectedAthlete.full_name}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex gap-2 mb-3">
