@@ -587,7 +587,7 @@ export default function Athletes() {
                       <p className="font-semibold text-slate-900 dark:text-gray-100">
                         {request.full_name}
                       </p>
-                      <Badge className="text-xs bg-blue-100 border-blue-300 text-blue-700 dark:bg-blue-900/20 dark:border-blue-700 dark:text-blue-400">
+                      <Badge className="text-xs bg-gray-100 border-gray-300 text-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
                         Access Request
                       </Badge>
                     </div>
