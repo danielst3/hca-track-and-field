@@ -313,7 +313,7 @@ export default function Athletes() {
   if (!user || (user.role !== "admin" && user.role !== "coach")) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800 p-4 pb-24">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#111] p-4 pb-24">
       <div className="max-w-5xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
