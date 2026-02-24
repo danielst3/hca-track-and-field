@@ -9,7 +9,7 @@ import DayDetailDialog from "../components/calendar/DayDetailDialog";
 import EditPlanDialog from "../components/calendar/EditPlanDialog";
 import AbbreviationsKey from "../components/shared/AbbreviationsKey";
 import EventToggle from "../components/shared/EventToggle";
-import { ChevronLeft, ChevronRight, Trophy } from "lucide-react";
+import { ChevronLeft, ChevronRight, Trophy, Circle, Disc3, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { MobileSelect } from "@/components/ui/mobile-select";
 import { cn } from "@/lib/utils";
