@@ -199,12 +199,18 @@ export default function Calendar() {
     updateSelectedEventsMutation.mutate(newEvents);
   };
 
+  const EVENT_ICON_MAP = {
+    shot: <Circle className="w-3.5 h-3.5 inline text-amber-600" />,
+    discus: <Disc3 className="w-3.5 h-3.5 inline text-cyan-600" />,
+    javelin: <Zap className="w-3.5 h-3.5 inline text-rose-600" />,
+  };
+
   const getPlanContent = (plan) => {
-    const content = [];
-    if (selectedEvents.includes("shot") && plan.shot_text) content.push("🏋️");
-    if (selectedEvents.includes("discus") && plan.discus_text) content.push("🥏");
-    if (selectedEvents.includes("javelin") && plan.javelin_text) content.push("🎯");
-    return content.join(" ");
+    const icons = [];
+    if (selectedEvents.includes("shot") && plan.shot_text) icons.push("shot");
+    if (selectedEvents.includes("discus") && plan.discus_text) icons.push("discus");
+    if (selectedEvents.includes("javelin") && plan.javelin_text) icons.push("javelin");
+    return icons;
   };
 
   const selectedPlan = selectedDay ? getPlanForDate(selectedDay) : null;
