@@ -27,6 +27,8 @@ export default function Athletes() {
   const [editingAthlete, setEditingAthlete] = useState(null);
   const [editRoles, setEditRoles] = useState([]);
   const [editEvents, setEditEvents] = useState([]);
+  const [editFirstName, setEditFirstName] = useState("");
+  const [editLastName, setEditLastName] = useState("");
   const queryClient = useQueryClient();
 
   useEffect(() => {
