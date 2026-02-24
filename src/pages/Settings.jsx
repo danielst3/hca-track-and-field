@@ -469,61 +469,32 @@ export default function Settings() {
               </CardHeader>
               <CardContent className="space-y-2">
                 <Link to={createPageUrl("Athletes")}>
-                  <Button 
-                    variant="ghost" 
-                    className="w-full justify-between text-slate-700 hover:text-slate-900 dark:text-gray-200 dark:hover:bg-gray-700"
-                  >
-                    <span className="flex items-center gap-3">
-                      <Users className="w-5 h-5" />
-                      Manage Athletes
-                    </span>
+                  <Button variant="ghost" className="w-full justify-between text-slate-700 hover:text-slate-900 dark:text-gray-200 dark:hover:bg-gray-700">
+                    <span className="flex items-center gap-3"><Users className="w-5 h-5" />Manage Athletes</span>
                     <ChevronRight className="w-5 h-5" />
                   </Button>
                 </Link>
-              </CardContent>
-            </Card>
-
-            <Card className="dark:bg-gray-800 dark:border-gray-700">
-              <CardHeader>
-                <CardTitle className="text-slate-900 dark:text-gray-100">Practice & Training</CardTitle>
-                <CardDescription className="text-slate-600 dark:text-gray-300">
-                  Manage practice plans and resources
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-2">
                 <Link to={createPageUrl("Seasons")}>
-                  <Button 
-                    variant="ghost" 
-                    className="w-full justify-between text-slate-700 hover:text-slate-900 dark:text-gray-200 dark:hover:bg-gray-700"
-                  >
-                    <span className="flex items-center gap-3">
-                      <Trophy className="w-5 h-5" />
-                      Manage Seasons
-                    </span>
+                  <Button variant="ghost" className="w-full justify-between text-slate-700 hover:text-slate-900 dark:text-gray-200 dark:hover:bg-gray-700">
+                    <span className="flex items-center gap-3"><Trophy className="w-5 h-5" />Manage Seasons</span>
                     <ChevronRight className="w-5 h-5" />
                   </Button>
                 </Link>
                 <Link to={createPageUrl("Calendar")}>
-                  <Button 
-                    variant="ghost" 
-                    className="w-full justify-between text-slate-700 hover:text-slate-900 dark:text-gray-200 dark:hover:bg-gray-700"
-                  >
-                    <span className="flex items-center gap-3">
-                      <Calendar className="w-5 h-5" />
-                      Edit Practice Plans
-                    </span>
+                  <Button variant="ghost" className="w-full justify-between text-slate-700 hover:text-slate-900 dark:text-gray-200 dark:hover:bg-gray-700">
+                    <span className="flex items-center gap-3"><Calendar className="w-5 h-5" />Edit Practice Plans</span>
                     <ChevronRight className="w-5 h-5" />
                   </Button>
                 </Link>
                 <Link to={createPageUrl("Resources")}>
-                  <Button 
-                    variant="ghost" 
-                    className="w-full justify-between text-slate-700 hover:text-slate-900 dark:text-gray-200 dark:hover:bg-gray-700"
-                  >
-                    <span className="flex items-center gap-3">
-                      <BookOpen className="w-5 h-5" />
-                      Manage Resources
-                    </span>
+                  <Button variant="ghost" className="w-full justify-between text-slate-700 hover:text-slate-900 dark:text-gray-200 dark:hover:bg-gray-700">
+                    <span className="flex items-center gap-3"><BookOpen className="w-5 h-5" />Resources</span>
+                    <ChevronRight className="w-5 h-5" />
+                  </Button>
+                </Link>
+                <Link to={createPageUrl("Support")}>
+                  <Button variant="ghost" className="w-full justify-between text-slate-700 hover:text-slate-900 dark:text-gray-200 dark:hover:bg-gray-700">
+                    <span className="flex items-center gap-3"><MessageSquare className="w-5 h-5" />Support</span>
                     <ChevronRight className="w-5 h-5" />
                   </Button>
                 </Link>
