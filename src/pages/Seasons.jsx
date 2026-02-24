@@ -218,7 +218,7 @@ export default function Seasons() {
       <div className="max-w-5xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Calendar className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+            <Calendar className="w-8 h-8 text-[var(--brand-primary)] dark:text-gray-300" />
             <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100">
               Seasons
             </h1>
