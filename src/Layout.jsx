@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "./utils";
 import { Button } from "@/components/ui/button";
 import { Home, Calendar, Plus, LogOut, Trophy, TrendingUp, Users, BookOpen, FileText, Trash2, RefreshCw, ArrowLeft, Settings, Moon, Sun, MoreHorizontal, Download, Shield, MessageSquare } from "lucide-react";
+// Note: BookOpen, Shield, MessageSquare, Trophy kept for settings dropdown usage
 import { cn } from "@/lib/utils";
 import UniversalSearch from "./components/shared/UniversalSearch";
 
