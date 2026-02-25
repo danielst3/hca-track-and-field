@@ -173,16 +173,20 @@ export default function LogActivity() {
           {/* Event Selection */}
           <Card className="dark:bg-gray-800 dark:border-gray-700">
             <CardHeader>
-              <CardTitle className="dark:text-gray-100">Select Event</CardTitle>
+              <CardTitle className="dark:text-gray-100">
+                Select Event {isCoach && !selectedAthlete && <span className="text-xs text-red-500 font-normal">(select athlete first)</span>}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-3 gap-3">
                 {events.map(event => (
                   <button
                     key={event.id}
+                    disabled={isCoach && !selectedAthlete}
                     onClick={() => setSelectedEvent(event.id)}
                     className={cn(
                       "h-20 rounded-lg border-2 flex flex-col items-center justify-center gap-2 transition-all",
+                      isCoach && !selectedAthlete ? "opacity-50 cursor-not-allowed" : "",
                       selectedEvent === event.id
                         ? "border-[var(--brand-primary)] bg-[var(--brand-secondary-light)] dark:bg-gray-700"
                         : "border-slate-200 dark:border-gray-600 hover:border-slate-300 dark:hover:border-gray-500"

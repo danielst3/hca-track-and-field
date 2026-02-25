@@ -382,7 +382,7 @@ export default function Settings() {
         </Card>
 
         {/* Events Selection (Athletes Only) */}
-        {!isCoach && (
+        {!isCoach && !user?.isImpersonating && (
           <>
             <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
@@ -433,7 +433,7 @@ export default function Settings() {
               </CardContent>
             </Card>
 
-            {installPrompt && (
+            {installPrompt && !user?.isImpersonating && (
               <Card className="dark:bg-gray-800 dark:border-gray-700 border-[var(--brand-primary)]">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-gray-100">

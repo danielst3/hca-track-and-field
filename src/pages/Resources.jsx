@@ -216,7 +216,7 @@ export default function Resources() {
       </button>
       
       {expandedDrill === index && (
-        <div className="p-4 space-y-4 bg-white dark:bg-gray-800">
+         <div className="p-4 space-y-4 bg-blue-50 dark:bg-blue-950/20 border-l-4 border-blue-400 dark:border-blue-600">
           {drill.setup && (
             <div>
               <p className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-1">Setup:</p>
