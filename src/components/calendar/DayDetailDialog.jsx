@@ -70,9 +70,8 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, 
           </div>
         </DialogHeader>
 
-        {plan ? (
+        {displayPlan ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-            {/* Shot Put */}
             {selectedEvents.includes("shot") && (
               <Card className="border-amber-200 dark:border-amber-900 bg-white dark:bg-gray-900">
                 <CardHeader className="bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-amber-900/30 dark:to-yellow-900/30 border-b border-amber-200 dark:border-amber-800 pb-3">
@@ -82,8 +81,8 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, 
                 </CardHeader>
                 <CardContent className="pt-4">
                   <div className="text-sm">
-                    {plan.shot_text ? (
-                      <PracticePlanText text={plan.shot_text} />
+                    {displayPlan.shot_text ? (
+                      <PracticePlanText text={displayPlan.shot_text} />
                     ) : (
                       <p className="text-slate-400 dark:text-gray-500 italic">No plan</p>
                     )}
@@ -91,8 +90,6 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, 
                 </CardContent>
               </Card>
             )}
-
-            {/* Discus */}
             {selectedEvents.includes("discus") && (
               <Card className="border-cyan-200 dark:border-cyan-900 bg-white dark:bg-gray-900">
                 <CardHeader className="bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-900/30 dark:to-blue-900/30 border-b border-cyan-200 dark:border-cyan-800 pb-3">
@@ -102,8 +99,8 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, 
                 </CardHeader>
                 <CardContent className="pt-4">
                   <div className="text-sm">
-                    {plan.discus_text ? (
-                      <PracticePlanText text={plan.discus_text} />
+                    {displayPlan.discus_text ? (
+                      <PracticePlanText text={displayPlan.discus_text} />
                     ) : (
                       <p className="text-slate-400 dark:text-gray-500 italic">No plan</p>
                     )}
@@ -111,8 +108,6 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, 
                 </CardContent>
               </Card>
             )}
-
-            {/* Javelin */}
             {selectedEvents.includes("javelin") && (
               <Card className="border-rose-200 dark:border-rose-900 bg-white dark:bg-gray-900">
                 <CardHeader className="bg-gradient-to-br from-rose-50 to-pink-50 dark:from-rose-900/30 dark:to-pink-900/30 border-b border-rose-200 dark:border-rose-800 pb-3">
@@ -122,8 +117,8 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, 
                 </CardHeader>
                 <CardContent className="pt-4">
                   <div className="text-sm">
-                    {plan.javelin_text ? (
-                      <PracticePlanText text={plan.javelin_text} />
+                    {displayPlan.javelin_text ? (
+                      <PracticePlanText text={displayPlan.javelin_text} />
                     ) : (
                       <p className="text-slate-400 dark:text-gray-500 italic">No plan</p>
                     )}
@@ -139,13 +134,13 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, 
           </div>
         )}
 
-        {plan?.coach_notes && (
+        {displayPlan?.coach_notes && (
           <Card className="border-blue-300 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/30 mt-4">
             <CardContent className="pt-4">
               <p className="text-sm font-semibold text-blue-900 dark:text-blue-300 mb-1">
                 Coach Notes
               </p>
-              <p className="text-blue-800 dark:text-blue-200">{plan.coach_notes}</p>
+              <p className="text-blue-800 dark:text-blue-200">{displayPlan.coach_notes}</p>
             </CardContent>
           </Card>
         )}
