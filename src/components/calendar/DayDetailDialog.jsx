@@ -7,14 +7,29 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Trophy, Calendar, Edit } from "lucide-react";
+import { Trophy, Calendar, Edit, User } from "lucide-react";
 import { format } from "date-fns";
 import DayTypeBadge from "../shared/DayTypeBadge";
 import AbbreviationsKey from "../shared/AbbreviationsKey";
 import PracticePlanText from "../shared/PracticePlanText";
 
-export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, onEdit, isCoach, selectedEvents = ["shot", "discus", "javelin"] }) {
+// Merge override on top of team plan — override fields take priority when non-empty
+function mergeWithOverride(plan, override) {
+  if (!plan && !override) return null;
+  if (!override) return plan;
+  return {
+    ...plan,
+    shot_text: override.shot_text || plan?.shot_text || "",
+    discus_text: override.discus_text || plan?.discus_text || "",
+    javelin_text: override.javelin_text || plan?.javelin_text || "",
+    coach_notes: override.coach_notes || plan?.coach_notes || "",
+    _hasOverride: true,
+  };
+}
+
+export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, onEdit, isCoach, selectedEvents = ["shot", "discus", "javelin"], athleteOverride }) {
   if (!date) return null;
+  const displayPlan = mergeWithOverride(plan, athleteOverride);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
