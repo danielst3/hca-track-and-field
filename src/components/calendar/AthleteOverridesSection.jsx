@@ -214,16 +214,30 @@ export default function AthleteOverridesSection({ date, activeSeason }) {
                             />
                           </div>
                         ))}
-                        <Button
-                          type="button"
-                          size="sm"
-                          onClick={() => handleSave(athlete.email)}
-                          disabled={saveMutation.isPending}
-                          className="bg-orange-600 hover:bg-orange-700 text-white gap-1"
-                        >
-                          <Check className="w-3.5 h-3.5" />
-                          Save Override
-                        </Button>
+                        <div className="flex gap-2">
+                          <Button
+                            type="button"
+                            size="sm"
+                            onClick={() => handleSave(athlete.email)}
+                            disabled={saveMutation.isPending}
+                            className="bg-orange-600 hover:bg-orange-700 text-white gap-1"
+                          >
+                            <Check className="w-3.5 h-3.5" />
+                            Save Override
+                          </Button>
+                          {hasOverride && (
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleRevert(athlete.email)}
+                              className="gap-1 dark:bg-gray-700 dark:text-gray-200"
+                            >
+                              <RotateCcw className="w-3.5 h-3.5" />
+                              Revert
+                            </Button>
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
