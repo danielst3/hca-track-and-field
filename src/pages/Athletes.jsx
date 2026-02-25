@@ -35,7 +35,10 @@ export default function Athletes() {
     const fetchUser = async () => {
       const currentUser = await base44.auth.me();
       setUser(currentUser);
-      if (currentUser.role !== "admin" && currentUser.role !== "coach") {
+      // Check the active role (may be switched via localStorage)
+      const savedRole = localStorage.getItem(`activeRole_${currentUser.id}`);
+      const effectiveRole = savedRole || currentUser.role;
+      if (effectiveRole !== "admin" && effectiveRole !== "coach") {
         window.location.href = createPageUrl("Today");
       }
     };
