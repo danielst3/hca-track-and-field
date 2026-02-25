@@ -320,16 +320,17 @@ export default function Today() {
           </div>
         )}
         {dailyPlan ? (() => {
-          const dp = {
+          const isCoachOrAdmin = user?.role === "admin" || user?.role === "coach";
+          const dp = isCoachOrAdmin ? dailyPlan : {
             ...dailyPlan,
             shot_text: athleteOverride?.shot_text || dailyPlan.shot_text,
             discus_text: athleteOverride?.discus_text || dailyPlan.discus_text,
             javelin_text: athleteOverride?.javelin_text || dailyPlan.javelin_text,
             coach_notes: athleteOverride?.coach_notes || dailyPlan.coach_notes,
           };
-          const shotOverridden = !!athleteOverride?.shot_text;
-          const discusOverridden = !!athleteOverride?.discus_text;
-          const javelinOverridden = !!athleteOverride?.javelin_text;
+          const shotOverridden = !isCoachOrAdmin && !!athleteOverride?.shot_text;
+          const discusOverridden = !isCoachOrAdmin && !!athleteOverride?.discus_text;
+          const javelinOverridden = !isCoachOrAdmin && !!athleteOverride?.javelin_text;
           return (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {selectedEvents.includes("shot") && (
@@ -340,7 +341,7 @@ export default function Today() {
                         <Circle className="w-5 h-5" /> Shot Put
                         {shotOverridden && <span className="text-xs font-normal text-orange-500 bg-orange-100 dark:bg-orange-900/40 px-1.5 py-0.5 rounded">Personalized</span>}
                       </CardTitle>
-                      {user && user.role !== "admin" && (
+                      {user && !isCoachOrAdmin && (
                         <LogPerformanceForm event="shot" eventLabel="Shot" user={user} open={undefined} />
                       )}
                     </div>
@@ -360,7 +361,7 @@ export default function Today() {
                         <Disc3 className="w-5 h-5" /> Discus
                         {discusOverridden && <span className="text-xs font-normal text-orange-500 bg-orange-100 dark:bg-orange-900/40 px-1.5 py-0.5 rounded">Personalized</span>}
                       </CardTitle>
-                      {user && user.role !== "admin" && (
+                      {user && !isCoachOrAdmin && (
                         <LogPerformanceForm event="discus" eventLabel="Discus" user={user} open={undefined} />
                       )}
                     </div>
@@ -380,7 +381,7 @@ export default function Today() {
                         <Zap className="w-5 h-5" /> Javelin
                         {javelinOverridden && <span className="text-xs font-normal text-orange-500 bg-orange-100 dark:bg-orange-900/40 px-1.5 py-0.5 rounded">Personalized</span>}
                       </CardTitle>
-                      {user && user.role !== "admin" && (
+                      {user && !isCoachOrAdmin && (
                         <LogPerformanceForm event="javelin" eventLabel="Javelin" user={user} open={undefined} />
                       )}
                     </div>
@@ -401,6 +402,11 @@ export default function Today() {
               <p className="text-slate-600">No plan scheduled for today</p>
             </CardContent>
           </Card>
+        )}
+
+        {/* Coach: Athlete Overrides Preview */}
+        {(user?.role === "admin" || user?.role === "coach") && dailyPlan && (
+          <CoachAthleteOverviewSection date={selectedDate} dailyPlan={dailyPlan} />
         )}
 
         {/* Recent Posts */}
