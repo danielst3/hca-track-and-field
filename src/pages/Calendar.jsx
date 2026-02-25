@@ -384,13 +384,15 @@ export default function Calendar() {
           athleteOverride={athleteOverride}
         />
 
-        <EditPlanDialog
-          date={selectedDay}
-          plan={selectedPlan}
-          meet={selectedMeet}
-          open={editDialogOpen}
-          onOpenChange={setEditDialogOpen}
-        />
+        {!user?.isImpersonating && (user?.realRole === "admin" || user?.role === "admin" || user?.realRole === "coach" || user?.role === "coach") && (
+          <EditPlanDialog
+            date={selectedDay}
+            plan={selectedPlan}
+            meet={selectedMeet}
+            open={editDialogOpen}
+            onOpenChange={setEditDialogOpen}
+          />
+        )}
       </div>
     </div>
   );
