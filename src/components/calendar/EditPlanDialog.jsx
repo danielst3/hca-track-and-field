@@ -263,6 +263,12 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
               />
             </div>
 
+            <AIPlanGenerator
+              planData={planData}
+              date={date}
+              onApplyGeneric={(updates) => setPlanData((prev) => ({ ...prev, ...updates }))}
+            />
+
             <div className="flex gap-2 flex-wrap">
               <Button
                 onClick={handleSavePlan}
