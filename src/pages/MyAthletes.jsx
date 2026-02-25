@@ -22,13 +22,6 @@ export default function MyAthletes() {
     fetchUser();
   }, []);
 
-  // Set initial selected athlete from first available
-  useEffect(() => {
-    if (assignedAthletes.length > 0 && !selectedAthleteId) {
-      setSelectedAthleteId(assignedAthletes[0].id);
-    }
-  }, [assignedAthletes]);
-
   const { data: allUsers = [] } = useQuery({
     queryKey: ["users"],
     queryFn: () => base44.entities.User.list(),
@@ -40,6 +33,13 @@ export default function MyAthletes() {
   const assignedAthletes = isCoach 
     ? allUsers.filter(u => u.role === "user")
     : allUsers.filter(u => u.role === "user" && u.created_by === user?.email);
+
+  // Set initial selected athlete from first available
+  useEffect(() => {
+    if (assignedAthletes.length > 0 && !selectedAthleteId) {
+      setSelectedAthleteId(assignedAthletes[0].id);
+    }
+  }, [assignedAthletes]);
 
   // Find selected athlete
   const selectedAthlete = selectedAthleteId ? assignedAthletes.find(a => a.id === selectedAthleteId) : null;
