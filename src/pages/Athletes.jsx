@@ -386,7 +386,13 @@ export default function Athletes() {
           <div>
             <h2 className="text-xl font-semibold text-slate-900 dark:text-gray-100 mb-4">Current Roster</h2>
             <div className="grid gap-4">
-              {athletes.filter(a => !a.graduated).map((athlete) => (
+              {athletes.filter(a => !a.graduated).map((athlete) => {
+                const roles = athlete.user_role_preference ? athlete.user_role_preference.split(",") : [athlete.role];
+                const isAthlete = roles.includes("user");
+                const isCoachOrAdmin = roles.includes("admin") || roles.includes("coach");
+                const isParent = roles.includes("parent");
+                const roleLabel = isCoachOrAdmin ? (roles.includes("admin") ? "Admin" : "Coach") : isParent ? "Parent" : "Athlete";
+                return (
                 <Card key={athlete.id} className="hover:shadow-lg transition-shadow dark:bg-gray-800 dark:border-gray-700">
                   <CardContent className="p-4">
                     <div className="flex flex-col gap-3">
