@@ -53,10 +53,13 @@ export default function Calendar() {
     const fetchUser = async () => {
       const currentUser = await base44.auth.me();
       const impersonating = localStorage.getItem("impersonating");
-      const effectiveUser = (impersonating && currentUser?.role === "admin")
-        ? { ...currentUser, ...JSON.parse(impersonating), isImpersonating: true, realRole: currentUser.role }
-        : currentUser;
-      setUser(effectiveUser);
+      if (impersonating && currentUser?.role === "admin") {
+        setUser({ ...currentUser, ...JSON.parse(impersonating), isImpersonating: true, realRole: currentUser.role });
+      } else {
+        const savedRole = localStorage.getItem(`activeRole_${currentUser.id}`);
+        const effectiveRole = savedRole || currentUser.role;
+        setUser({ ...currentUser, role: effectiveRole });
+      }
       
       // Build event options from user's event_types
       if (currentUser?.event_types && currentUser.event_types.length > 0) {
