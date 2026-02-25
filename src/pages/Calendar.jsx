@@ -52,7 +52,11 @@ export default function Calendar() {
   React.useEffect(() => {
     const fetchUser = async () => {
       const currentUser = await base44.auth.me();
-      setUser(currentUser);
+      const impersonating = localStorage.getItem("impersonating");
+      const effectiveUser = (impersonating && currentUser?.role === "admin")
+        ? { ...currentUser, ...JSON.parse(impersonating), isImpersonating: true, realRole: currentUser.role }
+        : currentUser;
+      setUser(effectiveUser);
       
       // Build event options from user's event_types
       if (currentUser?.event_types && currentUser.event_types.length > 0) {
