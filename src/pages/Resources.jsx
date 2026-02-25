@@ -186,7 +186,8 @@ export default function Resources() {
     queryFn: () => base44.entities.Resource.list(),
   });
 
-  const isCoach = user?.role === "admin";
+  const effectiveRole = localStorage.getItem(`activeRole_${user?.id}`) || user?.role;
+  const isCoach = effectiveRole === "admin" || effectiveRole === "coach";
 
   const handleAddResource = () => {
     setSelectedResource(null);
@@ -203,7 +204,7 @@ export default function Resources() {
   };
 
   const renderDrillCard = (drill, index) => (
-    <div key={index} className="border border-slate-200 dark:border-gray-700 rounded-lg overflow-hidden">
+    <div key={`${drill.name}-${index}`} className="border border-slate-200 dark:border-gray-700 rounded-lg overflow-hidden">
       <button
         onClick={() => setExpandedDrill(expandedDrill === index ? null : index)}
         className="w-full p-4 bg-slate-50 dark:bg-gray-900 hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors text-left"

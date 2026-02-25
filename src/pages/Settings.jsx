@@ -459,7 +459,7 @@ export default function Settings() {
         )}
 
         {/* Coach-only Settings */}
-        {isCoach && (
+        {isCoach && !user?.isImpersonating && (
           <>
             <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>

@@ -28,7 +28,8 @@ export default function LogActivity() {
   const [submitted, setSubmitted] = useState(false);
   const queryClient = useQueryClient();
 
-  const isCoach = user?.role === "admin";
+  const effectiveRole = localStorage.getItem(`activeRole_${user?.id}`) || user?.role;
+  const isCoach = effectiveRole === "admin" || effectiveRole === "coach";
 
   const events = [
     { id: "shot", label: "Shot Put", Icon: Circle },
@@ -72,8 +73,8 @@ export default function LogActivity() {
     onSuccess: () => {
       const key = logType === "distance" ? ["throwLogs"] : ["trainingLogs"];
       queryClient.invalidateQueries({ queryKey: key });
-      toast.success("Performance logged successfully!");
       setSubmitted(true);
+      toast.success("Performance logged successfully!");
       setTimeout(() => {
         setFormData({
           date: format(new Date(), "yyyy-MM-dd"),
@@ -83,7 +84,7 @@ export default function LogActivity() {
         });
         setSelectedEvent(null);
         setSubmitted(false);
-      }, 2000);
+      }, 1500);
     },
     onError: () => {
       toast.error("Failed to log performance");
@@ -207,14 +208,15 @@ export default function LogActivity() {
                     <div className="space-y-2">
                       <Label className="dark:text-gray-200">Date</Label>
                       <Input
-                        type="date"
-                        value={formData.date}
-                        onChange={(e) =>
-                          setFormData({ ...formData, date: e.target.value })
-                        }
-                        required
-                        className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
-                      />
+                          type="date"
+                          value={formData.date}
+                          onChange={(e) =>
+                            setFormData({ ...formData, date: e.target.value })
+                          }
+                          max={format(new Date(), "yyyy-MM-dd")}
+                          required
+                          className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                        />
                     </div>
                     <div className="space-y-2">
                       <Label className="dark:text-gray-200">Log Type</Label>

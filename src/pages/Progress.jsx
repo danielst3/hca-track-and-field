@@ -26,13 +26,16 @@ const DATE_RANGES = [
 export default function Progress() {
   const [user, setUser] = useState(null);
   const [activeEvent, setActiveEvent] = useState("shot");
-  const [dateRange, setDateRange] = useState(null);
+  const [dateRange, setDateRange] = useState(null); // null = "All"
+  const [loadError, setLoadError] = useState(null);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    base44.auth.me().then(setUser).catch((err) => {
+      setLoadError("Failed to load user data");
+    });
   }, []);
 
-  const { data: logs = [] } = useQuery({
+  const { data: logs = [], isError: logsError } = useQuery({
     queryKey: ["throwLogs", user?.email],
     queryFn: () => base44.entities.ThrowLog.filter({ athlete_email: user.email }),
     enabled: !!user,
@@ -46,6 +49,16 @@ export default function Progress() {
     }
     return result;
   }, [logs, activeEvent, dateRange]);
+
+  if (loadError || logsError) {
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-[#111] p-4 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 dark:text-red-400 font-semibold">{loadError || "Failed to load analytics"}</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!user) return null;
 
@@ -88,7 +101,7 @@ export default function Progress() {
                 key={label}
                 onClick={() => setDateRange(days)}
                 className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${
-                  dateRange === days
+                  (dateRange === null && days === null) || (dateRange === days && days !== null)
                     ? "bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900"
                     : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400"
                 }`}

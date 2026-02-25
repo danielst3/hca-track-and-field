@@ -18,15 +18,16 @@ export default function MyAthletes() {
     const fetchUser = async () => {
       const currentUser = await base44.auth.me();
       setUser(currentUser);
-      // Set initial selected athlete from user preference or first assigned
-      if (currentUser.selected_athlete_id) {
-        setSelectedAthleteId(currentUser.selected_athlete_id);
-      } else if (currentUser.assigned_athletes?.length > 0) {
-        setSelectedAthleteId(currentUser.assigned_athletes[0]);
-      }
     };
     fetchUser();
   }, []);
+
+  // Set initial selected athlete from first available
+  useEffect(() => {
+    if (assignedAthletes.length > 0 && !selectedAthleteId) {
+      setSelectedAthleteId(assignedAthletes[0].id);
+    }
+  }, [assignedAthletes]);
 
   const { data: allUsers = [] } = useQuery({
     queryKey: ["users"],
@@ -34,8 +35,11 @@ export default function MyAthletes() {
     enabled: !!user,
   });
 
-  const assignedAthletes = allUsers.filter(u => user?.assigned_athletes?.includes(u.id));
-  const selectedAthlete = assignedAthletes.find(a => a.id === selectedAthleteId);
+  // For parents: filter athletes by created_by match. For coaches: show all athletes.
+  const isCoach = user?.role === "admin" || user?.role === "coach";
+  const assignedAthletes = isCoach 
+    ? allUsers.filter(u => u.role === "user")
+    : allUsers.filter(u => u.role === "user" && u.created_by === user?.email);
 
   const { data: throwLogs = [] } = useQuery({
     queryKey: ["throwLogs", selectedAthleteId],
@@ -48,7 +52,6 @@ export default function MyAthletes() {
 
   const selectAthleteMutation = useMutation({
     mutationFn: async (athleteId) => {
-      await base44.auth.updateMe({ selected_athlete_id: athleteId });
       return athleteId;
     },
     onSuccess: (athleteId) => {
