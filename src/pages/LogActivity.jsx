@@ -28,9 +28,6 @@ export default function LogActivity() {
   const [submitted, setSubmitted] = useState(false);
   const queryClient = useQueryClient();
 
-  const effectiveRole = localStorage.getItem(`activeRole_${user?.id}`) || user?.role;
-  const isCoach = effectiveRole === "admin" || effectiveRole === "coach";
-
   const events = [
     { id: "shot", label: "Shot Put", Icon: Circle },
     { id: "discus", label: "Discus", Icon: Disc3 },
@@ -47,6 +44,9 @@ export default function LogActivity() {
     };
     fetchUser();
   }, []);
+
+  const effectiveRole = user ? (localStorage.getItem(`activeRole_${user.id}`) || user.role) : null;
+  const isCoach = effectiveRole === "admin" || effectiveRole === "coach";
 
   const { data: athletes = [] } = useQuery({
     queryKey: ["athletes"],
