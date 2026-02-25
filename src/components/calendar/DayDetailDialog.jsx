@@ -145,6 +145,16 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, 
             </CardContent>
           </Card>
         )}
+
+        {isCoach && (
+          <div className="mt-4">
+            <CoachAthleteOverviewSection
+              date={date}
+              dailyPlan={plan}
+              selectedEvents={selectedEvents}
+            />
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
