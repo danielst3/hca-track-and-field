@@ -137,6 +137,7 @@ export default function CoachAthleteOverviewSection({ date, dailyPlan, selectedE
                   athlete={athlete}
                   dailyPlan={dailyPlan}
                   override={override}
+                  selectedEvents={selectedEvents}
                 />
               );
             })
