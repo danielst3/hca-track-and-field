@@ -284,11 +284,11 @@ export default function Today() {
         )}
 
         {/* Coach Notes */}
-        {dailyPlan?.coach_notes && (
+        {(athleteOverride?.coach_notes || dailyPlan?.coach_notes) && (
           <Card className="border-gray-300 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
             <CardContent className="pt-4">
               <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">Coach Notes</p>
-              <p className="text-gray-800 dark:text-gray-300">{dailyPlan.coach_notes}</p>
+              <p className="text-gray-800 dark:text-gray-300">{athleteOverride?.coach_notes || dailyPlan?.coach_notes}</p>
             </CardContent>
           </Card>
         )}
