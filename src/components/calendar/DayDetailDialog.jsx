@@ -12,6 +12,7 @@ import { format } from "date-fns";
 import DayTypeBadge from "../shared/DayTypeBadge";
 import AbbreviationsKey from "../shared/AbbreviationsKey";
 import PracticePlanText from "../shared/PracticePlanText";
+import CoachAthleteOverviewSection from "../dashboard/CoachAthleteOverviewSection";
 
 // Merge override on top of team plan — override fields take priority when non-empty
 function mergeWithOverride(plan, override) {
