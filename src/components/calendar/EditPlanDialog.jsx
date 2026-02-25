@@ -42,6 +42,7 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
     const fetchActiveSeason = async () => {
       const seasons = await base44.entities.Season.filter({ is_active: true });
       setActiveSeason(seasons[0] || null);
+      setActiveSeasonObj(seasons[0] || null);
     };
     fetchActiveSeason();
   }, []);
