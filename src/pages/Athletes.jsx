@@ -384,7 +384,7 @@ export default function Athletes() {
         <div className="grid gap-4">
           {/* Active Athletes Section */}
           <div>
-            <h2 className="text-xl font-semibold text-slate-900 dark:text-gray-100 mb-4">Current Roster</h2>
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-gray-100 mb-4">All Users</h2>
             <div className="grid gap-4">
               {athletes.filter(a => !a.graduated).map((athlete) => {
                 const roles = athlete.user_role_preference ? athlete.user_role_preference.split(",") : [athlete.role];
