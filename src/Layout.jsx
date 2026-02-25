@@ -147,10 +147,17 @@ export default function Layout({ children, currentPageName }) {
     return localStorage.getItem(`activeRole_${currentUser.id}`) || currentUser.role;
   };
 
+  const VALID_ROLES = ["admin", "coach", "user", "parent"];
+
   const getUserRoles = (currentUser) => {
-    if (!currentUser?.user_role_preference) return [currentUser.role];
-    const roles = currentUser.user_role_preference.split(",").filter(Boolean);
-    return roles.length > 0 ? roles : [currentUser.role];
+    // The user's actual assigned role is the source of truth
+    const assignedRole = currentUser.role;
+    // user_role_preference can grant extra view modes, but only valid roles
+    if (!currentUser?.user_role_preference) return [assignedRole];
+    const prefRoles = currentUser.user_role_preference.split(",").filter(r => VALID_ROLES.includes(r));
+    // Always include the assigned role; only include other roles if explicitly in preferences
+    const allRoles = Array.from(new Set([assignedRole, ...prefRoles]));
+    return allRoles.length > 0 ? allRoles : [assignedRole];
   };
 
   useEffect(() => {
