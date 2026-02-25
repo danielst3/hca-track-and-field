@@ -53,6 +53,7 @@ export default function AIPlanGenerator({ planData, date, onApplyGeneric }) {
   const handleGenerate = async (eventsArg) => {
     const eventList = eventsArg === "all" ? ["shot", "discus", "javelin"] : [eventsArg];
     setGenerating(eventsArg);
+    try {
 
     let athleteContext = "";
     if (mode === "athlete" && selectedAthlete) {
