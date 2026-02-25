@@ -361,7 +361,7 @@ export default function Today() {
                         {discusOverridden && <span className="text-xs font-normal text-orange-500 bg-orange-100 dark:bg-orange-900/40 px-1.5 py-0.5 rounded">Personalized</span>}
                       </CardTitle>
                       {user && user.role !== "admin" && (
-                        <LogPerformanceForm event="discus" eventLabel="Discus" user={user} />
+                        <LogPerformanceForm event="discus" eventLabel="Discus" user={user} open={undefined} />
                       )}
                     </div>
                   </CardHeader>
