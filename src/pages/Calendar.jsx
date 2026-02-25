@@ -196,14 +196,6 @@ export default function Calendar() {
     updateSelectedEventsMutation.mutate(newEvents);
   };
 
-  const toggleEventAndSave = (eventId) => {
-    const newEvents = selectedEvents.includes(eventId)
-      ? selectedEvents.filter(e => e !== eventId)
-      : [...selectedEvents, eventId];
-    setSelectedEvents(newEvents);
-    updateSelectedEventsMutation.mutate(newEvents);
-  };
-
   const EVENT_ICON_MAP = {
     shot: <Circle className="w-3.5 h-3.5 inline text-amber-600" />,
     discus: <Disc3 className="w-3.5 h-3.5 inline text-cyan-600" />,
@@ -272,7 +264,7 @@ export default function Calendar() {
               key={event.id}
               event={event}
               isSelected={selectedEvents.includes(event.id)}
-              onClick={() => toggleEventAndSave(event.id)}
+              onClick={() => toggleEvent(event.id)}
             />
           ))}
         </div>

@@ -316,7 +316,8 @@ export default function Settings() {
     );
   }
 
-  const isCoach = user.role === "admin";
+  const effectiveRole = localStorage.getItem(`activeRole_${user.id}`) || user.role;
+  const isCoach = effectiveRole === "admin" || effectiveRole === "coach";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[var(--brand-secondary)] to-[var(--brand-secondary-light)] dark:from-gray-900 dark:to-gray-800 p-4 pb-24">

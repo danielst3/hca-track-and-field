@@ -11,14 +11,15 @@ import EventToggle from "../components/shared/EventToggle";
 import LogPerformanceForm from "../components/tracking/LogPerformanceForm";
 import { Calendar, Trophy, ChevronLeft, ChevronRight, X, FileText, Circle, Disc3, Zap, User } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { format, isSameDay, addDays } from "date-fns";
+
 const EVENT_ICONS = {
   shot: <Circle className="w-4 h-4" />,
   discus: <Disc3 className="w-4 h-4" />,
   javelin: <Zap className="w-4 h-4" />,
 };
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { format, isSameDay, addDays } from "date-fns";
 import { cn } from "@/lib/utils";
 import AthleteCard from "../components/dashboard/AthleteCard";
 import EventProgressChart from "../components/dashboard/EventProgressChart";
@@ -37,9 +38,11 @@ export default function Today() {
     const fetchUser = async () => {
       const currentUser = await base44.auth.me();
       const impersonating = localStorage.getItem("impersonating");
+      const savedRole = localStorage.getItem(`activeRole_${currentUser.id}`);
+      const effectiveRole = savedRole || currentUser.role;
       const effectiveUser = (impersonating && currentUser?.role === "admin")
-        ? { ...currentUser, ...JSON.parse(impersonating), isImpersonating: true, realRole: currentUser.role }
-        : currentUser;
+        ? { ...currentUser, ...JSON.parse(impersonating), isImpersonating: true, realRole: currentUser.role, role: effectiveRole }
+        : { ...currentUser, role: effectiveRole };
       setUser(effectiveUser);
       
       // Build event options from user's event_types
