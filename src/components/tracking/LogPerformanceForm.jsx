@@ -18,7 +18,10 @@ import { Plus } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
-export default function LogPerformanceForm({ event, eventLabel, user, onClose, open = true, onOpenChange }) {
+export default function LogPerformanceForm({ event, eventLabel, user, onClose, open: openProp, onOpenChange }) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled = openProp !== undefined;
+  const open = isControlled ? openProp : internalOpen;
   const [logType, setLogType] = useState("distance");
   const [formData, setFormData] = useState({
     date: format(new Date(), "yyyy-MM-dd"),
