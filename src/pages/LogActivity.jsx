@@ -49,7 +49,7 @@ export default function LogActivity() {
   const isCoach = effectiveRole === "admin" || effectiveRole === "coach";
 
   const { data: athletes = [] } = useQuery({
-    queryKey: ["athletes"],
+    queryKey: ["athletes", isCoach],
     queryFn: async () => {
       if (!isCoach) return [];
       const allUsers = await base44.entities.User.list();
@@ -63,7 +63,7 @@ export default function LogActivity() {
         return nameA.localeCompare(nameB);
       });
     },
-    enabled: isCoach,
+    enabled: !!user && isCoach,
   });
 
   const logMutation = useMutation({
