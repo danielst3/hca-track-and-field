@@ -437,7 +437,9 @@ export default function Layout({ children, currentPageName }) {
     );
   }
 
-  const navItems = (user?.realRole === "admin" || user?.role === "admin" || user?.realRole === "coach" || user?.role === "coach") && !user?.isImpersonating
+  // Nav items are driven by the active role, respecting the switched role
+  const activeRole = user?.role;
+  const navItems = (activeRole === "admin" || activeRole === "coach" || user?.realRole === "admin" || user?.realRole === "coach") && !user?.isImpersonating
     ? [
         { name: "Today", icon: Home, page: "Today" },
         { name: "Calendar", icon: Calendar, page: "Calendar" },
