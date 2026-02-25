@@ -120,16 +120,20 @@ export default function Today() {
     },
   });
 
+  const athleteEmail = user?.isImpersonating
+    ? JSON.parse(localStorage.getItem("impersonating") || "{}").email
+    : user?.email;
+
   const { data: athleteOverride } = useQuery({
-    queryKey: ["athleteOverride", dateStr, user?.email],
+    queryKey: ["athleteOverride", dateStr, athleteEmail],
     queryFn: async () => {
       const overrides = await base44.entities.AthletePlanOverride.filter({
-        athlete_email: user.email,
+        athlete_email: athleteEmail,
         date: dateStr,
       });
       return overrides[0] || null;
     },
-    enabled: !!user && (user.role === "user" || user.role === "parent" || user.isImpersonating),
+    enabled: !!athleteEmail && (!!user?.isImpersonating || user?.role === "user" || user?.role === "parent"),
   });
 
   const { data: throwLogs } = useQuery({
