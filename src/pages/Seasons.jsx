@@ -49,7 +49,8 @@ export default function Seasons() {
     const fetchUser = async () => {
       const currentUser = await base44.auth.me();
       setUser(currentUser);
-      if (currentUser.role !== "admin") {
+      const effectiveRole = localStorage.getItem(`activeRole_${currentUser.id}`) || currentUser.role;
+      if (effectiveRole !== "admin" && effectiveRole !== "coach") {
         window.location.href = createPageUrl("Today");
       }
     };
@@ -209,7 +210,8 @@ export default function Seasons() {
     });
   };
 
-  if (!user || user.role !== "admin") return null;
+  const effectiveRole = user ? (localStorage.getItem(`activeRole_${user.id}`) || user.role) : null;
+  if (!user || (effectiveRole !== "admin" && effectiveRole !== "coach")) return null;
 
   const activeSeason = seasons.find((s) => s.is_active);
 
