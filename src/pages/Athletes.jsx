@@ -318,7 +318,8 @@ export default function Athletes() {
 
   const parents = athletes.filter(a => a.role === "parent" || (a.user_role_preference && a.user_role_preference.includes("parent")));
 
-  if (!user || (user.role !== "admin" && user.role !== "coach")) return null;
+  const effectiveRole = user ? (localStorage.getItem(`activeRole_${user.id}`) || user.role) : null;
+  if (!user || (effectiveRole !== "admin" && effectiveRole !== "coach")) return null;
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#111] p-4 pb-24">
