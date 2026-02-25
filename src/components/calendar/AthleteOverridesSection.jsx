@@ -61,13 +61,16 @@ export default function AthleteOverridesSection({ date, activeSeason }) {
           ...data,
           athlete_email: athleteEmail,
           date: dateStr,
-          season_id: activeSeason?.id,
         });
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["athlete-overrides-section", dateStr] });
+      queryClient.invalidateQueries({ queryKey: ["athlete-plan-overrides"] });
       toast.success("Override saved!");
+    },
+    onError: (err) => {
+      toast.error("Failed to save override: " + (err?.message || "Unknown error"));
     },
   });
 
