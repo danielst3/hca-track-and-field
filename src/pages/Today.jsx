@@ -306,6 +306,32 @@ export default function Today() {
         </div>
 
         {/* Three Event Columns */}
+        {(() => {
+          const displayPlan = dailyPlan ? {
+            ...dailyPlan,
+            shot_text: athleteOverride?.shot_text || dailyPlan.shot_text,
+            discus_text: athleteOverride?.discus_text || dailyPlan.discus_text,
+            javelin_text: athleteOverride?.javelin_text || dailyPlan.javelin_text,
+            coach_notes: athleteOverride?.coach_notes || dailyPlan.coach_notes,
+          } : null;
+          return null;
+        })()}
+        {(() => {
+          const displayPlan = dailyPlan ? {
+            ...dailyPlan,
+            shot_text: athleteOverride?.shot_text || dailyPlan.shot_text,
+            discus_text: athleteOverride?.discus_text || dailyPlan.discus_text,
+            javelin_text: athleteOverride?.javelin_text || dailyPlan.javelin_text,
+            coach_notes: athleteOverride?.coach_notes || dailyPlan.coach_notes,
+          } : null;
+          return null;
+        })()}
+        {athleteOverride && (
+          <div className="flex items-center gap-2 text-orange-600 dark:text-orange-400 text-sm font-medium">
+            <User className="w-4 h-4" />
+            You have a personalized practice plan for today
+          </div>
+        )}
         {dailyPlan ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Shot Put */}
