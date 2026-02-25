@@ -393,7 +393,6 @@ export default function Athletes() {
                 const isParent = roles.includes("parent");
                 const roleLabel = isCoachOrAdmin ? (roles.includes("admin") ? "Admin" : "Coach") : isParent ? "Parent" : "Athlete";
                 return (
-                return (
                 <Card key={athlete.id} className="hover:shadow-lg transition-shadow dark:bg-gray-800 dark:border-gray-700">
                   <CardContent className="p-4">
                     <div className="flex flex-col gap-3">
