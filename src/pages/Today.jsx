@@ -133,7 +133,7 @@ export default function Today() {
       });
       return overrides[0] || null;
     },
-    enabled: !!athleteEmail && (!!user?.isImpersonating || user?.role === "user" || user?.role === "parent"),
+    enabled: !!athleteEmail && !!user,
   });
 
   const { data: throwLogs } = useQuery({
