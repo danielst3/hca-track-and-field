@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DayTypeBadge from "../components/shared/DayTypeBadge";
-import AbbreviationsKey from "../components/shared/AbbreviationsKey";
+import AbbreviationsKey from "../components/shared/AbbreviationsKey.jsx";
 
 import QuickLogButton from "../components/tracking/QuickLogButton";
 import PracticePlanText from "../components/shared/PracticePlanText";

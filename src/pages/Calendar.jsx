@@ -7,7 +7,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { getDayTypeColors } from "../components/shared/DayTypeBadge";
 import DayDetailDialog from "../components/calendar/DayDetailDialog";
 import EditPlanDialog from "../components/calendar/EditPlanDialog";
-import AbbreviationsKey from "../components/shared/AbbreviationsKey";
+import AbbreviationsKey from "../components/shared/AbbreviationsKey.jsx";
 import EventToggle from "../components/shared/EventToggle";
 import { ChevronLeft, ChevronRight, Trophy, Circle, Disc3, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
