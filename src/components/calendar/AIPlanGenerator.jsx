@@ -106,30 +106,78 @@ export default function AIPlanGenerator({ planData, date, onApplyGeneric = () =>
 
       const dayDesc = DAY_TYPE_DESCRIPTIONS[planData?.day_type] || planData?.day_type || "training";
 
+      // List of known drills so AI can reference them by exact name for auto-linking
+      const knownDrills = [
+        "Standard Daily Warm-Up (20–25 min)", "Shot Put — Power Position (PP) Stand Throw",
+        "Shot Put — PP Holds (Isometric Positioning)", "Shot Put — Step-In Drill",
+        "Shot Put — Block Freeze (Front-Side Integrity)", "Shot Put — Full Throw (General Checkpoints)",
+        "Discus — Stand Throw", "Discus — Finish Freeze", "Discus — Wheel Drill (Axis Control)",
+        "Discus — South African (SA)", "Discus — Full Throw (General Checkpoints)",
+        "Javelin — Carry Mechanics (Warm-Up Carry)", "Javelin — Cross-Step Rhythm Runs (No Throw)",
+        "Javelin — 3-Step Throw", "Javelin — Impulse Step (IS) Drill",
+        "Javelin — Approach Progression Rules", "Javelin — Safety Rules (Non-Negotiable)",
+        "Strength — Trap Bar Jump", "Strength — Push Press", "Strength — Back Squat (Throwers)",
+        "Strength — Front Squat (Block Strength)", "Strength — Romanian Deadlift (RDL)",
+        "Prehab — Copenhagen Plank", "Prehab — Band External Rotation (ER)", "Prehab — Scap Row (Band or Cable)"
+      ];
+
       const prompt = `You are an expert high school track and field throws coach. Generate a specific and practical ${dayDesc} practice plan.
 ${meetContext}${athleteContext}
 ${focusNotes ? `\nCoach's additional focus: ${focusNotes}` : ""}
 
 Generate a practice plan for: ${selectedEvents.map((e) => EVENT_LABELS[e]).join(", ")}.
 
+IMPORTANT — DRILL NAMING:
+When referencing any of the drills below, use their EXACT name as written so athletes can tap them for details:
+${knownDrills.join(", ")}
+
+For drills or exercises NOT in the list above, still name them clearly so they can be added as resources.
+
 For each event, provide:
 - A 1-line theme for the session
-- 3–5 specific drills or exercises with sets/reps where relevant
+- 3–5 specific drills or exercises with sets/reps where relevant (use exact drill names from the list where applicable)
 - 2–3 key coaching cues or technical focuses
 
-Use plain text with line breaks. No markdown headers or asterisks. Keep each event under 120 words.
+Use plain text with line breaks. No markdown headers or asterisks. Keep each event under 150 words.
 ${
   mode === "athlete" && selectedAthlete
     ? "IMPORTANT: Tailor this specifically to the athlete's trends shown above. If any event shows a declining trend, prescribe corrective work."
     : "Create a plan appropriate for the full team at a high school throws program."
-}`;
+}
+
+Also return a list of any drills/exercises you included that are NOT in the known drills list above, with a brief description for each, so they can be added as resources.`;
 
       const schema = {
         type: "object",
-        properties: Object.fromEntries(selectedEvents.map((ev) => [`${ev}_text`, { type: "string" }])),
+        properties: {
+          ...Object.fromEntries(selectedEvents.map((ev) => [`${ev}_text`, { type: "string" }])),
+          new_resources: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                title: { type: "string" },
+                content: { type: "string" },
+              },
+            },
+          },
+        },
       };
 
       const result = await base44.integrations.Core.InvokeLLM({ prompt, response_json_schema: schema });
+
+      // Auto-create any new resources for drills not in the database
+      if (result.new_resources && result.new_resources.length > 0) {
+        const existingResources = await base44.entities.Resource.list();
+        const existingTitles = existingResources.map((r) => r.title.toLowerCase());
+        const toCreate = result.new_resources.filter(
+          (r) => r.title && r.content && !existingTitles.includes(r.title.toLowerCase())
+        );
+        if (toCreate.length > 0) {
+          await Promise.all(toCreate.map((r) => base44.entities.Resource.create({ title: r.title, content: r.content })));
+          toast.info(`Added ${toCreate.length} new resource${toCreate.length > 1 ? "s" : ""} for new drills.`);
+        }
+      }
 
       if (mode === "athlete" && selectedAthlete) {
         const dateStr = format(date, "yyyy-MM-dd");
