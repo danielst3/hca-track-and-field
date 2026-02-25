@@ -97,6 +97,20 @@ export default function AthleteOverridesSection({ date, activeSeason }) {
     }
   };
 
+  const handleRevert = (email) => {
+    const existing = overrides.find((o) => o.athlete_email === email);
+    setEditData((prev) => ({
+      ...prev,
+      [email]: {
+        shot_text: existing?.shot_text || "",
+        discus_text: existing?.discus_text || "",
+        javelin_text: existing?.javelin_text || "",
+        coach_notes: existing?.coach_notes || "",
+      },
+    }));
+    toast.success("Reverted to saved override");
+  };
+
   const updateField = (email, key, value) => {
     setEditData((prev) => ({
       ...prev,
