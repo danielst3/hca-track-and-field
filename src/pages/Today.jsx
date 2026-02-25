@@ -123,14 +123,13 @@ export default function Today() {
   const { data: athleteOverride } = useQuery({
     queryKey: ["athleteOverride", dateStr, user?.email],
     queryFn: async () => {
-      if (!user || (user.role !== "user" && user.role !== "parent")) return null;
       const overrides = await base44.entities.AthletePlanOverride.filter({
         athlete_email: user.email,
         date: dateStr,
       });
       return overrides[0] || null;
     },
-    enabled: !!user && (user.role === "user" || user.role === "parent"),
+    enabled: !!user && (user.role === "user" || user.role === "parent" || user.isImpersonating),
   });
 
   const { data: throwLogs } = useQuery({
