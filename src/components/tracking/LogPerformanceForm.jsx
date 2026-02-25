@@ -95,16 +95,25 @@ export default function LogPerformanceForm({ event, eventLabel, user, onClose, o
   };
 
   const handleClose = (newOpen) => {
-    if (onOpenChange) {
-      onOpenChange(newOpen);
-    }
-    if (!newOpen && onClose) {
-      onClose();
-    }
+    if (!isControlled) setInternalOpen(newOpen);
+    if (onOpenChange) onOpenChange(newOpen);
+    if (!newOpen && onClose) onClose();
   };
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
+      {!isControlled && (
+        <DialogTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7 text-slate-500 hover:text-slate-700 dark:text-gray-400 dark:hover:text-gray-200"
+            onClick={() => setInternalOpen(true)}
+          >
+            <Plus className="w-4 h-4" />
+          </Button>
+        </DialogTrigger>
+      )}
       <DialogContent className="max-w-md dark:bg-gray-800 dark:border-gray-700">
         <DialogHeader>
           <DialogTitle className="dark:text-gray-100">Log {eventLabel} Performance</DialogTitle>
