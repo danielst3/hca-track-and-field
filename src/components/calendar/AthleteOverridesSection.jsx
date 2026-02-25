@@ -25,7 +25,14 @@ export default function AthleteOverridesSection({ date, activeSeason }) {
 
   const { data: athletes = [] } = useQuery({
     queryKey: ["athletes-overrides-list"],
-    queryFn: () => base44.entities.User.filter({ role: "user" }),
+    queryFn: async () => {
+      const users = await base44.entities.User.list();
+      // Only include users who have the "user" (athlete) role
+      return users.filter(u => {
+        const roles = u.user_role_preference ? u.user_role_preference.split(",") : [u.role];
+        return roles.includes("user");
+      });
+    },
     enabled: open,
   });
 
