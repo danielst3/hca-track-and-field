@@ -193,8 +193,7 @@ export default function Layout({ children, currentPageName }) {
   };
 
   const handleSwitchRole = (role) => {
-    // Only allow switching to roles the user actually has
-    const allowedRoles = getUserRoles(user);
+    const allowedRoles = user?.availableRoles || [];
     if (!allowedRoles.includes(role)) {
       toast.error("You don't have access to that role");
       return;
