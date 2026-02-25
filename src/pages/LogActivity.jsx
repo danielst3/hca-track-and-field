@@ -285,10 +285,10 @@ export default function LogActivity() {
                     type="submit"
                     disabled={logMutation.isPending || submitted}
                     className={cn(
-                      "w-full h-12 text-base font-semibold transition-all",
+                      "w-full h-12 text-base font-semibold transition-all text-white dark:text-gray-900",
                       submitted
                         ? "bg-green-600 hover:bg-green-600"
-                        : "bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)]"
+                        : "bg-slate-800 hover:bg-slate-900 dark:bg-slate-300 dark:hover:bg-slate-400"
                     )}
                   >
                     {submitted ? (
