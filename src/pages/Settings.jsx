@@ -89,16 +89,19 @@ export default function Settings() {
     });
   }, []);
 
+  const effectiveRole = user ? (localStorage.getItem(`activeRole_${user.id}`) || user.role) : null;
+  const isCoach = effectiveRole === "admin" || effectiveRole === "coach";
+
   const { data: athletes = [] } = useQuery({
     queryKey: ["athletes"],
     queryFn: () => base44.entities.User.filter({ role: "user" }),
-    enabled: !!user && user.role === "admin",
+    enabled: !!user && isCoach,
   });
 
   const { data: seasons = [] } = useQuery({
     queryKey: ["seasons"],
     queryFn: () => base44.entities.Season.list(),
-    enabled: !!user && user.role === "admin",
+    enabled: !!user && isCoach,
   });
 
   const handleSaveName = async () => {
@@ -316,8 +319,7 @@ export default function Settings() {
     );
   }
 
-  const effectiveRole = localStorage.getItem(`activeRole_${user.id}`) || user.role;
-  const isCoach = effectiveRole === "admin" || effectiveRole === "coach";
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[var(--brand-secondary)] to-[var(--brand-secondary-light)] dark:from-gray-900 dark:to-gray-800 p-4 pb-24">
