@@ -215,16 +215,20 @@ export default function Calendar() {
   const selectedMeet = selectedDay ? getMeetForDate(selectedDay) : null;
   const selectedDayStr = selectedDay ? format(selectedDay, "yyyy-MM-dd") : null;
 
+  const athleteEmail = user?.isImpersonating
+    ? (JSON.parse(localStorage.getItem("impersonating") || "{}").email || null)
+    : user?.email;
+
   const { data: athleteOverride } = useQuery({
-    queryKey: ["athlete-plan-overrides", selectedDayStr, user?.email],
+    queryKey: ["athlete-plan-overrides", selectedDayStr, athleteEmail],
     queryFn: async () => {
       const overrides = await base44.entities.AthletePlanOverride.filter({
-        athlete_email: user.email,
+        athlete_email: athleteEmail,
         date: selectedDayStr,
       });
       return overrides[0] || null;
     },
-    enabled: !!user && (user.role === "user" || user.role === "parent") && !!selectedDayStr,
+    enabled: !!athleteEmail && !!user && !!selectedDayStr,
   });
 
   const days = getDaysToShow();
