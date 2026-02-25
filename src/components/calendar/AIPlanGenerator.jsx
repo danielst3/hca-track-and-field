@@ -144,7 +144,12 @@ ${
       toast.success("AI plan applied to form — review and save.");
     }
 
-    setGenerating(null);
+    } catch (err) {
+      console.error("AI generation error:", err);
+      toast.error("AI generation failed: " + (err?.message || "Unknown error"));
+    } finally {
+      setGenerating(null);
+    }
   };
 
   return (
