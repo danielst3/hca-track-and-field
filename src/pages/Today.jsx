@@ -121,7 +121,7 @@ export default function Today() {
   });
 
   const athleteEmail = user?.isImpersonating
-    ? JSON.parse(localStorage.getItem("impersonating") || "{}").email
+    ? (JSON.parse(localStorage.getItem("impersonating") || "{}").email || null)
     : user?.email;
 
   const { data: athleteOverride } = useQuery({
