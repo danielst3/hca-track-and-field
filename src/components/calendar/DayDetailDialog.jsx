@@ -52,7 +52,7 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, 
                     Edit
                   </Button>
                 )}
-                <AbbreviationsKey />
+                <AbbreviationsKey isCoach={isCoach} />
               </div>
             </div>
             {displayPlan && <DayTypeBadge type={displayPlan.day_type} />}
