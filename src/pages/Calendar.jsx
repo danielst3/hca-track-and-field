@@ -213,6 +213,19 @@ export default function Calendar() {
 
   const selectedPlan = selectedDay ? getPlanForDate(selectedDay) : null;
   const selectedMeet = selectedDay ? getMeetForDate(selectedDay) : null;
+  const selectedDayStr = selectedDay ? format(selectedDay, "yyyy-MM-dd") : null;
+
+  const { data: athleteOverride } = useQuery({
+    queryKey: ["athlete-plan-overrides", selectedDayStr, user?.email],
+    queryFn: async () => {
+      const overrides = await base44.entities.AthletePlanOverride.filter({
+        athlete_email: user.email,
+        date: selectedDayStr,
+      });
+      return overrides[0] || null;
+    },
+    enabled: !!user && (user.role === "user" || user.role === "parent") && !!selectedDayStr,
+  });
 
   const days = getDaysToShow();
 
