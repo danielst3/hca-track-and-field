@@ -306,110 +306,82 @@ export default function Today() {
         </div>
 
         {/* Three Event Columns */}
-        {(() => {
-          const displayPlan = dailyPlan ? {
-            ...dailyPlan,
-            shot_text: athleteOverride?.shot_text || dailyPlan.shot_text,
-            discus_text: athleteOverride?.discus_text || dailyPlan.discus_text,
-            javelin_text: athleteOverride?.javelin_text || dailyPlan.javelin_text,
-            coach_notes: athleteOverride?.coach_notes || dailyPlan.coach_notes,
-          } : null;
-          return null;
-        })()}
-        {(() => {
-          const displayPlan = dailyPlan ? {
-            ...dailyPlan,
-            shot_text: athleteOverride?.shot_text || dailyPlan.shot_text,
-            discus_text: athleteOverride?.discus_text || dailyPlan.discus_text,
-            javelin_text: athleteOverride?.javelin_text || dailyPlan.javelin_text,
-            coach_notes: athleteOverride?.coach_notes || dailyPlan.coach_notes,
-          } : null;
-          return null;
-        })()}
         {athleteOverride && (
           <div className="flex items-center gap-2 text-orange-600 dark:text-orange-400 text-sm font-medium">
             <User className="w-4 h-4" />
             You have a personalized practice plan for today
           </div>
         )}
-        {dailyPlan ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Shot Put */}
-            {selectedEvents.includes("shot") && (
-              <Card className="border-amber-200 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-lg">
-                <CardHeader className="bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-gray-900 dark:to-gray-800 border-b border-amber-200 dark:border-gray-700">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-amber-900 dark:text-amber-300 flex items-center gap-2 select-none">
-                    <Circle className="w-5 h-5" /> Shot Put
-                    </CardTitle>
-                    {user && user.role !== "admin" && (
-                      <LogPerformanceForm event="shot" eventLabel="Shot" user={user} />
-                    )}
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <div className="prose prose-sm max-w-none">
-                    {dailyPlan.shot_text ? (
-                      <PracticePlanText text={dailyPlan.shot_text} />
-                    ) : (
-                      <p className="text-slate-500 dark:text-slate-400 italic">No plan for today</p>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Discus */}
-            {selectedEvents.includes("discus") && (
-              <Card className="border-cyan-200 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-lg">
-                <CardHeader className="bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 border-b border-cyan-200 dark:border-gray-700">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-cyan-900 dark:text-cyan-300 flex items-center gap-2 select-none">
-                     <Disc3 className="w-5 h-5" /> Discus
-                    </CardTitle>
-                    {user && user.role !== "admin" && (
-                      <LogPerformanceForm event="discus" eventLabel="Discus" user={user} />
-                    )}
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <div className="prose prose-sm max-w-none">
-                    {dailyPlan.discus_text ? (
-                      <PracticePlanText text={dailyPlan.discus_text} />
-                    ) : (
-                      <p className="text-slate-500 dark:text-slate-400 italic">No plan for today</p>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Javelin */}
-            {selectedEvents.includes("javelin") && (
-              <Card className="border-rose-200 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-lg">
-                <CardHeader className="bg-gradient-to-br from-rose-50 to-pink-50 dark:from-gray-900 dark:to-gray-800 border-b border-rose-200 dark:border-gray-700">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-rose-900 dark:text-rose-300 flex items-center gap-2 select-none">
-                     <Zap className="w-5 h-5" /> Javelin
-                    </CardTitle>
-                    {user && user.role !== "admin" && (
-                      <LogPerformanceForm event="javelin" eventLabel="Javelin" user={user} />
-                    )}
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <div className="prose prose-sm max-w-none">
-                    {dailyPlan.javelin_text ? (
-                      <PracticePlanText text={dailyPlan.javelin_text} />
-                    ) : (
-                      <p className="text-slate-500 dark:text-slate-400 italic">No plan for today</p>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-          </div>
-        ) : (
+        {dailyPlan ? (() => {
+          const dp = {
+            ...dailyPlan,
+            shot_text: athleteOverride?.shot_text || dailyPlan.shot_text,
+            discus_text: athleteOverride?.discus_text || dailyPlan.discus_text,
+            javelin_text: athleteOverride?.javelin_text || dailyPlan.javelin_text,
+            coach_notes: athleteOverride?.coach_notes || dailyPlan.coach_notes,
+          };
+          return (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {selectedEvents.includes("shot") && (
+                <Card className="border-amber-200 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-lg">
+                  <CardHeader className="bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-gray-900 dark:to-gray-800 border-b border-amber-200 dark:border-gray-700">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-amber-900 dark:text-amber-300 flex items-center gap-2 select-none">
+                        <Circle className="w-5 h-5" /> Shot Put
+                      </CardTitle>
+                      {user && user.role !== "admin" && (
+                        <LogPerformanceForm event="shot" eventLabel="Shot" user={user} />
+                      )}
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-4">
+                    <div className="prose prose-sm max-w-none">
+                      {dp.shot_text ? <PracticePlanText text={dp.shot_text} /> : <p className="text-slate-500 dark:text-slate-400 italic">No plan for today</p>}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+              {selectedEvents.includes("discus") && (
+                <Card className="border-cyan-200 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-lg">
+                  <CardHeader className="bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 border-b border-cyan-200 dark:border-gray-700">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-cyan-900 dark:text-cyan-300 flex items-center gap-2 select-none">
+                        <Disc3 className="w-5 h-5" /> Discus
+                      </CardTitle>
+                      {user && user.role !== "admin" && (
+                        <LogPerformanceForm event="discus" eventLabel="Discus" user={user} />
+                      )}
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-4">
+                    <div className="prose prose-sm max-w-none">
+                      {dp.discus_text ? <PracticePlanText text={dp.discus_text} /> : <p className="text-slate-500 dark:text-slate-400 italic">No plan for today</p>}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+              {selectedEvents.includes("javelin") && (
+                <Card className="border-rose-200 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-lg">
+                  <CardHeader className="bg-gradient-to-br from-rose-50 to-pink-50 dark:from-gray-900 dark:to-gray-800 border-b border-rose-200 dark:border-gray-700">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-rose-900 dark:text-rose-300 flex items-center gap-2 select-none">
+                        <Zap className="w-5 h-5" /> Javelin
+                      </CardTitle>
+                      {user && user.role !== "admin" && (
+                        <LogPerformanceForm event="javelin" eventLabel="Javelin" user={user} />
+                      )}
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-4">
+                    <div className="prose prose-sm max-w-none">
+                      {dp.javelin_text ? <PracticePlanText text={dp.javelin_text} /> : <p className="text-slate-500 dark:text-slate-400 italic">No plan for today</p>}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          );
+        })() : (
           <Card>
             <CardContent className="pt-6 text-center">
               <Calendar className="w-12 h-12 text-slate-300 mx-auto mb-3" />
