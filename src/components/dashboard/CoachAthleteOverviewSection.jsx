@@ -43,7 +43,7 @@ function AthleteEventPlan({ athlete, dailyPlan, override, selectedEvents = ["sho
 
       {expanded && (
         <div className="p-4 bg-white dark:bg-gray-900 grid grid-cols-1 md:grid-cols-3 gap-3">
-          {EVENTS.map(({ id, label, icon: Icon, borderClass, headerClass, titleClass, planKey }) => {
+          {EVENTS.filter(e => selectedEvents.includes(e.id)).map(({ id, label, icon: Icon, borderClass, headerClass, titleClass, planKey }) => {
             const isOverridden = !!override?.[planKey];
             const text = override?.[planKey] || dailyPlan?.[planKey];
             return (
