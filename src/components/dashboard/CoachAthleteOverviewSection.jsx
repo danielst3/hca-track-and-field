@@ -15,7 +15,7 @@ const EVENTS = [
   { id: "javelin", label: "Javelin", icon: Zap, borderClass: "border-rose-200 dark:border-rose-800", headerClass: "from-rose-50 to-pink-50 dark:from-gray-900 dark:to-gray-800", titleClass: "text-rose-900 dark:text-rose-300", planKey: "javelin_text" },
 ];
 
-function AthleteEventPlan({ athlete, dailyPlan, override }) {
+function AthleteEventPlan({ athlete, dailyPlan, override, selectedEvents = ["shot", "discus", "javelin"] }) {
   const [expanded, setExpanded] = useState(false);
 
   const hasAnyOverride = override?.shot_text || override?.discus_text || override?.javelin_text;
