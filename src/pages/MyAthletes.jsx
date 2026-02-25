@@ -41,6 +41,8 @@ export default function MyAthletes() {
     ? allUsers.filter(u => u.role === "user")
     : allUsers.filter(u => u.role === "user" && u.created_by === user?.email);
 
+  const selectedAthlete = assignedAthletes.find(a => a.id === selectedAthleteId);
+
   const { data: throwLogs = [] } = useQuery({
     queryKey: ["throwLogs", selectedAthleteId],
     queryFn: async () => {
