@@ -80,7 +80,7 @@ function AthleteEventPlan({ athlete, dailyPlan, override }) {
   );
 }
 
-export default function CoachAthleteOverviewSection({ date, dailyPlan }) {
+export default function CoachAthleteOverviewSection({ date, dailyPlan, selectedEvents = ["shot", "discus", "javelin"] }) {
   const [open, setOpen] = useState(false);
   const dateStr = format(date, "yyyy-MM-dd");
 
