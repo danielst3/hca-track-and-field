@@ -20,7 +20,7 @@ const DAY_TYPE_DESCRIPTIONS = {
   recovery: "recovery and light movement day — low intensity",
 };
 
-export default function AIPlanGenerator({ planData, date, onApplyGeneric }) {
+export default function AIPlanGenerator({ planData, date, onApplyGeneric = () => {} }) {
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState("generic");
   const [selectedAthlete, setSelectedAthlete] = useState("");
