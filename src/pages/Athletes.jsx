@@ -550,11 +550,12 @@ export default function Athletes() {
                            </DialogContent>
                          </Dialog>
                        </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-              {athletes.filter(a => !a.graduated).length === 0 && (
+                       </div>
+                       </CardContent>
+                       </Card>
+                       );
+                       })}
+                       {athletes.filter(a => !a.graduated).length === 0 && (
                 <Card className="dark:bg-gray-800 dark:border-gray-700">
                   <CardContent className="py-12 text-center">
                     <Users className="w-12 h-12 text-slate-400 dark:text-gray-500 mx-auto mb-3" />
