@@ -54,7 +54,13 @@ export default function DayDetailDialog({ date, plan, meet, open, onOpenChange, 
                 <AbbreviationsKey />
               </div>
             </div>
-            {plan && <DayTypeBadge type={plan.day_type} />}
+            {displayPlan && <DayTypeBadge type={displayPlan.day_type} />}
+            {displayPlan?._hasOverride && (
+              <div className="flex items-center gap-1.5 text-orange-600 dark:text-orange-400 text-xs font-medium">
+                <User className="w-3 h-3" />
+                Personalized plan active
+              </div>
+            )}
             {meet && (
               <div className="flex items-center gap-2 text-red-600 dark:text-red-400 font-semibold">
                 <Trophy className="w-4 h-4" />
