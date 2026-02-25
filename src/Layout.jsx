@@ -193,6 +193,12 @@ export default function Layout({ children, currentPageName }) {
   };
 
   const handleSwitchRole = (role) => {
+    // Only allow switching to roles the user actually has
+    const allowedRoles = getUserRoles(user);
+    if (!allowedRoles.includes(role)) {
+      toast.error("You don't have access to that role");
+      return;
+    }
     localStorage.setItem(`activeRole_${user.id}`, role);
     setUser(prev => ({ ...prev, role }));
     const roleLabel = role === "admin" ? "Admin" : role === "coach" ? "Coach" : role === "parent" ? "Parent" : "Athlete";
