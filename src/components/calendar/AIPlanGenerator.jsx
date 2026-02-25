@@ -163,7 +163,6 @@ Also return a JSON list of any drills/exercises you included that are NOT in the
 
       // Auto-create any new resources for drills not in the database
       if (result.new_resources && result.new_resources.length > 0) {
-        const existingResources = await base44.entities.Resource.list();
         const existingTitles = existingResources.map((r) => r.title.toLowerCase());
         const toCreate = result.new_resources.filter(
           (r) => r.title && r.content && !existingTitles.includes(r.title.toLowerCase())
