@@ -613,7 +613,7 @@ export default function Layout({ children, currentPageName }) {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="bg-black border-gray-800 dark:bg-black dark:border-gray-800">
-              {user.availableRoles.map(role => {
+              {user.availableRoles.filter(r => r === user.role || (user.user_role_preference && user.user_role_preference.split(",").includes(r))).map(role => {
                 const label = role === "admin" ? "Admin" : role === "coach" ? "Coach" : role === "parent" ? "Parent" : "Athlete";
                 const isActive = user.role === role;
                 return (
