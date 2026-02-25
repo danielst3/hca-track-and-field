@@ -15,6 +15,8 @@ import { MobileSelect } from "@/components/ui/mobile-select";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import CopyPlanDialog from "./CopyPlanDialog";
+import AIPlanGenerator from "./AIPlanGenerator";
+import AthleteOverridesSection from "./AthleteOverridesSection";
 
 export default function EditPlanDialog({ date, plan, meet, open, onOpenChange }) {
   const [planData, setPlanData] = useState({
