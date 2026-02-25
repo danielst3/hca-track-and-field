@@ -200,9 +200,9 @@ export default function Layout({ children, currentPageName }) {
       return;
     }
     localStorage.setItem(`activeRole_${user.id}`, role);
-    setUser(prev => ({ ...prev, role }));
     const roleLabel = role === "admin" ? "Admin" : role === "coach" ? "Coach" : role === "parent" ? "Parent" : "Athlete";
     toast.success(`Switched to ${roleLabel} view`);
+    window.location.reload();
   };
 
   const handleToggleParentView = async () => {
