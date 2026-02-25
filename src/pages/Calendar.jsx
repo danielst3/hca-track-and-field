@@ -373,6 +373,7 @@ export default function Calendar() {
           onEdit={handleEdit}
           isCoach={user?.role === "admin"}
           selectedEvents={selectedEvents}
+          athleteOverride={athleteOverride}
         />
 
         <EditPlanDialog
