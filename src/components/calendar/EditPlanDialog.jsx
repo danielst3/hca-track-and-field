@@ -298,6 +298,9 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
             </div>
           </div>
 
+          {/* Athlete-Specific Overrides */}
+          <AthleteOverridesSection date={date} activeSeason={activeSeasonObj} />
+
           {/* Meet Section */}
           <div className="space-y-4 p-4 bg-white dark:bg-gray-900 rounded-lg border border-red-300 dark:border-red-900">
             <h3 className="font-semibold text-lg text-red-700 dark:text-red-400">Meet Information</h3>
