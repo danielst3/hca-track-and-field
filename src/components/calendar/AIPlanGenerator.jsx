@@ -143,13 +143,7 @@ ${
       onApplyGeneric(update);
       toast.success("AI plan applied to form — review and save.");
     }
-
-    } catch (err) {
-      console.error("AI generation error:", err);
-      toast.error("AI generation failed: " + (err?.message || "Unknown error"));
-    } finally {
-      setGenerating(null);
-    }
+    setGenerating(null);
   };
 
   return (
