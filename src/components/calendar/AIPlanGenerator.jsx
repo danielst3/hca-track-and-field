@@ -138,16 +138,19 @@ ${
           date: dateStr,
         });
 
-        const overrideData = {
-          athlete_email: selectedAthlete,
-          date: dateStr,
-          ...Object.fromEntries(selectedEvents.map((ev) => [`${ev}_text`, result[`${ev}_text`] || ""])),
-        };
+        // Only update the fields for selected events — don't touch unselected event fields
+        const selectedEventFields = Object.fromEntries(
+          selectedEvents.map((ev) => [`${ev}_text`, result[`${ev}_text`] || ""])
+        );
 
         if (existing.length > 0) {
-          await base44.entities.AthletePlanOverride.update(existing[0].id, overrideData);
+          await base44.entities.AthletePlanOverride.update(existing[0].id, selectedEventFields);
         } else {
-          await base44.entities.AthletePlanOverride.create(overrideData);
+          await base44.entities.AthletePlanOverride.create({
+            athlete_email: selectedAthlete,
+            date: dateStr,
+            ...selectedEventFields,
+          });
         }
 
         // Invalidate override queries so AthleteOverridesSection and Today page refresh
