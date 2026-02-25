@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -25,7 +25,11 @@ export default function AIPlanGenerator({ planData, date, onApplyGeneric = () =>
   const [mode, setMode] = useState("generic");
   const [selectedAthlete, setSelectedAthlete] = useState("");
   const [focusNotes, setFocusNotes] = useState("");
-  const [generating, setGenerating] = useState(null);
+  const [generating, setGenerating] = useState(false);
+  // Selected events to generate for (toggleable)
+  const [selectedEvents, setSelectedEvents] = useState(["shot", "discus", "javelin"]);
+
+  const queryClient = useQueryClient();
 
   const { data: athletes = [] } = useQuery({
     queryKey: ["athletes-ai-generator"],
@@ -39,6 +43,12 @@ export default function AIPlanGenerator({ planData, date, onApplyGeneric = () =>
     enabled: open,
   });
 
+  const toggleEvent = (ev) => {
+    setSelectedEvents((prev) =>
+      prev.includes(ev) ? prev.filter((e) => e !== ev) : [...prev, ev]
+    );
+  };
+
   const getNextMeetInfo = () => {
     if (!date || !upcomingMeets.length) return null;
     const dateStr = format(date, "yyyy-MM-dd");
@@ -50,50 +60,57 @@ export default function AIPlanGenerator({ planData, date, onApplyGeneric = () =>
     return { name: future[0].name, daysAway: days };
   };
 
-  const handleGenerate = async (eventsArg) => {
-    const eventList = eventsArg === "all" ? ["shot", "discus", "javelin"] : [eventsArg];
-    setGenerating(eventsArg);
-    try {
-
-    let athleteContext = "";
-    if (mode === "athlete" && selectedAthlete) {
-      const athlete = athletes.find((a) => a.email === selectedAthlete);
-      const logs = await base44.entities.ThrowLog.filter({ athlete_email: selectedAthlete });
-      const sorted = logs.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-      athleteContext = `\n\nATHLETE DATA — ${athlete?.full_name || selectedAthlete}:\n`;
-      for (const ev of eventList) {
-        const evLogs = sorted.filter((l) => l.event === ev);
-        if (evLogs.length > 0) {
-          const pr = Math.max(...evLogs.map((l) => l.best_distance));
-          const recent = evLogs.slice(0, 5).map((l) => l.best_distance);
-          const trend =
-            recent.length > 1
-              ? recent[0] > recent[recent.length - 1]
-                ? "improving"
-                : recent[0] < recent[recent.length - 1]
-                ? "declining"
-                : "plateaued"
-              : "insufficient data";
-          athleteContext += `- ${EVENT_LABELS[ev]}: PR ${pr}ft | Last ${recent.length} sessions: [${recent.join(", ")}]ft | Trend: ${trend} | Total sessions: ${evLogs.length}\n`;
-        } else {
-          athleteContext += `- ${EVENT_LABELS[ev]}: No data yet (beginner or new to event)\n`;
-        }
-      }
+  const handleGenerate = async () => {
+    if (selectedEvents.length === 0) {
+      toast.error("Select at least one event to generate a plan for.");
+      return;
+    }
+    if (mode === "athlete" && !selectedAthlete) {
+      toast.error("Please select an athlete first.");
+      return;
     }
 
-    const nextMeet = getNextMeetInfo();
-    const meetContext = nextMeet
-      ? `\nUpcoming competition: "${nextMeet.name}" in ${nextMeet.daysAway} day${nextMeet.daysAway !== 1 ? "s" : ""}.`
-      : "\nNo upcoming meets scheduled.";
+    setGenerating(true);
+    try {
+      let athleteContext = "";
+      if (mode === "athlete" && selectedAthlete) {
+        const athlete = athletes.find((a) => a.email === selectedAthlete);
+        const logs = await base44.entities.ThrowLog.filter({ athlete_email: selectedAthlete });
+        const sorted = logs.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    const dayDesc = DAY_TYPE_DESCRIPTIONS[planData?.day_type] || planData?.day_type || "training";
+        athleteContext = `\n\nATHLETE DATA — ${athlete?.full_name || selectedAthlete}:\n`;
+        for (const ev of selectedEvents) {
+          const evLogs = sorted.filter((l) => l.event === ev);
+          if (evLogs.length > 0) {
+            const pr = Math.max(...evLogs.map((l) => l.best_distance));
+            const recent = evLogs.slice(0, 5).map((l) => l.best_distance);
+            const trend =
+              recent.length > 1
+                ? recent[0] > recent[recent.length - 1]
+                  ? "improving"
+                  : recent[0] < recent[recent.length - 1]
+                  ? "declining"
+                  : "plateaued"
+                : "insufficient data";
+            athleteContext += `- ${EVENT_LABELS[ev]}: PR ${pr}ft | Last ${recent.length} sessions: [${recent.join(", ")}]ft | Trend: ${trend} | Total sessions: ${evLogs.length}\n`;
+          } else {
+            athleteContext += `- ${EVENT_LABELS[ev]}: No data yet (beginner or new to event)\n`;
+          }
+        }
+      }
 
-    const prompt = `You are an expert high school track and field throws coach. Generate a specific and practical ${dayDesc} practice plan.
+      const nextMeet = getNextMeetInfo();
+      const meetContext = nextMeet
+        ? `\nUpcoming competition: "${nextMeet.name}" in ${nextMeet.daysAway} day${nextMeet.daysAway !== 1 ? "s" : ""}.`
+        : "\nNo upcoming meets scheduled.";
+
+      const dayDesc = DAY_TYPE_DESCRIPTIONS[planData?.day_type] || planData?.day_type || "training";
+
+      const prompt = `You are an expert high school track and field throws coach. Generate a specific and practical ${dayDesc} practice plan.
 ${meetContext}${athleteContext}
 ${focusNotes ? `\nCoach's additional focus: ${focusNotes}` : ""}
 
-Generate a practice plan for: ${eventList.map((e) => EVENT_LABELS[e]).join(", ")}.
+Generate a practice plan for: ${selectedEvents.map((e) => EVENT_LABELS[e]).join(", ")}.
 
 For each event, provide:
 - A 1-line theme for the session
@@ -107,43 +124,52 @@ ${
     : "Create a plan appropriate for the full team at a high school throws program."
 }`;
 
-    const schema = {
-      type: "object",
-      properties: Object.fromEntries(eventList.map((ev) => [`${ev}_text`, { type: "string" }])),
-    };
-
-    const result = await base44.integrations.Core.InvokeLLM({ prompt, response_json_schema: schema });
-
-    if (mode === "athlete" && selectedAthlete) {
-      const dateStr = format(date, "yyyy-MM-dd");
-      const existing = await base44.entities.AthletePlanOverride.filter({
-        athlete_email: selectedAthlete,
-        date: dateStr,
-      });
-
-      const overrideData = {
-        athlete_email: selectedAthlete,
-        date: dateStr,
-        ...Object.fromEntries(eventList.map((ev) => [`${ev}_text`, result[`${ev}_text`] || ""])),
+      const schema = {
+        type: "object",
+        properties: Object.fromEntries(selectedEvents.map((ev) => [`${ev}_text`, { type: "string" }])),
       };
 
-      if (existing.length > 0) {
-        await base44.entities.AthletePlanOverride.update(existing[0].id, overrideData);
-      } else {
-        await base44.entities.AthletePlanOverride.create(overrideData);
-      }
+      const result = await base44.integrations.Core.InvokeLLM({ prompt, response_json_schema: schema });
 
-      const athleteName = athletes.find((a) => a.email === selectedAthlete)?.full_name || selectedAthlete;
-      toast.success(`Athlete-specific plan saved for ${athleteName}!`);
-    } else {
-      const update = {};
-      for (const ev of eventList) {
-        if (result[`${ev}_text`]) update[`${ev}_text`] = result[`${ev}_text`];
+      if (mode === "athlete" && selectedAthlete) {
+        const dateStr = format(date, "yyyy-MM-dd");
+        const existing = await base44.entities.AthletePlanOverride.filter({
+          athlete_email: selectedAthlete,
+          date: dateStr,
+        });
+
+        const overrideData = {
+          athlete_email: selectedAthlete,
+          date: dateStr,
+          ...Object.fromEntries(selectedEvents.map((ev) => [`${ev}_text`, result[`${ev}_text`] || ""])),
+        };
+
+        if (existing.length > 0) {
+          await base44.entities.AthletePlanOverride.update(existing[0].id, overrideData);
+        } else {
+          await base44.entities.AthletePlanOverride.create(overrideData);
+        }
+
+        // Invalidate override queries so AthleteOverridesSection and Today page refresh
+        queryClient.invalidateQueries({ queryKey: ["athlete-overrides-section"] });
+        queryClient.invalidateQueries({ queryKey: ["athlete-plan-overrides"] });
+
+        const athleteName = athletes.find((a) => a.email === selectedAthlete)?.full_name || selectedAthlete;
+        toast.success(`Athlete-specific plan saved for ${athleteName}!`);
+      } else {
+        const update = {};
+        for (const ev of selectedEvents) {
+          if (result[`${ev}_text`]) update[`${ev}_text`] = result[`${ev}_text`];
+        }
+        onApplyGeneric(update);
+        toast.success("AI plan applied to form — review and save.");
       }
-      onApplyGeneric(update);
-      toast.success("AI plan applied to form — review and save.");
+    } catch (err) {
+      console.error("AI generation error:", err);
+      toast.error("AI generation failed: " + (err?.message || "Unknown error"));
+    } finally {
+      setGenerating(false);
     }
-    setGenerating(null);
   };
 
   return (
@@ -207,6 +233,30 @@ ${
             </div>
           )}
 
+          {/* Event Toggles */}
+          <div className="space-y-1">
+            <Label className="text-sm dark:text-gray-300">Events to generate</Label>
+            <div className="flex gap-2">
+              {["shot", "discus", "javelin"].map((ev) => {
+                const active = selectedEvents.includes(ev);
+                return (
+                  <button
+                    key={ev}
+                    type="button"
+                    onClick={() => toggleEvent(ev)}
+                    className={`flex-1 py-2 px-3 rounded-lg border text-xs font-medium transition-colors ${
+                      active
+                        ? "bg-purple-600 text-white border-purple-600"
+                        : "bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-600 line-through opacity-60"
+                    }`}
+                  >
+                    {EVENT_LABELS[ev]}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Focus Notes */}
           <div className="space-y-1">
             <Label className="text-sm dark:text-gray-300">Focus / Context (optional)</Label>
@@ -219,37 +269,25 @@ ${
             />
           </div>
 
-          {/* Generate Buttons */}
-          <div className="flex flex-wrap gap-2">
-            {["shot", "discus", "javelin"].map((ev) => (
-              <Button
-                key={ev}
-                type="button"
-                size="sm"
-                variant="outline"
-                disabled={!!generating || (mode === "athlete" && !selectedAthlete)}
-                onClick={() => handleGenerate(ev)}
-                className="border-purple-300 text-purple-700 hover:bg-purple-50 dark:border-purple-700 dark:text-purple-300 dark:hover:bg-purple-950/30 text-xs"
-              >
-                {generating === ev && <Loader2 className="w-3 h-3 animate-spin mr-1" />}
-                {EVENT_LABELS[ev]}
-              </Button>
-            ))}
-            <Button
-              type="button"
-              size="sm"
-              disabled={!!generating || (mode === "athlete" && !selectedAthlete)}
-              onClick={() => handleGenerate("all")}
-              className="bg-purple-600 hover:bg-purple-700 text-white text-xs"
-            >
-              {generating === "all" ? (
-                <Loader2 className="w-3 h-3 animate-spin mr-1" />
-              ) : (
-                <Sparkles className="w-3 h-3 mr-1" />
-              )}
-              Generate All
-            </Button>
-          </div>
+          {/* Generate Button */}
+          <Button
+            type="button"
+            disabled={generating || selectedEvents.length === 0 || (mode === "athlete" && !selectedAthlete)}
+            onClick={handleGenerate}
+            className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+          >
+            {generating ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                Generating...
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-4 h-4 mr-2" />
+                Generate Plan
+              </>
+            )}
+          </Button>
 
           <p className="text-xs text-gray-500 dark:text-gray-400">
             {mode === "generic"
