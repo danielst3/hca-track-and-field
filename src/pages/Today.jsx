@@ -323,14 +323,18 @@ export default function Today() {
             javelin_text: athleteOverride?.javelin_text || dailyPlan.javelin_text,
             coach_notes: athleteOverride?.coach_notes || dailyPlan.coach_notes,
           };
+          const shotOverridden = !!athleteOverride?.shot_text;
+          const discusOverridden = !!athleteOverride?.discus_text;
+          const javelinOverridden = !!athleteOverride?.javelin_text;
           return (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {selectedEvents.includes("shot") && (
-                <Card className="border-amber-200 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-lg">
+                <Card className={cn("bg-white dark:bg-gray-800 shadow-lg", shotOverridden ? "border-2 border-orange-400 dark:border-orange-500" : "border-amber-200 dark:border-gray-700")}>
                   <CardHeader className="bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-gray-900 dark:to-gray-800 border-b border-amber-200 dark:border-gray-700">
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-amber-900 dark:text-amber-300 flex items-center gap-2 select-none">
                         <Circle className="w-5 h-5" /> Shot Put
+                        {shotOverridden && <span className="text-xs font-normal text-orange-500 bg-orange-100 dark:bg-orange-900/40 px-1.5 py-0.5 rounded">Personalized</span>}
                       </CardTitle>
                       {user && user.role !== "admin" && (
                         <LogPerformanceForm event="shot" eventLabel="Shot" user={user} />
@@ -345,11 +349,12 @@ export default function Today() {
                 </Card>
               )}
               {selectedEvents.includes("discus") && (
-                <Card className="border-cyan-200 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-lg">
+                <Card className={cn("bg-white dark:bg-gray-800 shadow-lg", discusOverridden ? "border-2 border-orange-400 dark:border-orange-500" : "border-cyan-200 dark:border-gray-700")}>
                   <CardHeader className="bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 border-b border-cyan-200 dark:border-gray-700">
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-cyan-900 dark:text-cyan-300 flex items-center gap-2 select-none">
                         <Disc3 className="w-5 h-5" /> Discus
+                        {discusOverridden && <span className="text-xs font-normal text-orange-500 bg-orange-100 dark:bg-orange-900/40 px-1.5 py-0.5 rounded">Personalized</span>}
                       </CardTitle>
                       {user && user.role !== "admin" && (
                         <LogPerformanceForm event="discus" eventLabel="Discus" user={user} />
@@ -364,11 +369,12 @@ export default function Today() {
                 </Card>
               )}
               {selectedEvents.includes("javelin") && (
-                <Card className="border-rose-200 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-lg">
+                <Card className={cn("bg-white dark:bg-gray-800 shadow-lg", javelinOverridden ? "border-2 border-orange-400 dark:border-orange-500" : "border-rose-200 dark:border-gray-700")}>
                   <CardHeader className="bg-gradient-to-br from-rose-50 to-pink-50 dark:from-gray-900 dark:to-gray-800 border-b border-rose-200 dark:border-gray-700">
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-rose-900 dark:text-rose-300 flex items-center gap-2 select-none">
                         <Zap className="w-5 h-5" /> Javelin
+                        {javelinOverridden && <span className="text-xs font-normal text-orange-500 bg-orange-100 dark:bg-orange-900/40 px-1.5 py-0.5 rounded">Personalized</span>}
                       </CardTitle>
                       {user && user.role !== "admin" && (
                         <LogPerformanceForm event="javelin" eventLabel="Javelin" user={user} />
