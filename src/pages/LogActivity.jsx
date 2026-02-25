@@ -52,8 +52,9 @@ export default function LogActivity() {
     queryKey: ["athletes"],
     queryFn: async () => {
       if (!isCoach) return [];
-      const allUsers = await base44.entities.User.filter({ role: "user" });
-      return allUsers.sort((a, b) => {
+      const allUsers = await base44.entities.User.list();
+      const athleteUsers = allUsers.filter(u => u.role === "user" || (u.user_role_preference && u.user_role_preference.includes("user")));
+      return athleteUsers.sort((a, b) => {
         const nameA = (a.first_name && a.last_name) ? `${a.first_name} ${a.last_name}` : a.full_name;
         const nameB = (b.first_name && b.last_name) ? `${b.first_name} ${b.last_name}` : b.full_name;
         return nameA.localeCompare(nameB);

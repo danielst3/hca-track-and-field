@@ -47,7 +47,10 @@ export default function Athletes() {
 
   const { data: athletes = [] } = useQuery({
     queryKey: ["athletes"],
-    queryFn: () => base44.entities.User.list(),
+    queryFn: async () => {
+      const allUsers = await base44.entities.User.list();
+      return allUsers;
+    },
   });
 
   const { data: pendingInvitations = [] } = useQuery({
