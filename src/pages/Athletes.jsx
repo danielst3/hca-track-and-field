@@ -393,6 +393,7 @@ export default function Athletes() {
                 const isParent = roles.includes("parent");
                 const roleLabel = isCoachOrAdmin ? (roles.includes("admin") ? "Admin" : "Coach") : isParent ? "Parent" : "Athlete";
                 return (
+                return (
                 <Card key={athlete.id} className="hover:shadow-lg transition-shadow dark:bg-gray-800 dark:border-gray-700">
                   <CardContent className="p-4">
                     <div className="flex flex-col gap-3">
@@ -401,16 +402,21 @@ export default function Athletes() {
                         className="flex items-center justify-between cursor-pointer"
                       >
                         <div>
-                          <p className="font-semibold text-slate-900 dark:text-gray-100">
-                            {athlete.first_name && athlete.last_name ? `${athlete.first_name} ${athlete.last_name}` : athlete.full_name}
-                          </p>
+                          <div className="flex items-center gap-2">
+                            <p className="font-semibold text-slate-900 dark:text-gray-100">
+                              {athlete.first_name && athlete.last_name ? `${athlete.first_name} ${athlete.last_name}` : athlete.full_name}
+                            </p>
+                            <Badge variant="outline" className="text-xs dark:border-gray-600 dark:text-gray-300">
+                              {roleLabel}
+                            </Badge>
+                          </div>
                           <p className="text-sm text-slate-600 dark:text-gray-400">{athlete.email}</p>
-                          {athlete.grade && (
+                          {athlete.grade && isAthlete && (
                             <Badge variant="outline" className="mt-2 text-xs capitalize dark:border-gray-600 dark:text-gray-300">
                               {athlete.grade}
                             </Badge>
                           )}
-                          {athlete.events && athlete.events.length > 0 && (
+                          {athlete.events && athlete.events.length > 0 && isAthlete && (
                             <div className="flex gap-1 mt-2 flex-wrap">
                               {athlete.events.map((evt) => (
                                 <Badge
@@ -426,7 +432,7 @@ export default function Athletes() {
                         <ChevronRight className="w-5 h-5 text-slate-500 dark:text-gray-400" />
                       </Link>
                       <div className="flex gap-2 items-center flex-wrap">
-                        {(athlete.role === "user" || athlete.user_role_preference?.includes("user")) && (
+                        {isAthlete && (
                           <Button
                             variant="outline"
                             onClick={() => handleOpenAssignParent(athlete)}
