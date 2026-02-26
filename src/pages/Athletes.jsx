@@ -21,7 +21,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
 export default function Athletes() {
-  const [user, setUser] = useState(null);
+  const { activeView, user, allowed } = useViewGuard("Athletes");
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState("user");
   const [inviteOpen, setInviteOpen] = useState(false);
