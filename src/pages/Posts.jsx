@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useViewGuard } from "../components/shared/useViewGuard";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,12 +11,11 @@ import { Badge } from "@/components/ui/badge";
 import { FileText, Link as LinkIcon, Upload, Plus, ExternalLink, MoreVertical, Pencil, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import EventToggle from "../components/shared/EventToggle";
-import { useViewGuard } from "../components/shared/useViewGuard";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 export default function Posts() {
-  const { activeView, user, allowed } = useViewGuard("Posts");
+  const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
   const [editPost, setEditPost] = useState(null);
   const [deletePostId, setDeletePostId] = useState(null);
@@ -33,17 +33,29 @@ export default function Posts() {
   });
 
   useEffect(() => {
-    if (!user) return;
-    if (user?.event_types && user.event_types.length > 0) {
-      setEventOptions(user.event_types.map(e => ({ id: e.id, label: e.label, icon: e.icon || "🎯" })));
-    } else {
-      setEventOptions([
-        { id: "shot", label: "Shot Put", icon: "🏋️" },
-        { id: "discus", label: "Discus", icon: "🥏" },
-        { id: "javelin", label: "Javelin", icon: "🎯" }
-      ]);
-    }
-  }, [user]);
+    const fetchUser = async () => {
+      const currentUser = await base44.auth.me();
+      setUser(currentUser);
+      
+      // Build event options from user's event_types
+      if (currentUser?.event_types && currentUser.event_types.length > 0) {
+        const options = currentUser.event_types.map(event => ({
+          id: event.id,
+          label: event.label,
+          icon: event.icon || "🎯"
+        }));
+        setEventOptions(options);
+      } else {
+        // Fallback to default events
+        setEventOptions([
+          { id: "shot", label: "Shot Put", icon: "🏋️" },
+          { id: "discus", label: "Discus", icon: "🥏" },
+          { id: "javelin", label: "Javelin", icon: "🎯" }
+        ]);
+      }
+    };
+    fetchUser();
+  }, []);
 
   const { data: posts = [], isLoading } = useQuery({
     queryKey: ["posts"],
@@ -148,9 +160,7 @@ export default function Posts() {
     return url && (url.includes("youtube.com") || url.includes("youtu.be"));
   };
 
-  const canCreatePost = activeView === "admin" || activeView === "coach";
-
-  if (!allowed || isLoading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-50 dark:bg-[#111] p-4 flex items-center justify-center">
         <div className="text-center">
@@ -170,7 +180,7 @@ export default function Posts() {
             <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100">Posts</h1>
             <p className="text-slate-600 dark:text-gray-300 mt-1">Team updates and announcements</p>
           </div>
-          {canCreatePost && (
+          {user?.role === "admin" && (
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
                 <Button className="bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600">
@@ -364,7 +374,7 @@ export default function Posts() {
                         </div>
                       )}
                     </div>
-                    {canCreatePost && (user?.role === "admin" || user?.email === post.created_by) && (
+                    {(user?.role === "admin" || user?.email === post.created_by) && (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400">
