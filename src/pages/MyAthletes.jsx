@@ -33,11 +33,11 @@ export default function MyAthletes() {
     enabled: !!user,
   });
 
-  // For parents: filter athletes by created_by match. For coaches: show all athletes.
+  // For parents: filter athletes by assigned_athletes IDs on the parent. For coaches: show all athletes.
   const isCoach = user?.activeViewRole === "admin" || user?.activeViewRole === "coach";
-  const assignedAthletes = isCoach 
+  const assignedAthletes = isCoach
     ? allUsers.filter(u => u.role === "user")
-    : allUsers.filter(u => u.role === "user" && u.created_by === user?.email);
+    : allUsers.filter(u => u.role === "user" && user?.assigned_athletes?.includes(u.id));
 
   // Set initial selected athlete from first available
   useEffect(() => {
