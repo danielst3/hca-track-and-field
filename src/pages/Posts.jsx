@@ -15,7 +15,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 export default function Posts() {
-  const [user, setUser] = useState(null);
+  const { activeView, user, allowed } = useViewGuard("Posts");
   const [open, setOpen] = useState(false);
   const [editPost, setEditPost] = useState(null);
   const [deletePostId, setDeletePostId] = useState(null);
