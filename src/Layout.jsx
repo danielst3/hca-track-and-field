@@ -396,7 +396,7 @@ export default function Layout({ children, currentPageName }) {
         { name: "Athletes", icon: Users, page: "Athletes" },
         { name: "Seasons", icon: Trophy, page: "Seasons" },
       ]
-    : activeRole === "parent"
+    : activeViewRole === "parent"
     ? [
         { name: "Today", icon: Home, page: "Today" },
         { name: "Calendar", icon: Calendar, page: "Calendar" },
