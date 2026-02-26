@@ -324,6 +324,23 @@ export default function Posts() {
                         </div>
                       )}
                     </div>
+                    {(user?.role === "admin" || user?.email === post.created_by) && (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400">
+                            <MoreVertical className="w-4 h-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="dark:bg-gray-800 dark:border-gray-700">
+                          <DropdownMenuItem onClick={() => handleEdit(post)} className="dark:text-gray-200 dark:hover:bg-gray-700">
+                            <Pencil className="w-4 h-4 mr-2" /> Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => setDeletePostId(post.id)} className="text-red-600 dark:text-red-400 dark:hover:bg-gray-700">
+                            <Trash2 className="w-4 h-4 mr-2" /> Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    )}
                   </div>
                 </CardHeader>
                 <CardContent className="pt-4">
