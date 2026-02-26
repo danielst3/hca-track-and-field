@@ -148,7 +148,9 @@ export default function Posts() {
     return url && (url.includes("youtube.com") || url.includes("youtu.be"));
   };
 
-  if (isLoading) {
+  const canCreatePost = activeView === "admin" || activeView === "coach";
+
+  if (!allowed || isLoading) {
     return (
       <div className="min-h-screen bg-slate-50 dark:bg-[#111] p-4 flex items-center justify-center">
         <div className="text-center">
