@@ -419,9 +419,9 @@ export default function Layout({ children, currentPageName }) {
     );
   }
 
-  // Nav items are driven by the active role, respecting the switched role
-  const activeRole = user?.role;
-  const navItems = (activeRole === "admin" || activeRole === "coach" || user?.realRole === "admin" || user?.realRole === "coach") && !user?.isImpersonating
+  // activeViewRole = UX selection; user.role = real security role (unchanged)
+  const activeViewRole = user?.isImpersonating ? user?.role : (user?.activeViewRole ?? user?.role);
+  const navItems = (activeViewRole === "admin" || activeViewRole === "coach" || user?.realRole === "admin" || user?.realRole === "coach") && !user?.isImpersonating
     ? [
         { name: "Today", icon: Home, page: "Today" },
         { name: "Calendar", icon: Calendar, page: "Calendar" },
