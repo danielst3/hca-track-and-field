@@ -458,8 +458,16 @@ export default function Layout({ children, currentPageName }) {
     );
   }
 
-  // Nav items are driven by the active role, respecting the switched role
+  // Route guard: if current page is not allowed for activeRole, redirect
   const activeRole = user?.role;
+  const allowedPages = ROLE_PAGES[activeRole] || ROLE_PAGES["user"];
+  if (!UNIVERSAL_PAGES.includes(currentPageName) && !allowedPages.includes(currentPageName)) {
+    const landing = DEFAULT_PAGE[activeRole] || "Today";
+    window.location.replace(createPageUrl(landing));
+    return null;
+  }
+
+  // Nav items are driven by the active role, respecting the switched role
   const navItems = (activeRole === "admin" || activeRole === "coach" || user?.realRole === "admin" || user?.realRole === "coach") && !user?.isImpersonating
     ? [
         { name: "Today", icon: Home, page: "Today" },
