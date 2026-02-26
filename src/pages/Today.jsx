@@ -172,7 +172,7 @@ export default function Today() {
     );
   };
 
-  if (planLoading) {
+  if (roleLoading || !user) {
     return (
       <div className="min-h-screen bg-[#111] dark:bg-[#111] p-4 flex items-center justify-center">
         <div className="text-center">
