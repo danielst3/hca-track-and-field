@@ -45,7 +45,7 @@ export default function LogActivity() {
   }, [user, isCoach]);
 
   const { data: athletes = [] } = useQuery({
-    queryKey: ["athletes", isCoach],
+    queryKey: ["athletes", activeViewRole],
     queryFn: async () => {
       if (!isCoach) return [];
       const res = await base44.functions.invoke("getAthletes");
