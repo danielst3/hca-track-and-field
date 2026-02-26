@@ -379,17 +379,16 @@ export default function Layout({ children, currentPageName }) {
     );
   }
 
-  // Route guard: if current page is not allowed for activeRole, redirect
-  const activeRole = user?.role;
-  const allowedPages = ROLE_PAGES[activeRole] || ROLE_PAGES["user"];
-  if (!UNIVERSAL_PAGES.includes(currentPageName) && !allowedPages.includes(currentPageName)) {
-    const landing = DEFAULT_PAGE[activeRole] || "Today";
+  // Route guard: if current page is not allowed for activeViewRole, redirect immediately
+  const allowedRoles = pageAccessConfig[currentPageName];
+  if (allowedRoles && !allowedRoles.includes(activeViewRole)) {
+    const landing = landingPageByRole[activeViewRole] || "Today";
     window.location.replace(createPageUrl(landing));
     return null;
   }
 
-  // Nav items are driven purely by activeRole (viewMode)
-  const navItems = (activeRole === "admin" || activeRole === "coach") && !user?.isImpersonating
+  // Nav items are driven purely by activeViewRole
+  const navItems = (activeViewRole === "admin" || activeViewRole === "coach") && !user?.isImpersonating
     ? [
         { name: "Today", icon: Home, page: "Today" },
         { name: "Calendar", icon: Calendar, page: "Calendar" },
