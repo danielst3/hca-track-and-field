@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
-import { useRoleContext } from "@/components/shared/useRoleContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DayTypeBadge from "../components/shared/DayTypeBadge";
 import AbbreviationsKey from "../components/shared/AbbreviationsKey.jsx";
@@ -30,28 +29,45 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 
 export default function Today() {
-  const { user, activeViewRole, isLoading: roleLoading } = useRoleContext();
+  const [user, setUser] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedEvents, setSelectedEvents] = useState(["shot", "discus", "javelin"]);
   const [eventOptions, setEventOptions] = useState([]);
   const dateStr = format(selectedDate, "yyyy-MM-dd");
 
   useEffect(() => {
-    if (!user) return;
-    // Build event options from user's event_types
-    if (user?.event_types && user.event_types.length > 0) {
-      setEventOptions(user.event_types.map(e => ({ id: e.id, label: e.label })));
-    } else {
-      setEventOptions([
-        { id: "shot", label: "Shot Put" },
-        { id: "discus", label: "Discus" },
-        { id: "javelin", label: "Javelin" }
-      ]);
-    }
-    if (user?.default_events && user.default_events.length > 0) {
-      setSelectedEvents(user.default_events);
-    }
-  }, [user?.id]);
+    const fetchUser = async () => {
+      const currentUser = await base44.auth.me();
+      const impersonating = localStorage.getItem("impersonating");
+      const savedRole = localStorage.getItem(`activeRole_${currentUser.id}`);
+      const effectiveRole = savedRole || currentUser.role;
+      const effectiveUser = (impersonating && (currentUser?.role === "admin" || effectiveRole === "admin"))
+        ? { ...currentUser, ...JSON.parse(impersonating), isImpersonating: true, realRole: currentUser.role, role: effectiveRole }
+        : { ...currentUser, role: effectiveRole };
+      setUser(effectiveUser);
+      
+      // Build event options from user's event_types
+      if (currentUser?.event_types && currentUser.event_types.length > 0) {
+        const options = currentUser.event_types.map(event => ({
+          id: event.id,
+          label: event.label,
+        }));
+        setEventOptions(options);
+      } else {
+        // Fallback to default events
+        setEventOptions([
+          { id: "shot", label: "Shot Put" },
+          { id: "discus", label: "Discus" },
+          { id: "javelin", label: "Javelin" }
+        ]);
+      }
+      
+      if (currentUser?.default_events && currentUser.default_events.length > 0) {
+        setSelectedEvents(currentUser.default_events);
+      }
+    };
+    fetchUser();
+  }, []);
 
   const { data: activeSeason } = useQuery({
     queryKey: ["activeSeason"],
@@ -88,9 +104,9 @@ export default function Today() {
   });
 
   const { data: nextMeet } = useQuery({
-    queryKey: ["nextMeet", activeSeason?.id, activeViewRole],
+    queryKey: ["nextMeet", activeSeason?.id, user?.role],
     queryFn: async () => {
-      if (!activeSeason || activeViewRole === "admin") return null;
+      if (!activeSeason || user?.role === "admin") return null;
       const today = format(new Date(), "yyyy-MM-dd");
       const meets = await base44.entities.Meet.filter({
         season_id: activeSeason.id
@@ -98,7 +114,7 @@ export default function Today() {
       const future = meets.filter(m => m.date >= today).sort((a, b) => new Date(a.date) - new Date(b.date));
       return future[0] || null;
     },
-    enabled: !!activeSeason && !!user && activeViewRole !== "admin",
+    enabled: !!activeSeason && !!user && user.role !== "admin",
   });
 
   const { data: recentPosts = [] } = useQuery({
@@ -126,15 +142,15 @@ export default function Today() {
   });
 
   const { data: throwLogs } = useQuery({
-    queryKey: ["throwLogs", user?.email, activeViewRole],
+    queryKey: ["throwLogs", user?.email],
     queryFn: async () => {
-      if (!user || activeViewRole === "admin") return [];
+      if (!user || user.role === "admin") return [];
       const logs = await base44.entities.ThrowLog.filter({ 
         athlete_email: user.email 
       });
       return logs.sort((a, b) => new Date(a.date) - new Date(b.date));
     },
-    enabled: !!user && activeViewRole !== "admin",
+    enabled: !!user && user.role !== "admin",
   });
 
   const getEventData = (event) => {
@@ -172,7 +188,7 @@ export default function Today() {
     );
   };
 
-  if (roleLoading || !user) {
+  if (planLoading) {
     return (
       <div className="min-h-screen bg-[#111] dark:bg-[#111] p-4 flex items-center justify-center">
         <div className="text-center">
@@ -183,14 +199,12 @@ export default function Today() {
     );
   }
 
-  const isCoachOrAdmin = activeViewRole === "admin" || activeViewRole === "coach";
-
   return (
     <div className="min-h-screen bg-[var(--brand-secondary)] dark:bg-[#111] p-4 pb-20">
-      {user && !isCoachOrAdmin && <QuickLogButton user={user} />}
+      {user && user.role !== "admin" && <QuickLogButton user={user} />}
       <div className="max-w-7xl mx-auto space-y-4">
-        {/* Athlete Dashboard (only for athletes / parents viewing athlete data) */}
-        {user && !isCoachOrAdmin && isSameDay(selectedDate, new Date()) && (
+        {/* Athlete Dashboard (only for athletes) */}
+        {user && user.role !== "admin" && isSameDay(selectedDate, new Date()) && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div className="lg:col-span-2 space-y-4">
               {user.events && user.events.filter(e => selectedEvents.includes(e)).map(event => (
@@ -311,6 +325,7 @@ export default function Today() {
           </div>
         )}
         {dailyPlan ? (() => {
+          const isCoachOrAdmin = user?.role === "admin" || user?.role === "coach";
           const dp = isCoachOrAdmin ? dailyPlan : {
             ...dailyPlan,
             shot_text: athleteOverride?.shot_text || dailyPlan.shot_text,
@@ -395,7 +410,7 @@ export default function Today() {
         )}
 
         {/* Coach: Athlete Overrides Preview */}
-        {isCoachOrAdmin && dailyPlan && (
+        {(user?.role === "admin" || user?.role === "coach") && dailyPlan && (
           <CoachAthleteOverviewSection date={selectedDate} dailyPlan={dailyPlan} selectedEvents={selectedEvents} />
         )}
 

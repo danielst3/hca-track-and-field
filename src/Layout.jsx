@@ -4,10 +4,9 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "./utils";
 import { Button } from "@/components/ui/button";
 import { Home, Calendar, Plus, LogOut, Trophy, TrendingUp, Users, BookOpen, FileText, Trash2, RefreshCw, ArrowLeft, Settings, Moon, Sun, MoreHorizontal, Download, Shield, MessageSquare } from "lucide-react";
+// Note: BookOpen, Shield, MessageSquare, Trophy kept for settings dropdown usage
 import { cn } from "@/lib/utils";
 import UniversalSearch from "./components/shared/UniversalSearch";
-import { useRoleContext, bustRoleCache } from "./components/shared/useRoleContext";
-import { pageAccessConfig, landingPageByRole, roleLabel as ROLE_LABELS } from "./components/shared/roleConfig";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
@@ -43,7 +42,8 @@ import {
 import { toast } from "sonner";
 
 export default function Layout({ children, currentPageName }) {
-  const { user, isLoading: loading, activeViewRole, roles, setActiveViewRole, primaryRole, roleLabelFor } = useRoleContext();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [pullDistance, setPullDistance] = useState(0);
@@ -143,17 +143,74 @@ export default function Layout({ children, currentPageName }) {
     };
   }, [currentPageName]);
 
+  const getActiveRole = (currentUser) => {
+    return localStorage.getItem(`activeRole_${currentUser.id}`) || currentUser.role;
+  };
 
+  const VALID_ROLES = ["admin", "coach", "user", "parent"];
+
+  const getUserRoles = (currentUser) => {
+    // The user's actual assigned role is the source of truth
+    const assignedRole = currentUser.role;
+    // user_role_preference can grant extra view modes, but only valid roles
+    if (!currentUser?.user_role_preference) return [assignedRole];
+    const prefRoles = currentUser.user_role_preference.split(",").filter(r => VALID_ROLES.includes(r));
+    // Always include the assigned role; only include other roles if explicitly in preferences
+    const allRoles = Array.from(new Set([assignedRole, ...prefRoles]));
+    return allRoles.length > 0 ? allRoles : [assignedRole];
+  };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const currentUser = await base44.auth.me();
+        const impersonating = localStorage.getItem("impersonating");
+        if (impersonating && currentUser?.role === "admin") {
+          const impersonatedUser = JSON.parse(impersonating);
+          setUser({ ...currentUser, ...impersonatedUser, isImpersonating: true, realRole: currentUser.role });
+        } else {
+          const roles = getUserRoles(currentUser);
+          if (roles.length > 1) {
+            const savedRole = getActiveRole(currentUser);
+            const activeRole = roles.includes(savedRole) ? savedRole : roles[0];
+            setUser({ ...currentUser, role: activeRole, availableRoles: roles });
+          } else {
+            setUser(currentUser);
+          }
+        }
+      } catch (error) {
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUser();
+  }, []);
 
   const handleStopImpersonating = () => {
     localStorage.removeItem("impersonating");
-    bustRoleCache();
     window.location.reload();
   };
 
   const handleSwitchRole = (role) => {
-    toast.success(`Switched to ${roleLabelFor(role)} view`);
-    setActiveViewRole(role); // handles persist + cache clear + redirect
+    const allowedRoles = user?.availableRoles || [];
+    if (!allowedRoles.includes(role)) {
+      toast.error("You don't have access to that role");
+      return;
+    }
+    localStorage.setItem(`activeRole_${user.id}`, role);
+    const roleLabel = role === "admin" ? "Admin" : role === "coach" ? "Coach" : role === "parent" ? "Parent" : "Athlete";
+    toast.success(`Switched to ${roleLabel} view`);
+    window.location.reload();
+  };
+
+  const handleToggleParentView = async () => {
+    try {
+      await base44.auth.updateMe({ view_as_parent: !user.view_as_parent });
+      window.location.reload();
+    } catch (error) {
+      toast.error("Failed to toggle view");
+    }
   };
 
   const handleLogout = () => {
@@ -379,16 +436,9 @@ export default function Layout({ children, currentPageName }) {
     );
   }
 
-  // Route guard: if current page is not allowed for activeViewRole, redirect immediately
-  const allowedRoles = pageAccessConfig[currentPageName];
-  if (allowedRoles && !allowedRoles.includes(activeViewRole)) {
-    const landing = landingPageByRole[activeViewRole] || "Today";
-    window.location.replace(createPageUrl(landing));
-    return null;
-  }
-
-  // Nav items are driven purely by activeViewRole
-  const navItems = (activeViewRole === "admin" || activeViewRole === "coach") && !user?.isImpersonating
+  // Nav items are driven by the active role, respecting the switched role
+  const activeRole = user?.role;
+  const navItems = (activeRole === "admin" || activeRole === "coach" || user?.realRole === "admin" || user?.realRole === "coach") && !user?.isImpersonating
     ? [
         { name: "Today", icon: Home, page: "Today" },
         { name: "Calendar", icon: Calendar, page: "Calendar" },
@@ -396,7 +446,7 @@ export default function Layout({ children, currentPageName }) {
         { name: "Athletes", icon: Users, page: "Athletes" },
         { name: "Seasons", icon: Trophy, page: "Seasons" },
       ]
-    : activeViewRole === "parent"
+    : activeRole === "parent"
     ? [
         { name: "Today", icon: Home, page: "Today" },
         { name: "Calendar", icon: Calendar, page: "Calendar" },
@@ -439,7 +489,7 @@ export default function Layout({ children, currentPageName }) {
                 {canGoBack ? "" : "HCA Chargers Track & Field"}
               </h1>
               <p className="text-xs text-gray-700 dark:text-gray-400">
-                    {(user.first_name && user.last_name) ? `${user.first_name} ${user.last_name}` : user.full_name} • {user.isImpersonating ? "Athlete (Viewing)" : roleLabelFor(activeViewRole)}
+                    {(user.first_name && user.last_name) ? `${user.first_name} ${user.last_name}` : user.full_name} • {user.isImpersonating ? "Athlete (Viewing)" : (user.role === "admin" ? "Admin" : user.role === "coach" ? "Coach" : user.role === "parent" ? "Parent" : "Athlete")}
               </p>
             </div>
           </div>
@@ -488,7 +538,7 @@ export default function Layout({ children, currentPageName }) {
                     <DropdownMenuSeparator className="dark:bg-gray-700" />
                   </>
                 )}
-                {(activeRole === "admin" || activeRole === "coach") && !user?.isImpersonating && (
+                {(user.role === "admin" || user.realRole === "admin") && (
                   <DropdownMenuSub>
                     <DropdownMenuSubTrigger className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none cursor-pointer">
                       <Users className="w-4 h-4 mr-2" />
@@ -558,20 +608,21 @@ export default function Layout({ children, currentPageName }) {
         </div>
       </div>
 
-      {/* Role Switcher Dropdown — shown when user has multiple view roles */}
-      {roles.length > 1 && !user?.isImpersonating && (
+      {/* Role Switcher Dropdown */}
+      {user?.availableRoles && user.availableRoles.length > 1 && (
         <div className="bg-[var(--brand-primary-dark)] dark:bg-black border-b border-[var(--brand-primary-darker)] dark:border-gray-800 px-4 py-1.5 flex items-center gap-2 select-none">
           <span className="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap">View as:</span>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="flex items-center gap-1.5 text-xs font-semibold text-white dark:text-gray-100 bg-white/10 dark:bg-gray-800 hover:bg-white/20 dark:hover:bg-gray-700 px-3 py-1 rounded-full transition-colors">
-                {roleLabelFor(activeViewRole)}
+                {user.role === "admin" ? "Admin" : user.role === "coach" ? "Coach" : user.role === "parent" ? "Parent" : "Athlete"}
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="bg-black border-gray-800 dark:bg-black dark:border-gray-800">
-              {roles.map(role => {
-                const isActive = activeViewRole === role;
+              {user.availableRoles.filter(r => r === user.role || (user.user_role_preference && user.user_role_preference.split(",").includes(r))).map(role => {
+                const label = role === "admin" ? "Admin" : role === "coach" ? "Coach" : role === "parent" ? "Parent" : "Athlete";
+                const isActive = user.role === role;
                 return (
                   <DropdownMenuItem
                     key={role}
@@ -583,7 +634,7 @@ export default function Layout({ children, currentPageName }) {
                         : "text-gray-400 hover:text-white hover:bg-gray-800"
                     )}
                   >
-                    {roleLabelFor(role)}
+                    {label}
                   </DropdownMenuItem>
                 );
               })}

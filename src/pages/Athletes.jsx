@@ -18,10 +18,9 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { useRoleContext } from "@/components/shared/useRoleContext";
 
 export default function Athletes() {
-  const { user, activeViewRole } = useRoleContext();
+  const [user, setUser] = useState(null);
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState("user");
   const [inviteOpen, setInviteOpen] = useState(false);
@@ -32,8 +31,22 @@ export default function Athletes() {
   const [editLastName, setEditLastName] = useState("");
   const queryClient = useQueryClient();
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      const currentUser = await base44.auth.me();
+      setUser(currentUser);
+      // Check the active role (may be switched via localStorage)
+      const savedRole = localStorage.getItem(`activeRole_${currentUser.id}`);
+      const effectiveRole = savedRole || currentUser.role;
+      if (effectiveRole !== "admin" && effectiveRole !== "coach") {
+        window.location.href = createPageUrl("Today");
+      }
+    };
+    fetchUser();
+  }, []);
+
   const { data: athletes = [] } = useQuery({
-    queryKey: ["athletes", activeViewRole],
+    queryKey: ["athletes"],
     queryFn: async () => {
       const res = await base44.functions.invoke("getAthletes");
       return res.data.users || [];
@@ -308,8 +321,17 @@ export default function Athletes() {
 
   const parents = athletes.filter(a => a.role === "parent" || (a.user_role_preference && a.user_role_preference.includes("parent")));
 
-  // Access guard (Layout also handles this, but defense-in-depth)
-  if (!user) return null;
+  const effectiveRole = user ? (localStorage.getItem(`activeRole_${user.id}`) || user.role) : null;
+  
+  if (!user || (effectiveRole !== "admin" && effectiveRole !== "coach")) {
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-[#111] p-4 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-slate-600 dark:text-gray-300 font-semibold">Access denied. Only coaches and admins can manage athletes.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#111] p-4 pb-24">

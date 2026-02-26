@@ -13,10 +13,9 @@ import { format } from "date-fns";
 import { createPageUrl } from "../utils";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { useRoleContext } from "@/components/shared/useRoleContext";
 
 export default function LogActivity() {
-  const { user, activeViewRole } = useRoleContext();
+  const [user, setUser] = useState(null);
   const [selectedAthlete, setSelectedAthlete] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [logType, setLogType] = useState("distance");
@@ -35,17 +34,25 @@ export default function LogActivity() {
     { id: "javelin", label: "Javelin", Icon: Zap },
   ];
 
-  const isCoach = activeViewRole === "admin" || activeViewRole === "coach";
-
-  // Set self as default athlete for non-coach views
   useEffect(() => {
-    if (user && !isCoach && !selectedAthlete) {
-      setSelectedAthlete(user);
-    }
-  }, [user, isCoach]);
+    const fetchUser = async () => {
+      const currentUser = await base44.auth.me();
+      const savedRole = localStorage.getItem(`activeRole_${currentUser.id}`);
+      const effectiveRole = savedRole || currentUser.role;
+      const effectiveUser = { ...currentUser, role: effectiveRole };
+      setUser(effectiveUser);
+      const isCoachRole = effectiveRole === "admin" || effectiveRole === "coach";
+      if (!isCoachRole) {
+        setSelectedAthlete(effectiveUser);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  const isCoach = user?.role === "admin" || user?.role === "coach";
 
   const { data: athletes = [] } = useQuery({
-    queryKey: ["athletes", activeViewRole],
+    queryKey: ["athletes", isCoach],
     queryFn: async () => {
       if (!isCoach) return [];
       const res = await base44.functions.invoke("getAthletes");
