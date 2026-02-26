@@ -13,9 +13,9 @@ export function useViewGuard(allowedRoles) {
 
   useEffect(() => {
     base44.auth.me().then((currentUser) => {
-      const availableRoles = getAvailableRoles(currentUser.user_role_preference, currentUser.role);
-      const activeRole = getActiveViewRole(currentUser.id, availableRoles, currentUser.role);
-      if (!allowedRoles.includes(activeRole)) {
+      const availableViews = getAvailableViews(currentUser.user_role_preference, currentUser.role);
+      const activeViewRole = getActiveViewRole(currentUser.id, availableViews, currentUser.role);
+      if (!allowedRoles.includes(activeViewRole)) {
         window.location.href = createPageUrl("Today");
       } else {
         setReady(true);
