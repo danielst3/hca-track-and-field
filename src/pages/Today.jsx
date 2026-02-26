@@ -89,9 +89,9 @@ export default function Today() {
   });
 
   const { data: nextMeet } = useQuery({
-    queryKey: ["nextMeet", activeSeason?.id, user?.role],
+    queryKey: ["nextMeet", activeSeason?.id, activeView],
     queryFn: async () => {
-      if (!activeSeason || user?.role === "admin") return null;
+      if (!activeSeason || activeView === "admin") return null;
       const today = format(new Date(), "yyyy-MM-dd");
       const meets = await base44.entities.Meet.filter({
         season_id: activeSeason.id
