@@ -7,6 +7,7 @@ import { Home, Calendar, Plus, LogOut, Trophy, TrendingUp, Users, BookOpen, File
 // Note: BookOpen, Shield, MessageSquare, Trophy kept for settings dropdown usage
 import { cn } from "@/lib/utils";
 import UniversalSearch from "./components/shared/UniversalSearch";
+import { getAvailableViews, getActiveView, getViewHome, PAGE_ALLOWED_VIEWS } from "./components/shared/viewConfig";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
