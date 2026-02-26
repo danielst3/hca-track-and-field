@@ -173,12 +173,12 @@ export default function Today() {
     );
   };
 
-  if (planLoading) {
+  if (!allowed || planLoading) {
     return (
       <div className="min-h-screen bg-[#111] dark:bg-[#111] p-4 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--brand-primary)] mx-auto mb-4" />
-          <p className="text-slate-700 dark:text-gray-300">Loading today's plan...</p>
+          <p className="text-slate-700 dark:text-gray-300">Loading...</p>
         </div>
       </div>
     );
