@@ -140,13 +140,9 @@ export default function Today() {
   const { data: throwLogs } = useQuery({
     queryKey: ["throwLogs", user?.email],
     queryFn: async () => {
-      if (!user || user.role === "admin") return [];
-      const logs = await base44.entities.ThrowLog.filter({ 
-        athlete_email: user.email 
-      });
-      return logs.sort((a, b) => new Date(a.date) - new Date(b.date));
-    },
-    enabled: !!user && user.role !== "admin",
+      if (!user || user.activeViewRole === "admin") return [];
+...
+    enabled: !!user && user.activeViewRole !== "admin",
   });
 
   const getEventData = (event) => {
