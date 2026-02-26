@@ -170,7 +170,7 @@ export default function Posts() {
             <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100">Posts</h1>
             <p className="text-slate-600 dark:text-gray-300 mt-1">Team updates and announcements</p>
           </div>
-          {user?.role === "admin" && (
+          {isAdmin && (
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
                 <Button className="bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600">
