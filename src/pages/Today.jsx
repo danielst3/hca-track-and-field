@@ -183,12 +183,14 @@ export default function Today() {
     );
   }
 
+  const isCoachOrAdmin = activeViewRole === "admin" || activeViewRole === "coach";
+
   return (
     <div className="min-h-screen bg-[var(--brand-secondary)] dark:bg-[#111] p-4 pb-20">
-      {user && user.role !== "admin" && <QuickLogButton user={user} />}
+      {user && !isCoachOrAdmin && <QuickLogButton user={user} />}
       <div className="max-w-7xl mx-auto space-y-4">
-        {/* Athlete Dashboard (only for athletes) */}
-        {user && user.role !== "admin" && isSameDay(selectedDate, new Date()) && (
+        {/* Athlete Dashboard (only for athletes / parents viewing athlete data) */}
+        {user && !isCoachOrAdmin && isSameDay(selectedDate, new Date()) && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div className="lg:col-span-2 space-y-4">
               {user.events && user.events.filter(e => selectedEvents.includes(e)).map(event => (
