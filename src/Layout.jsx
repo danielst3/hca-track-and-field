@@ -217,9 +217,13 @@ export default function Layout({ children, currentPageName }) {
       return;
     }
     localStorage.setItem(`activeRole_${user.id}`, role);
+    // Clear any query cache so new role fetches fresh data
+    queryClient.clear();
     const roleLabel = role === "admin" ? "Admin" : role === "coach" ? "Coach" : role === "parent" ? "Parent" : "Athlete";
     toast.success(`Switched to ${roleLabel} view`);
-    window.location.reload();
+    // Navigate to the default landing page for the new role
+    const landingPage = DEFAULT_PAGE[role] || "Today";
+    window.location.href = createPageUrl(landingPage);
   };
 
   const handleToggleParentView = async () => {
