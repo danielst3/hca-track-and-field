@@ -280,6 +280,55 @@ export default function Posts() {
           )}
         </div>
 
+        {/* Edit Dialog */}
+        <Dialog open={!!editPost} onOpenChange={(o) => { if (!o) { setEditPost(null); setFormData({ title: "", content: "", file_url: "", link_url: "", event_tags: [] }); } }}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Edit Post</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-1 block">Title *</label>
+                <Input value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} required />
+              </div>
+              <div>
+                <label className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-1 block">Description</label>
+                <Textarea value={formData.content} onChange={(e) => setFormData({ ...formData, content: e.target.value })} rows={3} />
+              </div>
+              <div>
+                <label className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-1 block">Link or YouTube URL</label>
+                <Input value={formData.link_url} onChange={(e) => setFormData({ ...formData, link_url: e.target.value })} placeholder="https://..." type="url" />
+              </div>
+              <div>
+                <label className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-1 block">Event Tags</label>
+                <div className="flex items-center gap-2 flex-wrap">
+                  {eventOptions.map(event => (
+                    <EventToggle key={event.id} event={event} isSelected={formData.event_tags.includes(event.id)} onClick={() => toggleFormEvent(event.id)} />
+                  ))}
+                </div>
+              </div>
+              <div className="flex gap-3 pt-2">
+                <Button type="button" variant="outline" onClick={() => { setEditPost(null); setFormData({ title: "", content: "", file_url: "", link_url: "", event_tags: [] }); }}>Cancel</Button>
+                <Button type="submit" disabled={updateMutation.isPending}>{updateMutation.isPending ? "Saving..." : "Save"}</Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
+
+        {/* Delete Confirmation */}
+        <AlertDialog open={!!deletePostId} onOpenChange={(o) => { if (!o) setDeletePostId(null); }}>
+          <AlertDialogContent className="dark:bg-gray-800 dark:border-gray-700">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="dark:text-gray-100">Delete Post</AlertDialogTitle>
+              <AlertDialogDescription className="dark:text-gray-300">This will permanently delete the post. This action cannot be undone.</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel className="dark:bg-gray-700 dark:text-gray-200">Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={() => deleteMutation.mutate(deletePostId)} className="bg-red-600 hover:bg-red-700">Delete</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
         {/* Event Filter */}
         <div className="flex items-center gap-3 flex-wrap">
           {eventOptions.map(event => (
