@@ -107,8 +107,8 @@ export default function Posts() {
       );
 
   const getYouTubeEmbedUrl = (url) => {
-    const videoIdMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
-    return videoIdMatch ? `https://www.youtube.com/embed/${videoIdMatch[1]}` : null;
+    const videoIdMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?\s]+)/);
+    return videoIdMatch ? `https://www.youtube-nocookie.com/embed/${videoIdMatch[1]}` : null;
   };
 
   const isImageUrl = (url) => {
