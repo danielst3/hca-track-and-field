@@ -364,7 +364,7 @@ export default function Posts() {
                         </div>
                       )}
                     </div>
-                    {(user?.role === "admin" || user?.email === post.created_by) && (
+                    {(isAdmin || user?.email === post.created_by) && (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400">
