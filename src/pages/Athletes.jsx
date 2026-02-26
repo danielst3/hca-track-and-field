@@ -32,19 +32,7 @@ export default function Athletes() {
   const [editLastName, setEditLastName] = useState("");
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const currentUser = await base44.auth.me();
-      setUser(currentUser);
-      // Check the active role (may be switched via localStorage)
-      const savedRole = localStorage.getItem(`activeRole_${currentUser.id}`);
-      const effectiveRole = savedRole || currentUser.role;
-      if (effectiveRole !== "admin" && effectiveRole !== "coach") {
-        window.location.href = createPageUrl("Today");
-      }
-    };
-    fetchUser();
-  }, []);
+  // Guard handled by useViewGuard("Athletes") — only admin/coach allowed
 
   const { data: athletes = [] } = useQuery({
     queryKey: ["athletes"],
