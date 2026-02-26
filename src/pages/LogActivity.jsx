@@ -38,8 +38,8 @@ export default function LogActivity() {
   useEffect(() => {
     const fetchUser = async () => {
       const currentUser = await base44.auth.me();
-      const savedRole = localStorage.getItem(`activeRole_${currentUser.id}`);
-      const effectiveRole = savedRole || currentUser.role;
+      const availableRoles = getAvailableRoles(currentUser.user_role_preference, currentUser.role);
+      const effectiveRole = getActiveViewRole(currentUser.id, availableRoles, currentUser.role);
       const effectiveUser = { ...currentUser, role: effectiveRole };
       setUser(effectiveUser);
       const isCoachRole = effectiveRole === "admin" || effectiveRole === "coach";
