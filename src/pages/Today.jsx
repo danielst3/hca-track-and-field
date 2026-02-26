@@ -30,45 +30,28 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 
 export default function Today() {
-  const [user, setUser] = useState(null);
+  const { user, activeViewRole, isLoading: roleLoading } = useRoleContext();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedEvents, setSelectedEvents] = useState(["shot", "discus", "javelin"]);
   const [eventOptions, setEventOptions] = useState([]);
   const dateStr = format(selectedDate, "yyyy-MM-dd");
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const currentUser = await base44.auth.me();
-      const impersonating = localStorage.getItem("impersonating");
-      const savedRole = localStorage.getItem(`activeRole_${currentUser.id}`);
-      const effectiveRole = savedRole || currentUser.role;
-      const effectiveUser = (impersonating && (currentUser?.role === "admin" || effectiveRole === "admin"))
-        ? { ...currentUser, ...JSON.parse(impersonating), isImpersonating: true, realRole: currentUser.role, role: effectiveRole }
-        : { ...currentUser, role: effectiveRole };
-      setUser(effectiveUser);
-      
-      // Build event options from user's event_types
-      if (currentUser?.event_types && currentUser.event_types.length > 0) {
-        const options = currentUser.event_types.map(event => ({
-          id: event.id,
-          label: event.label,
-        }));
-        setEventOptions(options);
-      } else {
-        // Fallback to default events
-        setEventOptions([
-          { id: "shot", label: "Shot Put" },
-          { id: "discus", label: "Discus" },
-          { id: "javelin", label: "Javelin" }
-        ]);
-      }
-      
-      if (currentUser?.default_events && currentUser.default_events.length > 0) {
-        setSelectedEvents(currentUser.default_events);
-      }
-    };
-    fetchUser();
-  }, []);
+    if (!user) return;
+    // Build event options from user's event_types
+    if (user?.event_types && user.event_types.length > 0) {
+      setEventOptions(user.event_types.map(e => ({ id: e.id, label: e.label })));
+    } else {
+      setEventOptions([
+        { id: "shot", label: "Shot Put" },
+        { id: "discus", label: "Discus" },
+        { id: "javelin", label: "Javelin" }
+      ]);
+    }
+    if (user?.default_events && user.default_events.length > 0) {
+      setSelectedEvents(user.default_events);
+    }
+  }, [user?.id]);
 
   const { data: activeSeason } = useQuery({
     queryKey: ["activeSeason"],
