@@ -32,30 +32,20 @@ export default function Posts() {
     event_tags: [],
   });
 
+  const isAdmin = activeView === "admin";
+
   useEffect(() => {
-    const fetchUser = async () => {
-      const currentUser = await base44.auth.me();
-      setUser(currentUser);
-      
-      // Build event options from user's event_types
-      if (currentUser?.event_types && currentUser.event_types.length > 0) {
-        const options = currentUser.event_types.map(event => ({
-          id: event.id,
-          label: event.label,
-          icon: event.icon || "🎯"
-        }));
-        setEventOptions(options);
-      } else {
-        // Fallback to default events
-        setEventOptions([
-          { id: "shot", label: "Shot Put", icon: "🏋️" },
-          { id: "discus", label: "Discus", icon: "🥏" },
-          { id: "javelin", label: "Javelin", icon: "🎯" }
-        ]);
-      }
-    };
-    fetchUser();
-  }, []);
+    if (!user) return;
+    if (user?.event_types && user.event_types.length > 0) {
+      setEventOptions(user.event_types.map(e => ({ id: e.id, label: e.label, icon: e.icon || "🎯" })));
+    } else {
+      setEventOptions([
+        { id: "shot", label: "Shot Put", icon: "🏋️" },
+        { id: "discus", label: "Discus", icon: "🥏" },
+        { id: "javelin", label: "Javelin", icon: "🎯" }
+      ]);
+    }
+  }, [user]);
 
   const { data: posts = [], isLoading } = useQuery({
     queryKey: ["posts"],
