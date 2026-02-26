@@ -14,8 +14,8 @@ const EVENT_ICONS = {
 };
 
 const getYouTubeEmbedUrl = (url) => {
-  const videoIdMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
-  return videoIdMatch ? `https://www.youtube.com/embed/${videoIdMatch[1]}` : null;
+  const videoIdMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?\s]+)/);
+  return videoIdMatch ? `https://www.youtube-nocookie.com/embed/${videoIdMatch[1]}` : null;
 };
 
 const isImageUrl = (url) => url && /\.(jpg|jpeg|png|gif|webp)$/i.test(url);
