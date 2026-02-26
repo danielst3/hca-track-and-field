@@ -27,7 +27,7 @@ import CoachAthleteOverviewSection from "@/components/dashboard/CoachAthleteOver
 import RecentPostsSection from "@/components/dashboard/RecentPostsSection";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
-import { getActiveViewRole, getAvailableRoles } from "../components/shared/getActiveViewRole";
+import { getActiveViewRole, getAvailableViews } from "../components/shared/getActiveViewRole";
 
 export default function Today() {
   const [user, setUser] = useState(null);
