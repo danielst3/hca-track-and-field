@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 import AthleteCard from "../components/dashboard/AthleteCard";
 import EventProgressChart from "../components/dashboard/EventProgressChart";
 import CoachAthleteOverviewSection from "../components/dashboard/CoachAthleteOverviewSection";
+import RecentPostsSection from "../components/dashboard/RecentPostsSection";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 
