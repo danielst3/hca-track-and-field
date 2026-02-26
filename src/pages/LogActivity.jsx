@@ -37,16 +37,19 @@ export default function LogActivity() {
   useEffect(() => {
     const fetchUser = async () => {
       const currentUser = await base44.auth.me();
-      setUser(currentUser);
-      if (!currentUser?.role || currentUser.role !== "admin") {
-        setSelectedAthlete(currentUser);
+      const savedRole = localStorage.getItem(`activeRole_${currentUser.id}`);
+      const effectiveRole = savedRole || currentUser.role;
+      const effectiveUser = { ...currentUser, role: effectiveRole };
+      setUser(effectiveUser);
+      const isCoachRole = effectiveRole === "admin" || effectiveRole === "coach";
+      if (!isCoachRole) {
+        setSelectedAthlete(effectiveUser);
       }
     };
     fetchUser();
   }, []);
 
-  const effectiveRole = user ? (localStorage.getItem(`activeRole_${user.id}`) || user.role) : null;
-  const isCoach = effectiveRole === "admin" || effectiveRole === "coach";
+  const isCoach = user?.role === "admin" || user?.role === "coach";
 
   const { data: athletes = [] } = useQuery({
     queryKey: ["athletes", isCoach],
