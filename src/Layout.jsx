@@ -177,10 +177,11 @@ export default function Layout({ children, currentPageName }) {
       toast.error("You don't have access to that role");
       return;
     }
+    // Persist view, clear all cached query data, redirect to view home
     localStorage.setItem(`activeRole_${user.id}`, role);
-    const roleLabel = role === "admin" ? "Admin" : role === "coach" ? "Coach" : role === "parent" ? "Parent" : "Athlete";
-    toast.success(`Switched to ${roleLabel} view`);
-    window.location.reload();
+    queryClient.clear();
+    const homePage = getViewHome(role);
+    window.location.href = createPageUrl(homePage);
   };
 
   const handleToggleParentView = async () => {
