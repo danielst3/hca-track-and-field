@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { useViewGuard } from "../components/shared/useViewGuard";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
@@ -21,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
 export default function Athletes() {
-  const { activeView, user, allowed } = useViewGuard("Athletes");
+  const [user, setUser] = useState(null);
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState("user");
   const [inviteOpen, setInviteOpen] = useState(false);
@@ -32,7 +31,19 @@ export default function Athletes() {
   const [editLastName, setEditLastName] = useState("");
   const queryClient = useQueryClient();
 
-  // Guard handled by useViewGuard("Athletes") — only admin/coach allowed
+  useEffect(() => {
+    const fetchUser = async () => {
+      const currentUser = await base44.auth.me();
+      setUser(currentUser);
+      // Check the active role (may be switched via localStorage)
+      const savedRole = localStorage.getItem(`activeRole_${currentUser.id}`);
+      const effectiveRole = savedRole || currentUser.role;
+      if (effectiveRole !== "admin" && effectiveRole !== "coach") {
+        window.location.href = createPageUrl("Today");
+      }
+    };
+    fetchUser();
+  }, []);
 
   const { data: athletes = [] } = useQuery({
     queryKey: ["athletes"],
@@ -310,10 +321,14 @@ export default function Athletes() {
 
   const parents = athletes.filter(a => a.role === "parent" || (a.user_role_preference && a.user_role_preference.includes("parent")));
 
-  if (!allowed) {
+  const effectiveRole = user ? (localStorage.getItem(`activeRole_${user.id}`) || user.role) : null;
+  
+  if (!user || (effectiveRole !== "admin" && effectiveRole !== "coach")) {
     return (
       <div className="min-h-screen bg-slate-50 dark:bg-[#111] p-4 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--brand-primary)]" />
+        <div className="text-center">
+          <p className="text-slate-600 dark:text-gray-300 font-semibold">Access denied. Only coaches and admins can manage athletes.</p>
+        </div>
       </div>
     );
   }

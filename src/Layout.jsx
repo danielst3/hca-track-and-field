@@ -7,7 +7,6 @@ import { Home, Calendar, Plus, LogOut, Trophy, TrendingUp, Users, BookOpen, File
 // Note: BookOpen, Shield, MessageSquare, Trophy kept for settings dropdown usage
 import { cn } from "@/lib/utils";
 import UniversalSearch from "./components/shared/UniversalSearch";
-import { getAvailableViews, getActiveView, getViewHome, PAGE_ALLOWED_VIEWS } from "./components/shared/viewConfig";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
@@ -144,6 +143,23 @@ export default function Layout({ children, currentPageName }) {
     };
   }, [currentPageName]);
 
+  const getActiveRole = (currentUser) => {
+    return localStorage.getItem(`activeRole_${currentUser.id}`) || currentUser.role;
+  };
+
+  const VALID_ROLES = ["admin", "coach", "user", "parent"];
+
+  const getUserRoles = (currentUser) => {
+    // The user's actual assigned role is the source of truth
+    const assignedRole = currentUser.role;
+    // user_role_preference can grant extra view modes, but only valid roles
+    if (!currentUser?.user_role_preference) return [assignedRole];
+    const prefRoles = currentUser.user_role_preference.split(",").filter(r => VALID_ROLES.includes(r));
+    // Always include the assigned role; only include other roles if explicitly in preferences
+    const allRoles = Array.from(new Set([assignedRole, ...prefRoles]));
+    return allRoles.length > 0 ? allRoles : [assignedRole];
+  };
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -153,9 +169,14 @@ export default function Layout({ children, currentPageName }) {
           const impersonatedUser = JSON.parse(impersonating);
           setUser({ ...currentUser, ...impersonatedUser, isImpersonating: true, realRole: currentUser.role });
         } else {
-          const availableViews = getAvailableViews(currentUser);
-          const activeView = getActiveView(currentUser);
-          setUser({ ...currentUser, role: activeView, availableRoles: availableViews });
+          const roles = getUserRoles(currentUser);
+          if (roles.length > 1) {
+            const savedRole = getActiveRole(currentUser);
+            const activeRole = roles.includes(savedRole) ? savedRole : roles[0];
+            setUser({ ...currentUser, role: activeRole, availableRoles: roles });
+          } else {
+            setUser(currentUser);
+          }
         }
       } catch (error) {
         setUser(null);
@@ -177,11 +198,10 @@ export default function Layout({ children, currentPageName }) {
       toast.error("You don't have access to that role");
       return;
     }
-    // Persist view, clear all cached query data, redirect to view home
     localStorage.setItem(`activeRole_${user.id}`, role);
-    queryClient.clear();
-    const homePage = getViewHome(role);
-    window.location.href = createPageUrl(homePage);
+    const roleLabel = role === "admin" ? "Admin" : role === "coach" ? "Coach" : role === "parent" ? "Parent" : "Athlete";
+    toast.success(`Switched to ${roleLabel} view`);
+    window.location.reload();
   };
 
   const handleToggleParentView = async () => {

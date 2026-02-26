@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
-import { useViewGuard } from "../components/shared/useViewGuard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Scroll, Book, Dumbbell, Info, Shield, Target, Activity, Plus, ExternalLink, FileText, Edit } from "lucide-react";
@@ -168,20 +167,27 @@ const safety = [
 ];
 
 export default function Resources() {
-  const { activeView, user, allowed } = useViewGuard("Resources");
+  const [user, setUser] = useState(null);
   const [activeSection, setActiveSection] = useState("abbreviations");
   const [expandedDrill, setExpandedDrill] = useState(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedResource, setSelectedResource] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const currentUser = await base44.auth.me();
+      setUser(currentUser);
+    };
+    fetchUser();
+  }, []);
 
   const { data: customResources = [] } = useQuery({
     queryKey: ["resources"],
     queryFn: () => base44.entities.Resource.list(),
   });
 
-  const isCoach = activeView === "admin" || activeView === "coach";
-
-  if (!allowed) return null;
+  const effectiveRole = localStorage.getItem(`activeRole_${user?.id}`) || user?.role;
+  const isCoach = effectiveRole === "admin" || effectiveRole === "coach";
 
   const handleAddResource = () => {
     setSelectedResource(null);

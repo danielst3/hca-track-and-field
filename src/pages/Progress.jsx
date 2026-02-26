@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { base44 } from "@/api/base44Client";
-import { useViewGuard } from "../components/shared/useViewGuard";
 import { useQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { subDays, isAfter, parseISO } from "date-fns";
@@ -25,19 +24,21 @@ const DATE_RANGES = [
 ];
 
 export default function Progress() {
-  const { activeView, user, allowed } = useViewGuard("Progress");
+  const [user, setUser] = useState(null);
   const [activeEvent, setActiveEvent] = useState("shot");
   const [dateRange, setDateRange] = useState(null); // null = "All"
+  const [loadError, setLoadError] = useState(null);
 
-  // For parent view, logs will be fetched via MyAthletes. For athlete view, show their own.
-  const targetEmail = user?.isImpersonating
-    ? (JSON.parse(localStorage.getItem("impersonating") || "{}").email || user?.email)
-    : user?.email;
+  useEffect(() => {
+    base44.auth.me().then(setUser).catch((err) => {
+      setLoadError("Failed to load user data");
+    });
+  }, []);
 
   const { data: logs = [], isError: logsError } = useQuery({
-    queryKey: ["throwLogs", targetEmail],
-    queryFn: () => base44.entities.ThrowLog.filter({ athlete_email: targetEmail }),
-    enabled: !!user && !!targetEmail,
+    queryKey: ["throwLogs", user?.email],
+    queryFn: () => base44.entities.ThrowLog.filter({ athlete_email: user.email }),
+    enabled: !!user,
   });
 
   const filteredLogs = useMemo(() => {
@@ -49,15 +50,17 @@ export default function Progress() {
     return result;
   }, [logs, activeEvent, dateRange]);
 
-  if (!allowed || !user) return null;
-
-  if (logsError) {
+  if (loadError || logsError) {
     return (
       <div className="min-h-screen bg-slate-50 dark:bg-[#111] p-4 flex items-center justify-center">
-        <p className="text-red-600 dark:text-red-400 font-semibold">Failed to load analytics</p>
+        <div className="text-center">
+          <p className="text-red-600 dark:text-red-400 font-semibold">{loadError || "Failed to load analytics"}</p>
+        </div>
       </div>
     );
   }
+
+  if (!user) return null;
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#111] p-4 pb-24">
