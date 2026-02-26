@@ -68,11 +68,7 @@ export default function Calendar() {
 
 
 
-  useEffect(() => {
-    if (user?.default_events && user.default_events.length > 0) {
-      setSelectedEvents(user.default_events);
-    }
-  }, [user]);
+
 
   const { data: allSeasons = [] } = useQuery({
     queryKey: ["allSeasons"],
