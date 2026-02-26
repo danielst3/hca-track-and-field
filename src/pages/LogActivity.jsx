@@ -13,9 +13,10 @@ import { format } from "date-fns";
 import { createPageUrl } from "../utils";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useRoleContext } from "@/components/shared/useRoleContext";
 
 export default function LogActivity() {
-  const [user, setUser] = useState(null);
+  const { user, activeViewRole } = useRoleContext();
   const [selectedAthlete, setSelectedAthlete] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [logType, setLogType] = useState("distance");
@@ -34,22 +35,14 @@ export default function LogActivity() {
     { id: "javelin", label: "Javelin", Icon: Zap },
   ];
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const currentUser = await base44.auth.me();
-      const savedRole = localStorage.getItem(`activeRole_${currentUser.id}`);
-      const effectiveRole = savedRole || currentUser.role;
-      const effectiveUser = { ...currentUser, role: effectiveRole };
-      setUser(effectiveUser);
-      const isCoachRole = effectiveRole === "admin" || effectiveRole === "coach";
-      if (!isCoachRole) {
-        setSelectedAthlete(effectiveUser);
-      }
-    };
-    fetchUser();
-  }, []);
+  const isCoach = activeViewRole === "admin" || activeViewRole === "coach";
 
-  const isCoach = user?.role === "admin" || user?.role === "coach";
+  // Set self as default athlete for non-coach views
+  useEffect(() => {
+    if (user && !isCoach && !selectedAthlete) {
+      setSelectedAthlete(user);
+    }
+  }, [user, isCoach]);
 
   const { data: athletes = [] } = useQuery({
     queryKey: ["athletes", isCoach],
