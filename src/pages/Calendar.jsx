@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { getDayTypeColors } from "../components/shared/DayTypeBadge";
+import { getActiveViewRole, getAvailableViews } from "../components/shared/getActiveViewRole";
 import DayDetailDialog from "../components/calendar/DayDetailDialog";
 import EditPlanDialog from "../components/calendar/EditPlanDialog";
 import AbbreviationsKey from "../components/shared/AbbreviationsKey.jsx";

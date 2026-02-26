@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import EventProgressCard from "../components/tracking/EventProgressCard";
 import { useViewGuard } from "../components/shared/useViewGuard";
+import { getActiveViewRole, getAvailableViews } from "../components/shared/getActiveViewRole";
 
 export default function MyAthletes() {
   const { ready } = useViewGuard(["admin", "coach", "parent"]);

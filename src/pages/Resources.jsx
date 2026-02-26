@@ -7,6 +7,7 @@ import { Scroll, Book, Dumbbell, Info, Shield, Target, Activity, Plus, ExternalL
 import { cn } from "@/lib/utils";
 import { drillsDatabase } from "../components/data/drillsDatabase";
 import EditResourceDialog from "../components/resources/EditResourceDialog";
+import { getActiveViewRole, getAvailableViews } from "../components/shared/getActiveViewRole";
 
 const customSection = {
   id: "custom-resources",
