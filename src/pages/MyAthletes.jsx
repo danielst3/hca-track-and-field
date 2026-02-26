@@ -11,6 +11,7 @@ import EventProgressCard from "../components/tracking/EventProgressCard";
 import { useViewGuard } from "../components/shared/useViewGuard";
 
 export default function MyAthletes() {
+  const { ready } = useViewGuard(["admin", "coach", "parent"]);
   const [user, setUser] = useState(null);
   const [selectedAthleteId, setSelectedAthleteId] = useState(null);
   const queryClient = useQueryClient();
@@ -64,7 +65,7 @@ export default function MyAthletes() {
     },
   });
 
-  if (!user) {
+  if (!ready || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />

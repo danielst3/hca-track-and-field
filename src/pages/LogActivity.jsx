@@ -17,6 +17,7 @@ import { getActiveViewRole, getAvailableRoles } from "../components/shared/getAc
 import { useViewGuard } from "../components/shared/useViewGuard";
 
 export default function LogActivity() {
+  const { ready } = useViewGuard(["admin", "coach", "user"]);
   const [user, setUser] = useState(null);
   const [selectedAthlete, setSelectedAthlete] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -132,7 +133,7 @@ export default function LogActivity() {
 
   const currentEvent = events.find(e => e.id === selectedEvent);
 
-  if (!user) {
+  if (!ready || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-[#111] p-4">
         <div className="text-center">
