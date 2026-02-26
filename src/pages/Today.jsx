@@ -40,7 +40,7 @@ export default function Today() {
       const impersonating = localStorage.getItem("impersonating");
       const savedRole = localStorage.getItem(`activeRole_${currentUser.id}`);
       const effectiveRole = savedRole || currentUser.role;
-      const effectiveUser = (impersonating && currentUser?.role === "admin")
+      const effectiveUser = (impersonating && (currentUser?.role === "admin" || effectiveRole === "admin"))
         ? { ...currentUser, ...JSON.parse(impersonating), isImpersonating: true, realRole: currentUser.role, role: effectiveRole }
         : { ...currentUser, role: effectiveRole };
       setUser(effectiveUser);
