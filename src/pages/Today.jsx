@@ -395,7 +395,7 @@ export default function Today() {
         )}
 
         {/* Coach: Athlete Overrides Preview */}
-        {(user?.role === "admin" || user?.role === "coach") && dailyPlan && (
+        {isCoachOrAdmin && dailyPlan && (
           <CoachAthleteOverviewSection date={selectedDate} dailyPlan={dailyPlan} selectedEvents={selectedEvents} />
         )}
 
