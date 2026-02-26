@@ -317,7 +317,7 @@ export default function Today() {
           </div>
         )}
         {dailyPlan ? (() => {
-          const isCoachOrAdmin = user?.role === "admin" || user?.role === "coach";
+          const isCoachOrAdmin = user?.activeViewRole === "admin" || user?.activeViewRole === "coach";
           const dp = isCoachOrAdmin ? dailyPlan : {
             ...dailyPlan,
             shot_text: athleteOverride?.shot_text || dailyPlan.shot_text,
