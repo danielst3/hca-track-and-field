@@ -104,7 +104,22 @@ export default function Posts() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createMutation.mutate(formData);
+    if (editPost) {
+      updateMutation.mutate({ id: editPost.id, data: formData });
+    } else {
+      createMutation.mutate(formData);
+    }
+  };
+
+  const handleEdit = (post) => {
+    setEditPost(post);
+    setFormData({
+      title: post.title || "",
+      content: post.content || "",
+      file_url: post.file_url || "",
+      link_url: post.link_url || "",
+      event_tags: post.event_tags || [],
+    });
   };
 
   const toggleFormEvent = (eventId) => {
