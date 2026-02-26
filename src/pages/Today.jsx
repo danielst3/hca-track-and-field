@@ -145,7 +145,9 @@ export default function Today() {
     queryKey: ["throwLogs", user?.email],
     queryFn: async () => {
       if (!user || user.activeViewRole === "admin") return [];
-...
+      const logs = await base44.entities.ThrowLog.filter({ athlete_email: user.email });
+      return logs.sort((a, b) => new Date(a.date) - new Date(b.date));
+    },
     enabled: !!user && user.activeViewRole !== "admin",
   });
 
