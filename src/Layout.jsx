@@ -568,7 +568,7 @@ export default function Layout({ children, currentPageName }) {
                     <DropdownMenuSeparator className="dark:bg-gray-700" />
                   </>
                 )}
-                {(user.role === "admin" || user.realRole === "admin") && (
+                {(activeRole === "admin" || activeRole === "coach") && !user?.isImpersonating && (
                   <DropdownMenuSub>
                     <DropdownMenuSubTrigger className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none cursor-pointer">
                       <Users className="w-4 h-4 mr-2" />
