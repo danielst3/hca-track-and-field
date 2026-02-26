@@ -147,32 +147,13 @@ export default function Layout({ children, currentPageName }) {
 
   const handleStopImpersonating = () => {
     localStorage.removeItem("impersonating");
+    bustRoleCache();
     window.location.reload();
   };
 
   const handleSwitchRole = (role) => {
-    const allowedRoles = user?.availableRoles || [];
-    if (!allowedRoles.includes(role)) {
-      toast.error("You don't have access to that role");
-      return;
-    }
-    localStorage.setItem(`activeRole_${user.id}`, role);
-    // Clear any query cache so new role fetches fresh data
-    queryClient.clear();
-    const roleLabel = role === "admin" ? "Admin" : role === "coach" ? "Coach" : role === "parent" ? "Parent" : "Athlete";
-    toast.success(`Switched to ${roleLabel} view`);
-    // Navigate to the default landing page for the new role
-    const landingPage = DEFAULT_PAGE[role] || "Today";
-    window.location.href = createPageUrl(landingPage);
-  };
-
-  const handleToggleParentView = async () => {
-    try {
-      await base44.auth.updateMe({ view_as_parent: !user.view_as_parent });
-      window.location.reload();
-    } catch (error) {
-      toast.error("Failed to toggle view");
-    }
+    toast.success(`Switched to ${roleLabelFor(role)} view`);
+    setActiveViewRole(role); // handles persist + cache clear + redirect
   };
 
   const handleLogout = () => {
