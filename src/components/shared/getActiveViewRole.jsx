@@ -1,30 +1,50 @@
 /**
- * Single source of truth for determining the active view role.
+ * Returns the list of views a user can switch between.
+ * primaryRole is always included. Additional views come from user_role_preference.
  *
- * @param {string} userId - The authenticated user's ID.
- * @param {string[]} availableRoles - The roles this user is allowed to view as.
- * @param {string} primaryRole - The user's real/primary role from auth.
- * @returns {string} The validated active view role.
+ * @param {string|undefined} rolePref - Comma-separated user_role_preference field.
+ * @param {string} primaryRole - The user's real JWT/auth role (never changes).
+ * @returns {string[]} availableViews
  */
-export function getActiveViewRole(userId, availableRoles, primaryRole) {
-  const saved = localStorage.getItem(`activeRole_${userId}`);
-  if (saved && availableRoles.includes(saved)) {
+export function getAvailableViews(rolePref, primaryRole) {
+  if (rolePref && rolePref.trim().length > 0) {
+    const extras = rolePref.split(",").map(r => r.trim()).filter(Boolean);
+    return Array.from(new Set([primaryRole, ...extras]));
+  }
+  return [primaryRole];
+}
+
+/**
+ * Returns the currently selected view role from localStorage,
+ * validated against the user's available views.
+ * Falls back to primaryRole if nothing is saved or the saved value is invalid.
+ *
+ * @param {string} userId
+ * @param {string[]} availableViews
+ * @param {string} primaryRole - The user's real role (security role, never overwritten).
+ * @returns {string} activeViewRole
+ */
+export function getActiveViewRole(userId, availableViews, primaryRole) {
+  const saved = localStorage.getItem(`activeViewRole_${userId}`);
+  if (saved && availableViews.includes(saved)) {
     return saved;
   }
   return primaryRole;
 }
 
 /**
- * Parse user_role_preference string into an array of roles.
- * Falls back to [primaryRole] if not set.
+ * Persists the selected view role to localStorage.
+ * Does NOT mutate User.role — this is purely a UX preference.
  *
- * @param {string|undefined} rolePref - The user_role_preference field value.
- * @param {string} primaryRole - The user's real role.
- * @returns {string[]}
+ * @param {string} userId
+ * @param {string} viewRole
  */
-export function getAvailableRoles(rolePref, primaryRole) {
-  if (rolePref && rolePref.trim().length > 0) {
-    return rolePref.split(",").map(r => r.trim()).filter(Boolean);
-  }
-  return [primaryRole];
+export function setActiveViewRole(userId, viewRole) {
+  localStorage.setItem(`activeViewRole_${userId}`, viewRole);
 }
+
+// ---------------------------------------------------------------------------
+// Legacy alias — kept so old callers don't break during migration.
+// Prefer getAvailableViews going forward.
+// ---------------------------------------------------------------------------
+export const getAvailableRoles = getAvailableViews;
