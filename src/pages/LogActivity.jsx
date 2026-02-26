@@ -28,6 +28,7 @@ export default function LogActivity() {
   });
   const [submitted, setSubmitted] = useState(false);
   const queryClient = useQueryClient();
+  const isCoach = activeView === "admin" || activeView === "coach";
 
   const events = [
     { id: "shot", label: "Shot Put", Icon: Circle },
