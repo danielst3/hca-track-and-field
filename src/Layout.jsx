@@ -467,8 +467,8 @@ export default function Layout({ children, currentPageName }) {
     return null;
   }
 
-  // Nav items are driven by the active role, respecting the switched role
-  const navItems = (activeRole === "admin" || activeRole === "coach" || user?.realRole === "admin" || user?.realRole === "coach") && !user?.isImpersonating
+  // Nav items are driven purely by activeRole (viewMode)
+  const navItems = (activeRole === "admin" || activeRole === "coach") && !user?.isImpersonating
     ? [
         { name: "Today", icon: Home, page: "Today" },
         { name: "Calendar", icon: Calendar, page: "Calendar" },
