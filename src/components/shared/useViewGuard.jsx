@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { getActiveViewRole, getAvailableRoles } from "./getActiveViewRole";
+import { getActiveViewRole, getAvailableViews } from "./getActiveViewRole";
 import { createPageUrl } from "../../utils";
 
 /**
