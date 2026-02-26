@@ -143,6 +143,24 @@ export default function Layout({ children, currentPageName }) {
     };
   }, [currentPageName]);
 
+  // Pages accessible per view mode. "shared" pages are accessible from any view.
+  const ROLE_PAGES = {
+    admin:   ["Today", "Calendar", "LogActivity", "Athletes", "Seasons", "Posts", "Resources", "Settings", "Privacy", "Support", "FERPACompliance", "AthleteDetail", "BulkMeetEntry", "Progress", "MyAthletes"],
+    coach:   ["Today", "Calendar", "LogActivity", "Athletes", "Seasons", "Posts", "Resources", "Settings", "Privacy", "Support", "AthleteDetail", "BulkMeetEntry", "Progress", "MyAthletes"],
+    user:    ["Today", "Calendar", "LogActivity", "Progress", "Resources", "Posts", "Settings", "Privacy", "Support"],
+    parent:  ["Today", "Calendar", "MyAthletes", "Posts", "Resources", "Settings", "Privacy", "Support"],
+  };
+
+  const DEFAULT_PAGE = {
+    admin:  "Today",
+    coach:  "Today",
+    user:   "Today",
+    parent: "Today",
+  };
+
+  // Pages that are always accessible regardless of role
+  const UNIVERSAL_PAGES = ["Settings", "Privacy", "Support"];
+
   const getActiveRole = (currentUser) => {
     return localStorage.getItem(`activeRole_${currentUser.id}`) || currentUser.role;
   };
