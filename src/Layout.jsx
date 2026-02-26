@@ -144,23 +144,6 @@ export default function Layout({ children, currentPageName }) {
     };
   }, [currentPageName]);
 
-  const getActiveRole = (currentUser) => {
-    return localStorage.getItem(`activeRole_${currentUser.id}`) || currentUser.role;
-  };
-
-  const VALID_ROLES = ["admin", "coach", "user", "parent"];
-
-  const getUserRoles = (currentUser) => {
-    // The user's actual assigned role is the source of truth
-    const assignedRole = currentUser.role;
-    // user_role_preference can grant extra view modes, but only valid roles
-    if (!currentUser?.user_role_preference) return [assignedRole];
-    const prefRoles = currentUser.user_role_preference.split(",").filter(r => VALID_ROLES.includes(r));
-    // Always include the assigned role; only include other roles if explicitly in preferences
-    const allRoles = Array.from(new Set([assignedRole, ...prefRoles]));
-    return allRoles.length > 0 ? allRoles : [assignedRole];
-  };
-
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -170,14 +153,13 @@ export default function Layout({ children, currentPageName }) {
           const impersonatedUser = JSON.parse(impersonating);
           setUser({ ...currentUser, ...impersonatedUser, isImpersonating: true, realRole: currentUser.role });
         } else {
-          const roles = getUserRoles(currentUser);
-          if (roles.length > 1) {
-            const savedRole = getActiveRole(currentUser);
-            const activeRole = roles.includes(savedRole) ? savedRole : roles[0];
-            setUser({ ...currentUser, role: activeRole, availableRoles: roles });
-          } else {
-            setUser(currentUser);
-          }
+          const availableRoles = getAvailableRoles(currentUser.user_role_preference, currentUser.role);
+          const activeRole = getActiveViewRole(currentUser.id, availableRoles, currentUser.role);
+          setUser({
+            ...currentUser,
+            role: activeRole,
+            availableRoles: availableRoles.length > 1 ? availableRoles : undefined,
+          });
         }
       } catch (error) {
         setUser(null);
