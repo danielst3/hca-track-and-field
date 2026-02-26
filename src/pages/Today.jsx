@@ -40,11 +40,12 @@ export default function Today() {
     const fetchUser = async () => {
       const currentUser = await base44.auth.me();
       const impersonating = localStorage.getItem("impersonating");
-      const availableRoles = getAvailableRoles(currentUser.user_role_preference, currentUser.role);
-      const effectiveRole = getActiveViewRole(currentUser.id, availableRoles, currentUser.role);
-      const effectiveUser = (impersonating && (currentUser?.role === "admin" || effectiveRole === "admin"))
-        ? { ...currentUser, ...JSON.parse(impersonating), isImpersonating: true, realRole: currentUser.role, role: effectiveRole }
-        : { ...currentUser, role: effectiveRole };
+      const availableViews = getAvailableViews(currentUser.user_role_preference, currentUser.role);
+      // activeViewRole = UX view selection; currentUser.role = primaryRole (never overwritten)
+      const activeViewRole = getActiveViewRole(currentUser.id, availableViews, currentUser.role);
+      const effectiveUser = (impersonating && (currentUser?.role === "admin" || activeViewRole === "admin"))
+        ? { ...currentUser, ...JSON.parse(impersonating), isImpersonating: true, realRole: currentUser.role, activeViewRole }
+        : { ...currentUser, activeViewRole };
       setUser(effectiveUser);
       
       // Build event options from user's event_types
