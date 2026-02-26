@@ -362,12 +362,12 @@ export default function Calendar() {
           open={dialogOpen}
           onOpenChange={setDialogOpen}
           onEdit={handleEdit}
-          isCoach={!user?.isImpersonating && (user?.role === "admin" || user?.role === "coach")}
+          isCoach={!user?.isImpersonating && isCoachOrAdmin}
           selectedEvents={selectedEvents}
           athleteOverride={athleteOverride}
         />
 
-        {!user?.isImpersonating && (user?.role === "admin" || user?.role === "coach") && (
+        {!user?.isImpersonating && isCoachOrAdmin && (
           <EditPlanDialog
             date={selectedDay}
             plan={selectedPlan}
