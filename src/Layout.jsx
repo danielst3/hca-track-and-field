@@ -143,67 +143,7 @@ export default function Layout({ children, currentPageName }) {
     };
   }, [currentPageName]);
 
-  // Pages accessible per view mode. "shared" pages are accessible from any view.
-  const ROLE_PAGES = {
-    admin:   ["Today", "Calendar", "LogActivity", "Athletes", "Seasons", "Posts", "Resources", "Settings", "Privacy", "Support", "FERPACompliance", "AthleteDetail", "BulkMeetEntry", "Progress", "MyAthletes"],
-    coach:   ["Today", "Calendar", "LogActivity", "Athletes", "Seasons", "Posts", "Resources", "Settings", "Privacy", "Support", "AthleteDetail", "BulkMeetEntry", "Progress", "MyAthletes"],
-    user:    ["Today", "Calendar", "LogActivity", "Progress", "Resources", "Posts", "Settings", "Privacy", "Support"],
-    parent:  ["Today", "Calendar", "MyAthletes", "Posts", "Resources", "Settings", "Privacy", "Support"],
-  };
 
-  const DEFAULT_PAGE = {
-    admin:  "Today",
-    coach:  "Today",
-    user:   "Today",
-    parent: "Today",
-  };
-
-  // Pages that are always accessible regardless of role
-  const UNIVERSAL_PAGES = ["Settings", "Privacy", "Support"];
-
-  const getActiveRole = (currentUser) => {
-    return localStorage.getItem(`activeRole_${currentUser.id}`) || currentUser.role;
-  };
-
-  const VALID_ROLES = ["admin", "coach", "user", "parent"];
-
-  const getUserRoles = (currentUser) => {
-    // The user's actual assigned role is the source of truth
-    const assignedRole = currentUser.role;
-    // user_role_preference can grant extra view modes, but only valid roles
-    if (!currentUser?.user_role_preference) return [assignedRole];
-    const prefRoles = currentUser.user_role_preference.split(",").filter(r => VALID_ROLES.includes(r));
-    // Always include the assigned role; only include other roles if explicitly in preferences
-    const allRoles = Array.from(new Set([assignedRole, ...prefRoles]));
-    return allRoles.length > 0 ? allRoles : [assignedRole];
-  };
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const currentUser = await base44.auth.me();
-        const impersonating = localStorage.getItem("impersonating");
-        if (impersonating && currentUser?.role === "admin") {
-          const impersonatedUser = JSON.parse(impersonating);
-          setUser({ ...currentUser, ...impersonatedUser, isImpersonating: true, realRole: currentUser.role });
-        } else {
-          const roles = getUserRoles(currentUser);
-          if (roles.length > 1) {
-            const savedRole = getActiveRole(currentUser);
-            const activeRole = roles.includes(savedRole) ? savedRole : roles[0];
-            setUser({ ...currentUser, role: activeRole, availableRoles: roles });
-          } else {
-            setUser(currentUser);
-          }
-        }
-      } catch (error) {
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUser();
-  }, []);
 
   const handleStopImpersonating = () => {
     localStorage.removeItem("impersonating");
