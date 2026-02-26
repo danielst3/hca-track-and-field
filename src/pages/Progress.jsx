@@ -29,10 +29,15 @@ export default function Progress() {
   const [activeEvent, setActiveEvent] = useState("shot");
   const [dateRange, setDateRange] = useState(null); // null = "All"
 
+  // For parent view, logs will be fetched via MyAthletes. For athlete view, show their own.
+  const targetEmail = user?.isImpersonating
+    ? (JSON.parse(localStorage.getItem("impersonating") || "{}").email || user?.email)
+    : user?.email;
+
   const { data: logs = [], isError: logsError } = useQuery({
-    queryKey: ["throwLogs", user?.email],
-    queryFn: () => base44.entities.ThrowLog.filter({ athlete_email: user.email }),
-    enabled: !!user,
+    queryKey: ["throwLogs", targetEmail],
+    queryFn: () => base44.entities.ThrowLog.filter({ athlete_email: targetEmail }),
+    enabled: !!user && !!targetEmail,
   });
 
   const filteredLogs = useMemo(() => {
