@@ -50,8 +50,8 @@ export default function Seasons() {
     const fetchUser = async () => {
       const currentUser = await base44.auth.me();
       setUser(currentUser);
-      const availableRoles = getAvailableRoles(currentUser.user_role_preference, currentUser.role);
-      const effectiveRole = getActiveViewRole(currentUser.id, availableRoles, currentUser.role);
+      const availableViews = getAvailableViews(currentUser.user_role_preference, currentUser.role);
+      const effectiveRole = getActiveViewRole(currentUser.id, availableViews, currentUser.role);
       if (effectiveRole !== "admin" && effectiveRole !== "coach") {
         window.location.href = createPageUrl("Today");
       }
@@ -212,7 +212,7 @@ export default function Seasons() {
     });
   };
 
-  const effectiveRole = user ? getActiveViewRole(user.id, getAvailableRoles(user.user_role_preference, user.role), user.role) : null;
+  const effectiveRole = user ? getActiveViewRole(user.id, getAvailableViews(user.user_role_preference, user.role), user.role) : null;
   if (!user || (effectiveRole !== "admin" && effectiveRole !== "coach")) return null;
 
   const activeSeason = seasons.find((s) => s.is_active);
