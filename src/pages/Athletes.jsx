@@ -310,14 +310,10 @@ export default function Athletes() {
 
   const parents = athletes.filter(a => a.role === "parent" || (a.user_role_preference && a.user_role_preference.includes("parent")));
 
-  const effectiveRole = user ? (localStorage.getItem(`activeRole_${user.id}`) || user.role) : null;
-  
-  if (!user || (effectiveRole !== "admin" && effectiveRole !== "coach")) {
+  if (!allowed) {
     return (
       <div className="min-h-screen bg-slate-50 dark:bg-[#111] p-4 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-slate-600 dark:text-gray-300 font-semibold">Access denied. Only coaches and admins can manage athletes.</p>
-        </div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--brand-primary)]" />
       </div>
     );
   }
