@@ -7,9 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { FileText, Link as LinkIcon, Upload, Youtube, Image as ImageIcon, Plus, ExternalLink } from "lucide-react";
+import { FileText, Link as LinkIcon, Upload, Plus, ExternalLink, MoreVertical, Pencil, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import EventToggle from "../components/shared/EventToggle";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 export default function Posts() {
   const [user, setUser] = useState(null);
