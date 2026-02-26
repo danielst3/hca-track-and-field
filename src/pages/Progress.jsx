@@ -49,17 +49,15 @@ export default function Progress() {
     return result;
   }, [logs, activeEvent, dateRange]);
 
-  if (loadError || logsError) {
+  if (!allowed || !user) return null;
+
+  if (logsError) {
     return (
       <div className="min-h-screen bg-slate-50 dark:bg-[#111] p-4 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 dark:text-red-400 font-semibold">{loadError || "Failed to load analytics"}</p>
-        </div>
+        <p className="text-red-600 dark:text-red-400 font-semibold">Failed to load analytics</p>
       </div>
     );
   }
-
-  if (!user) return null;
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#111] p-4 pb-24">
