@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useViewGuard } from "../components/shared/useViewGuard";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -10,6 +9,7 @@ import DayDetailDialog from "../components/calendar/DayDetailDialog";
 import EditPlanDialog from "../components/calendar/EditPlanDialog";
 import AbbreviationsKey from "../components/shared/AbbreviationsKey.jsx";
 import EventToggle from "../components/shared/EventToggle";
+import { useViewGuard } from "../components/shared/useViewGuard";
 import { ChevronLeft, ChevronRight, Trophy, Circle, Disc3, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { MobileSelect } from "@/components/ui/mobile-select";
@@ -40,8 +40,8 @@ const planTypeOptions = [
 ];
 
 export default function Calendar() {
-  const { activeView, user, allowed } = useViewGuard("Calendar");
   const queryClient = useQueryClient();
+  const [user, setUser] = React.useState(null);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState("week");
   const [selectedDay, setSelectedDay] = useState(null);
@@ -51,24 +51,46 @@ export default function Calendar() {
   const [eventOptions, setEventOptions] = useState([]);
 
   React.useEffect(() => {
-    if (!user) return;
-    if (user?.event_types && user.event_types.length > 0) {
-      setEventOptions(user.event_types.map(e => ({ id: e.id, label: e.label })));
-    } else {
-      setEventOptions([
-        { id: "shot", label: "Shot Put" },
-        { id: "discus", label: "Discus" },
-        { id: "javelin", label: "Javelin" }
-      ]);
-    }
+    const fetchUser = async () => {
+      const currentUser = await base44.auth.me();
+      const impersonating = localStorage.getItem("impersonating");
+      if (impersonating && currentUser?.role === "admin") {
+        setUser({ ...currentUser, ...JSON.parse(impersonating), isImpersonating: true, realRole: currentUser.role });
+      } else {
+        const savedRole = localStorage.getItem(`activeRole_${currentUser.id}`);
+        const effectiveRole = savedRole || currentUser.role;
+        setUser({ ...currentUser, role: effectiveRole });
+      }
+      
+      // Build event options from user's event_types
+      if (currentUser?.event_types && currentUser.event_types.length > 0) {
+        const options = currentUser.event_types.map(event => ({
+          id: event.id,
+          label: event.label,
+        }));
+        setEventOptions(options);
+      } else {
+        setEventOptions([
+          { id: "shot", label: "Shot Put" },
+          { id: "discus", label: "Discus" },
+          { id: "javelin", label: "Javelin" }
+        ]);
+      }
+      
+      if (currentUser?.default_events && currentUser.default_events.length > 0) {
+        setSelectedEvents(currentUser.default_events);
+      }
+    };
+    fetchUser();
+  }, []);
+
+
+
+  useEffect(() => {
     if (user?.default_events && user.default_events.length > 0) {
       setSelectedEvents(user.default_events);
     }
   }, [user]);
-
-
-
-
 
   const { data: allSeasons = [] } = useQuery({
     queryKey: ["allSeasons"],
@@ -189,7 +211,6 @@ export default function Calendar() {
     return icons;
   };
 
-  const isCoachOrAdmin = activeView === "admin" || activeView === "coach";
   const selectedPlan = selectedDay ? getPlanForDate(selectedDay) : null;
   const selectedMeet = selectedDay ? getMeetForDate(selectedDay) : null;
   const selectedDayStr = selectedDay ? format(selectedDay, "yyyy-MM-dd") : null;
@@ -212,14 +233,6 @@ export default function Calendar() {
 
   const days = getDaysToShow();
 
-  if (!allowed) {
-    return (
-      <div className="min-h-screen bg-slate-50 dark:bg-[#111] p-4 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--brand-primary)]" />
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#111] p-4 pb-20">
       <div className="max-w-7xl mx-auto">
@@ -234,7 +247,7 @@ export default function Calendar() {
                 label="Season"
               />
             )}
-            <AbbreviationsKey isCoach={!user?.isImpersonating && isCoachOrAdmin} />
+            <AbbreviationsKey isCoach={!user?.isImpersonating && (user?.role === "admin" || user?.role === "coach")} />
           </div>
         </div>
 
@@ -362,12 +375,12 @@ export default function Calendar() {
           open={dialogOpen}
           onOpenChange={setDialogOpen}
           onEdit={handleEdit}
-          isCoach={!user?.isImpersonating && isCoachOrAdmin}
+          isCoach={!user?.isImpersonating && (user?.role === "admin" || user?.role === "coach")}
           selectedEvents={selectedEvents}
           athleteOverride={athleteOverride}
         />
 
-        {!user?.isImpersonating && isCoachOrAdmin && (
+        {!user?.isImpersonating && (user?.role === "admin" || user?.role === "coach") && (
           <EditPlanDialog
             date={selectedDay}
             plan={selectedPlan}
