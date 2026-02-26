@@ -212,6 +212,14 @@ export default function Calendar() {
 
   const days = getDaysToShow();
 
+  if (!allowed) {
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-[#111] p-4 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--brand-primary)]" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#111] p-4 pb-20">
       <div className="max-w-7xl mx-auto">
