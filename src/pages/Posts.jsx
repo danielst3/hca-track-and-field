@@ -16,6 +16,8 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 export default function Posts() {
   const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
+  const [editPost, setEditPost] = useState(null);
+  const [deletePostId, setDeletePostId] = useState(null);
   const [uploading, setUploading] = useState(false);
   const queryClient = useQueryClient();
   const [eventOptions, setEventOptions] = useState([]);
