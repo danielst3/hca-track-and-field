@@ -16,7 +16,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 export default function LogActivity() {
-  const [user, setUser] = useState(null);
+  const { activeView, user, allowed } = useViewGuard("LogActivity");
   const [selectedAthlete, setSelectedAthlete] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [logType, setLogType] = useState("distance");
