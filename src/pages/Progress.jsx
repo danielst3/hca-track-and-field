@@ -25,16 +25,9 @@ const DATE_RANGES = [
 ];
 
 export default function Progress() {
-  const [user, setUser] = useState(null);
+  const { activeView, user, allowed } = useViewGuard("Progress");
   const [activeEvent, setActiveEvent] = useState("shot");
   const [dateRange, setDateRange] = useState(null); // null = "All"
-  const [loadError, setLoadError] = useState(null);
-
-  useEffect(() => {
-    base44.auth.me().then(setUser).catch((err) => {
-      setLoadError("Failed to load user data");
-    });
-  }, []);
 
   const { data: logs = [], isError: logsError } = useQuery({
     queryKey: ["throwLogs", user?.email],
