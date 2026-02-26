@@ -57,9 +57,9 @@ export default function Calendar() {
       if (impersonating && currentUser?.role === "admin") {
         setUser({ ...currentUser, ...JSON.parse(impersonating), isImpersonating: true, realRole: currentUser.role });
       } else {
-        const savedRole = localStorage.getItem(`activeRole_${currentUser.id}`);
-        const effectiveRole = savedRole || currentUser.role;
-        setUser({ ...currentUser, role: effectiveRole });
+        const availableViews = getAvailableViews(currentUser.user_role_preference, currentUser.role);
+        const activeViewRole = getActiveViewRole(currentUser.id, availableViews, currentUser.role);
+        setUser({ ...currentUser, activeViewRole });
       }
       
       // Build event options from user's event_types
@@ -247,7 +247,7 @@ export default function Calendar() {
                 label="Season"
               />
             )}
-            <AbbreviationsKey isCoach={!user?.isImpersonating && (user?.role === "admin" || user?.role === "coach")} />
+            <AbbreviationsKey isCoach={!user?.isImpersonating && (user?.activeViewRole === "admin" || user?.activeViewRole === "coach")} />
           </div>
         </div>
 
@@ -375,12 +375,12 @@ export default function Calendar() {
           open={dialogOpen}
           onOpenChange={setDialogOpen}
           onEdit={handleEdit}
-          isCoach={!user?.isImpersonating && (user?.role === "admin" || user?.role === "coach")}
+          isCoach={!user?.isImpersonating && (user?.activeViewRole === "admin" || user?.activeViewRole === "coach")}
           selectedEvents={selectedEvents}
           athleteOverride={athleteOverride}
         />
 
-        {!user?.isImpersonating && (user?.role === "admin" || user?.role === "coach") && (
+        {!user?.isImpersonating && (user?.activeViewRole === "admin" || user?.activeViewRole === "coach") && (
           <EditPlanDialog
             date={selectedDay}
             plan={selectedPlan}

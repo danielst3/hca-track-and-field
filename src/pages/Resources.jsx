@@ -187,8 +187,9 @@ export default function Resources() {
     queryFn: () => base44.entities.Resource.list(),
   });
 
-  const effectiveRole = localStorage.getItem(`activeRole_${user?.id}`) || user?.role;
-  const isCoach = effectiveRole === "admin" || effectiveRole === "coach";
+  const availableViews = user ? getAvailableViews(user.user_role_preference, user.role) : [];
+  const activeViewRole = user ? getActiveViewRole(user.id, availableViews, user.role) : null;
+  const isCoach = activeViewRole === "admin" || activeViewRole === "coach";
 
   const handleAddResource = () => {
     setSelectedResource(null);

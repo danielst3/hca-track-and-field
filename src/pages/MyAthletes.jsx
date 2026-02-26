@@ -20,19 +20,21 @@ export default function MyAthletes() {
   useEffect(() => {
     const fetchUser = async () => {
       const currentUser = await base44.auth.me();
-      setUser(currentUser);
+      const availableViews = getAvailableViews(currentUser.user_role_preference, currentUser.role);
+      const activeViewRole = getActiveViewRole(currentUser.id, availableViews, currentUser.role);
+      setUser({ ...currentUser, activeViewRole });
     };
     fetchUser();
   }, []);
 
   const { data: allUsers = [] } = useQuery({
-    queryKey: ["users"],
+    queryKey: ["users", user?.activeViewRole],
     queryFn: () => base44.entities.User.list(),
     enabled: !!user,
   });
 
   // For parents: filter athletes by created_by match. For coaches: show all athletes.
-  const isCoach = user?.role === "admin" || user?.role === "coach";
+  const isCoach = user?.activeViewRole === "admin" || user?.activeViewRole === "coach";
   const assignedAthletes = isCoach 
     ? allUsers.filter(u => u.role === "user")
     : allUsers.filter(u => u.role === "user" && u.created_by === user?.email);

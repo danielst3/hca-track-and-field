@@ -35,7 +35,9 @@ export default function Posts() {
   useEffect(() => {
     const fetchUser = async () => {
       const currentUser = await base44.auth.me();
-      setUser(currentUser);
+      const availableViews = getAvailableViews(currentUser.user_role_preference, currentUser.role);
+      const activeViewRole = getActiveViewRole(currentUser.id, availableViews, currentUser.role);
+      setUser({ ...currentUser, activeViewRole });
       
       // Build event options from user's event_types
       if (currentUser?.event_types && currentUser.event_types.length > 0) {
@@ -57,8 +59,10 @@ export default function Posts() {
     fetchUser();
   }, []);
 
+  const canManagePosts = user?.activeViewRole === "admin" || user?.activeViewRole === "coach";
+
   const { data: posts = [], isLoading } = useQuery({
-    queryKey: ["posts"],
+    queryKey: ["posts", user?.activeViewRole],
     queryFn: () => base44.entities.Post.list("-created_date"),
   });
 
@@ -180,7 +184,7 @@ export default function Posts() {
             <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100">Posts</h1>
             <p className="text-slate-600 dark:text-gray-300 mt-1">Team updates and announcements</p>
           </div>
-          {user?.role === "admin" && (
+          {canManagePosts && (
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
                 <Button className="bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600">
@@ -374,7 +378,7 @@ export default function Posts() {
                         </div>
                       )}
                     </div>
-                    {(user?.role === "admin" || user?.email === post.created_by) && (
+                    {(canManagePosts && (user?.activeViewRole === "admin" || user?.email === post.created_by)) && (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400">
