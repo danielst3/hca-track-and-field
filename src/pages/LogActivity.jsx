@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { useViewGuard } from "../components/shared/useViewGuard";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useViewGuard } from "../components/shared/useViewGuard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,7 +16,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 export default function LogActivity() {
-  const [user, setUser] = useState(null);
+  const { activeView, user, allowed } = useViewGuard("LogActivity");
   const [selectedAthlete, setSelectedAthlete] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [logType, setLogType] = useState("distance");
@@ -28,6 +28,7 @@ export default function LogActivity() {
   });
   const [submitted, setSubmitted] = useState(false);
   const queryClient = useQueryClient();
+  const isCoach = activeView === "admin" || activeView === "coach";
 
   const events = [
     { id: "shot", label: "Shot Put", Icon: Circle },
@@ -36,21 +37,11 @@ export default function LogActivity() {
   ];
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const currentUser = await base44.auth.me();
-      const savedRole = localStorage.getItem(`activeRole_${currentUser.id}`);
-      const effectiveRole = savedRole || currentUser.role;
-      const effectiveUser = { ...currentUser, role: effectiveRole };
-      setUser(effectiveUser);
-      const isCoachRole = effectiveRole === "admin" || effectiveRole === "coach";
-      if (!isCoachRole) {
-        setSelectedAthlete(effectiveUser);
-      }
-    };
-    fetchUser();
-  }, []);
-
-  const isCoach = user?.role === "admin" || user?.role === "coach";
+    if (!user) return;
+    if (!isCoach) {
+      setSelectedAthlete(user);
+    }
+  }, [user, isCoach]);
 
   const { data: athletes = [] } = useQuery({
     queryKey: ["athletes", isCoach],
@@ -131,7 +122,7 @@ export default function LogActivity() {
 
   const currentEvent = events.find(e => e.id === selectedEvent);
 
-  if (!user) {
+  if (!allowed || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-[#111] p-4">
         <div className="text-center">
