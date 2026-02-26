@@ -18,9 +18,10 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { useRoleContext } from "@/components/shared/useRoleContext";
 
 export default function Athletes() {
-  const [user, setUser] = useState(null);
+  const { user, activeViewRole } = useRoleContext();
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState("user");
   const [inviteOpen, setInviteOpen] = useState(false);
@@ -30,20 +31,6 @@ export default function Athletes() {
   const [editFirstName, setEditFirstName] = useState("");
   const [editLastName, setEditLastName] = useState("");
   const queryClient = useQueryClient();
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const currentUser = await base44.auth.me();
-      setUser(currentUser);
-      // Check the active role (may be switched via localStorage)
-      const savedRole = localStorage.getItem(`activeRole_${currentUser.id}`);
-      const effectiveRole = savedRole || currentUser.role;
-      if (effectiveRole !== "admin" && effectiveRole !== "coach") {
-        window.location.href = createPageUrl("Today");
-      }
-    };
-    fetchUser();
-  }, []);
 
   const { data: athletes = [] } = useQuery({
     queryKey: ["athletes"],
