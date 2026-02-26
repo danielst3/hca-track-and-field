@@ -153,12 +153,13 @@ export default function Layout({ children, currentPageName }) {
           const impersonatedUser = JSON.parse(impersonating);
           setUser({ ...currentUser, ...impersonatedUser, isImpersonating: true, realRole: currentUser.role });
         } else {
-          const availableRoles = getAvailableRoles(currentUser.user_role_preference, currentUser.role);
-          const activeRole = getActiveViewRole(currentUser.id, availableRoles, currentUser.role);
+          const availableViews = getAvailableViews(currentUser.user_role_preference, currentUser.role);
+          const activeViewRole = getActiveViewRole(currentUser.id, availableViews, currentUser.role);
           setUser({
             ...currentUser,
-            role: activeRole,
-            availableRoles: availableRoles.length > 1 ? availableRoles : undefined,
+            // primaryRole: currentUser.role  ← never overwritten (security role)
+            activeViewRole,
+            availableViews: availableViews.length > 1 ? availableViews : undefined,
           });
         }
       } catch (error) {
