@@ -33,7 +33,7 @@ export default function Athletes() {
   const queryClient = useQueryClient();
 
   const { data: athletes = [] } = useQuery({
-    queryKey: ["athletes"],
+    queryKey: ["athletes", activeViewRole],
     queryFn: async () => {
       const res = await base44.functions.invoke("getAthletes");
       return res.data.users || [];
