@@ -8,6 +8,7 @@ import { Users, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import EventProgressCard from "../components/tracking/EventProgressCard";
+import { useViewGuard } from "../components/shared/useViewGuard";
 
 export default function MyAthletes() {
   const [user, setUser] = useState(null);
