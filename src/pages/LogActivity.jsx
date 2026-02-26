@@ -13,7 +13,7 @@ import { format } from "date-fns";
 import { createPageUrl } from "../utils";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { getActiveViewRole, getAvailableRoles } from "../components/shared/getActiveViewRole";
+import { getActiveViewRole, getAvailableViews } from "../components/shared/getActiveViewRole";
 import { useViewGuard } from "../components/shared/useViewGuard";
 
 export default function LogActivity() {
