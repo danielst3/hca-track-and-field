@@ -179,8 +179,9 @@ export default function Resources() {
     queryFn: () => base44.entities.Resource.list(),
   });
 
-  const effectiveRole = localStorage.getItem(`activeRole_${user?.id}`) || user?.role;
-  const isCoach = effectiveRole === "admin" || effectiveRole === "coach";
+  const isCoach = activeView === "admin" || activeView === "coach";
+
+  if (!allowed) return null;
 
   const handleAddResource = () => {
     setSelectedResource(null);
