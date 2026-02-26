@@ -110,6 +110,7 @@ export default function Today() {
     },
   });
 
+  const isCoachOrAdmin = activeView === "admin" || activeView === "coach";
   const athleteEmail = user?.isImpersonating
     ? (JSON.parse(localStorage.getItem("impersonating") || "{}").email || null)
     : user?.email;
