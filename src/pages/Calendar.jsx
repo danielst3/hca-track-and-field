@@ -189,6 +189,7 @@ export default function Calendar() {
     return icons;
   };
 
+  const isCoachOrAdmin = activeView === "admin" || activeView === "coach";
   const selectedPlan = selectedDay ? getPlanForDate(selectedDay) : null;
   const selectedMeet = selectedDay ? getMeetForDate(selectedDay) : null;
   const selectedDayStr = selectedDay ? format(selectedDay, "yyyy-MM-dd") : null;
