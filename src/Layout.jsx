@@ -176,13 +176,13 @@ export default function Layout({ children, currentPageName }) {
     window.location.reload();
   };
 
-  const handleSwitchRole = (role) => {
-    const allowedRoles = user?.availableRoles || [];
-    if (!allowedRoles.includes(role)) {
-      toast.error("You don't have access to that role");
+  const handleSwitchView = (viewRole) => {
+    const allowed = user?.availableViews || [];
+    if (!allowed.includes(viewRole)) {
+      toast.error("You don't have access to that view");
       return;
     }
-    localStorage.setItem(`activeRole_${user.id}`, role);
+    setActiveViewRole(user.id, viewRole);
     queryClient.clear();
     window.location.href = createPageUrl("Today");
   };
