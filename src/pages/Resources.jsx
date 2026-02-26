@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { useViewGuard } from "../components/shared/useViewGuard";
 import { useQuery } from "@tanstack/react-query";
+import { useViewGuard } from "../components/shared/useViewGuard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Scroll, Book, Dumbbell, Info, Shield, Target, Activity, Plus, ExternalLink, FileText, Edit } from "lucide-react";
