@@ -168,19 +168,11 @@ const safety = [
 ];
 
 export default function Resources() {
-  const [user, setUser] = useState(null);
+  const { activeView, user, allowed } = useViewGuard("Resources");
   const [activeSection, setActiveSection] = useState("abbreviations");
   const [expandedDrill, setExpandedDrill] = useState(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedResource, setSelectedResource] = useState(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const currentUser = await base44.auth.me();
-      setUser(currentUser);
-    };
-    fetchUser();
-  }, []);
 
   const { data: customResources = [] } = useQuery({
     queryKey: ["resources"],
