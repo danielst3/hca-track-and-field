@@ -415,44 +415,7 @@ export default function Today() {
 
         {/* Recent Posts */}
         {recentPosts.length > 0 && (
-          <Card className="bg-white dark:bg-gray-800 dark:border-gray-700">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2 dark:text-gray-100">
-                  <FileText className="w-5 h-5" />
-                  Recent Posts
-                </CardTitle>
-                <Link to={createPageUrl("Posts")}>
-                  <Button variant="outline" size="sm" className="dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">View All</Button>
-                </Link>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {recentPosts.map((post) => (
-                <div key={post.id} className="p-4 bg-slate-50 dark:bg-gray-900 rounded-lg border border-slate-200 dark:border-gray-700">
-                  <h3 className="font-semibold text-slate-900 dark:text-gray-100">{post.title}</h3>
-                  <p className="text-sm text-slate-600 dark:text-gray-400 mt-1">
-                    {post.created_by} • {format(new Date(post.created_date), "MMM d")}
-                  </p>
-                  {post.event_tags && post.event_tags.length > 0 && (
-                    <div className="flex gap-2 mt-2 flex-wrap">
-                      {post.event_tags.map((tag) => {
-                        const eventOption = eventOptions.find(e => e.id === tag);
-                        return (
-                          <Badge key={tag} variant="outline" className="text-xs flex items-center gap-1">
-                           {EVENT_ICONS[tag] || null} {eventOption?.label || tag}
-                          </Badge>
-                        );
-                      })}
-                    </div>
-                  )}
-                  {post.content && (
-                    <p className="text-sm text-slate-700 dark:text-gray-300 mt-2 line-clamp-2">{post.content}</p>
-                  )}
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+          <RecentPostsSection recentPosts={recentPosts} eventOptions={eventOptions} />
         )}
       </div>
     </div>
