@@ -55,10 +55,11 @@ export default function LogActivity() {
     queryKey: ["athletes", isCoach],
     queryFn: async () => {
       if (!isCoach) return [];
-      const allUsers = await base44.entities.User.list();
+      const res = await base44.functions.invoke("getAthletes");
+      const allUsers = res.data.users || [];
       const athleteUsers = allUsers.filter(u => {
-        const isAthlete = u.role === "user" || u.role === "athlete" || (u.user_role_preference && (u.user_role_preference.includes("user") || u.user_role_preference.includes("athlete")));
-        return isAthlete;
+        const roles = u.user_role_preference ? u.user_role_preference.split(",") : [u.role];
+        return roles.includes("user") || roles.includes("athlete");
       });
       return athleteUsers.sort((a, b) => {
         const nameA = (a.first_name && a.last_name) ? `${a.first_name} ${a.last_name}` : a.full_name;
