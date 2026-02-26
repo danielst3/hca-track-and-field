@@ -234,7 +234,7 @@ export default function Calendar() {
                 label="Season"
               />
             )}
-            <AbbreviationsKey isCoach={!user?.isImpersonating && (user?.role === "admin" || user?.role === "coach")} />
+            <AbbreviationsKey isCoach={!user?.isImpersonating && isCoachOrAdmin} />
           </div>
         </div>
 
