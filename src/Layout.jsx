@@ -43,8 +43,7 @@ import {
 import { toast } from "sonner";
 
 export default function Layout({ children, currentPageName }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { user, isLoading: loading, activeViewRole, roles, setActiveViewRole, primaryRole, roleLabelFor } = useRoleContext();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [pullDistance, setPullDistance] = useState(0);
