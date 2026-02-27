@@ -275,12 +275,12 @@ export default function LogActivity() {
                       }
                       placeholder={logType === "distance" ? "e.g. 38.5" : "e.g. 2:45 or 165"}
                       required
-                      className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
-                    />
-                  </div>
+                      className="h-11 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                      />
+                      </div>
 
-                  <div className="space-y-2">
-                    <Label className="dark:text-gray-200">Notes (optional)</Label>
+                      <div className="space-y-2">
+                      <Label className="dark:text-gray-200">Notes (optional)</Label>
                     <Textarea
                       value={formData.notes}
                       onChange={(e) =>
