@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { drillsDatabase } from "../components/data/drillsDatabase";
 import EditResourceDialog from "../components/resources/EditResourceDialog";
 import { getActiveViewRole, getAvailableViews } from "../components/shared/getActiveViewRole";
+import HorizontalScrollContainer from "../components/shared/HorizontalScrollContainer";
 
 const customSection = {
   id: "custom-resources",
