@@ -251,15 +251,14 @@ export default function Calendar() {
           </div>
         </div>
 
-        <Tabs value={view} onValueChange={setView} className="mb-4">
-          <TabsList>
-            <TabsTrigger value="week">Week</TabsTrigger>
-            <TabsTrigger value="month">Month</TabsTrigger>
-          </TabsList>
-        </Tabs>
-
-        {/* Event Filter */}
-        <div className="flex items-center gap-3 flex-wrap mb-6">
+        {/* View Toggle + Event Filter */}
+        <div className="flex flex-wrap items-center gap-3 mb-4">
+          <Tabs value={view} onValueChange={setView}>
+            <TabsList className="h-11">
+              <TabsTrigger value="week" className="h-10 px-5 text-sm">Week</TabsTrigger>
+              <TabsTrigger value="month" className="h-10 px-5 text-sm">Month</TabsTrigger>
+            </TabsList>
+          </Tabs>
           {eventOptions.map(event => (
             <EventToggle
               key={event.id}
@@ -271,17 +270,27 @@ export default function Calendar() {
         </div>
 
         {/* Navigation */}
-        <div className="flex items-center justify-between mb-6">
-          <Button variant="outline" onClick={handlePrevious}>
-            <ChevronLeft className="w-4 h-4" />
+        <div className="flex items-center justify-between mb-5 gap-2">
+          <Button
+            variant="outline"
+            onClick={handlePrevious}
+            className="h-11 w-11 flex-shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
+            size="icon"
+          >
+            <ChevronLeft className="w-5 h-5" />
           </Button>
-          <h2 className="text-xl font-semibold text-slate-800 dark:text-gray-200">
+          <h2 className="text-base font-semibold text-slate-800 dark:text-gray-200 text-center flex-1">
            {view === "week"
              ? `Week of ${format(startOfWeek(currentDate, { weekStartsOn: 0 }), "MMM d, yyyy")}`
              : format(currentDate, "MMMM yyyy")}
           </h2>
-          <Button variant="outline" onClick={handleNext}>
-            <ChevronRight className="w-4 h-4" />
+          <Button
+            variant="outline"
+            onClick={handleNext}
+            className="h-11 w-11 flex-shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
+            size="icon"
+          >
+            <ChevronRight className="w-5 h-5" />
           </Button>
         </div>
 
