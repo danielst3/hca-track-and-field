@@ -80,27 +80,29 @@ export default function Progress() {
               <button
                 key={opt.value}
                 onClick={() => setActiveEvent(opt.value)}
-                className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-all flex items-center gap-1.5 ${
+                style={{ minHeight: "44px" }}
+                className={`px-5 rounded-full text-sm font-semibold border-2 transition-all flex items-center gap-1.5 active:scale-95 ${
                   activeEvent === opt.value
-                    ? opt.color
+                    ? opt.color + " shadow-sm"
                     : "border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800"
                 }`}
               >
-                <Icon className="w-3.5 h-3.5" /> {opt.label}
+                <Icon className="w-4 h-4" /> {opt.label}
               </button>
             );
           })}
         </div>
 
         {/* Date Range Filter */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Range:</span>
-          <div className="flex gap-1">
+          <div className="flex gap-1.5 flex-wrap">
             {DATE_RANGES.map(({ label, days }) => (
               <button
                 key={label}
                 onClick={() => setDateRange(days)}
-                className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${
+                style={{ minHeight: "44px", minWidth: "44px" }}
+                className={`px-3 rounded-md text-sm font-semibold transition-all active:scale-95 ${
                   (dateRange === null && days === null) || (dateRange === days && days !== null)
                     ? "bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900"
                     : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400"
