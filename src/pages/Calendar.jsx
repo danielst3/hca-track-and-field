@@ -329,7 +329,7 @@ export default function Calendar() {
                 className={`${
                   colors ? colors.bg : "bg-white dark:bg-gray-800"
                 } border-2 ${isToday ? "border-[var(--brand-primary)] ring-2 ring-[var(--brand-primary)] ring-offset-1" : "border-slate-200 dark:border-gray-700"} ${
-                  view === "month" ? "min-h-[3.5rem]" : "min-h-[5rem]"
+                  view === "month" ? "min-h-[2.5rem] sm:min-h-[3.5rem]" : "min-h-[5rem]"
                 } hover:shadow-lg transition-shadow cursor-pointer active:scale-[0.98]`}
               >
                 <CardContent className={view === "month" ? "p-1 sm:p-3" : "p-3"}>
