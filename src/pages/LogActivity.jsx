@@ -196,7 +196,7 @@ export default function LogActivity() {
                     disabled={isCoach && !selectedAthlete}
                     onClick={() => setSelectedEvent(event.id)}
                     className={cn(
-                      "h-20 rounded-lg border-2 flex flex-col items-center justify-center gap-2 transition-all",
+                      "h-20 rounded-lg border-2 flex flex-col items-center justify-center gap-2 transition-all active:scale-95",
                       isCoach && !selectedAthlete ? "opacity-50 cursor-not-allowed" : "",
                       selectedEvent === event.id
                         ? "border-[var(--brand-primary)] bg-[var(--brand-secondary-light)] dark:bg-gray-700"
