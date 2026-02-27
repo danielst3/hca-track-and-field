@@ -331,7 +331,7 @@ export default function Calendar() {
                   view === "month" ? "min-h-[3.5rem]" : "min-h-[5rem]"
                 } hover:shadow-lg transition-shadow cursor-pointer active:scale-[0.98]`}
               >
-                <CardContent className="p-3">
+                <CardContent className={view === "month" ? "p-1 sm:p-3" : "p-3"}>
                   <div className="flex items-center justify-between mb-2">
                     <span
                       className={`text-sm font-bold ${
