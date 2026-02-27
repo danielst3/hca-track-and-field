@@ -300,27 +300,29 @@ export default function Resources() {
         </div>
 
         {/* Mobile: horizontal scroll nav */}
-        <div className="lg:hidden px-4 mb-4">
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+        <div className="lg:hidden px-4 mb-6">
+          <HorizontalScrollContainer>
             {sections.map((section) => {
               const Icon = section.icon;
+              const isActive = activeSection === section.id;
               return (
                 <button
                   key={section.id}
                   onClick={() => setActiveSection(section.id)}
+                  style={{ scrollSnapAlign: "start", minHeight: "44px" }}
                   className={cn(
-                    "flex items-center gap-2 px-3 py-2 rounded-lg text-left transition-all whitespace-nowrap flex-shrink-0",
-                    activeSection === section.id
-                      ? "bg-blue-600 text-white shadow-md dark:bg-blue-700"
-                      : "text-slate-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700"
+                    "flex items-center gap-2 px-4 rounded-xl text-left transition-all whitespace-nowrap flex-shrink-0 font-medium text-sm active:scale-95",
+                    isActive
+                      ? "bg-blue-600 text-white shadow-md ring-2 ring-blue-400 ring-offset-1 dark:bg-blue-700"
+                      : "text-slate-700 dark:text-gray-300 bg-white dark:bg-gray-800 border-2 border-slate-200 dark:border-gray-700"
                   )}
                 >
                   <Icon className="w-4 h-4 flex-shrink-0" />
-                  <span className="text-sm font-medium">{section.title}</span>
+                  <span>{section.title}</span>
                 </button>
               );
             })}
-          </div>
+          </HorizontalScrollContainer>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 px-4">
