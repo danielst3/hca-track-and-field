@@ -326,11 +326,16 @@ export default function Calendar() {
               <Card
                 key={day.toISOString()}
                 onClick={() => handleDayClick(day)}
-                className={`${
-                  colors ? colors.bg : "bg-white dark:bg-gray-800"
-                } border-2 ${isToday ? "border-[var(--brand-primary)] ring-2 ring-[var(--brand-primary)] ring-offset-1" : "border-slate-200 dark:border-gray-700"} ${
-                  view === "month" ? "min-h-[2.5rem] sm:min-h-[3.5rem]" : "min-h-[5rem]"
-                } hover:shadow-lg transition-shadow cursor-pointer active:scale-[0.98]`}
+                className={cn(
+                  "border-2 hover:shadow-lg transition-shadow cursor-pointer active:scale-[0.98]",
+                  view === "month" ? "min-h-[2.5rem] sm:min-h-[3.5rem]" : "min-h-[5rem]",
+                  meet
+                    ? "bg-red-100 dark:bg-red-950 border-red-500 dark:border-red-500 shadow-red-200 dark:shadow-red-900 shadow-md"
+                    : colors
+                    ? `${colors.bg} border-slate-200 dark:border-gray-700`
+                    : "bg-white dark:bg-gray-800 border-slate-200 dark:border-gray-700",
+                  isToday && "border-[var(--brand-primary)] ring-2 ring-[var(--brand-primary)] ring-offset-1"
+                )}
               >
                 <CardContent className={view === "month" ? "p-1 sm:p-3" : "p-3"}>
                   <div className={cn("flex items-center justify-between", view === "month" ? "mb-0 sm:mb-2" : "mb-2")}>
