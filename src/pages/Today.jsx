@@ -114,7 +114,7 @@ export default function Today() {
       const future = meets.filter(m => m.date >= today).sort((a, b) => new Date(a.date) - new Date(b.date));
       return future[0] || null;
     },
-    enabled: !!activeSeason && !!user,
+    enabled: !!activeSeason,
   });
 
   const { data: recentPosts = [] } = useQuery({
