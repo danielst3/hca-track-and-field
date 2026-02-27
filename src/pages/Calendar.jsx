@@ -351,8 +351,9 @@ export default function Calendar() {
 
                   {plan && (
                     <div>
+                      {/* Label: hidden on small screens in month view */}
                       <p
-                        className={`text-xs font-semibold ${
+                        className={`text-xs font-semibold hidden sm:block ${
                           colors?.text || "text-slate-600 dark:text-gray-400"
                         }`}
                       >
@@ -367,7 +368,7 @@ export default function Calendar() {
                   )}
 
                   {meet && (
-                    <p className="text-xs font-semibold text-red-700 dark:text-red-400 mt-1 line-clamp-2">
+                    <p className="text-xs font-semibold text-red-700 dark:text-red-400 mt-1 line-clamp-1 hidden sm:block">
                       {meet.name}
                     </p>
                   )}
