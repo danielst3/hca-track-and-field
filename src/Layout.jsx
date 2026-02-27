@@ -597,7 +597,7 @@ export default function Layout({ children, currentPageName }) {
           <span className="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap">Mode:</span>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-1.5 text-xs font-semibold text-white dark:text-gray-100 bg-white/10 dark:bg-gray-800 hover:bg-white/20 dark:hover:bg-gray-700 px-3 py-1 rounded-full transition-colors">
+              <button className="flex items-center gap-1.5 text-xs font-semibold text-white bg-white/10 hover:bg-white/20 px-3 py-1 rounded-full transition-colors">
                 {activeViewRole === "admin" ? "Admin" : activeViewRole === "coach" ? "Coach" : activeViewRole === "parent" ? "Parent" : "Athlete"}
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
               </button>
