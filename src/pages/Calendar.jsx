@@ -327,9 +327,9 @@ export default function Calendar() {
                 onClick={() => handleDayClick(day)}
                 className={`${
                   colors ? colors.bg : "bg-white dark:bg-gray-800"
-                } border-2 ${isToday ? "border-[var(--brand-primary)]" : "border-slate-200 dark:border-gray-700"} ${
-                  view === "month" ? "min-h-24" : "min-h-32"
-                } hover:shadow-lg transition-shadow cursor-pointer`}
+                } border-2 ${isToday ? "border-[var(--brand-primary)] ring-2 ring-[var(--brand-primary)] ring-offset-1" : "border-slate-200 dark:border-gray-700"} ${
+                  view === "month" ? "min-h-[3.5rem]" : "min-h-[5rem]"
+                } hover:shadow-lg transition-shadow cursor-pointer active:scale-[0.98]`}
               >
                 <CardContent className="p-3">
                   <div className="flex items-center justify-between mb-2">
