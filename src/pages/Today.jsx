@@ -236,7 +236,7 @@ export default function Today() {
                 variant="outline"
                 size="icon"
                 onClick={handlePrevDay}
-                className="h-8 w-8 select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
+                className="h-11 w-11 select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
               >
                 <ChevronLeft className="w-4 h-4" />
               </Button>
@@ -247,7 +247,7 @@ export default function Today() {
                 variant="outline"
                 size="icon"
                 onClick={handleNextDay}
-                className="h-8 w-8 select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
+                className="h-11 w-11 select-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
               >
                 <ChevronRight className="w-4 h-4" />
               </Button>
