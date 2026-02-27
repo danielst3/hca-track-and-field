@@ -406,10 +406,7 @@ export default function Today() {
           <CoachAthleteOverviewSection date={selectedDate} dailyPlan={dailyPlan} selectedEvents={selectedEvents} />
         )}
 
-        {/* Recent Posts */}
-        {recentPosts.length > 0 && (
-          <RecentPostsSection recentPosts={recentPosts} eventOptions={eventOptions} />
-        )}
+
       </div>
     </div>
   );
