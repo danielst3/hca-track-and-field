@@ -106,15 +106,15 @@ export default function Today() {
   });
 
   const { data: nextMeet } = useQuery({
-    queryKey: ["nextMeet", activeSeason?.id, user?.activeViewRole],
+    queryKey: ["nextMeet", activeSeason?.id],
     queryFn: async () => {
-      if (!activeSeason || user?.activeViewRole === "admin") return null;
+      if (!activeSeason) return null;
       const today = format(new Date(), "yyyy-MM-dd");
       const meets = await base44.entities.Meet.filter({ season_id: activeSeason.id });
-      const future = meets.filter(m => m.date >= today).sort((a, b) => new Date(a.date) - new Date(b.date));
+      const future = meets.filter(m => m.date > today).sort((a, b) => new Date(a.date) - new Date(b.date));
       return future[0] || null;
     },
-    enabled: !!activeSeason && !!user && user.activeViewRole !== "admin",
+    enabled: !!activeSeason && !!user,
   });
 
   const { data: recentPosts = [] } = useQuery({
