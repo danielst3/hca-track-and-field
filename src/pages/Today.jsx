@@ -201,27 +201,6 @@ export default function Today() {
     <div className="min-h-screen bg-[var(--brand-secondary)] dark:bg-[#111] p-4 pb-20">
       {user && user.activeViewRole !== "admin" && <QuickLogButton user={user} />}
       <div className="max-w-7xl mx-auto space-y-4">
-        {/* Athlete Dashboard (only for athletes) */}
-        {user && user.activeViewRole !== "admin" && isSameDay(selectedDate, new Date()) && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div className="lg:col-span-2 space-y-4">
-              {user.events && user.events.filter(e => selectedEvents.includes(e)).map(event => (
-                <EventProgressChart 
-                  key={event} 
-                  event={event} 
-                  data={getEventData(event)} 
-                />
-              ))}
-            </div>
-            <div>
-              <AthleteCard 
-                user={user} 
-                nextMeet={nextMeet} 
-                recentPosts={recentPosts} 
-              />
-            </div>
-          </div>
-        )}
         {/* Next Meet Countdown */}
         {nextMeet && isSameDay(selectedDate, new Date()) && (() => {
           const daysUntil = differenceInCalendarDays(parseISO(nextMeet.date), new Date());
