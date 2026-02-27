@@ -304,12 +304,13 @@ export default function Calendar() {
         >
           {view === "month" && (
             <>
-              {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
+              {[["Mon","M"], ["Tue","T"], ["Wed","W"], ["Thu","T"], ["Fri","F"], ["Sat","S"], ["Sun","S"]].map(([full, short]) => (
                 <div
-                  key={day}
+                  key={full}
                   className="text-center text-xs font-semibold text-slate-600 dark:text-gray-100 py-2"
                 >
-                  {day}
+                  <span className="hidden sm:inline">{full}</span>
+                  <span className="sm:hidden">{short}</span>
                 </div>
               ))}
             </>
