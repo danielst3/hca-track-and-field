@@ -333,7 +333,7 @@ export default function Calendar() {
                 } hover:shadow-lg transition-shadow cursor-pointer active:scale-[0.98]`}
               >
                 <CardContent className={view === "month" ? "p-1 sm:p-3" : "p-3"}>
-                  <div className="flex items-center justify-between mb-2">
+                  <div className={cn("flex items-center justify-between", view === "month" ? "mb-0 sm:mb-2" : "mb-2")}>
                     <span
                       className={`text-sm font-bold ${
                         isToday
