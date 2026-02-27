@@ -220,18 +220,18 @@ export default function LogActivity() {
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label className="dark:text-gray-200">Date</Label>
-                      <Input
-                          type="date"
-                          value={formData.date}
-                          onChange={(e) =>
-                            setFormData({ ...formData, date: e.target.value })
-                          }
-                          max={format(new Date(), "yyyy-MM-dd")}
-                          required
-                          className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
-                        />
+                     <div className="space-y-2">
+                       <Label className="dark:text-gray-200">Date</Label>
+                       <Input
+                           type="date"
+                           value={formData.date}
+                           onChange={(e) =>
+                             setFormData({ ...formData, date: e.target.value })
+                           }
+                           max={format(new Date(), "yyyy-MM-dd")}
+                           required
+                           className="h-11 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                         />
                     </div>
                     <div className="space-y-2">
                       <Label className="dark:text-gray-200">Log Type</Label>
