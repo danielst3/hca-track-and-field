@@ -204,14 +204,15 @@ export default function Today() {
         {/* Next Meet Countdown */}
         {nextMeet && isSameDay(selectedDate, new Date()) && (() => {
           const daysUntil = differenceInCalendarDays(parseISO(nextMeet.date), new Date());
+          const label = daysUntil === 0
+            ? `It's meet day — ${nextMeet.name}!`
+            : daysUntil === 1
+            ? `1 day until the ${nextMeet.name}!`
+            : `${daysUntil} days until the ${nextMeet.name}!`;
           return (
             <div className="flex items-center gap-3 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-xl px-4 py-3 shadow-md">
               <Trophy className="w-5 h-5 flex-shrink-0" />
-              <p className="font-semibold text-sm sm:text-base">
-                {daysUntil === 1
-                  ? `1 day until the ${nextMeet.name}!`
-                  : `${daysUntil} days until the ${nextMeet.name}!`}
-              </p>
+              <p className="font-semibold text-sm sm:text-base">{label}</p>
             </div>
           );
         })()}
