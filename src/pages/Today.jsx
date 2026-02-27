@@ -13,7 +13,7 @@ import { Calendar, Trophy, ChevronLeft, ChevronRight, X, FileText, Circle, Disc3
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { format, isSameDay, addDays } from "date-fns";
+import { format, isSameDay, addDays, differenceInCalendarDays, parseISO } from "date-fns";
 
 const EVENT_ICONS = {
   shot: <Circle className="w-4 h-4" />,
