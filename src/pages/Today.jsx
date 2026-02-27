@@ -304,7 +304,7 @@ export default function Today() {
         )}
 
         {/* Event Filter */}
-        <div className="flex items-center gap-3 flex-wrap">
+        <div className="flex items-center gap-3 flex-wrap gap-y-2">
           {eventOptions.map(event => (
             <EventToggle
               key={event.id}
