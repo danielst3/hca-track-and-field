@@ -352,15 +352,15 @@ export default function Calendar() {
 
                   {plan && (
                     <div>
-                      {/* Label: hidden on small screens in month view */}
-                      <p
-                        className={`text-xs font-semibold hidden sm:block ${
-                          colors?.text || "text-slate-600 dark:text-gray-400"
-                        }`}
-                      >
+                      {/* Mobile: just a colored dot */}
+                      <div className="flex justify-center sm:hidden mt-1">
+                        <span className={`w-2 h-2 rounded-full ${colors?.dot || "bg-slate-400"}`} />
+                      </div>
+                      {/* Desktop: label + event icons */}
+                      <p className={`text-xs font-semibold hidden sm:block ${colors?.text || "text-slate-600 dark:text-gray-400"}`}>
                         {colors?.label}
                       </p>
-                      <div className="flex flex-wrap gap-1 mt-1">
+                      <div className="hidden sm:flex flex-wrap gap-1 mt-1">
                         {getPlanContent(plan).map(evt => (
                           <span key={evt}>{EVENT_ICON_MAP[evt]}</span>
                         ))}
