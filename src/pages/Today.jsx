@@ -407,6 +407,24 @@ export default function Today() {
           <CoachAthleteOverviewSection date={selectedDate} dailyPlan={dailyPlan} selectedEvents={selectedEvents} />
         )}
 
+        {/* Athlete Dashboard */}
+        {user && user.activeViewRole !== "admin" && isSameDay(selectedDate, new Date()) && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="lg:col-span-2 space-y-4">
+              {user.events && user.events.filter(e => selectedEvents.includes(e)).map(event => (
+                <EventProgressChart key={event} event={event} data={getEventData(event)} />
+              ))}
+            </div>
+            <div>
+              <AthleteCard user={user} nextMeet={nextMeet} recentPosts={recentPosts} />
+            </div>
+          </div>
+        )}
+
+        {/* Recent Posts */}
+        {recentPosts.length > 0 && (
+          <RecentPostsSection recentPosts={recentPosts} eventOptions={eventOptions} />
+        )}
 
       </div>
     </div>
