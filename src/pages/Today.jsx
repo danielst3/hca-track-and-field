@@ -207,8 +207,8 @@ export default function Today() {
           const label = daysUntil === 0
             ? `It's meet day — ${nextMeet.name}!`
             : daysUntil === 1
-            ? `1 day until the ${nextMeet.name}!`
-            : `${daysUntil} days until the ${nextMeet.name}!`;
+            ? `1 day until the ${nextMeet.name} meet!`
+            : `${daysUntil} days until the ${nextMeet.name} meet!`;
           return (
             <div className="flex items-center gap-3 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-xl px-4 py-3 shadow-md">
               <Trophy className="w-5 h-5 flex-shrink-0" />
