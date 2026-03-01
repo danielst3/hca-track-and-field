@@ -343,7 +343,7 @@ export default function Athletes() {
           </div>
           <Dialog open={inviteOpen} onOpenChange={setInviteOpen}>
             <DialogTrigger asChild>
-              <Button style={{ backgroundColor: 'var(--brand-primary)' }} className="hover:bg-[var(--brand-primary-dark)] text-white dark:bg-gray-700 dark:hover:bg-gray-600 gap-2">
+              <Button style={{ backgroundColor: '#551e1b', color: 'white' }} className="hover:opacity-90 dark:!bg-gray-700 dark:hover:!bg-gray-600 gap-2">
                 <UserPlus className="w-4 h-4" />
                 Invite User
               </Button>
