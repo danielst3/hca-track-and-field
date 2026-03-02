@@ -32,6 +32,7 @@ export default function EditResourceDialog({ resource, open, onOpenChange }) {
         title: resource.title || "",
         content: resource.content || "",
         link_url: resource.link_url || "",
+        file_url: resource.file_url || "",
         tags: resource.tags || [],
       });
     } else {
@@ -39,6 +40,7 @@ export default function EditResourceDialog({ resource, open, onOpenChange }) {
         title: "",
         content: "",
         link_url: "",
+        file_url: "",
         tags: [],
       });
     }
