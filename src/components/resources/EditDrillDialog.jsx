@@ -59,29 +59,33 @@ export default function EditDrillDialog({ drill, open, onOpenChange }) {
   }, [drill, open]);
 
   const drillMutation = useMutation({
-    mutationFn: async ({ id, data }) => {
-      if (id) {
-        // Try to update first. If drill doesn't exist in database, create it
-        try {
-          return await base44.entities.Drill.update(id, data);
-        } catch (error) {
-          if (error.message?.includes("404") || error.message?.includes("not found")) {
-            return base44.entities.Drill.create(data);
-          }
-          throw error;
-        }
-      } else {
-        return base44.entities.Drill.create(data);
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["drills"] });
-      toast.success("Drill saved!");
-      onOpenChange(false);
-    },
-    onError: () => {
-      toast.error("Failed to save drill");
-    },
+   mutationFn: async ({ id, data }) => {
+     // Map form data to database schema
+     const dbData = {
+       name: data.name,
+       purpose: data.purpose,
+       setup: data.setup,
+       execution: data.execution,
+       cues: Array.isArray(data.cues) ? data.cues : [],
+       common_faults: Array.isArray(data.common_faults) ? data.common_faults : [],
+       event: data.event,
+     };
+
+     if (id) {
+       return base44.entities.Drill.update(id, dbData);
+     } else {
+       return base44.entities.Drill.create(dbData);
+     }
+   },
+   onSuccess: () => {
+     queryClient.invalidateQueries({ queryKey: ["drills"] });
+     toast.success("Drill saved!");
+     onOpenChange(false);
+   },
+   onError: (error) => {
+     console.error("Drill save error:", error);
+     toast.error("Failed to save drill");
+   },
   });
 
   const deleteMutation = useMutation({
