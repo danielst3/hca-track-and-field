@@ -680,7 +680,7 @@ export default function Layout({ children, currentPageName }) {
       </AlertDialog>
 
       {/* Bottom Navigation */}
-      <div ref={navRef} className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-slate-200 dark:border-gray-700 shadow-lg z-50 select-none" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+      <div ref={navRef} className="sticky bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-slate-200 dark:border-gray-700 shadow-lg z-50 select-none mt-auto" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-around">
           {(showOverflow ? navItems.slice(0, 3) : navItems).map((item) => {
             const Icon = item.icon;
