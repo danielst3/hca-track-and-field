@@ -488,6 +488,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_prehab_copenhagen",
     "name": "Prehab — Copenhagen Plank",
     "category": "Prehab",
     "purpose": "Build adductor strength for rotational stability, groin resilience, and stronger block positions.",
