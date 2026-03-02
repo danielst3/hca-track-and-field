@@ -32,6 +32,7 @@ export default function EditDrillDialog({ drill, open, onOpenChange }) {
   });
   const [cueInput, setCueInput] = useState("");
   const [faultInput, setFaultInput] = useState("");
+  const [drillId, setDrillId] = useState(null);
 
   const queryClient = useQueryClient();
 
@@ -51,6 +52,7 @@ export default function EditDrillDialog({ drill, open, onOpenChange }) {
         common_faults: commonFaults,
         event: drill.event || "",
       });
+      setDrillId(drill.id || null);
       setCueInput("");
       setFaultInput("");
     }
