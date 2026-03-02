@@ -446,7 +446,7 @@ export default function Layout({ children, currentPageName }) {
       ];
 
   return (
-    <div className="h-screen flex flex-col bg-gradient-to-br from-[var(--brand-secondary)] to-[var(--brand-secondary-light)] dark:from-[#111] dark:to-[#111] overflow-hidden" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
+    <div className="min-h-screen bg-gradient-to-br from-[var(--brand-secondary)] to-[var(--brand-secondary-light)] dark:from-[#111] dark:to-[#111]" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
       {/* Top Bar */}
       <div className="bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-primary-dark)] dark:from-black dark:to-gray-950 border-b border-[var(--brand-primary-darker)] dark:border-gray-800 sticky top-0 z-50 select-none">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
