@@ -272,7 +272,7 @@ export default function Resources() {
           <p className="text-sm text-slate-600 dark:text-gray-300 mt-1">{drill.purpose}</p>
         )}
       </button>
-      {isCoach && drill.id && (
+      {isCoach && (
         <Button
           onClick={() => handleEditDrill(drill)}
           size="icon"
