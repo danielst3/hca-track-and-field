@@ -216,7 +216,7 @@ export default function Resources() {
   };
 
   const renderDrillCard = (drill, index) => (
-    <div key={`${drill.name}-${index}`} className="border border-slate-200 dark:border-gray-700 rounded-lg overflow-hidden">
+    <div key={`${drill.name}-${index}`} id={`drill-${encodeURIComponent(drill.name)}`} className="border border-slate-200 dark:border-gray-700 rounded-lg overflow-hidden">
       <button
         onClick={() => setExpandedDrill(expandedDrill === index ? null : index)}
         className="w-full p-4 bg-slate-50 dark:bg-gray-900 hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors text-left"
