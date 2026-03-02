@@ -1,6 +1,6 @@
 import React from "react";
-import { parseDrillText, useResourceTitles, useAbbreviations } from "./DrillLink";
-import DrillLink from "./DrillLink";
+import { parseDrillText, useResourceTitles, useAbbreviations } from "./DrillLink.jsx";
+import DrillLink from "./DrillLink.jsx";
 
 export default function PracticePlanText({ text }) {
   const resources = useResourceTitles();
