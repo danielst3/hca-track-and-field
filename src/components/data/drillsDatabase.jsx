@@ -159,6 +159,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_discus_finishfreeze",
     "name": "Discus — Finish Freeze",
     "category": "Discus",
     "purpose": "Reinforce a balanced finish position and prevent drifting/falling out of the circle.",
