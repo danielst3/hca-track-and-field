@@ -68,7 +68,15 @@ export function parseDrillText(text, resources, abbreviations) {
   return parts;
 }
 
-function DrillToast({ drill, resource }) {
+function DrillToast({ drill, resource, abbreviation }) {
+  if (abbreviation) {
+    return (
+      <div className="text-sm max-w-xs">
+        <p className="font-bold text-base mb-1">{abbreviation.abbr}</p>
+        <p className="text-gray-600 dark:text-gray-300">{abbreviation.full}</p>
+      </div>
+    );
+  }
   if (drill) {
     return (
       <div className="text-sm max-w-xs">
@@ -90,6 +98,11 @@ function DrillToast({ drill, resource }) {
       <div className="text-sm max-w-xs">
         <p className="font-bold text-base mb-1">{resource.title}</p>
         {resource.content && <p className="text-gray-600 dark:text-gray-300">{resource.content}</p>}
+        {resource.link_url && (
+          <a href={resource.link_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline text-xs mt-1 block">
+            Open link
+          </a>
+        )}
       </div>
     );
   }
@@ -101,7 +114,9 @@ export default function DrillLink({ displayText, linkItem, resources }) {
 
   const handleClick = (e) => {
     e.preventDefault();
-    if (linkItem.type === "drill") {
+    if (linkItem.type === "abbreviation") {
+      toast(<DrillToast abbreviation={linkItem} />, { duration: 6000 });
+    } else if (linkItem.type === "drill") {
       const drill = drillsDatabase.find((d) => d.name === linkItem.name);
       if (drill) {
         toast(<DrillToast drill={drill} />, { duration: 6000 });
