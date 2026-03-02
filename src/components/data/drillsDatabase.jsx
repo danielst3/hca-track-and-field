@@ -93,6 +93,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_shot_blockfreeze",
     "name": "Shot Put — Block Freeze (Front-Side Integrity)",
     "category": "Shot",
     "purpose": "Build a non-negotiable front leg block and prevent collapsing at delivery.",
