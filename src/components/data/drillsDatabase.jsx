@@ -1,5 +1,6 @@
 export const drillsDatabase = [
   {
+    "id": "drill_warmup_standard",
     "name": "Standard Daily Warm-Up (20–25 min)",
     "category": "Warm-up",
     "purpose": "Raise core temperature, open mobility, activate key stabilizers, and transition into event-specific movement patterns without fatigue.",
