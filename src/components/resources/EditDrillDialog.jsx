@@ -59,12 +59,17 @@ export default function EditDrillDialog({ drill, open, onOpenChange }) {
   }, [drill, open]);
 
   const drillMutation = useMutation({
-    mutationFn: async ({ id, data, isLocalDrill }) => {
-      if (isLocalDrill) {
-        // Local database drills are not in the Drill entity, so always create
-        return base44.entities.Drill.create(data);
-      } else if (id) {
-        return base44.entities.Drill.update(id, data);
+    mutationFn: async ({ id, data }) => {
+      if (id) {
+        // Try to update first. If drill doesn't exist in database, create it
+        try {
+          return await base44.entities.Drill.update(id, data);
+        } catch (error) {
+          if (error.message?.includes("404") || error.message?.includes("not found")) {
+            return base44.entities.Drill.create(data);
+          }
+          throw error;
+        }
       } else {
         return base44.entities.Drill.create(data);
       }
@@ -131,13 +136,9 @@ export default function EditDrillDialog({ drill, open, onOpenChange }) {
       return;
     }
 
-    // Check if this is a local drills database drill by ID pattern
-    const isLocalDrill = drillId && drillId.startsWith("drill_");
-
     drillMutation.mutate({
       id: drillId,
       data: formData,
-      isLocalDrill,
     });
   };
 
