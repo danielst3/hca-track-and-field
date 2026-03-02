@@ -203,7 +203,7 @@ export default function Resources() {
 
   const availableViews = user ? getAvailableViews(user.user_role_preference, user.role) : [];
   const activeViewRole = user ? getActiveViewRole(user.id, availableViews, user.role) : null;
-  const isCoach = activeViewRole === "admin" || activeViewRole === "coach";
+  const isCoach = user?.role === "admin" || user?.role === "coach" || activeViewRole === "admin" || activeViewRole === "coach";
 
   const handleAddResource = () => {
     setSelectedResource(null);
