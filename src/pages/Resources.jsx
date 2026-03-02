@@ -237,27 +237,17 @@ export default function Resources() {
 
   const renderDrillCard = (drill, index) => (
     <div key={`${drill.name}-${index}`} id={`drill-${encodeURIComponent(drill.name)}`} className="border border-slate-200 dark:border-gray-700 rounded-lg overflow-hidden">
-      <div className="flex items-start justify-between p-4 bg-slate-50 dark:bg-gray-900 hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors">
-        <button
-          onClick={() => setExpandedDrill(expandedDrill === index ? null : index)}
-          className="flex-1 text-left"
-        >
-          <h3 className="text-lg font-bold text-slate-900 dark:text-gray-100">{drill.name}</h3>
-          {drill.purpose && (
-            <p className="text-sm text-slate-600 dark:text-gray-300 mt-1">{drill.purpose}</p>
-          )}
-        </button>
-        {isCoach && (
-          <Button
-            onClick={() => handleEditResource(null)}
-            size="icon"
-            variant="ghost"
-            className="ml-2 h-11 w-11 dark:text-gray-300 dark:hover:bg-gray-800 flex-shrink-0"
-          >
-            <Edit className="w-4 h-4" />
-          </Button>
+    <div className="flex items-start justify-between p-4 bg-slate-50 dark:bg-gray-900 hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors">
+      <button
+        onClick={() => setExpandedDrill(expandedDrill === index ? null : index)}
+        className="flex-1 text-left"
+      >
+        <h3 className="text-lg font-bold text-slate-900 dark:text-gray-100">{drill.name}</h3>
+        {drill.purpose && (
+          <p className="text-sm text-slate-600 dark:text-gray-300 mt-1">{drill.purpose}</p>
         )}
-      </div>
+      </button>
+    </div>
       
       {expandedDrill === index && (
          <div className="p-4 space-y-4 bg-blue-50 dark:bg-blue-950/20 border-l-4 border-blue-400 dark:border-blue-600">
