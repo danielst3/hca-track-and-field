@@ -398,6 +398,48 @@ export default function Resources() {
                 {/* Custom Resources */}
                 {activeSection === "custom-resources" && (
                   <div className="space-y-4">
+                    {/* Search & Filter Bar */}
+                    {customResources.length > 0 && (
+                      <div className="space-y-3">
+                        <div className="relative">
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                          <Input
+                            value={searchQuery}
+                            onChange={e => setSearchQuery(e.target.value)}
+                            placeholder="Search resources..."
+                            className="pl-9 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-200"
+                          />
+                          {searchQuery && (
+                            <button onClick={() => setSearchQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700">
+                              <X className="w-4 h-4" />
+                            </button>
+                          )}
+                        </div>
+                        {allResourceTags.length > 0 && (
+                          <div className="flex flex-wrap gap-2">
+                            {allResourceTags.map(tag => (
+                              <button
+                                key={tag}
+                                onClick={() => toggleTagFilter(tag)}
+                                className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${
+                                  activeTagFilters.includes(tag)
+                                    ? "bg-blue-600 text-white border-blue-600"
+                                    : "bg-white dark:bg-gray-900 text-slate-600 dark:text-gray-300 border-slate-300 dark:border-gray-600 hover:border-blue-400"
+                                }`}
+                              >
+                                {tag}
+                              </button>
+                            ))}
+                            {activeTagFilters.length > 0 && (
+                              <button onClick={() => setActiveTagFilters([])} className="text-xs text-slate-500 dark:text-gray-400 hover:text-red-500 underline">
+                                Clear filters
+                              </button>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     {customResources.length === 0 ? (
                       <div className="text-center py-12">
                         <FileText className="w-12 h-12 text-slate-300 dark:text-gray-600 mx-auto mb-3" />
@@ -408,17 +450,28 @@ export default function Resources() {
                           </p>
                         )}
                       </div>
+                    ) : filteredResources.length === 0 ? (
+                      <div className="text-center py-8">
+                        <p className="text-slate-500 dark:text-gray-400">No resources match your search or filters.</p>
+                      </div>
                     ) : (
-                      customResources.map((resource) => (
+                      filteredResources.map((resource) => (
                         <div
                           key={resource.id}
                           className="p-4 bg-slate-50 dark:bg-gray-900 rounded-lg border border-slate-200 dark:border-gray-700"
                         >
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
-                              <h3 className="font-bold text-lg text-slate-900 dark:text-gray-100 mb-2">
+                              <h3 className="font-bold text-lg text-slate-900 dark:text-gray-100 mb-1">
                                 {resource.title}
                               </h3>
+                              {resource.tags && resource.tags.length > 0 && (
+                                <div className="flex flex-wrap gap-1.5 mb-2">
+                                  {resource.tags.map(tag => (
+                                    <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>
+                                  ))}
+                                </div>
+                              )}
                               {resource.content && (
                                 <p className="text-sm text-slate-600 dark:text-gray-300 mb-3 whitespace-pre-wrap">
                                   {resource.content}
