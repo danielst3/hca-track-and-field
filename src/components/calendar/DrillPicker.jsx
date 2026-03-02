@@ -12,16 +12,42 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Search, Plus } from "lucide-react";
+import { drillsDatabase } from "../data/drillsDatabase";
 
 export default function DrillPicker({ open, onOpenChange, onSelectDrill, eventType }) {
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { data: drills = [] } = useQuery({
+  const { data: databaseDrills = [] } = useQuery({
     queryKey: ["drills"],
     queryFn: () => base44.entities.Drill.list(),
   });
 
-  const filteredDrills = drills.filter(drill => {
+  const eventMap = {
+    shot_put: "Shot",
+    discus: "Discus",
+    javelin: "Javelin",
+    strength: "Strength",
+    warmup: "Warm-up",
+    prehab: "Prehab"
+  };
+
+  // Combine database drills and drills from drillsDatabase
+  const allDrills = [
+    ...databaseDrills,
+    ...drillsDatabase
+      .filter(d => {
+        const categoryMap = { "Shot": "shot_put", "Discus": "discus", "Javelin": "javelin", "Strength": "strength", "Warm-up": "warmup", "Prehab": "prehab" };
+        return !eventType || categoryMap[d.category] === eventType;
+      })
+      .map(d => ({
+        id: `db-${d.name}`,
+        name: d.name,
+        purpose: d.objective,
+        event: { "Shot": "shot_put", "Discus": "discus", "Javelin": "javelin", "Strength": "strength", "Warm-up": "warmup", "Prehab": "prehab" }[d.category]
+      }))
+  ];
+
+  const filteredDrills = allDrills.filter(drill => {
     const matchesSearch = !searchQuery || drill.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesEvent = !eventType || drill.event === eventType;
     return matchesSearch && matchesEvent;
