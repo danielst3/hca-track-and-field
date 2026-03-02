@@ -170,8 +170,17 @@ const safety = [
 
 export default function Resources() {
   const [user, setUser] = useState(null);
-  const [activeSection, setActiveSection] = useState("abbreviations");
-  const [expandedDrill, setExpandedDrill] = useState(null);
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialSection = urlParams.get("section") || "abbreviations";
+  const highlightName = urlParams.get("highlight") ? decodeURIComponent(urlParams.get("highlight")) : null;
+  const [activeSection, setActiveSection] = useState(initialSection);
+  const [expandedDrill, setExpandedDrill] = useState(() => {
+    if (highlightName) {
+      const idx = drillsDatabase.findIndex((d) => d.name === highlightName);
+      return idx >= 0 ? idx : null;
+    }
+    return null;
+  });
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedResource, setSelectedResource] = useState(null);
 
