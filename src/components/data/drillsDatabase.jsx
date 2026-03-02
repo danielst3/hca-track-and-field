@@ -203,6 +203,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_discus_sa",
     "name": "Discus — South African (SA)",
     "category": "Discus",
     "purpose": "Train middle acceleration and right-foot timing without full-turn complexity.",
