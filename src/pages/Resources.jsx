@@ -293,17 +293,22 @@ export default function Resources() {
             </div>
           )}
           
-          {drill.executionSteps && drill.executionSteps.length > 0 && (
+          {(drill.execution || drill.executionSteps) && (
             <div>
               <p className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">Execution:</p>
-              <ol className="space-y-2">
-                {drill.executionSteps.map((step, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-sm text-slate-600 dark:text-gray-400">
-                    <span className="font-semibold text-blue-600 dark:text-blue-400 min-w-[20px]">{idx + 1}.</span>
-                    <span>{step}</span>
-                  </li>
-                ))}
-              </ol>
+              {drill.execution && (
+                <p className="text-sm text-slate-600 dark:text-gray-400 whitespace-pre-wrap">{drill.execution}</p>
+              )}
+              {drill.executionSteps && drill.executionSteps.length > 0 && (
+                <ol className="space-y-2">
+                  {drill.executionSteps.map((step, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-sm text-slate-600 dark:text-gray-400">
+                      <span className="font-semibold text-blue-600 dark:text-blue-400 min-w-[20px]">{idx + 1}.</span>
+                      <span>{step}</span>
+                    </li>
+                  ))}
+                </ol>
+              )}
             </div>
           )}
           
@@ -323,11 +328,11 @@ export default function Resources() {
             </div>
           )}
           
-          {drill.commonFaultsFixes && drill.commonFaultsFixes.length > 0 && (
+          {(drill.common_faults || drill.commonFaultsFixes) && (
             <div>
               <p className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">Common Faults & Fixes:</p>
               <div className="space-y-2">
-                {drill.commonFaultsFixes.map((item, idx) => (
+                {(drill.common_faults || drill.commonFaultsFixes || []).map((item, idx) => (
                   <div key={idx} className="p-2 bg-red-50 dark:bg-red-900/30 rounded border border-red-200 dark:border-red-800 text-sm">
                     <span className="text-slate-700 dark:text-gray-300">{item}</span>
                   </div>

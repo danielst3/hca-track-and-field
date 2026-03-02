@@ -57,11 +57,11 @@ import MyAthletes from './pages/MyAthletes';
 import Posts from './pages/Posts';
 import Privacy from './pages/Privacy';
 import Progress from './pages/Progress';
-import Resources from './pages/Resources';
 import Seasons from './pages/Seasons';
 import Settings from './pages/Settings';
 import Support from './pages/Support';
 import Today from './pages/Today';
+import Resources from './pages/Resources';
 import __Layout from './Layout.jsx';
 
 
@@ -76,11 +76,11 @@ export const PAGES = {
     "Posts": Posts,
     "Privacy": Privacy,
     "Progress": Progress,
-    "Resources": Resources,
     "Seasons": Seasons,
     "Settings": Settings,
     "Support": Support,
     "Today": Today,
+    "Resources": Resources,
 }
 
 export const pagesConfig = {
