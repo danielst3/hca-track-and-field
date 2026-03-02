@@ -334,6 +334,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_javelin_progression",
     "name": "Javelin — Approach Progression Rules",
     "category": "Javelin",
     "purpose": "Safely progress approach length and speed while protecting the elbow/shoulder and preserving block mechanics.",
