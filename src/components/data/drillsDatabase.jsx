@@ -290,6 +290,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_javelin_3step",
     "name": "Javelin — 3-Step Throw",
     "category": "Javelin",
     "purpose": "Safest method to teach block timing, release alignment, and sequence without high approach speed.",
