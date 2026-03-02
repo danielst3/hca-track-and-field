@@ -132,6 +132,7 @@ export default function DrillLink({ displayText, linkItem, resources }) {
 
   return (
     <button
+      type="button"
       onClick={handleClick}
       className="text-blue-600 dark:text-blue-400 underline decoration-dotted hover:decoration-solid font-medium cursor-pointer"
     >
