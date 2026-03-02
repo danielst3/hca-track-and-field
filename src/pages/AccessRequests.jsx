@@ -21,7 +21,7 @@ export default function AccessRequests() {
 
   const { data: requests = [], isLoading } = useQuery({
     queryKey: ["accessRequests"],
-    queryFn: () => base44.entities.AccessRequest.list("-created_date", 100),
+    queryFn: () => base44.entities.AccessRequest.filter({}, "-created_date", 100),
   });
 
   const approveMutation = useMutation({
