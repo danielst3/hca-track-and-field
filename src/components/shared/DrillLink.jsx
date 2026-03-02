@@ -31,7 +31,7 @@ export function useAbbreviations() {
 export function parseDrillText(text, resources, abbreviations) {
   if (!text) return [{ type: "text", content: text }];
 
-  // All abbreviations get links showing their full meaning
+  // Abbreviations: only show definition overlay (lowest priority)
   const abbrLinks = (abbreviations || []).map((ab) => ({
     key: `abbr:${ab.id}`,
     title: ab.abbr.trim(),
@@ -40,11 +40,11 @@ export function parseDrillText(text, resources, abbreviations) {
     full: ab.full.trim(),
   }));
 
-  // Build combined list: abbreviations first, then resources, then drills
+  // Build combined list: drills first (longest match wins), then resources, then abbreviations last
   const allLinks = [
-    ...abbrLinks,
-    ...(resources || []).map((r) => ({ key: `resource:${r.id}`, title: r.title.trim(), type: "resource", id: r.id, resource: r })),
     ...drillsDatabase.map((d) => ({ key: `drill:${d.name}`, title: d.name, type: "drill", name: d.name, drill: d })),
+    ...(resources || []).map((r) => ({ key: `resource:${r.id}`, title: r.title.trim(), type: "resource", id: r.id, resource: r })),
+    ...abbrLinks,
   ];
 
   if (allLinks.length === 0) return [{ type: "text", content: text }];
