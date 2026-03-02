@@ -48,6 +48,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_shot_pp_holds",
     "name": "Shot Put — PP Holds (Isometric Positioning)",
     "category": "Shot",
     "purpose": "Reinforce correct stacked posture and front-side block alignment under control before adding speed.",
