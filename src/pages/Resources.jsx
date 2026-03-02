@@ -5,10 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Scroll, Book, Dumbbell, Info, Shield, Target, Activity, Plus, ExternalLink, FileText, Edit, Search, X } from "lucide-react";
+import { Scroll, Book, Dumbbell, Info, Shield, Target, Activity, Plus, ExternalLink, FileText, Edit, Search, X, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { drillsDatabase } from "../components/data/drillsDatabase";
 import EditResourceDialog from "../components/resources/EditResourceDialog";
+import EditDrillDialog from "../components/resources/EditDrillDialog";
 import { getActiveViewRole, getAvailableViews } from "../components/shared/getActiveViewRole";
 import HorizontalScrollContainer from "../components/shared/HorizontalScrollContainer";
 
