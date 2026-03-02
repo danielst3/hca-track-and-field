@@ -384,7 +384,7 @@ export default function Today() {
                       )}
                     </div>
                   </CardHeader>
-                  <CardContent className="pt-4">
+                  <CardContent className="pt-4 pb-6">
                     <div className="prose prose-sm max-w-none">
                       {dp.javelin_text ? <PracticePlanText text={dp.javelin_text} /> : <p className="text-slate-500 dark:text-slate-400 italic">No plan for today</p>}
                     </div>
