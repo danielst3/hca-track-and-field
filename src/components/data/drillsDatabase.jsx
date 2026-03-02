@@ -181,6 +181,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_discus_wheel",
     "name": "Discus — Wheel Drill (Axis Control)",
     "category": "Discus",
     "purpose": "Teach rotation around a stable left side/axis without drifting and without chasing speed.",
