@@ -689,11 +689,17 @@ export default function Resources() {
         </div>
 
         <EditResourceDialog
-          resource={selectedResource}
-          open={editDialogOpen}
-          onOpenChange={setEditDialogOpen}
-        />
-      </div>
-    </div>
-  );
-}
+           resource={selectedResource}
+           open={editDialogOpen}
+           onOpenChange={setEditDialogOpen}
+         />
+
+         <EditDrillDialog
+           drill={selectedDrill}
+           open={editDrillDialogOpen}
+           onOpenChange={setEditDrillDialogOpen}
+         />
+        </div>
+        </div>
+        );
+        }
