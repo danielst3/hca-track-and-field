@@ -92,7 +92,7 @@ function DrillOverlayContent({ linkItem, resources }) {
   }
 
   if (linkItem.type === "drill") {
-    const drill = linkItem.drill || drillsDatabase.find((d) => d.name === linkItem.name);
+    const drill = linkItem.drill;
     if (!drill) return null;
     return (
       <>
