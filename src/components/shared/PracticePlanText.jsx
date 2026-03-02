@@ -15,7 +15,7 @@ export default function PracticePlanText({ text }) {
           return (
             <DrillLink
               key={idx}
-              drillKey={part.drillKey}
+              linkItem={part.linkItem}
               displayText={part.displayText}
               resources={resources}
             />
