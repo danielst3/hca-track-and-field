@@ -282,7 +282,7 @@ export default function EditDrillDialog({ drill, open, onOpenChange }) {
             <Button
               onClick={handleSave}
               disabled={drillMutation.isPending}
-              className="bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] dark:bg-gray-700 dark:hover:bg-gray-600"
+              className="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800"
             >
               {drillMutation.isPending ? "Saving..." : "Save Drill"}
             </Button>
