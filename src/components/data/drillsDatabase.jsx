@@ -269,6 +269,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_javelin_rhythm",
     "name": "Javelin — Cross-Step Rhythm Runs (No Throw)",
     "category": "Javelin",
     "purpose": "Build approach rhythm and posture without arm stress; ideal for early season and recovery days.",
