@@ -9,7 +9,7 @@ import { Scroll, Book, Dumbbell, Info, Shield, Target, Activity, Plus, ExternalL
 import { cn } from "@/lib/utils";
 import { drillsDatabase } from "../components/data/drillsDatabase";
 import EditResourceDialog from "../components/resources/EditResourceDialog";
-import EditDrillDialog from "../components/resources/EditDrillDialog";
+import EditDrillDialog from "../components/resources/EditDrillDialog.jsx";
 import { getActiveViewRole, getAvailableViews } from "../components/shared/getActiveViewRole";
 import HorizontalScrollContainer from "../components/shared/HorizontalScrollContainer";
 
