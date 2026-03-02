@@ -25,18 +25,16 @@ export function useAbbreviations() {
 export function parseDrillText(text, resources, abbreviations) {
   if (!text) return [{ type: "text", content: text }];
 
-  // Build abbreviation links: only abbrs whose "full" name matches a resource title
-  const abbrLinks = (abbreviations || []).reduce((acc, ab) => {
-    const matchedResource = (resources || []).find(
-      (r) => r.title.trim().toLowerCase() === ab.full.trim().toLowerCase()
-    );
-    if (matchedResource) {
-      acc.push({ key: `abbr:${ab.id}`, title: ab.abbr.trim(), type: "resource", id: matchedResource.id });
-    }
-    return acc;
-  }, []);
+  // All abbreviations get links showing their full meaning
+  const abbrLinks = (abbreviations || []).map((ab) => ({
+    key: `abbr:${ab.id}`,
+    title: ab.abbr.trim(),
+    type: "abbreviation",
+    abbr: ab.abbr.trim(),
+    full: ab.full.trim(),
+  }));
 
-  // Build combined list: abbreviation shortcuts + custom resources + drillsDatabase entries
+  // Build combined list: abbreviations first (shorter, so sorted by length anyway), then resources, then drills
   const allLinks = [
     ...abbrLinks,
     ...(resources || []).map((r) => ({ key: `resource:${r.id}`, title: r.title.trim(), type: "resource", id: r.id })),
