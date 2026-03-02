@@ -224,8 +224,24 @@ export default function Resources() {
     setEditDialogOpen(true);
   };
 
+  const handleEditDrill = (drill) => {
+    setSelectedDrill(drill);
+    setEditDrillDialogOpen(true);
+  };
+
   const getDrillsByCategory = (category) => {
-    return drillsDatabase.filter(d => d.category === category);
+    const categoryMap = {
+      "Warm-up": "warmup",
+      "Shot": "shot_put",
+      "Discus": "discus",
+      "Javelin": "javelin",
+      "Strength": "strength",
+      "Prehab": "prehab"
+    };
+    const eventType = categoryMap[category];
+    return databaseDrills.filter(d => d.event === eventType).concat(
+      drillsDatabase.filter(d => d.category === category)
+    );
   };
 
   // All unique tags from custom resources
