@@ -356,6 +356,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_javelin_safety",
     "name": "Javelin — Safety Rules (Non-Negotiable)",
     "category": "Javelin",
     "purpose": "Prevent common overuse injuries (elbow/shoulder) and manage risk with youth throwers.",
