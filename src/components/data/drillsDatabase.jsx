@@ -510,6 +510,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_prehab_er",
     "name": "Prehab — Band External Rotation (ER)",
     "category": "Prehab",
     "purpose": "Shoulder health and rotator cuff endurance (mandatory for javelin; strongly recommended for all throwers).",
