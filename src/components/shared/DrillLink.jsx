@@ -28,7 +28,7 @@ export function useAbbreviations() {
 }
 
 // Parse text and identify drill names / abbreviations that match resource titles OR drillsDatabase entries
-export function parseDrillText(text, resources, abbreviations) {
+export function parseDrillText(text, resources, abbreviations, databaseDrills = []) {
   if (!text) return [{ type: "text", content: text }];
 
   // Abbreviations: only show definition overlay (lowest priority)
@@ -43,6 +43,7 @@ export function parseDrillText(text, resources, abbreviations) {
   // Build combined list: drills first (longest match wins), then resources, then abbreviations last
   const allLinks = [
     ...drillsDatabase.map((d) => ({ key: `drill:${d.name}`, title: d.name, type: "drill", name: d.name, drill: d })),
+    ...(databaseDrills || []).map((d) => ({ key: `drill:${d.id}`, title: d.name, type: "drill", id: d.id, drill: d })),
     ...(resources || []).map((r) => ({ key: `resource:${r.id}`, title: r.title.trim(), type: "resource", id: r.id, resource: r })),
     ...abbrLinks,
   ];
