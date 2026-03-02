@@ -71,6 +71,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_shot_stepin",
     "name": "Shot Put — Step-In Drill",
     "category": "Shot",
     "purpose": "Train rhythm into the block (right–left–hit) and reduce static arm throwing.",
