@@ -126,21 +126,10 @@ export default function EditDrillDialog({ drill, open, onOpenChange }) {
       return;
     }
 
-    // Only allow saving database drills (those with real IDs, not temp IDs)
-    if (drill && drill.id && !drill.id.startsWith("db-")) {
-      drillMutation.mutate({
-        id: drill.id,
-        data: formData,
-      });
-    } else if (!drill) {
-      // Create new drill
-      drillMutation.mutate({
-        id: null,
-        data: formData,
-      });
-    } else {
-      toast.error("Cannot edit drills from the database library. Create a custom drill instead.");
-    }
+    drillMutation.mutate({
+      id: drill?.id,
+      data: formData,
+    });
   };
 
   const handleDelete = () => {
