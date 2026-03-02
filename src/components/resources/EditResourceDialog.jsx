@@ -32,12 +32,14 @@ export default function EditResourceDialog({ resource, open, onOpenChange }) {
         title: resource.title || "",
         content: resource.content || "",
         link_url: resource.link_url || "",
+        tags: resource.tags || [],
       });
     } else {
       setFormData({
         title: "",
         content: "",
         link_url: "",
+        tags: [],
       });
     }
   }, [resource]);
