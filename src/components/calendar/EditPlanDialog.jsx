@@ -188,6 +188,7 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
     } else if (selectedEventForDrill === "javelin") {
       setPlanData({ ...planData, javelin_text: planData.javelin_text + (planData.javelin_text ? "\n" : "") + drill.name });
     }
+    setDrillPickerOpen(false);
     setSelectedEventForDrill(null);
   };
 
