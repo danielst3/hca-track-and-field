@@ -239,15 +239,9 @@ export default function Resources() {
       "Prehab": "prehab"
     };
     const eventType = categoryMap[category];
-    const dbDrills = databaseDrills.filter(d => d.event === eventType);
-    
-    // Get names of drills already in database to avoid duplicates
-    const dbDrillNames = new Set(dbDrills.map(d => d.name));
-    
-    // Only include local drills that aren't already in the database
-    const localDrills = drillsDatabase.filter(d => d.category === category && !dbDrillNames.has(d.name));
-    
-    return dbDrills.concat(localDrills);
+    return databaseDrills.filter(d => d.event === eventType).concat(
+      drillsDatabase.filter(d => d.category === category)
+    );
   };
 
   // All unique tags from custom resources
