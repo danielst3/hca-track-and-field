@@ -219,6 +219,22 @@ export default function Resources() {
     return drillsDatabase.filter(d => d.category === category);
   };
 
+  // All unique tags from custom resources
+  const allResourceTags = [...new Set((customResources || []).flatMap(r => r.tags || []))].sort();
+
+  const toggleTagFilter = (tag) => {
+    setActiveTagFilters(prev =>
+      prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
+    );
+  };
+
+  const filteredResources = customResources.filter(r => {
+    const q = searchQuery.toLowerCase();
+    const matchesSearch = !q || r.title.toLowerCase().includes(q) || (r.content || "").toLowerCase().includes(q);
+    const matchesTags = activeTagFilters.length === 0 || activeTagFilters.every(tag => (r.tags || []).includes(tag));
+    return matchesSearch && matchesTags;
+  });
+
   const renderDrillCard = (drill, index) => (
     <div key={`${drill.name}-${index}`} id={`drill-${encodeURIComponent(drill.name)}`} className="border border-slate-200 dark:border-gray-700 rounded-lg overflow-hidden">
       <button
