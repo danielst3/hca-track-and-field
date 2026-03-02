@@ -37,13 +37,18 @@ export default function EditDrillDialog({ drill, open, onOpenChange }) {
 
   useEffect(() => {
     if (drill) {
+      // Handle both database drills (with executionSteps, commonFaultsFixes) and custom drills
+      const execution = drill.execution || (drill.executionSteps ? drill.executionSteps.join("\n") : "");
+      const cues = drill.cues || [];
+      const commonFaults = drill.common_faults || (drill.commonFaultsFixes || []);
+      
       setFormData({
         name: drill.name || "",
-        purpose: drill.purpose || "",
+        purpose: drill.purpose || drill.objective || "",
         setup: drill.setup || "",
-        execution: drill.execution || "",
-        cues: drill.cues || [],
-        common_faults: drill.common_faults || [],
+        execution,
+        cues,
+        common_faults: commonFaults,
         event: drill.event || "",
       });
       setCueInput("");
