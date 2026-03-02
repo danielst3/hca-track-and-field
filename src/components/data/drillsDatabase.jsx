@@ -225,6 +225,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_discus_fullthrow",
     "name": "Discus — Full Throw (General Checkpoints)",
     "category": "Discus",
     "purpose": "Integrate entry, middle, and delivery while maintaining balance, orbit, and a clean finish.",
