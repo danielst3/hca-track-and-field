@@ -59,19 +59,10 @@ export default function EditDrillDialog({ drill, open, onOpenChange }) {
   }, [drill, open]);
 
   const drillMutation = useMutation({
-    mutationFn: async ({ id, data, drillName }) => {
-      // Always check if a drill with this exact name exists in the database
-      const allDrills = await base44.entities.Drill.list();
-      const existingDrill = allDrills.find(d => d.name.toLowerCase() === drillName.toLowerCase());
-      
-      if (existingDrill) {
-        // Update existing drill by ID
-        return base44.entities.Drill.update(existingDrill.id, data);
-      } else if (id) {
-        // Update by provided ID (shouldn't reach here normally)
+    mutationFn: ({ id, data }) => {
+      if (id) {
         return base44.entities.Drill.update(id, data);
       } else {
-        // Create new drill
         return base44.entities.Drill.create(data);
       }
     },
