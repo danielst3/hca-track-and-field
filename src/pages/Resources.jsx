@@ -272,6 +272,16 @@ export default function Resources() {
           <p className="text-sm text-slate-600 dark:text-gray-300 mt-1">{drill.purpose}</p>
         )}
       </button>
+      {isCoach && drill.id && (
+        <Button
+          onClick={() => handleEditDrill(drill)}
+          size="icon"
+          variant="ghost"
+          className="ml-2 h-11 w-11 dark:text-gray-300 dark:hover:bg-gray-800 flex-shrink-0"
+        >
+          <Edit className="w-4 h-4" />
+        </Button>
+      )}
     </div>
       
       {expandedDrill === index && (
