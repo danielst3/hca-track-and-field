@@ -1,12 +1,13 @@
 import React from "react";
-import { parseDrillText, useResourceTitles } from "./DrillLink";
+import { parseDrillText, useResourceTitles, useAbbreviations } from "./DrillLink";
 import DrillLink from "./DrillLink";
 
 export default function PracticePlanText({ text }) {
   const resources = useResourceTitles();
+  const abbreviations = useAbbreviations();
   if (!text) return null;
 
-  const parts = parseDrillText(text, resources);
+  const parts = parseDrillText(text, resources, abbreviations);
 
   return (
     <p className="text-slate-700 dark:text-gray-300 whitespace-pre-wrap">
