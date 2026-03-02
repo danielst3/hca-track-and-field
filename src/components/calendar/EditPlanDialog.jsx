@@ -279,7 +279,21 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
             </div>
 
             <div className="space-y-2">
-              <Label className="text-gray-900 dark:text-gray-200">Javelin Plan</Label>
+              <div className="flex items-center justify-between">
+                <Label className="text-gray-900 dark:text-gray-200">Javelin Plan</Label>
+                <Button
+                  onClick={() => {
+                    setSelectedEventForDrill("javelin");
+                    setDrillPickerOpen(true);
+                  }}
+                  size="sm"
+                  variant="outline"
+                  className="gap-2 dark:border-gray-600 dark:text-gray-200"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add Drill
+                </Button>
+              </div>
               <Textarea
                 value={planData.javelin_text}
                 onChange={(e) =>
