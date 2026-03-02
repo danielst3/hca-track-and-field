@@ -51,39 +51,58 @@ export function parseDrillText(text, resources) {
   return parts;
 }
 
-export default function DrillLink({ displayText, linkItem }) {
-  if (!linkItem) return <span>{displayText}</span>;
-
-  if (linkItem.type === "resource") {
+function DrillToast({ drill, resource }) {
+  if (drill) {
     return (
-      <Link
-        to={createPageUrl(`Resources?highlight=${linkItem.id}`)}
-        className="text-blue-600 dark:text-blue-400 underline decoration-dotted hover:decoration-solid font-medium"
-      >
-        {displayText}
-      </Link>
+      <div className="text-sm max-w-xs">
+        <p className="font-bold text-base mb-1">{drill.name}</p>
+        {drill.purpose && <p className="text-gray-600 dark:text-gray-300 mb-2 italic">{drill.purpose}</p>}
+        {drill.cues && drill.cues.length > 0 && (
+          <div>
+            <p className="font-semibold text-xs uppercase tracking-wide text-gray-500 mb-1">Cues</p>
+            <ul className="list-disc list-inside space-y-0.5">
+              {drill.cues.map((cue, i) => <li key={i}>{cue}</li>)}
+            </ul>
+          </div>
+        )}
+      </div>
     );
   }
+  if (resource) {
+    return (
+      <div className="text-sm max-w-xs">
+        <p className="font-bold text-base mb-1">{resource.title}</p>
+        {resource.content && <p className="text-gray-600 dark:text-gray-300">{resource.content}</p>}
+      </div>
+    );
+  }
+  return null;
+}
 
-  // drillsDatabase entry
-  const categoryMap = {
-    "Shot": "drills-shot",
-    "Discus": "drills-discus",
-    "Javelin": "drills-javelin",
-    "Strength": "drills-strength",
-    "Prehab": "drills-prehab",
-    "Warm-up": "drills-warmup",
+export default function DrillLink({ displayText, linkItem, resources }) {
+  if (!linkItem) return <span>{displayText}</span>;
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    if (linkItem.type === "drill") {
+      const drill = drillsDatabase.find((d) => d.name === linkItem.name);
+      if (drill) {
+        toast(<DrillToast drill={drill} />, { duration: 6000 });
+      }
+    } else if (linkItem.type === "resource") {
+      const resource = (resources || []).find((r) => r.id === linkItem.id);
+      if (resource) {
+        toast(<DrillToast resource={resource} />, { duration: 6000 });
+      }
+    }
   };
-  const drill = drillsDatabase.find((d) => d.name === linkItem.name);
-  const section = drill ? (categoryMap[drill.category] || "drills-shot") : "drills-shot";
-  const encodedName = encodeURIComponent(linkItem.name);
 
   return (
-    <Link
-      to={createPageUrl(`Resources?section=${section}&highlight=${encodedName}`)}
-      className="text-blue-600 dark:text-blue-400 underline decoration-dotted hover:decoration-solid font-medium"
+    <button
+      onClick={handleClick}
+      className="text-blue-600 dark:text-blue-400 underline decoration-dotted hover:decoration-solid font-medium cursor-pointer"
     >
       {displayText}
-    </Link>
+    </button>
   );
 }
