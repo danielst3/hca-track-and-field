@@ -312,6 +312,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_javelin_impulse",
     "name": "Javelin — Impulse Step (IS) Drill",
     "category": "Javelin",
     "purpose": "Train long–short braking mechanics and hip-shoulder separation; critical for distance and injury prevention.",
