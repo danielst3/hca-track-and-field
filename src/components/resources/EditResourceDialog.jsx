@@ -20,6 +20,7 @@ export default function EditResourceDialog({ resource, open, onOpenChange }) {
     title: "",
     content: "",
     link_url: "",
+    tags: [],
   });
   const [uploading, setUploading] = useState(false);
 
