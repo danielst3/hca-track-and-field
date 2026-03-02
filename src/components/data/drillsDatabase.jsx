@@ -400,6 +400,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_strength_pushpress",
     "name": "Strength — Push Press",
     "category": "Strength",
     "purpose": "Leg-driven overhead power; teaches force transfer through torso without excessive shoulder strain.",
