@@ -680,6 +680,8 @@ export default function Layout({ children, currentPageName }) {
         </AlertDialogContent>
       </AlertDialog>
 
+      <Toaster position="top-center" />
+
       {/* Bottom Navigation */}
       <div ref={navRef} className="bg-white dark:bg-gray-900 border-t border-slate-200 dark:border-gray-700 shadow-lg z-50 select-none flex-shrink-0" style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 8px)' }}>
         <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-around">
