@@ -532,6 +532,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_prehab_scaprow",
     "name": "Prehab — Scap Row (Band or Cable)",
     "category": "Prehab",
     "purpose": "Build scapular control to support shoulder health and clean arm path in all throws.",
