@@ -17,6 +17,8 @@ import { format } from "date-fns";
 import CopyPlanDialog from "./CopyPlanDialog";
 import AIPlanGenerator from "./AIPlanGenerator";
 import AthleteOverridesSection from "./AthleteOverridesSection";
+import DrillPicker from "./DrillPicker";
+import { Plus } from "lucide-react";
 
 export default function EditPlanDialog({ date, plan, meet, open, onOpenChange }) {
   const [planData, setPlanData] = useState({
