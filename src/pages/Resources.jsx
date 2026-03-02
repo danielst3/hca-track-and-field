@@ -185,6 +185,8 @@ export default function Resources() {
   });
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedResource, setSelectedResource] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeTagFilters, setActiveTagFilters] = useState([]);
 
   useEffect(() => {
     const fetchUser = async () => {
