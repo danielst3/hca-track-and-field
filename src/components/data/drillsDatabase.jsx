@@ -247,6 +247,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_javelin_carry",
     "name": "Javelin — Carry Mechanics (Warm-Up Carry)",
     "category": "Javelin",
     "purpose": "Establish safe shoulder position, relaxed carry, and consistent approach posture.",
