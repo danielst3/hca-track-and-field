@@ -444,6 +444,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_strength_frontsquat",
     "name": "Strength — Front Squat (Block Strength)",
     "category": "Strength",
     "purpose": "Build upright strength and block-leg resilience; strong trunk demands transfer well to throws.",
