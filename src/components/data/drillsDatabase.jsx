@@ -24,6 +24,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_shot_pp_stand",
     "name": "Shot Put — Power Position (PP) Stand Throw",
     "category": "Shot",
     "purpose": "Teach the correct kinetic chain: ground→hips→torso→arm, build a stable block, and eliminate arm-leading throws.",
