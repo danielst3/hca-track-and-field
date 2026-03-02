@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Upload, Loader2 } from "lucide-react";
+import ResourceTagSelector from "./ResourceTagSelector";
 
 export default function EditResourceDialog({ resource, open, onOpenChange }) {
   const [formData, setFormData] = useState({
