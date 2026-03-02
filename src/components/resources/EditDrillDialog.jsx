@@ -133,10 +133,8 @@ export default function EditDrillDialog({ drill, open, onOpenChange }) {
   };
 
   const handleDelete = () => {
-    if (drill?.id && !drill.id.startsWith("db-") && confirm("Delete this drill?")) {
+    if (drill?.id && confirm("Delete this drill?")) {
       deleteMutation.mutate(drill.id);
-    } else if (drill?.id?.startsWith("db-")) {
-      toast.error("Cannot delete drills from the database library.");
     }
   };
 
