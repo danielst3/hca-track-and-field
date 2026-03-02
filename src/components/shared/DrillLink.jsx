@@ -54,7 +54,7 @@ export function parseDrillText(text, resources, abbreviations) {
   const escaped = sorted.map((item) => item.title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
 
   // Use word boundaries so "IS" doesn't match inside "Finish", etc.
-  const regex = new RegExp(`\\b(${escaped.join("|")})\\b`, "g");
+  const regex = new RegExp(`\\b(${escaped.join("|")})\\b`, "gi");
   const parts = [];
   let lastIndex = 0;
   let match;
