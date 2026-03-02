@@ -413,6 +413,13 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
         open={copyDialogOpen}
         onOpenChange={setCopyDialogOpen}
       />
+
+      <DrillPicker
+        open={drillPickerOpen}
+        onOpenChange={setDrillPickerOpen}
+        onSelectDrill={handleSelectDrill}
+        eventType={selectedEventForDrill ? { shot: "shot_put", discus: "discus", javelin: "javelin" }[selectedEventForDrill] : null}
+      />
     </Dialog>
   );
 }
