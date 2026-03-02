@@ -202,9 +202,17 @@ export default function Resources() {
     queryFn: () => base44.entities.Resource.list(),
   });
 
+  const { data: databaseDrills = [] } = useQuery({
+    queryKey: ["drills"],
+    queryFn: () => base44.entities.Drill.list(),
+  });
+
   const availableViews = user ? getAvailableViews(user.user_role_preference, user.role) : [];
   const activeViewRole = user ? getActiveViewRole(user.id, availableViews, user.role) : null;
   const isCoach = user?.role === "admin" || user?.role === "coach" || activeViewRole === "admin" || activeViewRole === "coach";
+
+  const [editDrillDialogOpen, setEditDrillDialogOpen] = useState(false);
+  const [selectedDrill, setSelectedDrill] = useState(null);
 
   const handleAddResource = () => {
     setSelectedResource(null);
