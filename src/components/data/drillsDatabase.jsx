@@ -466,6 +466,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_strength_rdl",
     "name": "Strength — Romanian Deadlift (RDL)",
     "category": "Strength",
     "purpose": "Develop posterior chain strength and hamstring durability for approach speed and rotational braking.",
