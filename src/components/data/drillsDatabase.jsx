@@ -422,6 +422,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_strength_backsquat",
     "name": "Strength — Back Squat (Throwers)",
     "category": "Strength",
     "purpose": "Build foundational lower-body strength and tissue tolerance for blocking and rotational braking.",
