@@ -65,16 +65,6 @@ export function parseDrillText(text, resources, abbreviations) {
     }
     const matched = match[0];
     const link = sorted.find((item) => item.title.toLowerCase() === matched.toLowerCase());
-    
-    // Skip abbreviations if they're part of a longer drill name that was already matched
-    if (link && link.type === "abbreviation") {
-      const isDrillPart = parts.some(p => p.type === "drill" && p.displayText.includes(matched));
-      if (isDrillPart) {
-        lastIndex = match.index + matched.length;
-        continue;
-      }
-    }
-    
     parts.push({ type: "drill", linkItem: link, displayText: matched });
     lastIndex = match.index + matched.length;
   }
