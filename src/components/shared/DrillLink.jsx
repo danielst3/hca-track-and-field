@@ -140,26 +140,49 @@ function DrillOverlayContent({ linkItem, resources }) {
   if (linkItem.type === "resource") {
     const resource = linkItem.resource || (resources || []).find((r) => r.id === linkItem.id);
     if (!resource) return null;
+
+    const isYouTube = resource.link_url && (resource.link_url.includes("youtube.com") || resource.link_url.includes("youtu.be"));
+    const isImage = resource.file_url && /\.(jpg|jpeg|png|gif|webp)(\?|$)/i.test(resource.file_url);
+    const isPDF = resource.file_url && /\.pdf(\?|$)/i.test(resource.file_url);
+
+    const getYouTubeEmbed = (url) => {
+      const match = url.match(/(?:v=|youtu\.be\/)([^&?/]+)/);
+      return match ? `https://www.youtube.com/embed/${match[1]}` : null;
+    };
+
     return (
       <>
         <DialogHeader>
           <DialogTitle>{resource.title}</DialogTitle>
         </DialogHeader>
-        <div className="mt-2 space-y-3 text-sm">
+        <div className="mt-2 space-y-4 text-sm">
           {resource.content && (
             <p className="text-gray-600 dark:text-gray-300 whitespace-pre-wrap">{resource.content}</p>
           )}
-          {resource.file_url && (
+          {isImage && (
+            <img src={resource.file_url} alt={resource.title} className="w-full rounded-lg" />
+          )}
+          {isPDF && (
             <a
               href={resource.file_url}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 text-blue-500 underline"
             >
-              <ExternalLink className="w-3 h-3" /> View File
+              <ExternalLink className="w-3 h-3" /> View PDF
             </a>
           )}
-          {resource.link_url && (
+          {isYouTube && getYouTubeEmbed(resource.link_url) && (
+            <div className="aspect-video w-full rounded-lg overflow-hidden">
+              <iframe
+                src={getYouTubeEmbed(resource.link_url)}
+                title={resource.title}
+                className="w-full h-full"
+                allowFullScreen
+              />
+            </div>
+          )}
+          {resource.link_url && !isYouTube && (
             <a
               href={resource.link_url}
               target="_blank"
@@ -167,6 +190,16 @@ function DrillOverlayContent({ linkItem, resources }) {
               className="flex items-center gap-1 text-blue-500 underline"
             >
               <ExternalLink className="w-3 h-3" /> Open Link
+            </a>
+          )}
+          {resource.file_url && !isImage && !isPDF && (
+            <a
+              href={resource.file_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-blue-500 underline"
+            >
+              <ExternalLink className="w-3 h-3" /> View File
             </a>
           )}
         </div>
