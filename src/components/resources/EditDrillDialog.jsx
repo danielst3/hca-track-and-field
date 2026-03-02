@@ -131,9 +131,13 @@ export default function EditDrillDialog({ drill, open, onOpenChange }) {
       return;
     }
 
+    // Check if this is a local drills database drill by ID pattern
+    const isLocalDrill = drillId && drillId.startsWith("drill_");
+
     drillMutation.mutate({
       id: drillId,
       data: formData,
+      isLocalDrill,
     });
   };
 
