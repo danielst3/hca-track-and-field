@@ -115,6 +115,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_shot_fullthrow",
     "name": "Shot Put — Full Throw (General Checkpoints)",
     "category": "Shot",
     "purpose": "Integrate entry/transition with PP timing and block mechanics at competitive rhythm.",
