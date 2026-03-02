@@ -642,7 +642,7 @@ export default function Layout({ children, currentPageName }) {
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className="flex-1 pb-4"
+        className="pb-24"
         style={{ transform: `translateY(${pullDistance}px)`, transition: pullDistance === 0 ? 'transform 0.3s' : 'none' }}
       >
         <AnimatePresence mode="wait">
