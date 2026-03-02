@@ -3,6 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
+import { drillsDatabase } from "../data/drillsDatabase";
 
 export function useResourceTitles() {
   const { data: resources = [] } = useQuery({
@@ -12,15 +13,20 @@ export function useResourceTitles() {
   return resources;
 }
 
-// Parse text and identify drill names that match resource titles
+// Parse text and identify drill names that match resource titles OR drillsDatabase entries
 export function parseDrillText(text, resources) {
-  if (!text || !resources || resources.length === 0) return [{ type: "text", content: text }];
+  if (!text) return [{ type: "text", content: text }];
 
-  const titles = resources.map((r) => r.title);
-  // Sort by length descending to match longer titles first
-  const sorted = [...titles].sort((a, b) => b.length - a.length);
-  const escaped = sorted.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
-  if (escaped.length === 0) return [{ type: "text", content: text }];
+  // Build combined list: custom resources + drillsDatabase entries
+  const allLinks = [
+    ...(resources || []).map((r) => ({ key: `resource:${r.id}`, title: r.title.trim(), type: "resource", id: r.id })),
+    ...drillsDatabase.map((d) => ({ key: `drill:${d.name}`, title: d.name, type: "drill", name: d.name })),
+  ];
+
+  if (allLinks.length === 0) return [{ type: "text", content: text }];
+
+  const sorted = [...allLinks].sort((a, b) => b.title.length - a.title.length);
+  const escaped = sorted.map((item) => item.title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
 
   const regex = new RegExp(`(${escaped.join("|")})`, "gi");
   const parts = [];
@@ -32,8 +38,8 @@ export function parseDrillText(text, resources) {
       parts.push({ type: "text", content: text.slice(lastIndex, match.index) });
     }
     const matched = match[0];
-    const resource = resources.find((r) => r.title.toLowerCase() === matched.toLowerCase());
-    parts.push({ type: "drill", drillKey: resource?.id, displayText: matched, resourceId: resource?.id });
+    const link = sorted.find((item) => item.title.toLowerCase() === matched.toLowerCase());
+    parts.push({ type: "drill", linkItem: link, displayText: matched });
     lastIndex = match.index + matched.length;
   }
 
@@ -44,13 +50,36 @@ export function parseDrillText(text, resources) {
   return parts;
 }
 
-export default function DrillLink({ drillKey, displayText, resources }) {
-  const resource = resources?.find((r) => r.id === drillKey);
-  if (!resource) return <span>{displayText}</span>;
+export default function DrillLink({ displayText, linkItem }) {
+  if (!linkItem) return <span>{displayText}</span>;
+
+  if (linkItem.type === "resource") {
+    return (
+      <Link
+        to={createPageUrl(`Resources?highlight=${linkItem.id}`)}
+        className="text-blue-600 dark:text-blue-400 underline decoration-dotted hover:decoration-solid font-medium"
+      >
+        {displayText}
+      </Link>
+    );
+  }
+
+  // drillsDatabase entry
+  const categoryMap = {
+    "Shot": "drills-shot",
+    "Discus": "drills-discus",
+    "Javelin": "drills-javelin",
+    "Strength": "drills-strength",
+    "Prehab": "drills-prehab",
+    "Warm-up": "drills-warmup",
+  };
+  const drill = drillsDatabase.find((d) => d.name === linkItem.name);
+  const section = drill ? (categoryMap[drill.category] || "drills-shot") : "drills-shot";
+  const encodedName = encodeURIComponent(linkItem.name);
 
   return (
     <Link
-      to={createPageUrl(`Resources?highlight=${resource.id}`)}
+      to={createPageUrl(`Resources?section=${section}&highlight=${encodedName}`)}
       className="text-blue-600 dark:text-blue-400 underline decoration-dotted hover:decoration-solid font-medium"
     >
       {displayText}
