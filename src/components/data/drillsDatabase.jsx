@@ -137,6 +137,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_discus_stand",
     "name": "Discus — Stand Throw",
     "category": "Discus",
     "purpose": "Establish orbit shape, balance/axis control, and clean release mechanics.",
