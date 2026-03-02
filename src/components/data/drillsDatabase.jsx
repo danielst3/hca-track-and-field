@@ -378,6 +378,7 @@ export const drillsDatabase = [
     ]
   },
   {
+    "id": "drill_strength_trapjump",
     "name": "Strength — Trap Bar Jump",
     "category": "Strength",
     "purpose": "Develop explosive hip extension with low soreness; strong transfer to throws and sprint qualities.",
