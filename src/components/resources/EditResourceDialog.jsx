@@ -155,6 +155,11 @@ export default function EditResourceDialog({ resource, open, onOpenChange }) {
             />
           </div>
 
+          <ResourceTagSelector
+            value={formData.tags || []}
+            onChange={(tags) => setFormData({ ...formData, tags })}
+          />
+
           <div className="space-y-2">
             <Label className="dark:text-gray-200">Upload File (optional)</Label>
             <div className="flex items-center gap-3">
