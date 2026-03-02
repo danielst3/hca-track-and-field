@@ -515,7 +515,7 @@ export default function Resources() {
                                 )}
                               </div>
                             </div>
-                            {isCoach && (
+                                            {isCoach && (
                               <Button
                                 onClick={() => handleEditResource(resource)}
                                 size="icon"
