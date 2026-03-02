@@ -19,9 +19,13 @@ export default function AccessRequests() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const queryClient = useQueryClient();
 
-  const { data: requests = [], isLoading } = useQuery({
+  const { data: requests = [], isLoading, refetch } = useQuery({
     queryKey: ["accessRequests"],
-    queryFn: () => base44.entities.AccessRequest.filter({}, "-created_date", 100),
+    queryFn: async () => {
+      const all = await base44.entities.AccessRequest.list("-created_date", 100);
+      return all || [];
+    },
+    refetchOnMount: true,
   });
 
   const approveMutation = useMutation({
