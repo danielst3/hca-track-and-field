@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
 import { drillsDatabase } from "../data/drillsDatabase";
+import { toast } from "sonner";
 
 export function useResourceTitles() {
   const { data: resources = [] } = useQuery({
