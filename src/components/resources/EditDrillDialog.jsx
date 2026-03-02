@@ -138,6 +138,7 @@ export default function EditDrillDialog({ drill, open, onOpenChange }) {
     drillMutation.mutate({
       id: drillId,
       data: formData,
+      drillName: formData.name,
     });
   };
 
