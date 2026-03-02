@@ -59,8 +59,11 @@ export default function EditDrillDialog({ drill, open, onOpenChange }) {
   }, [drill, open]);
 
   const drillMutation = useMutation({
-    mutationFn: ({ id, data }) => {
-      if (id) {
+    mutationFn: async ({ id, data }) => {
+      if (id && id.startsWith("drill_")) {
+        // Local drill ID - create as new instead
+        return base44.entities.Drill.create(data);
+      } else if (id) {
         return base44.entities.Drill.update(id, data);
       } else {
         return base44.entities.Drill.create(data);
