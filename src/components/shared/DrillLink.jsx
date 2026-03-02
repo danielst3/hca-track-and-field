@@ -1,8 +1,6 @@
 import React from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
-import { createPageUrl } from "@/utils";
-import { Link } from "react-router-dom";
 import { drillsDatabase } from "../data/drillsDatabase";
 import { toast } from "sonner";
 
@@ -14,12 +12,33 @@ export function useResourceTitles() {
   return resources;
 }
 
-// Parse text and identify drill names that match resource titles OR drillsDatabase entries
-export function parseDrillText(text, resources) {
+export function useAbbreviations() {
+  const { data: abbreviations = [] } = useQuery({
+    queryKey: ["abbreviations"],
+    queryFn: () => base44.entities.Abbreviation.list(),
+    staleTime: 60000,
+  });
+  return abbreviations;
+}
+
+// Parse text and identify drill names / abbreviations that match resource titles OR drillsDatabase entries
+export function parseDrillText(text, resources, abbreviations) {
   if (!text) return [{ type: "text", content: text }];
 
-  // Build combined list: custom resources + drillsDatabase entries
+  // Build abbreviation links: only abbrs whose "full" name matches a resource title
+  const abbrLinks = (abbreviations || []).reduce((acc, ab) => {
+    const matchedResource = (resources || []).find(
+      (r) => r.title.trim().toLowerCase() === ab.full.trim().toLowerCase()
+    );
+    if (matchedResource) {
+      acc.push({ key: `abbr:${ab.id}`, title: ab.abbr.trim(), type: "resource", id: matchedResource.id });
+    }
+    return acc;
+  }, []);
+
+  // Build combined list: abbreviation shortcuts + custom resources + drillsDatabase entries
   const allLinks = [
+    ...abbrLinks,
     ...(resources || []).map((r) => ({ key: `resource:${r.id}`, title: r.title.trim(), type: "resource", id: r.id })),
     ...drillsDatabase.map((d) => ({ key: `drill:${d.name}`, title: d.name, type: "drill", name: d.name })),
   ];
