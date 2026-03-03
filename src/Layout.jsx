@@ -226,23 +226,9 @@ export default function Layout({ children, currentPageName }) {
 
   const requestAccessMutation = useMutation({
     mutationFn: async (data) => {
-      const request = await base44.entities.AccessRequest.create(data);
-      
-      // Notify all coaches
-      const admins = await base44.entities.User.filter({ role: "admin" });
-      const roleLabel = data.role === "user" ? "Athlete" : data.role === "coach" ? "Coach" : "Parent";
-      const athleteInfo = data.athlete_name ? `\nAthlete: ${data.athlete_name}` : "";
-      const notesInfo = data.notes ? `\n\nNotes: ${data.notes}` : "";
-      
-      await Promise.all(admins.map(admin => 
-        base44.integrations.Core.SendEmail({
-          to: admin.email,
-          subject: `New Access Request - ${data.full_name}`,
-          body: `A new access request has been submitted:\n\nName: ${data.full_name}\nEmail: ${data.email}\nRequesting: ${roleLabel}${athleteInfo}${notesInfo}\n\nPlease review in the Athletes management page.`
-        })
-      ));
-      
-      return request;
+      const response = await base44.functions.invoke('submitAccessRequest', data);
+      if (response.data?.error) throw new Error(response.data.error);
+      return response.data;
     },
     onSuccess: () => {
       toast.success("Access request submitted! We'll review and get back to you soon.");
