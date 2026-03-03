@@ -596,36 +596,42 @@ export default function Resources() {
                 {activeSection === "drills-warmup" && (
                   <div className="space-y-4">
                     {getDrillsByCategory("Warm-up").map((drill, idx) => renderDrillCard(drill, idx))}
+                    {isCoach && <Button onClick={() => handleAddDrill("warmup")} variant="outline" className="w-full gap-2 dark:border-gray-600 dark:text-gray-300"><Plus className="w-4 h-4" />Add Warm-Up Drill</Button>}
                   </div>
                 )}
                 
                 {activeSection === "drills-shot" && (
                   <div className="space-y-4">
                     {getDrillsByCategory("Shot").map((drill, idx) => renderDrillCard(drill, idx))}
+                    {isCoach && <Button onClick={() => handleAddDrill("shot_put")} variant="outline" className="w-full gap-2 dark:border-gray-600 dark:text-gray-300"><Plus className="w-4 h-4" />Add Shot Put Drill</Button>}
                   </div>
                 )}
                 
                 {activeSection === "drills-discus" && (
                   <div className="space-y-4">
                     {getDrillsByCategory("Discus").map((drill, idx) => renderDrillCard(drill, idx))}
+                    {isCoach && <Button onClick={() => handleAddDrill("discus")} variant="outline" className="w-full gap-2 dark:border-gray-600 dark:text-gray-300"><Plus className="w-4 h-4" />Add Discus Drill</Button>}
                   </div>
                 )}
                 
                 {activeSection === "drills-javelin" && (
                   <div className="space-y-4">
                     {getDrillsByCategory("Javelin").map((drill, idx) => renderDrillCard(drill, idx))}
+                    {isCoach && <Button onClick={() => handleAddDrill("javelin")} variant="outline" className="w-full gap-2 dark:border-gray-600 dark:text-gray-300"><Plus className="w-4 h-4" />Add Javelin Drill</Button>}
                   </div>
                 )}
                 
                 {activeSection === "drills-strength" && (
                   <div className="space-y-4">
                     {getDrillsByCategory("Strength").map((drill, idx) => renderDrillCard(drill, idx))}
+                    {isCoach && <Button onClick={() => handleAddDrill("strength")} variant="outline" className="w-full gap-2 dark:border-gray-600 dark:text-gray-300"><Plus className="w-4 h-4" />Add Strength Drill</Button>}
                   </div>
                 )}
                 
                 {activeSection === "drills-prehab" && (
                   <div className="space-y-4">
                     {getDrillsByCategory("Prehab").map((drill, idx) => renderDrillCard(drill, idx))}
+                    {isCoach && <Button onClick={() => handleAddDrill("prehab")} variant="outline" className="w-full gap-2 dark:border-gray-600 dark:text-gray-300"><Plus className="w-4 h-4" />Add Prehab Drill</Button>}
                   </div>
                 )}
 
