@@ -32,26 +32,26 @@ export default function HorizontalScrollContainer({ children, className }) {
   return (
     <div className="relative">
       <div
-        ref={scrollRef}
-        className={cn(
-          "flex gap-2 overflow-x-auto pb-2 scroll-smooth",
-          "scrollbar-hide",
-          "[scroll-snap-type:x_mandatory]",
-          className
-        )}
-        style={{ WebkitOverflowScrolling: "touch" }}
-      >
+        ref={scrollRef} className="pt-3 pb-3 flex gap-2 overflow-x-auto scroll-smooth scrollbar-hide [scroll-snap-type:x_mandatory]"
+
+
+
+
+
+
+        style={{ WebkitOverflowScrolling: "touch" }}>
+
         {children}
       </div>
       {/* Right fade gradient — only visible when overflow exists */}
-      {showFade && (
-        <div
-          className="pointer-events-none absolute right-0 top-0 bottom-2 w-15"
-          style={{
-            background: "linear-gradient(to right, transparent, var(--fade-color, rgba(248,250,252,0.95)))",
-          }}
-        />
-      )}
-    </div>
-  );
+      {showFade &&
+      <div
+        className="pointer-events-none absolute right-0 top-0 bottom-2 w-15"
+        style={{
+          background: "linear-gradient(to right, transparent, var(--fade-color, rgba(248,250,252,0.95)))"
+        }} />
+
+      }
+    </div>);
+
 }
