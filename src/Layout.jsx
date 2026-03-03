@@ -466,6 +466,7 @@ export default function Layout({ children, currentPageName }) {
           </div>
           <div className="flex items-center gap-3">
             <UniversalSearch />
+            <NotificationBell userEmail={user?.email} />
             <Button
               variant="ghost"
               size="sm"
