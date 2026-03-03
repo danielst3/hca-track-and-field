@@ -29,6 +29,7 @@ export default function EditDrillDialog({ drill, open, onOpenChange }) {
     cues: [],
     common_faults: [],
     event: "",
+    youtube_url: "",
   });
   const [cueInput, setCueInput] = useState("");
   const [faultInput, setFaultInput] = useState("");
