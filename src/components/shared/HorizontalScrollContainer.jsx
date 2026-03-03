@@ -46,7 +46,7 @@ export default function HorizontalScrollContainer({ children, className }) {
       {/* Right fade gradient — only visible when overflow exists */}
       {showFade && (
         <div
-          className="pointer-events-none absolute right-0 top-0 bottom-2 w-12"
+          className="pointer-events-none absolute right-0 top-0 bottom-2 w-15"
           style={{
             background: "linear-gradient(to right, transparent, var(--fade-color, rgba(248,250,252,0.95)))",
           }}
