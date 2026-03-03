@@ -51,10 +51,11 @@ export default function EditDrillDialog({ drill, open, onOpenChange }) {
         cues,
         common_faults: commonFaults,
         event: drill.event || "",
+        youtube_url: drill.youtube_url || "",
       });
       setDrillId(drill.id ?? null);
     } else {
-      setFormData({ name: "", purpose: "", setup: "", execution: "", cues: [], common_faults: [], event: "" });
+      setFormData({ name: "", purpose: "", setup: "", execution: "", cues: [], common_faults: [], event: "", youtube_url: "" });
       setDrillId(null);
     }
     setCueInput("");
