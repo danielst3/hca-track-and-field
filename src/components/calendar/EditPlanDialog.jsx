@@ -181,13 +181,17 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
   };
 
   const handleSelectDrill = (drill) => {
-    if (selectedEventForDrill === "shot") {
-      setPlanData({ ...planData, shot_text: planData.shot_text + (planData.shot_text ? "\n" : "") + drill.name });
-    } else if (selectedEventForDrill === "discus") {
-      setPlanData({ ...planData, discus_text: planData.discus_text + (planData.discus_text ? "\n" : "") + drill.name });
-    } else if (selectedEventForDrill === "javelin") {
-      setPlanData({ ...planData, javelin_text: planData.javelin_text + (planData.javelin_text ? "\n" : "") + drill.name });
-    }
+    const target = selectedEventForDrill;
+    setPlanData(prev => {
+      if (target === "shot") {
+        return { ...prev, shot_text: prev.shot_text + (prev.shot_text ? "\n" : "") + drill.name };
+      } else if (target === "discus") {
+        return { ...prev, discus_text: prev.discus_text + (prev.discus_text ? "\n" : "") + drill.name };
+      } else if (target === "javelin") {
+        return { ...prev, javelin_text: prev.javelin_text + (prev.javelin_text ? "\n" : "") + drill.name };
+      }
+      return prev;
+    });
     setDrillPickerOpen(false);
     setSelectedEventForDrill(null);
   };
