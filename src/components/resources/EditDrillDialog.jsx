@@ -73,6 +73,7 @@ export default function EditDrillDialog({ drill, open, onOpenChange }) {
        cues: Array.isArray(data.cues) ? data.cues : [],
        common_faults: Array.isArray(data.common_faults) ? data.common_faults : [],
        event: data.event,
+       youtube_url: data.youtube_url || "",
      };
 
      if (id) {
