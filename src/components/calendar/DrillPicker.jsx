@@ -31,25 +31,23 @@ export default function DrillPicker({ open, onOpenChange, onSelectDrill, eventTy
     prehab: "Prehab"
   };
 
+  const categoryMap = { "Shot": "shot_put", "Discus": "discus", "Javelin": "javelin", "Strength": "strength", "Warm-up": "warmup", "Prehab": "prehab" };
+
   // Combine database drills and drills from drillsDatabase
   const allDrills = [
     ...databaseDrills,
-    ...drillsDatabase
-      .filter(d => {
-        const categoryMap = { "Shot": "shot_put", "Discus": "discus", "Javelin": "javelin", "Strength": "strength", "Warm-up": "warmup", "Prehab": "prehab" };
-        return !eventType || categoryMap[d.category] === eventType;
-      })
-      .map(d => ({
-        id: `db-${d.name}`,
-        name: d.name,
-        purpose: d.objective,
-        event: { "Shot": "shot_put", "Discus": "discus", "Javelin": "javelin", "Strength": "strength", "Warm-up": "warmup", "Prehab": "prehab" }[d.category]
-      }))
+    ...drillsDatabase.map(d => ({
+      id: `db-${d.name}`,
+      name: d.name,
+      purpose: d.objective,
+      event: categoryMap[d.category]
+    }))
   ];
 
   const filteredDrills = allDrills.filter(drill => {
     const matchesSearch = !searchQuery || drill.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesEvent = !eventType || drill.event === eventType;
+    // Always include strength drills; otherwise filter by event type
+    const matchesEvent = !eventType || drill.event === eventType || drill.event === "strength";
     return matchesSearch && matchesEvent;
   });
 
