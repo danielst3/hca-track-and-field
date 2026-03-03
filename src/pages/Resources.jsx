@@ -350,20 +350,26 @@ export default function Resources() {
             </div>
           )}
 
-          {drill.youtube_url && (
-            <div>
-              <p className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">Video:</p>
-              <div className="aspect-video rounded overflow-hidden">
-                <iframe
-                  src={drill.youtube_url.replace("watch?v=", "embed/").replace("youtu.be/", "www.youtube.com/embed/")}
-                  title={drill.name}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="w-full h-full"
-                />
+          {drill.youtube_url && (() => {
+            const url = drill.youtube_url;
+            // Extract video ID from any YouTube URL format or embed code
+            const idMatch = url.match(/(?:v=|\/embed\/|youtu\.be\/|\/v\/)([a-zA-Z0-9_-]{11})/);
+            const embedSrc = idMatch ? `https://www.youtube.com/embed/${idMatch[1]}` : null;
+            return embedSrc ? (
+              <div>
+                <p className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">Video:</p>
+                <div className="aspect-video rounded overflow-hidden">
+                  <iframe
+                    src={embedSrc}
+                    title={drill.name}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="w-full h-full"
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            ) : null;
+          })()}
         </div>
       )}
     </div>
