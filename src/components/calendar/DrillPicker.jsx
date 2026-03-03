@@ -17,6 +17,11 @@ import { drillsDatabase } from "../data/drillsDatabase";
 export default function DrillPicker({ open, onOpenChange, onSelectDrill, eventType }) {
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Reset search when dialog opens
+  React.useEffect(() => {
+    if (open) setSearchQuery("");
+  }, [open]);
+
   const { data: databaseDrills = [] } = useQuery({
     queryKey: ["drills"],
     queryFn: () => base44.entities.Drill.list(),
