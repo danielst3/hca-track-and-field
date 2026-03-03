@@ -104,9 +104,7 @@ export default function AccessRequests() {
             <CardContent className="pt-12 text-center">
               <p className="text-slate-600 dark:text-gray-400 mb-2">No access requests yet</p>
               <p className="text-sm text-slate-500 dark:text-gray-500">Users will appear here when they request access</p>
-              <Button onClick={() => refetch()} variant="outline" className="mt-4 dark:bg-gray-700 dark:border-gray-600">
-                Refresh
-              </Button>
+
             </CardContent>
           </Card>
         ) : (
