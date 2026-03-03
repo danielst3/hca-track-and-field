@@ -233,6 +233,11 @@ export default function Resources() {
     setEditDrillDialogOpen(true);
   };
 
+  const handleAddDrill = (eventType) => {
+    setSelectedDrill({ event: eventType });
+    setEditDrillDialogOpen(true);
+  };
+
   const getDrillsByCategory = (category) => {
     const categoryMap = {
       "Warm-up": "warmup",
