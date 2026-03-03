@@ -27,24 +27,26 @@ export default function EditResourceDialog({ resource, open, onOpenChange }) {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (resource) {
-      setFormData({
-        title: resource.title || "",
-        content: resource.content || "",
-        link_url: resource.link_url || "",
-        file_url: resource.file_url || "",
-        tags: resource.tags || [],
-      });
-    } else {
-      setFormData({
-        title: "",
-        content: "",
-        link_url: "",
-        file_url: "",
-        tags: [],
-      });
+    if (open) {
+      if (resource) {
+        setFormData({
+          title: resource.title || "",
+          content: resource.content || "",
+          link_url: resource.link_url || "",
+          file_url: resource.file_url || "",
+          tags: resource.tags || [],
+        });
+      } else {
+        setFormData({
+          title: "",
+          content: "",
+          link_url: "",
+          file_url: "",
+          tags: [],
+        });
+      }
     }
-  }, [resource]);
+  }, [resource, open]);
 
   const resourceMutation = useMutation({
     mutationFn: ({ id, data }) => {
