@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Check, X, Mail, UserCheck } from "lucide-react";
+import { Check, X, Mail, UserCheck, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
