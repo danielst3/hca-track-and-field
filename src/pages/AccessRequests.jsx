@@ -86,9 +86,15 @@ export default function AccessRequests() {
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <div className="bg-gradient-to-r from-slate-900 to-slate-800 dark:from-gray-950 dark:to-gray-900 p-6 mb-6 rounded-lg">
-          <div className="flex items-center gap-3 mb-2">
-            <UserCheck className="w-8 h-8 text-blue-400" />
-            <h1 className="text-3xl font-bold text-white">Access Requests</h1>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3 mb-2">
+              <UserCheck className="w-8 h-8 text-blue-400" />
+              <h1 className="text-3xl font-bold text-white">Access Requests</h1>
+            </div>
+            <Button onClick={() => refetch()} variant="ghost" size="sm" className="text-slate-300 hover:text-white hover:bg-white/10 gap-2">
+              <RefreshCw className="w-4 h-4" />
+              Refresh
+            </Button>
           </div>
           <p className="text-slate-300 dark:text-gray-400">Manage sign-up requests and user invitations</p>
         </div>
