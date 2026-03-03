@@ -37,12 +37,11 @@ export default function EditDrillDialog({ drill, open, onOpenChange }) {
   const queryClient = useQueryClient();
 
   useEffect(() => {
+    if (!open) return;
     if (drill) {
-      // Handle both database drills (with executionSteps, commonFaultsFixes) and custom drills
       const execution = drill.execution || (drill.executionSteps ? drill.executionSteps.join("\n") : "");
       const cues = drill.cues || [];
       const commonFaults = drill.common_faults || (drill.commonFaultsFixes || []);
-      
       setFormData({
         name: drill.name || "",
         purpose: drill.purpose || drill.objective || "",
@@ -53,9 +52,12 @@ export default function EditDrillDialog({ drill, open, onOpenChange }) {
         event: drill.event || "",
       });
       setDrillId(drill.id || null);
-      setCueInput("");
-      setFaultInput("");
+    } else {
+      setFormData({ name: "", purpose: "", setup: "", execution: "", cues: [], common_faults: [], event: "" });
+      setDrillId(null);
     }
+    setCueInput("");
+    setFaultInput("");
   }, [drill, open]);
 
   const drillMutation = useMutation({
