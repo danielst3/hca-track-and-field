@@ -200,6 +200,8 @@ export default function Resources() {
   const { data: customResources = [] } = useQuery({
     queryKey: ["resources"],
     queryFn: () => base44.entities.Resource.list(),
+    refetchOnMount: true,
+    staleTime: 0,
   });
 
   const { data: databaseDrills = [] } = useQuery({
