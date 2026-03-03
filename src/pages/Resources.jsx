@@ -207,6 +207,8 @@ export default function Resources() {
   const { data: databaseDrills = [] } = useQuery({
     queryKey: ["drills"],
     queryFn: () => base44.entities.Drill.list(),
+    refetchOnMount: true,
+    staleTime: 0,
   });
 
   const availableViews = user ? getAvailableViews(user.user_role_preference, user.role) : [];
