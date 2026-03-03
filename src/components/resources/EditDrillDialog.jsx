@@ -51,7 +51,7 @@ export default function EditDrillDialog({ drill, open, onOpenChange }) {
         common_faults: commonFaults,
         event: drill.event || "",
       });
-      setDrillId(drill.id || null);
+      setDrillId(drill.id || null); // null if new drill pre-seeded with event
     } else {
       setFormData({ name: "", purpose: "", setup: "", execution: "", cues: [], common_faults: [], event: "" });
       setDrillId(null);
