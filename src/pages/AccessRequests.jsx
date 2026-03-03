@@ -19,6 +19,14 @@ export default function AccessRequests() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const queryClient = useQueryClient();
 
+  // Subscribe to real-time updates
+  React.useEffect(() => {
+    const unsubscribe = base44.entities.AccessRequest.subscribe((event) => {
+      queryClient.invalidateQueries({ queryKey: ["accessRequests"] });
+    });
+    return unsubscribe;
+  }, [queryClient]);
+
   const { data: requests = [], isLoading, refetch } = useQuery({
     queryKey: ["accessRequests"],
     queryFn: async () => {
