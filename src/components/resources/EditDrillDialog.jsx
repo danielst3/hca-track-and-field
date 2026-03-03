@@ -231,6 +231,16 @@ export default function EditDrillDialog({ drill, open, onOpenChange }) {
           </div>
 
           <div className="space-y-2">
+            <Label className="dark:text-gray-200">YouTube Link</Label>
+            <Input
+              value={formData.youtube_url}
+              onChange={(e) => setFormData({ ...formData, youtube_url: e.target.value })}
+              placeholder="https://youtube.com/watch?v=..."
+              className="dark:bg-gray-900 dark:border-gray-700 dark:text-gray-200"
+            />
+          </div>
+
+          <div className="space-y-2">
             <Label className="dark:text-gray-200">Coaching Cues</Label>
             <div className="flex gap-2">
               <Input
