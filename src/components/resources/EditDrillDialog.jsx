@@ -141,6 +141,10 @@ export default function EditDrillDialog({ drill, open, onOpenChange }) {
       toast.error("Drill name is required");
       return;
     }
+    if (!formData.event) {
+      toast.error("Please select an event/category");
+      return;
+    }
 
     drillMutation.mutate({
       id: drillId,
