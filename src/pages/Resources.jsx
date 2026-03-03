@@ -330,7 +330,7 @@ export default function Resources() {
                     key={idx}
                     className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-sm rounded-full font-medium"
                   >
-                    "{cue}"
+                    '{cue}'
                   </span>
                 ))}
               </div>
