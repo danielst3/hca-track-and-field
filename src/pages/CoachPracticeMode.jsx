@@ -211,7 +211,7 @@ export default function CoachPracticeMode() {
     queryFn: async () => {
       const users = await base44.entities.User.list();
       const pref = (u) => u.user_role_preference || u.data?.user_role_preference || "";
-      return users.filter(u => u.role === "user" && (pref(u) === "athlete" || (!pref(u) && u.data?.first_name)));
+      return users.filter(u => u.role === "user" && pref(u) === "athlete");
     }
   });
 
