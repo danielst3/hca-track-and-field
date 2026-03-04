@@ -109,7 +109,7 @@ export default function CoachAthleteOverviewSection({ date, dailyPlan, selectedE
           onClick={() => setOpen((p) => !p)}
           className="w-full flex items-center justify-between">
 
-          <CardTitle className="flex items-center gap-2 text-base dark:text-gray-100">
+          <CardTitle className="text-slate-800 text-base font-semibold tracking-tight flex items-center gap-2 dark:text-gray-100">
             <Users className="w-5 h-5" />
             Athlete Practice Plans
             {overrideCount > 0 &&
