@@ -336,13 +336,38 @@ export default function CoachPracticeMode() {
         )}
 
         {/* Athlete Cards */}
-        <AthleteMonitorSection
-          athletes={athletes}
-          overrides={overrides}
-          dailyPlan={dailyPlan}
-          throwLogs={throwLogs}
-          onSendFeedback={handleSendFeedback}
-        />
+        <div>
+          <button
+            type="button"
+            onClick={() => setMonitorOpen(p => !p)}
+            className="w-full flex items-center justify-between text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide mb-3 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+          >
+            <span className="flex items-center gap-2"><Users className="w-4 h-4" /> Athlete Monitor ({athletes.length})</span>
+            {monitorOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </button>
+          {monitorOpen && (
+            <div className="space-y-3">
+              {athletes.length === 0 ? (
+                <Card className="dark:bg-gray-800 dark:border-gray-700">
+                  <CardContent className="pt-6 pb-6 text-center">
+                    <p className="text-gray-500 dark:text-gray-400">No athletes found.</p>
+                  </CardContent>
+                </Card>
+              ) : (
+                athletes.map(athlete => (
+                  <AthleteMonitorCard
+                    key={athlete.id}
+                    athlete={athlete}
+                    override={overrides.find(o => o.athlete_email === athlete.email) || null}
+                    dailyPlan={dailyPlan}
+                    throwLogs={throwLogs}
+                    onSendFeedback={handleSendFeedback}
+                  />
+                ))
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
