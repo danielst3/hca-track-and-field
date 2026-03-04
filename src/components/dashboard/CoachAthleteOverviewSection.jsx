@@ -88,7 +88,7 @@ export default function CoachAthleteOverviewSection({ date, dailyPlan, selectedE
     queryKey: ["coach-athlete-overview-athletes"],
     queryFn: async () => {
       const users = await base44.entities.User.list();
-      return users.filter((u) => u.role === "user");
+      return users.filter((u) => u.is_athlete === true);
     },
     enabled: open
   });
