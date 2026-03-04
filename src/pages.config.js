@@ -52,10 +52,12 @@ import AthleteDetail from './pages/AthleteDetail';
 import Athletes from './pages/Athletes';
 import BulkMeetEntry from './pages/BulkMeetEntry';
 import Calendar from './pages/Calendar';
+import CoachPracticeMode from './pages/CoachPracticeMode';
 import FERPACompliance from './pages/FERPACompliance';
 import LogActivity from './pages/LogActivity';
 import MyAthletes from './pages/MyAthletes';
 import Posts from './pages/Posts';
+import PracticeMode from './pages/PracticeMode';
 import Privacy from './pages/Privacy';
 import Progress from './pages/Progress';
 import Resources from './pages/Resources';
@@ -63,8 +65,6 @@ import Seasons from './pages/Seasons';
 import Settings from './pages/Settings';
 import Support from './pages/Support';
 import Today from './pages/Today';
-import PracticeMode from './pages/PracticeMode';
-import CoachPracticeMode from './pages/CoachPracticeMode';
 import __Layout from './Layout.jsx';
 
 
@@ -74,10 +74,12 @@ export const PAGES = {
     "Athletes": Athletes,
     "BulkMeetEntry": BulkMeetEntry,
     "Calendar": Calendar,
+    "CoachPracticeMode": CoachPracticeMode,
     "FERPACompliance": FERPACompliance,
     "LogActivity": LogActivity,
     "MyAthletes": MyAthletes,
     "Posts": Posts,
+    "PracticeMode": PracticeMode,
     "Privacy": Privacy,
     "Progress": Progress,
     "Resources": Resources,
@@ -85,8 +87,6 @@ export const PAGES = {
     "Settings": Settings,
     "Support": Support,
     "Today": Today,
-    "PracticeMode": PracticeMode,
-    "CoachPracticeMode": CoachPracticeMode,
 }
 
 export const pagesConfig = {
