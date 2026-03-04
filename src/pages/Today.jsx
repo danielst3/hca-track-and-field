@@ -280,7 +280,7 @@ export default function Today() {
                     ? "CoachPracticeMode"
                     : "PracticeMode"
                 )}
-                className="flex items-center gap-2 bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-primary-dark)] dark:from-white dark:to-gray-200 hover:opacity-90 text-white dark:text-gray-900 text-sm font-semibold px-4 py-2 rounded-lg shadow-md transition-opacity select-none"
+                className="flex items-center gap-2 bg-gray-900 hover:bg-gray-700 dark:from-white dark:to-gray-200 dark:bg-white hover:dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-semibold px-4 py-2 rounded-lg shadow-md transition-colors select-none"
               >
                 <Play className="w-4 h-4" />
                 {(user.activeViewRole === "admin" || user.activeViewRole === "coach") && !user?.isImpersonating
