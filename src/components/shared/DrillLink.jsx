@@ -109,6 +109,12 @@ function DrillOverlayContent({ linkItem, resources }) {
               <p className="text-gray-700 dark:text-gray-300">{drill.setup}</p>
             </div>
           )}
+          {drill.execution && (
+            <div>
+              <p className="font-semibold text-xs uppercase tracking-wide text-gray-500 mb-1">Execution</p>
+              <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{drill.execution}</p>
+            </div>
+          )}
           {drill.executionSteps && drill.executionSteps.length > 0 && (
             <div>
               <p className="font-semibold text-xs uppercase tracking-wide text-gray-500 mb-1">Steps</p>
