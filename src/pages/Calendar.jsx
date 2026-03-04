@@ -334,7 +334,7 @@ export default function Calendar() {
                     : colors
                     ? `${colors.bg} border-slate-200 dark:border-gray-700`
                     : "bg-white dark:bg-gray-800 border-slate-200 dark:border-gray-700",
-                  isToday && "border-[var(--brand-primary)] ring-2 ring-[var(--brand-primary)] ring-offset-1"
+                  isToday && "border-4 border-slate-700 dark:border-gray-300"
                 )}
               >
                 <CardContent className={view === "month" ? "p-1 sm:p-3" : "p-3"}>
