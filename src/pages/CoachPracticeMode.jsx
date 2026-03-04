@@ -173,6 +173,7 @@ function AthleteMonitorCard({ athlete, override, dailyPlan, throwLogs, onSendFee
 }
 
 export default function CoachPracticeMode() {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const queryClient = useQueryClient();
   const dateStr = format(new Date(), "yyyy-MM-dd");

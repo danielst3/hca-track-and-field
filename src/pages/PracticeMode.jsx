@@ -41,6 +41,7 @@ function extractDrillsFromText(text, databaseDrills = [], resources = [], abbrev
 }
 
 export default function PracticeMode() {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [currentDrillIndex, setCurrentDrillIndex] = useState(0);
   const [completedDrills, setCompletedDrills] = useState(new Set());
