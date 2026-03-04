@@ -71,12 +71,13 @@ export default function Athletes() {
   });
 
   const roleUpdateMutation = useMutation({
-   mutationFn: async ({ userId, newRoles, newEvents, firstName, lastName }) => {
+   mutationFn: async ({ userId, newRoles, newEvents, firstName, lastName, isAthlete }) => {
      return base44.entities.User.update(userId, { 
        user_role_preference: newRoles.join(","),
        events: newEvents,
        ...(firstName !== undefined && { first_name: firstName }),
        ...(lastName !== undefined && { last_name: lastName }),
+       is_athlete: isAthlete,
      });
    },
    onSuccess: () => {
