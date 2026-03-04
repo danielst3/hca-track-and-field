@@ -28,7 +28,7 @@ export default function AthleteOverridesSection({ date, activeSeason }) {
     queryFn: async () => {
       const currentUser = await base44.auth.me();
       const users = await base44.entities.User.list();
-      return users.filter(u => u.is_athlete === true);
+      return users.filter(u => u.data?.is_athlete === true);
     },
     enabled: open,
   });
