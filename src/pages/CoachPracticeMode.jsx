@@ -256,6 +256,8 @@ export default function CoachPracticeMode() {
   const activeAthletes = new Set(todayLogs.map(l => l.athlete_email)).size;
   const totalThrows = todayLogs.length;
 
+  const [monitorOpen, setMonitorOpen] = useState(true);
+
   const isCoachOrAdmin = user?.activeViewRole === "admin" || user?.activeViewRole === "coach";
 
   if (user && !isCoachOrAdmin) {
