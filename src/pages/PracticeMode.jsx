@@ -15,6 +15,7 @@ import DrillDetailPanel from "../components/practice/DrillDetailPanel";
 import PracticeTimer from "../components/practice/PracticeTimer";
 import SessionSummary from "../components/practice/SessionSummary";
 import { createPageUrl } from "../utils";
+import { useNavigate } from "react-router-dom";
 import {
   ChevronLeft, ChevronRight, CheckCircle2, Circle, Play,
   Flag, SkipForward, MessageSquare, Plus, X, Dumbbell,

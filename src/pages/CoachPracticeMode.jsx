@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { createPageUrl } from "../utils";
+import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft, Users, User, Send, Circle, Disc3, Zap,
   CheckCircle2, TrendingUp, MessageSquare, ChevronDown, ChevronUp, Trophy
