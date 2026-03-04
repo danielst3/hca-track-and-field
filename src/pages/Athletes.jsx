@@ -256,6 +256,7 @@ export default function Athletes() {
     setEditEvents(athlete.events || []);
     setEditFirstName(athlete.first_name || "");
     setEditLastName(athlete.last_name || "");
+    setEditIsAthlete(athlete.is_athlete === true);
   };
 
   const toggleRole = (role) => {
