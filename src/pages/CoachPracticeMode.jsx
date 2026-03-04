@@ -210,7 +210,7 @@ export default function CoachPracticeMode() {
     queryKey: ["athletes-practice-mode"],
     queryFn: async () => {
       const users = await base44.entities.User.list();
-      return users.filter(u => u.data?.user_role_preference === "user" || (Array.isArray(u.data?.user_role_preference) && u.data.user_role_preference.includes("user")));
+      return users.filter(u => u.data && (u.data.user_role_preference === "user" || (Array.isArray(u.data.user_role_preference) && u.data.user_role_preference.includes("user"))));
     }
   });
 
