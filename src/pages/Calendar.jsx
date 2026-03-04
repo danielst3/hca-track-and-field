@@ -342,7 +342,7 @@ export default function Calendar() {
                     <span
                       className={`text-sm font-bold ${
                         isToday
-                          ? "text-[var(--brand-primary)] dark:text-[var(--brand-primary)]"
+                          ? (plan && colors?.text) ? colors.text : meet ? "text-red-700 dark:text-red-400" : "text-slate-600 dark:text-gray-500"
                           : (plan && colors?.text)
                           ? colors.text
                           : meet
