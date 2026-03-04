@@ -24,7 +24,7 @@ export default function AthleteOverridesSection({ date, activeSeason }) {
   const dateStr = date ? format(date, "yyyy-MM-dd") : null;
 
   const { data: athletes = [] } = useQuery({
-    queryKey: ["athletes-overrides-list"],
+    queryKey: ["athletes-overrides-list-v2"],
     queryFn: async () => {
       const currentUser = await base44.auth.me();
       const users = await base44.entities.User.list();
