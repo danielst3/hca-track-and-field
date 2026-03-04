@@ -507,7 +507,22 @@ export default function Athletes() {
                                  </div>
                                </div>
                                <div>
-                                 <h3 className="font-semibold text-slate-900 dark:text-gray-100 mb-3">Roles</h3>
+                                  <h3 className="font-semibold text-slate-900 dark:text-gray-100 mb-3">Athlete Status</h3>
+                                  <label className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition border border-slate-200 dark:border-gray-600">
+                                    <input
+                                      type="checkbox"
+                                      checked={editIsAthlete}
+                                      onChange={(e) => setEditIsAthlete(e.target.checked)}
+                                      className="w-4 h-4"
+                                    />
+                                    <div>
+                                      <span className="dark:text-gray-200 font-medium">Is Athlete</span>
+                                      <p className="text-xs text-gray-500 dark:text-gray-400">Shows this user in Coach Practice Mode</p>
+                                    </div>
+                                  </label>
+                                </div>
+                               <div>
+                                  <h3 className="font-semibold text-slate-900 dark:text-gray-100 mb-3">Roles</h3>
                                  <div className="space-y-3">
                                    {[
                                      { value: "user", label: "Athlete" },
