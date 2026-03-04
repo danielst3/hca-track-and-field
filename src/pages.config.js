@@ -64,6 +64,7 @@ import Settings from './pages/Settings';
 import Support from './pages/Support';
 import Today from './pages/Today';
 import PracticeMode from './pages/PracticeMode';
+import CoachPracticeMode from './pages/CoachPracticeMode';
 import __Layout from './Layout.jsx';
 
 
@@ -85,6 +86,7 @@ export const PAGES = {
     "Support": Support,
     "Today": Today,
     "PracticeMode": PracticeMode,
+    "CoachPracticeMode": CoachPracticeMode,
 }
 
 export const pagesConfig = {
