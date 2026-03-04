@@ -139,6 +139,27 @@ function DrillOverlayContent({ linkItem, resources }) {
               </ul>
             </div>
           )}
+          {drill.youtube_url && (() => {
+            const match = drill.youtube_url.match(/(?:v=|youtu\.be\/)([^&?/]+)/);
+            const embedId = match ? match[1] : null;
+            return embedId ? (
+              <div>
+                <p className="font-semibold text-xs uppercase tracking-wide text-gray-500 mb-1">Video</p>
+                <div className="aspect-video w-full rounded-lg overflow-hidden">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${embedId}`}
+                    title={drill.name}
+                    className="w-full h-full"
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+            ) : (
+              <a href={drill.youtube_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-blue-500 underline">
+                <ExternalLink className="w-3 h-3" /> Watch Video
+              </a>
+            );
+          })()}
         </div>
       </>
     );
