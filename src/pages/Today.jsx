@@ -261,16 +261,34 @@ export default function Today() {
           <AbbreviationsKey />
         </div>
 
-        {/* Day Type Badge */}
+        {/* Day Type Badge + Practice Mode Button */}
         {dailyPlan &&
-        <div className="flex items-center gap-3">
-            <DayTypeBadge type={dailyPlan.day_type} />
-            {meet &&
-          <div className="flex items-center gap-2 text-red-600 font-semibold">
+        <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <DayTypeBadge type={dailyPlan.day_type} />
+              {meet &&
+              <div className="flex items-center gap-2 text-red-600 font-semibold">
                 <Trophy className="w-4 h-4" />
                 <span>{meet.name}</span>
               </div>
-          }
+              }
+            </div>
+            {user && (
+              <a
+                href={createPageUrl(
+                  (user.activeViewRole === "admin" || user.activeViewRole === "coach") && !user?.isImpersonating
+                    ? "CoachPracticeMode"
+                    : "PracticeMode"
+                )}
+                className="flex items-center gap-2 bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-primary-dark)] hover:opacity-90 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-md transition-opacity select-none"
+              >
+                <Play className="w-4 h-4" />
+                {(user.activeViewRole === "admin" || user.activeViewRole === "coach") && !user?.isImpersonating
+                  ? "Coach Mode"
+                  : "Practice Mode"
+                }
+              </a>
+            )}
           </div>
         }
 
