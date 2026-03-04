@@ -280,7 +280,7 @@ export default function Athletes() {
       toast.error("At least one role must be selected");
       return;
     }
-    roleUpdateMutation.mutate({ userId: editingAthlete.id, newRoles: editRoles, newEvents: editEvents, firstName: editFirstName, lastName: editLastName });
+    roleUpdateMutation.mutate({ userId: editingAthlete.id, newRoles: editRoles, newEvents: editEvents, firstName: editFirstName, lastName: editLastName, isAthlete: editIsAthlete });
   };
 
   const [assignParentOpen, setAssignParentOpen] = useState(false);
