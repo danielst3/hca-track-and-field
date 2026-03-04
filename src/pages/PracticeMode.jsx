@@ -212,8 +212,8 @@ export default function PracticeMode() {
   const isCoachOrAdmin = user?.activeViewRole === "admin" || user?.activeViewRole === "coach";
 
   // Redirect coaches to their own mode
-  if (isCoachOrAdmin && !user?.isImpersonating) {
-    window.location.href = createPageUrl("CoachPracticeMode");
+  if (user && isCoachOrAdmin && !user?.isImpersonating) {
+    navigate(createPageUrl("CoachPracticeMode"));
     return null;
   }
 

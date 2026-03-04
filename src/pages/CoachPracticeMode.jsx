@@ -259,7 +259,7 @@ export default function CoachPracticeMode() {
   const isCoachOrAdmin = user?.activeViewRole === "admin" || user?.activeViewRole === "coach";
 
   if (user && !isCoachOrAdmin) {
-    window.location.href = createPageUrl("PracticeMode");
+    navigate(createPageUrl("PracticeMode"));
     return null;
   }
 
