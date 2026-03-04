@@ -335,31 +335,13 @@ export default function CoachPracticeMode() {
         )}
 
         {/* Athlete Cards */}
-        <div>
-          <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide mb-3 flex items-center gap-2">
-            <Users className="w-4 h-4" /> Athlete Monitor
-          </h2>
-          <div className="space-y-3">
-            {athletes.length === 0 ? (
-              <Card className="dark:bg-gray-800 dark:border-gray-700">
-                <CardContent className="pt-6 pb-6 text-center">
-                  <p className="text-gray-500 dark:text-gray-400">No athletes found.</p>
-                </CardContent>
-              </Card>
-            ) : (
-              athletes.map(athlete => (
-                <AthleteMonitorCard
-                  key={athlete.id}
-                  athlete={athlete}
-                  override={overrides.find(o => o.athlete_email === athlete.email) || null}
-                  dailyPlan={dailyPlan}
-                  throwLogs={throwLogs}
-                  onSendFeedback={handleSendFeedback}
-                />
-              ))
-            )}
-          </div>
-        </div>
+        <AthleteMonitorSection
+          athletes={athletes}
+          overrides={overrides}
+          dailyPlan={dailyPlan}
+          throwLogs={throwLogs}
+          onSendFeedback={handleSendFeedback}
+        />
       </div>
     </div>
   );
