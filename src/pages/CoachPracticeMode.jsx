@@ -146,6 +146,66 @@ function AthleteMonitorCard({ athlete, override, dailyPlan, throwLogs, videoAnal
             </div>
           </div>
 
+          {/* Video Analyses */}
+          {videoAnalyses && videoAnalyses.length > 0 && (
+            <div>
+              <button
+                type="button"
+                onClick={() => setVideoExpanded(v => !v)}
+                className="w-full flex items-center justify-between text-xs font-semibold text-purple-700 dark:text-purple-400 uppercase tracking-wide mb-2 hover:opacity-80 transition-opacity"
+              >
+                <span className="flex items-center gap-1">
+                  <Video className="w-3 h-3" /> Video Analyses ({videoAnalyses.length})
+                </span>
+                {videoExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+              </button>
+              {videoExpanded && (
+                <div className="space-y-3">
+                  {/* Selector if multiple */}
+                  {videoAnalyses.length > 1 && (
+                    <div className="flex gap-2 overflow-x-auto pb-1">
+                      {videoAnalyses.map((va, idx) => (
+                        <button
+                          key={va.id}
+                          onClick={() => setSelectedAnalysisIdx(idx)}
+                          className={cn(
+                            "flex-shrink-0 px-2 py-1 rounded-full text-xs font-medium border transition-all",
+                            selectedAnalysisIdx === idx
+                              ? "bg-purple-600 text-white border-purple-600"
+                              : "bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-600"
+                          )}
+                        >
+                          {va.event} · {va.analysis_date}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  {(() => {
+                    const va = videoAnalyses[selectedAnalysisIdx];
+                    if (!va) return null;
+                    return (
+                      <div className="space-y-2">
+                        <video
+                          src={va.video_url}
+                          controls
+                          className="w-full rounded-lg max-h-48 bg-black"
+                        />
+                        <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-3">
+                          <p className="text-xs font-semibold text-purple-700 dark:text-purple-300 flex items-center gap-1 mb-2">
+                            <Sparkles className="w-3 h-3" /> AI Coaching Feedback
+                          </p>
+                          <div className="prose prose-sm max-w-none dark:prose-invert text-xs max-h-60 overflow-y-auto">
+                            <ReactMarkdown>{va.ai_response}</ReactMarkdown>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Send Feedback */}
           <div>
             <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2 flex items-center gap-1">
