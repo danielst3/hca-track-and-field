@@ -43,6 +43,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
+import ReleaseNotesModal from "./components/shared/ReleaseNotesModal";
 
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
