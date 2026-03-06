@@ -674,6 +674,7 @@ export default function Layout({ children, currentPageName }) {
         </AlertDialogContent>
       </AlertDialog>
 
+      <ReleaseNotesModal user={user} />
       <Toaster position="top-center" />
 
       {/* Bottom Navigation */}
