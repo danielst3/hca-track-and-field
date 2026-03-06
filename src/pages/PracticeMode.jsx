@@ -176,6 +176,16 @@ export default function PracticeMode() {
   const currentDrill = allDrills[currentDrillIndex];
   const progress = allDrills.length > 0 ? (completedDrills.size / allDrills.length) * 100 : 0;
 
+  const handleSelectEvent = (evt) => {
+    setSelectedEvent(evt);
+    setCurrentDrillIndex(0);
+    setCompletedDrills(new Set());
+    setDrillLogs({});
+    setNote("");
+    setShowDetail(false);
+    setSessionComplete(false);
+  };
+
   const handleMarkDone = () => {
     setCompletedDrills(prev => new Set([...prev, currentDrillIndex]));
     if (currentDrillIndex < allDrills.length - 1) {
