@@ -430,6 +430,7 @@ export default function CoachPracticeMode() {
                     override={overrides.find(o => o.athlete_email === athlete.email) || null}
                     dailyPlan={dailyPlan}
                     throwLogs={throwLogs}
+                    videoAnalyses={videoAnalyses.filter(v => v.athlete_email === athlete.email)}
                     onSendFeedback={handleSendFeedback}
                   />
                 ))
