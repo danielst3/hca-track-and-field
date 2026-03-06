@@ -56,7 +56,20 @@ export default function VideoAnalysis({ event, athleteName, athleteEmail }) {
         Be encouraging but specific. Focus on the most impactful improvements first.`,
         file_urls: [fileUrl],
       });
-      setAnalysis(typeof result === "string" ? result : JSON.stringify(result));
+      const aiText = typeof result === "string" ? result : JSON.stringify(result);
+      setAnalysis(aiText);
+      setVideoUrl(fileUrl);
+      // Save to database for coach review
+      if (athleteEmail) {
+        const { format } = await import("date-fns");
+        await base44.entities.VideoAnalysisResult.create({
+          athlete_email: athleteEmail,
+          event,
+          video_url: fileUrl,
+          ai_response: aiText,
+          analysis_date: format(new Date(), "yyyy-MM-dd"),
+        });
+      }
     } catch (e) {
       setError("AI analysis failed. Please try again.");
     }
