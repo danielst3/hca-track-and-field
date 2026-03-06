@@ -403,7 +403,7 @@ export default function PracticeMode() {
               )}
 
               {/* Video Analysis */}
-              <VideoAnalysis event={currentDrill.event} athleteName={user?.full_name} />
+              <VideoAnalysis event={currentDrill.event} athleteName={user?.full_name} athleteEmail={athleteEmail} />
 
               {/* Notes */}
               <div className="space-y-2">
