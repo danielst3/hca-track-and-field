@@ -152,17 +152,27 @@ export default function PracticeMode() {
     javelin_text: athleteOverride?.javelin_text || dailyPlan.javelin_text,
   } : null;
 
+  // Only show events the athlete participates in
+  const athleteEvents = user?.event_types || [];
+
   const eventSections = effectivePlan ? [
     { event: "shot", label: "Shot Put", text: effectivePlan.shot_text, color: "amber" },
     { event: "discus", label: "Discus", text: effectivePlan.discus_text, color: "cyan" },
     { event: "javelin", label: "Javelin", text: effectivePlan.javelin_text, color: "rose" },
-  ].filter(s => s.text) : [];
+  ].filter(s => s.text && (athleteEvents.length === 0 || athleteEvents.includes(s.event))) : [];
 
-  const allDrills = eventSections.flatMap(section => {
-    const drills = extractDrillsFromText(section.text, databaseDrills, resources, abbreviations);
-    return drills.map((d, i) => ({ ...d, event: section.event, eventLabel: section.label, color: section.color, key: `${section.event}-${i}` }));
-  });
+  // Auto-select first available event if none selected
+  const activeEvent = selectedEvent || (eventSections[0]?.event ?? null);
 
+  const activeSectionDrills = (() => {
+    const section = eventSections.find(s => s.event === activeEvent);
+    if (!section) return [];
+    return extractDrillsFromText(section.text, databaseDrills, resources, abbreviations).map((d, i) => ({
+      ...d, event: section.event, eventLabel: section.label, color: section.color, key: `${section.event}-${i}`
+    }));
+  })();
+
+  const allDrills = activeSectionDrills;
   const currentDrill = allDrills[currentDrillIndex];
   const progress = allDrills.length > 0 ? (completedDrills.size / allDrills.length) * 100 : 0;
 
