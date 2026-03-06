@@ -292,6 +292,30 @@ export default function PracticeMode() {
         </div>
       </div>
 
+      {/* Event Selector */}
+      {eventSections.length > 1 && (
+        <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-4 py-2">
+          <div className="max-w-2xl mx-auto flex gap-2">
+            {eventSections.map(s => (
+              <button
+                key={s.event}
+                onClick={() => handleSelectEvent(s.event)}
+                className={cn(
+                  "flex-1 py-1.5 rounded-full text-sm font-semibold border transition-all",
+                  activeEvent === s.event
+                    ? s.color === "amber" ? "bg-amber-500 text-white border-amber-500"
+                      : s.color === "cyan" ? "bg-cyan-600 text-white border-cyan-600"
+                      : "bg-rose-500 text-white border-rose-500"
+                    : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-600"
+                )}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="max-w-2xl mx-auto px-4 pt-4 space-y-4">
         {/* Coach Feedback Banner */}
         {coachFeedback.length > 0 && (
