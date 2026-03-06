@@ -14,6 +14,7 @@ import { drillsDatabase } from "../components/data/drillsDatabase";
 import DrillDetailPanel from "../components/practice/DrillDetailPanel";
 import PracticeTimer from "../components/practice/PracticeTimer";
 import SessionSummary from "../components/practice/SessionSummary";
+import VideoAnalysis from "../components/practice/VideoAnalysis";
 import { createPageUrl } from "../utils";
 import { useNavigate } from "react-router-dom";
 import {
