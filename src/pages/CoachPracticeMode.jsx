@@ -26,10 +26,12 @@ const EVENT_CONFIG = {
   javelin: { label: "Javelin", icon: Zap, color: "rose" },
 };
 
-function AthleteMonitorCard({ athlete, override, dailyPlan, throwLogs, onSendFeedback }) {
+function AthleteMonitorCard({ athlete, override, dailyPlan, throwLogs, videoAnalyses, onSendFeedback }) {
   const [expanded, setExpanded] = useState(false);
   const [feedbackMsg, setFeedbackMsg] = useState("");
   const [sending, setSending] = useState(false);
+  const [videoExpanded, setVideoExpanded] = useState(false);
+  const [selectedAnalysisIdx, setSelectedAnalysisIdx] = useState(0);
 
   const athleteLogs = throwLogs.filter(l => l.athlete_email === athlete.email);
   const today = format(new Date(), "yyyy-MM-dd");
