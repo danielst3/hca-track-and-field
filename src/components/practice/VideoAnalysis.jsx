@@ -7,12 +7,13 @@ import { Video, Upload, Loader2, X, Sparkles, ChevronDown, ChevronUp } from "luc
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 
-export default function VideoAnalysis({ event, athleteName }) {
+export default function VideoAnalysis({ event, athleteName, athleteEmail }) {
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState(null);
+  const [videoUrl, setVideoUrl] = useState(null);
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
 
