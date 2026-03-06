@@ -288,6 +288,12 @@ export default function CoachPracticeMode() {
     refetchInterval: 15000, // refresh every 15s
   });
 
+  const { data: videoAnalyses = [] } = useQuery({
+    queryKey: ["video-analyses-coach"],
+    queryFn: () => base44.entities.VideoAnalysisResult.list("-analysis_date", 200),
+    refetchInterval: 15000,
+  });
+
   const sendFeedbackMutation = useMutation({
     mutationFn: async ({ athleteEmail, message }) => {
       // Update the athlete's plan override with coach notes (real-time)
