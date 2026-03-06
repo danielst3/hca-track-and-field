@@ -79,6 +79,7 @@ export default function VideoAnalysis({ event, athleteName, athleteEmail }) {
   const handleReset = () => {
     setFile(null);
     setAnalysis(null);
+    setVideoUrl(null);
     setError(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
