@@ -14,8 +14,9 @@ import { createPageUrl } from "../utils";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft, Users, User, Send, Circle, Disc3, Zap,
-  CheckCircle2, TrendingUp, MessageSquare, ChevronDown, ChevronUp, Trophy
+  CheckCircle2, TrendingUp, MessageSquare, ChevronDown, ChevronUp, Trophy, Video, Sparkles
 } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
 import { getActiveViewRole, getAvailableViews } from "../components/shared/getActiveViewRole";
 
