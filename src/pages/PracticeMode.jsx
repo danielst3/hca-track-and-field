@@ -153,7 +153,7 @@ export default function PracticeMode() {
   } : null;
 
   // Only show events the athlete participates in
-  const athleteEvents = user?.event_types || [];
+  const athleteEvents = user?.events || user?.data?.events || [];
 
   const eventSections = effectivePlan ? [
     { event: "shot", label: "Shot Put", text: effectivePlan.shot_text, color: "amber" },
