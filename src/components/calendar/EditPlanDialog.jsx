@@ -109,21 +109,24 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
 
   useEffect(() => {
     if (plan) {
-      setPlanData({
+      const loaded = {
         day_type: plan.day_type || "technical",
-        shot_text: plan.shot_text || "",
-        discus_text: plan.discus_text || "",
-        javelin_text: plan.javelin_text || "",
         coach_notes: plan.coach_notes || "",
-      });
+      };
+      ALL_PLAN_FIELDS.forEach(f => { loaded[f] = plan[f] || ""; });
+      setPlanData(loaded);
+      // Determine which fields are active based on which have content
+      const fieldsWithContent = ALL_PLAN_FIELDS.filter(f => plan[f]);
+      setActiveFields(
+        fieldsWithContent.length > 0
+          ? fieldsWithContent
+          : ["shot_text", "discus_text", "javelin_text"]
+      );
     } else {
-      setPlanData({
-        day_type: "technical",
-        shot_text: "",
-        discus_text: "",
-        javelin_text: "",
-        coach_notes: "",
-      });
+      const empty = { day_type: "technical", coach_notes: "" };
+      ALL_PLAN_FIELDS.forEach(f => { empty[f] = ""; });
+      setPlanData(empty);
+      setActiveFields(["shot_text", "discus_text", "javelin_text"]);
     }
 
     if (meet) {
