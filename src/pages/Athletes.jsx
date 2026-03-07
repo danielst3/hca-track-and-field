@@ -479,9 +479,9 @@ export default function Athletes() {
                               Edit Roles
                             </Button>
                           </DialogTrigger>
-                           <DialogContent>
+                           <DialogContent className="max-h-[90vh] overflow-y-auto dark:bg-gray-800 dark:border-gray-700">
                              <DialogHeader>
-                               <DialogTitle>Edit {athlete.first_name && athlete.last_name ? `${athlete.first_name} ${athlete.last_name}` : athlete.full_name}</DialogTitle>
+                               <DialogTitle className="dark:text-gray-100">Edit {athlete.first_name && athlete.last_name ? `${athlete.first_name} ${athlete.last_name}` : athlete.full_name}</DialogTitle>
                              </DialogHeader>
                              <div className="space-y-6 mt-4">
                                <div>
