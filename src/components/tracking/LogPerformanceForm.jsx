@@ -119,12 +119,12 @@ export default function LogPerformanceForm({ event, eventLabel, user, onClose, o
           </Button>
         </DialogTrigger>
       )}
-      <DialogContent className="max-w-md dark:bg-gray-800 dark:border-gray-700">
-        <DialogHeader>
+      <DialogContent className="max-w-md w-[calc(100vw-2rem)] max-h-[90dvh] flex flex-col dark:bg-gray-800 dark:border-gray-700">
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle className="dark:text-gray-100">Log {eventLabel} Performance</DialogTitle>
           <DialogDescription>Record your performance data for {eventLabel}</DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-4 overflow-y-auto flex-1 pr-1">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label className="dark:text-gray-200">Date</Label>
