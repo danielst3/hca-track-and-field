@@ -545,25 +545,21 @@ export default function Athletes() {
                                </div>
 
                                <div>
-                                 <h3 className="font-semibold text-slate-900 dark:text-gray-100 mb-3">Event Types</h3>
-                                 <div className="space-y-3">
-                                   {[
-                                     { value: "shot", label: "Shot Put" },
-                                     { value: "discus", label: "Discus" },
-                                     { value: "javelin", label: "Javelin" }
-                                   ].map(event => (
-                                     <label key={event.value} className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-                                       <input
-                                         type="checkbox"
-                                         checked={editEvents.includes(event.value)}
-                                         onChange={() => toggleEvent(event.value)}
-                                         className="w-4 h-4"
-                                       />
-                                       <span className="dark:text-gray-200">{event.label}</span>
-                                     </label>
-                                   ))}
-                                 </div>
-                               </div>
+                                  <h3 className="font-semibold text-slate-900 dark:text-gray-100 mb-3">Event Types</h3>
+                                  <div className="space-y-1 max-h-64 overflow-y-auto">
+                                    {ALL_EVENTS.map(event => (
+                                      <label key={event.id} className="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                                        <input
+                                          type="checkbox"
+                                          checked={editEvents.includes(event.id)}
+                                          onChange={() => toggleEvent(event.id)}
+                                          className="w-4 h-4"
+                                        />
+                                        <span className="dark:text-gray-200 text-sm">{event.label}</span>
+                                      </label>
+                                    ))}
+                                  </div>
+                                </div>
 
                                <div className="flex justify-end gap-3">
                                  <Button
