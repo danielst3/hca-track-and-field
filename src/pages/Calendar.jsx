@@ -49,8 +49,8 @@ export default function Calendar() {
   const [selectedDay, setSelectedDay] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [selectedEvents, setSelectedEvents] = useState(["shot_put", "discus", "javelin"]);
-  const [eventOptions, setEventOptions] = useState([]);
+  const [selectedEvents, setSelectedEvents] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   React.useEffect(() => {
     const fetchUser = async () => {
