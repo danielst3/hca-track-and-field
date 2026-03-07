@@ -18,7 +18,7 @@ export default function BulkMeetEntry() {
   const [user, setUser] = useState(null);
   const [meetName, setMeetName] = useState("");
   const [meetDate, setMeetDate] = useState(format(new Date(), "yyyy-MM-dd"));
-  const [activeEvents, setActiveEvents] = useState(["shot", "discus", "javelin"]);
+  const [activeEvents, setActiveEvents] = useState(["shot_put", "discus", "javelin"]);
   // grid[athleteId][eventId] = distance string
   const [grid, setGrid] = useState({});
   const [saving, setSaving] = useState(false);
