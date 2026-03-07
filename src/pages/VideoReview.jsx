@@ -12,23 +12,44 @@ import { useViewGuard } from "../components/shared/useViewGuard";
 import ReactMarkdown from "react-markdown";
 
 export default function VideoReview() {
-  const { ready } = useViewGuard(["admin", "coach"]);
   const [expandedAnalysis, setExpandedAnalysis] = useState(null);
+  const [user, setUser] = useState(null);
+  const [userLoading, setUserLoading] = useState(true);
   const queryClient = useQueryClient();
 
+  useEffect(() => {
+    base44.auth.me().then(setUser).finally(() => setUserLoading(false));
+  }, []);
+
+  const isCoachOrAdmin = user?.role === "admin" || user?.role === "coach";
+
   const { data: throwLogs = [], isLoading: loadingThrows } = useQuery({
-    queryKey: ["throwLogsWithVideo"],
-    queryFn: () => base44.entities.ThrowLog.filter({ video_url: { $exists: true } }, "-date", 50),
+    queryKey: ["throwLogsWithVideo", user?.email],
+    queryFn: () => {
+      const filter = { video_url: { $exists: true } };
+      if (!isCoachOrAdmin) filter.athlete_email = user.email;
+      return base44.entities.ThrowLog.filter(filter, "-date", 50);
+    },
+    enabled: !!user,
   });
 
   const { data: trainingLogs = [], isLoading: loadingTraining } = useQuery({
-    queryKey: ["trainingLogsWithVideo"],
-    queryFn: () => base44.entities.TrainingLog.filter({ video_url: { $exists: true } }, "-date", 50),
+    queryKey: ["trainingLogsWithVideo", user?.email],
+    queryFn: () => {
+      const filter = { video_url: { $exists: true } };
+      if (!isCoachOrAdmin) filter.athlete_email = user.email;
+      return base44.entities.TrainingLog.filter(filter, "-date", 50);
+    },
+    enabled: !!user,
   });
 
   const { data: analyses = [], isLoading: loadingAnalyses } = useQuery({
-    queryKey: ["videoAnalyses"],
-    queryFn: () => base44.entities.VideoAnalysisResult.list("-analysis_date", 100),
+    queryKey: ["videoAnalyses", user?.email],
+    queryFn: () => {
+      if (isCoachOrAdmin) return base44.entities.VideoAnalysisResult.list("-analysis_date", 100);
+      return base44.entities.VideoAnalysisResult.filter({ athlete_email: user.email }, "-analysis_date", 100);
+    },
+    enabled: !!user,
   });
 
   const analyzeMutation = useMutation({
