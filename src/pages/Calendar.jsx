@@ -82,7 +82,7 @@ export default function Calendar() {
 
   useEffect(() => {
     if (user?.default_events && user.default_events.length > 0) {
-      setSelectedEvents(user.default_events);
+      setSelectedEvents(user.default_events.map(normalizeEventId));
     }
   }, [user]);
 
