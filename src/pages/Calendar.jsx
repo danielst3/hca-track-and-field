@@ -9,7 +9,6 @@ import { getActiveViewRole, getAvailableViews } from "../components/shared/getAc
 import DayDetailDialog from "../components/calendar/DayDetailDialog";
 import EditPlanDialog from "../components/calendar/EditPlanDialog";
 import AbbreviationsKey from "../components/shared/AbbreviationsKey.jsx";
-import EventToggle from "../components/shared/EventToggle";
 import { ChevronLeft, ChevronRight, Trophy } from "lucide-react";
 import { ALL_EVENTS, getEventById, EVENT_CATEGORIES, EVENTS_BY_CATEGORY } from "../components/shared/eventConfig";
 import { Badge } from "@/components/ui/badge";
