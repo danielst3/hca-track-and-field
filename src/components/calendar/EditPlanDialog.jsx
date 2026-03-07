@@ -302,86 +302,94 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
               />
             </div>
 
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label className="text-gray-900 dark:text-gray-200">Shot Put Plan</Label>
-                <Button
-                  onClick={() => {
-                    setSelectedEventForDrill("shot");
-                    setDrillPickerOpen(true);
-                  }}
-                  size="sm"
-                  variant="outline"
-                  className="gap-2 dark:border-gray-600 dark:text-gray-200"
-                >
-                  <Plus className="w-4 h-4" />
-                  Add Drill
-                </Button>
+            {/* Dynamic event fields */}
+            {activeFields.map(field => (
+              <div key={field} className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label className="text-gray-900 dark:text-gray-200">{FIELD_TO_LABEL[field]} Plan</Label>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={() => {
+                        setSelectedEventForDrill(field);
+                        setDrillPickerOpen(true);
+                      }}
+                      size="sm"
+                      variant="outline"
+                      className="gap-1 dark:border-gray-600 dark:text-gray-200"
+                    >
+                      <Plus className="w-3 h-3" />
+                      Add Drill
+                    </Button>
+                    <Button
+                      onClick={() => handleRemoveField(field)}
+                      size="sm"
+                      variant="ghost"
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30 px-2"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+                <Textarea
+                  value={planData[field] || ""}
+                  onChange={(e) => setPlanData({ ...planData, [field]: e.target.value })}
+                  placeholder="Theme, drills, cues..."
+                  rows={3}
+                  className="text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 break-words"
+                />
               </div>
-              <Textarea
-                value={planData.shot_text}
-                onChange={(e) =>
-                  setPlanData({ ...planData, shot_text: e.target.value })
-                }
-                placeholder="Theme, drills, cues..."
-                rows={3}
-                className="text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 break-words"
-              />
-            </div>
+            ))}
 
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label className="text-gray-900 dark:text-gray-200">Discus Plan</Label>
-                <Button
-                  onClick={() => {
-                    setSelectedEventForDrill("discus");
-                    setDrillPickerOpen(true);
-                  }}
-                  size="sm"
-                  variant="outline"
-                  className="gap-2 dark:border-gray-600 dark:text-gray-200"
-                >
-                  <Plus className="w-4 h-4" />
-                  Add Drill
-                </Button>
-              </div>
-              <Textarea
-                value={planData.discus_text}
-                onChange={(e) =>
-                  setPlanData({ ...planData, discus_text: e.target.value })
-                }
-                placeholder="Theme, drills, cues..."
-                rows={3}
-                className="text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 break-words"
-              />
-            </div>
+            {/* Add Event button */}
+            <Button
+              onClick={() => setEventPickerOpen(true)}
+              variant="outline"
+              size="sm"
+              className="gap-2 border-dashed dark:border-gray-600 dark:text-gray-300"
+            >
+              <Plus className="w-4 h-4" />
+              Add Event
+            </Button>
 
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label className="text-gray-900 dark:text-gray-200">Javelin Plan</Label>
-                <Button
-                  onClick={() => {
-                    setSelectedEventForDrill("javelin");
-                    setDrillPickerOpen(true);
-                  }}
-                  size="sm"
-                  variant="outline"
-                  className="gap-2 dark:border-gray-600 dark:text-gray-200"
-                >
-                  <Plus className="w-4 h-4" />
-                  Add Drill
-                </Button>
+            {/* Inline event picker */}
+            {eventPickerOpen && (
+              <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3 bg-gray-50 dark:bg-gray-800 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Select an event to add</span>
+                  <Button size="sm" variant="ghost" onClick={() => setEventPickerOpen(false)} className="h-6 w-6 p-0">✕</Button>
+                </div>
+                {EVENT_CATEGORIES.map(cat => {
+                  const eventsInCat = EVENTS_BY_CATEGORY[cat.id];
+                  // Only show events whose field isn't already active, and deduplicate by field
+                  const seenFields = new Set();
+                  const available = eventsInCat.filter(ev => {
+                    const f = EVENT_PLAN_FIELDS[ev.id];
+                    if (!f || activeFields.includes(f) || seenFields.has(f)) return false;
+                    seenFields.add(f);
+                    return true;
+                  });
+                  if (available.length === 0) return null;
+                  return (
+                    <div key={cat.id}>
+                      <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">{cat.label}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {available.map(ev => (
+                          <Button
+                            key={ev.id}
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleAddEvent(ev.id)}
+                            className="text-xs h-7 dark:border-gray-600 dark:text-gray-200"
+                          >
+                            {FIELD_TO_LABEL[EVENT_PLAN_FIELDS[ev.id]]}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-              <Textarea
-                value={planData.javelin_text}
-                onChange={(e) =>
-                  setPlanData({ ...planData, javelin_text: e.target.value })
-                }
-                placeholder="Theme, drills, cues..."
-                rows={3}
-                className="text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 break-words"
-              />
-            </div>
+            )}
 
             <div className="space-y-2">
               <Label className="text-gray-900 dark:text-gray-200">Coach Notes</Label>
