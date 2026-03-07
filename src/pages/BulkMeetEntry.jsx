@@ -7,14 +7,12 @@ import { Badge } from "@/components/ui/badge";
 import { createPageUrl } from "../utils";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { Trophy, Save, ArrowLeft, Circle, Disc3, Zap, ChevronDown } from "lucide-react";
+import { Trophy, Save } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { EVENT_CATEGORIES, EVENTS_BY_CATEGORY, getCategoryForEvent } from "../components/shared/eventConfig";
 
-const EVENTS = [
-  { id: "shot", label: "Shot Put", Icon: Circle, color: "text-amber-600" },
-  { id: "discus", label: "Discus", Icon: Disc3, color: "text-cyan-600" },
-  { id: "javelin", label: "Javelin", Icon: Zap, color: "text-rose-600" },
-];
+// All events flattened for the bulk entry grid
+const EVENTS = Object.values(EVENTS_BY_CATEGORY).flat();
 
 export default function BulkMeetEntry() {
   const [user, setUser] = useState(null);
