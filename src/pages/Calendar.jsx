@@ -198,7 +198,7 @@ export default function Calendar() {
   };
 
   const getPlanContent = (plan) => {
-    return selectedEvents.filter(eventId => {
+    return eventsToShow.filter(eventId => {
       const eventCfg = getEventById(eventId);
       return eventCfg && plan[eventCfg.planField];
     });
