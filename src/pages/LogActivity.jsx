@@ -337,7 +337,7 @@ export default function LogActivity() {
 
                   <Button
                     type="submit"
-                    disabled={logMutation.isPending || submitted}
+                    disabled={logMutation.isPending || submitted || uploadingVideo}
                     className={cn(
                       "w-full h-12 text-base font-semibold transition-all text-white dark:text-gray-900",
                       submitted
