@@ -16,7 +16,7 @@ export const EVENTS_BY_CATEGORY = {
     { id: "long_jump",   label: "Long Jump",   Icon: ArrowRight, color: "text-blue-500", planField: "long_jump_text" },
     { id: "triple_jump", label: "Triple Jump", Icon: RefreshCw,  color: "text-blue-600", planField: "triple_jump_text" },
     { id: "high_jump",   label: "High Jump",   Icon: MoveUp,     color: "text-blue-700", planField: "high_jump_text" },
-    { id: "pole_vault",  label: "Pole Vault",  Icon: Columns2,   color: "text-blue-800", planField: "pole_vault_text" },
+    { id: "pole_vault",  label: "Pole Vault",  Icon: MoveUp,     color: "text-blue-800", planField: "pole_vault_text" },
   ],
   running: [
     { id: "100m",          label: "100m",          Icon: Timer,    color: "text-green-500", planField: "100m_text" },
