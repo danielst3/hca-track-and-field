@@ -94,7 +94,7 @@ export default function VideoReview() {
       <div className="max-w-3xl mx-auto">
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100">Video Review</h1>
-          <p className="text-slate-500 dark:text-gray-400 mt-1">Analyze athlete videos with AI coaching feedback</p>
+          <p className="text-slate-500 dark:text-gray-400 mt-1">{isCoachOrAdmin ? "Analyze athlete videos with AI coaching feedback" : "Your AI coaching feedback"}</p>
         </div>
 
         <Tabs defaultValue="pending">
