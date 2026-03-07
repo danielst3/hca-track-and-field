@@ -2,22 +2,29 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Award, TrendingUp, Target, Flame } from "lucide-react";
 
-export default function StatsOverview({ logs }) {
+export default function StatsOverview({ logs, isTimeBased = false }) {
   if (!logs.length) return null;
 
-  const pr = Math.max(...logs.map((l) => l.best_distance));
-  const avg = logs.reduce((s, l) => s + l.best_distance, 0) / logs.length;
+  const getValue = (l) => isTimeBased ? parseFloat(l.time) || 0 : (l.best_distance || 0);
+  // For time, lower is better (PR = min); for distance, higher is better (PR = max)
+  const pr = isTimeBased
+    ? Math.min(...logs.map(getValue))
+    : Math.max(...logs.map(getValue));
+  const avg = logs.reduce((s, l) => s + getValue(l), 0) / logs.length;
   const totalAttempts = logs.reduce((s, l) => s + (l.attempts?.length || 1), 0);
 
   // Consistency: % of sessions within 5% of PR
-  const threshold = pr * 0.95;
-  const consistentSessions = logs.filter((l) => l.best_distance >= threshold).length;
+  const consistentSessions = isTimeBased
+    ? logs.filter(l => getValue(l) <= pr * 1.05).length
+    : logs.filter(l => getValue(l) >= pr * 0.95).length;
   const consistency = logs.length > 0 ? Math.round((consistentSessions / logs.length) * 100) : 0;
 
+  const formatMark = (v) => isTimeBased ? `${v.toFixed(2)}s` : `${v.toFixed(1)}'`;
+
   const stats = [
-    { icon: Award, label: "Personal Best", value: `${pr.toFixed(1)}'`, color: "text-amber-500", bg: "bg-amber-50 dark:bg-amber-950/30" },
-    { icon: TrendingUp, label: "Session Average", value: `${avg.toFixed(1)}'`, color: "text-blue-500", bg: "bg-blue-50 dark:bg-blue-950/30" },
-    { icon: Target, label: "Total Throws", value: totalAttempts, color: "text-purple-500", bg: "bg-purple-50 dark:bg-purple-950/30" },
+    { icon: Award, label: "Personal Best", value: formatMark(pr), color: "text-amber-500", bg: "bg-amber-50 dark:bg-amber-950/30" },
+    { icon: TrendingUp, label: "Session Average", value: formatMark(avg), color: "text-blue-500", bg: "bg-blue-50 dark:bg-blue-950/30" },
+    { icon: Target, label: "Total Efforts", value: totalAttempts, color: "text-purple-500", bg: "bg-purple-50 dark:bg-purple-950/30" },
     { icon: Flame, label: "Consistency", value: `${consistency}%`, color: "text-rose-500", bg: "bg-rose-50 dark:bg-rose-950/30" },
   ];
 

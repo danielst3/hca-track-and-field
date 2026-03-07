@@ -8,9 +8,14 @@ import {
 } from "recharts";
 
 const eventColors = {
-  shot: "#f59e0b",
+  shot_put: "#f59e0b", shot: "#f59e0b",
   discus: "#06b6d4",
   javelin: "#f43f5e",
+  long_jump: "#3b82f6", triple_jump: "#6366f1", high_jump: "#8b5cf6", pole_vault: "#a78bfa",
+  "100m": "#10b981", "200m": "#059669", "400m": "#047857",
+  "800m": "#0d9488", "1600m": "#0891b2", "3200m": "#0369a1",
+  "100m_hurdles": "#16a34a", "110m_hurdles": "#15803d", "300m_hurdles": "#166534",
+  "4x100_relay": "#84cc16", "4x400_relay": "#65a30d", "4x800_relay": "#4d7c0f",
 };
 
 const CustomTooltip = ({ active, payload, label }) => {

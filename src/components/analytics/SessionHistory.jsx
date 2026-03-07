@@ -4,9 +4,12 @@ import { Badge } from "@/components/ui/badge";
 import { History, Trophy } from "lucide-react";
 import { format } from "date-fns";
 
-export default function SessionHistory({ logs }) {
+export default function SessionHistory({ logs, isTimeBased = false }) {
   const sorted = [...logs].sort((a, b) => new Date(b.date) - new Date(a.date));
-  const pr = logs.length > 0 ? Math.max(...logs.map((l) => l.best_distance)) : 0;
+  const getValue = (l) => isTimeBased ? parseFloat(l.time) || 0 : (l.best_distance || 0);
+  const pr = logs.length > 0
+    ? (isTimeBased ? Math.min(...logs.map(getValue)) : Math.max(...logs.map(getValue)))
+    : 0;
 
   return (
     <Card className="dark:bg-gray-800 dark:border-gray-700">
