@@ -102,7 +102,7 @@ export default function LogActivityButton({ user }) {
 
       {/* Event Selection Dialog */}
       <Dialog open={eventDialogOpen} onOpenChange={setEventDialogOpen}>
-        <DialogContent className="max-w-sm dark:bg-gray-800 dark:border-gray-700">
+        <DialogContent className="max-w-sm w-[calc(100vw-2rem)] dark:bg-gray-800 dark:border-gray-700">
           <DialogHeader>
             <DialogTitle className="dark:text-gray-100">
               {isCoach && selectedAthlete ? `Select Event for ${selectedAthlete.full_name}` : "Select Event"}
