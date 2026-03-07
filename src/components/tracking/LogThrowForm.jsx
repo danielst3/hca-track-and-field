@@ -16,6 +16,7 @@ import { MobileSelect } from "@/components/ui/mobile-select";
 import { Plus } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import { getCategoryForEvent } from "../shared/eventConfig";
 
 export default function LogThrowForm({ event, eventLabel, user }) {
   const [open, setOpen] = useState(false);
@@ -66,6 +67,7 @@ export default function LogThrowForm({ event, eventLabel, user }) {
 
     logMutation.mutate({
       athlete_email: user.email,
+      event_category: getCategoryForEvent(event),
       event,
       date: formData.date,
       session_type: formData.session_type,
