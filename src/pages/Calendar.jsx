@@ -183,19 +183,7 @@ export default function Calendar() {
     setEditDialogOpen(true);
   };
 
-  const updateSelectedEventsMutation = useMutation({
-    mutationFn: async (newEvents) => {
-      await base44.auth.updateMe({ default_events: newEvents });
-    },
-  });
 
-  const toggleEvent = (eventId) => {
-    const newEvents = selectedEvents.includes(eventId)
-      ? selectedEvents.filter(e => e !== eventId)
-      : [...selectedEvents, eventId];
-    setSelectedEvents(newEvents);
-    updateSelectedEventsMutation.mutate(newEvents);
-  };
 
   const getPlanContent = (plan) => {
     return eventsToShow.filter(eventId => {
