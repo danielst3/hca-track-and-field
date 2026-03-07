@@ -431,7 +431,7 @@ export default function Layout({ children, currentPageName }) {
         { name: "Calendar", icon: Calendar, page: "Calendar" },
         { name: "Log Activity", icon: Plus, page: "LogActivity" },
         { name: "Progress", icon: TrendingUp, page: "Progress" },
-        { name: "Resources", icon: BookOpen, page: "Resources" },
+        { name: "Videos", icon: Video, page: "VideoReview" },
       ];
 
   return (
