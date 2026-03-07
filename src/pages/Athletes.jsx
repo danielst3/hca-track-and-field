@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { getActiveViewRole, getAvailableViews } from "../components/shared/getActiveViewRole";
+import { ALL_EVENTS } from "../components/shared/eventConfig";
 
 export default function Athletes() {
   const [user, setUser] = useState(null);
