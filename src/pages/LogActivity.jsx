@@ -29,6 +29,8 @@ export default function LogActivity() {
     value: "",
     notes: "",
   });
+  const [videoFile, setVideoFile] = useState(null);
+  const [uploadingVideo, setUploadingVideo] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const queryClient = useQueryClient();
 
