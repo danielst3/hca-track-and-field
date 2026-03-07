@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Scroll, Book, Dumbbell, Info, Shield, Target, Activity, Plus, ExternalLink, FileText, Edit, Search, X, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { drillsDatabase } from "../components/data/drillsDatabase";
+import { ALL_EVENTS } from "../components/shared/eventConfig";
 import EditResourceDialog from "../components/resources/EditResourceDialog";
 import EditDrillDialog from "../components/resources/EditDrillDialog.jsx";
 import { getActiveViewRole, getAvailableViews } from "../components/shared/getActiveViewRole";
@@ -31,21 +32,11 @@ const sections = [
     title: "Warm-Up & Prep",
     icon: Activity,
   },
-  {
-    id: "drills-shot",
-    title: "Shot Put Drills",
+  ...ALL_EVENTS.map(event => ({
+    id: `drills-${event.id}`,
+    title: `${event.label} Drills`,
     icon: Dumbbell,
-  },
-  {
-    id: "drills-discus",
-    title: "Discus Drills",
-    icon: Dumbbell,
-  },
-  {
-    id: "drills-javelin",
-    title: "Javelin Drills",
-    icon: Dumbbell,
-  },
+  })),
   {
     id: "drills-strength",
     title: "Strength Training",
@@ -238,19 +229,19 @@ export default function Resources() {
     setEditDrillDialogOpen(true);
   };
 
-  const getDrillsByCategory = (category) => {
-    const categoryMap = {
-      "Warm-up": "warmup",
-      "Shot": "shot_put",
-      "Discus": "discus",
-      "Javelin": "javelin",
-      "Strength": "strength",
-      "Prehab": "prehab"
-    };
-    const eventType = categoryMap[category];
-    return databaseDrills.filter(d => d.event === eventType).concat(
-      drillsDatabase.filter(d => d.category === category)
+  const getDrillsByEventId = (eventId) => {
+    return databaseDrills.filter(d => d.event === eventId).concat(
+      drillsDatabase.filter(d => d.category === eventId)
     );
+  };
+
+  const getDrillsByCategory = (category) => {
+    const legacyMap = {
+      "Warm-up": "warmup",
+      "Strength": "strength",
+      "Prehab": "prehab",
+    };
+    return getDrillsByEventId(legacyMap[category] || category);
   };
 
   // All unique tags from custom resources
