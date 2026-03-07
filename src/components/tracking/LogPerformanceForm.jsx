@@ -17,12 +17,14 @@ import { MobileSelect } from "@/components/ui/mobile-select";
 import { Plus } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import { isTimeBasedEvent, getCategoryForEvent } from "../shared/eventConfig";
 
 export default function LogPerformanceForm({ event, eventLabel, user, onClose, open: openProp, onOpenChange }) {
   const [internalOpen, setInternalOpen] = useState(false);
   const isControlled = openProp !== undefined;
   const open = isControlled ? openProp : internalOpen;
-  const [logType, setLogType] = useState("distance");
+  const isTimeBased = isTimeBasedEvent(event);
+  const [logType, setLogType] = useState(isTimeBased ? "time" : "distance");
   const [formData, setFormData] = useState({
     date: format(new Date(), "yyyy-MM-dd"),
     session_type: "practice",
@@ -73,9 +75,11 @@ export default function LogPerformanceForm({ event, eventLabel, user, onClose, o
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const category = getCategoryForEvent(event);
     if (logType === "distance") {
       logMutation.mutate({
         athlete_email: user.email,
+        event_category: category,
         event,
         date: formData.date,
         session_type: formData.session_type,
@@ -85,6 +89,7 @@ export default function LogPerformanceForm({ event, eventLabel, user, onClose, o
     } else {
       logMutation.mutate({
         athlete_email: user.email,
+        event_category: category,
         event,
         date: formData.date,
         session_type: formData.session_type,
