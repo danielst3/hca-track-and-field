@@ -25,7 +25,7 @@ export default function SessionHistory({ logs, isTimeBased = false }) {
         ) : (
           <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
             {sorted.map((log) => {
-              const isPR = log.best_distance === pr;
+              const isPR = getValue(log) === pr;
               return (
                 <div
                   key={log.id}
@@ -44,7 +44,7 @@ export default function SessionHistory({ logs, isTimeBased = false }) {
                           {log.session_type}
                         </Badge>
                         {log.attempts?.length > 0 && (
-                          <span className="text-xs text-gray-400">{log.attempts.length} throws</span>
+                          <span className="text-xs text-gray-400">{log.attempts.length} {isTimeBased ? "splits" : "throws"}</span>
                         )}
                       </div>
                     </div>
@@ -52,7 +52,7 @@ export default function SessionHistory({ logs, isTimeBased = false }) {
                   <div className="flex items-center gap-1.5">
                     {isPR && <Trophy className="w-4 h-4 text-amber-500" />}
                     <span className={`text-lg font-bold ${isPR ? "text-amber-500" : "text-gray-900 dark:text-gray-100"}`}>
-                      {log.best_distance.toFixed(1)}'
+                      {isTimeBased ? `${getValue(log).toFixed(2)}s` : `${getValue(log).toFixed(1)}'`}
                     </span>
                   </div>
                 </div>
