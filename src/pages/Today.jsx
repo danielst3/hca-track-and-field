@@ -308,16 +308,40 @@ export default function Today() {
           </Card>
         }
 
-        {/* Event Filter */}
-        <div className="flex items-center gap-3 flex-wrap gap-y-2">
-          {eventOptions.map((event) =>
-          <EventToggle
-            key={event.id}
-            event={event}
-            isSelected={selectedEvents.includes(event.id)}
-            onClick={() => toggleEvent(event.id)} />
-
-          )}
+        {/* Filter Section */}
+        <div className="flex flex-col sm:flex-row gap-2">
+          <div className="flex-1">
+            <p className="text-xs text-slate-500 dark:text-gray-400 mb-1 font-medium">Category</p>
+            <MultiSelectWithTags
+              placeholder="All Categories"
+              options={EVENT_CATEGORIES.map(c => ({ value: c.id, label: c.label }))}
+              selected={selectedCategories}
+              onChange={(cats) => {
+                setSelectedCategories(cats);
+                // Remove any selected events that no longer belong to a selected category
+                if (cats.length > 0) {
+                  setSelectedEvents(prev => prev.filter(evtId => {
+                    for (const catId of cats) {
+                      if (EVENTS_BY_CATEGORY[catId]?.find(e => e.id === evtId)) return true;
+                    }
+                    return false;
+                  }));
+                }
+              }}
+            />
+          </div>
+          <div className="flex-1">
+            <p className="text-xs text-slate-500 dark:text-gray-400 mb-1 font-medium">Events</p>
+            <MultiSelectWithTags
+              placeholder="All Events"
+              options={(selectedCategories.length > 0
+                ? selectedCategories.flatMap(catId => EVENTS_BY_CATEGORY[catId] ?? [])
+                : ALL_EVENTS
+              ).map(e => ({ value: e.id, label: e.label }))}
+              selected={selectedEvents}
+              onChange={setSelectedEvents}
+            />
+          </div>
         </div>
 
         {/* Three Event Columns */}
