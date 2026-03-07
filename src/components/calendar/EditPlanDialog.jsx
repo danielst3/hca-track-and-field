@@ -18,7 +18,59 @@ import CopyPlanDialog from "./CopyPlanDialog";
 import AIPlanGenerator from "./AIPlanGenerator";
 import AthleteOverridesSection from "./AthleteOverridesSection";
 import DrillPicker from "./DrillPicker";
-import { Plus } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
+import { ALL_EVENTS, EVENTS_BY_CATEGORY, EVENT_CATEGORIES } from "../shared/eventConfig";
+
+// Events that have a corresponding text field in DailyPlan
+const EVENT_PLAN_FIELDS = {
+  shot_put:      "shot_text",
+  discus:        "discus_text",
+  javelin:       "javelin_text",
+  long_jump:     "long_jump_text",
+  triple_jump:   "triple_jump_text",
+  high_jump:     "high_jump_text",
+  pole_vault:    "pole_vault_text",
+  "100m":        "100m_text",
+  "200m":        "200m_text",
+  "400m":        "400m_text",
+  "800m":        "800m_text",
+  "1600m":       "1600m_text",
+  "3200m":       "3200m_text",
+  "100m_hurdles":"hurdles_text",
+  "110m_hurdles":"hurdles_text",
+  "300m_hurdles":"hurdles_text",
+  "4x100_relay": "relays_text",
+  "4x400_relay": "relays_text",
+  "4x800_relay": "relays_text",
+};
+
+// Get the unique plan fields (some events share a field)
+const FIELD_TO_LABEL = {
+  shot_text:      "Shot Put",
+  discus_text:    "Discus",
+  javelin_text:   "Javelin",
+  long_jump_text: "Long Jump",
+  triple_jump_text:"Triple Jump",
+  high_jump_text: "High Jump",
+  pole_vault_text:"Pole Vault",
+  "100m_text":    "100m",
+  "200m_text":    "200m",
+  "400m_text":    "400m",
+  "800m_text":    "800m",
+  "1600m_text":   "1600m",
+  "3200m_text":   "3200m",
+  hurdles_text:   "Hurdles",
+  relays_text:    "Relays",
+};
+
+// Derive all event ids that map to a given field
+function getEventIdsForField(field) {
+  return Object.entries(EVENT_PLAN_FIELDS)
+    .filter(([, f]) => f === field)
+    .map(([id]) => id);
+}
+
+const ALL_PLAN_FIELDS = Object.keys(FIELD_TO_LABEL);
 
 export default function EditPlanDialog({ date, plan, meet, open, onOpenChange }) {
   const [planData, setPlanData] = useState({
@@ -28,6 +80,10 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
     javelin_text: "",
     coach_notes: "",
   });
+
+  // Track which fields are "active" (visible) in the editor
+  const [activeFields, setActiveFields] = useState(["shot_text", "discus_text", "javelin_text"]);
+  const [eventPickerOpen, setEventPickerOpen] = useState(false);
 
   const [meetData, setMeetData] = useState({
     name: "",
