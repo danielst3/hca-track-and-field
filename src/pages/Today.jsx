@@ -361,9 +361,14 @@ export default function Today() {
             });
             return merged;
           })();
+          const eventsToShow = selectedEvents.length > 0
+            ? selectedEvents
+            : (selectedCategories.length > 0
+                ? selectedCategories.flatMap(catId => EVENTS_BY_CATEGORY[catId] ?? []).map(e => e.id)
+                : ALL_EVENTS.map(e => e.id));
           return (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {selectedEvents.map(eventId => {
+              {eventsToShow.map(eventId => {
                 const eventCfg = getEventById(eventId);
                 if (!eventCfg) return null;
                 const Icon = eventCfg.Icon;
