@@ -25,22 +25,26 @@ const CustomTooltip = ({ active, payload, label }) => {
       <p className="text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">{label}</p>
       {payload.map((p) => (
         <p key={p.dataKey} className="text-sm font-bold" style={{ color: p.color }}>
-          {p.name}: {p.value?.toFixed(1)}'
+          {p.name}: {p.value?.toFixed(2)}{p.name?.includes("Time") || p.name?.includes("Split") ? "s" : "'"}
         </p>
       ))}
     </div>
   );
 };
 
-export default function ProgressChart({ logs, event }) {
+export default function ProgressChart({ logs, event, isTimeBased = false }) {
   const color = eventColors[event] || "#6366f1";
   const sorted = [...logs].sort((a, b) => new Date(a.date) - new Date(b.date));
+  const getValue = (l) => isTimeBased ? parseFloat(l.time) || 0 : (l.best_distance || 0);
+  const getBestPR = (slice) => isTimeBased
+    ? Math.min(...slice.map(getValue))
+    : Math.max(...slice.map(getValue));
 
   const data = sorted.map((log, i) => {
-    const runningPR = Math.max(...sorted.slice(0, i + 1).map((l) => l.best_distance));
+    const runningPR = getBestPR(sorted.slice(0, i + 1));
     return {
       date: format(new Date(log.date), "M/d"),
-      distance: log.best_distance,
+      distance: getValue(log),
       pr: runningPR,
       type: log.session_type,
     };
@@ -59,7 +63,7 @@ export default function ProgressChart({ logs, event }) {
       <CardHeader className="pb-2 border-b dark:border-gray-700">
         <CardTitle className="text-base text-gray-900 dark:text-gray-100 flex items-center gap-2">
           <TrendingUp className="w-4 h-4" style={{ color }} />
-          Distance Over Time
+          {isTimeBased ? "Time Over Time" : "Distance Over Time"}
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-4">
