@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Trophy, Calendar, Edit, User } from "lucide-react";
+import { ALL_EVENTS, getEventById } from "../shared/eventConfig";
 import { format } from "date-fns";
 import DayTypeBadge from "../shared/DayTypeBadge";
 import AbbreviationsKey from "../shared/AbbreviationsKey";

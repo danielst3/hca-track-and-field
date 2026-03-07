@@ -9,17 +9,12 @@ import QuickLogButton from "../components/tracking/QuickLogButton";
 import PracticePlanText from "../components/shared/PracticePlanText";
 import EventToggle from "../components/shared/EventToggle";
 import LogPerformanceForm from "../components/tracking/LogPerformanceForm";
-import { Calendar, Trophy, ChevronLeft, ChevronRight, X, FileText, Circle, Disc3, Zap, User, ExternalLink, Link as LinkIcon, ChevronDown, ChevronUp, Play } from "lucide-react";
+import { Calendar, Trophy, ChevronLeft, ChevronRight, X, FileText, User, ExternalLink, Link as LinkIcon, ChevronDown, ChevronUp, Play } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { format, isSameDay, addDays, differenceInCalendarDays, parseISO } from "date-fns";
-
-const EVENT_ICONS = {
-  shot: <Circle className="w-4 h-4" />,
-  discus: <Disc3 className="w-4 h-4" />,
-  javelin: <Zap className="w-4 h-4" />
-};
+import { ALL_EVENTS, getEventById } from "../components/shared/eventConfig";
 import { cn } from "@/lib/utils";
 import AthleteCard from "../components/dashboard/AthleteCard";
 import EventProgressChart from "../components/dashboard/EventProgressChart";
