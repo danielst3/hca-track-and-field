@@ -197,7 +197,7 @@ export default function LogPerformanceForm({ event, eventLabel, user, onClose, o
             />
           </div>
 
-          <div className="flex justify-end gap-3 pt-2">
+          <div className="flex justify-end gap-3 pt-2 pb-1">
             <Button
               type="button"
               variant="outline"
