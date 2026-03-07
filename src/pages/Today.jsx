@@ -14,7 +14,8 @@ import { Calendar, Trophy, ChevronLeft, ChevronRight, X, FileText, User, Externa
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { format, isSameDay, addDays, differenceInCalendarDays, parseISO } from "date-fns";
-import { ALL_EVENTS, getEventById } from "../components/shared/eventConfig";
+import { ALL_EVENTS, getEventById, EVENT_CATEGORIES, EVENTS_BY_CATEGORY } from "../components/shared/eventConfig";
+import MultiSelectWithTags from "../components/shared/MultiSelectWithTags";
 import { cn } from "@/lib/utils";
 import AthleteCard from "../components/dashboard/AthleteCard";
 import EventProgressChart from "../components/dashboard/EventProgressChart";
