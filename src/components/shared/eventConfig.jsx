@@ -1,4 +1,4 @@
-import { Circle, Disc3, Zap, ArrowRight, RefreshCw, MoveUp, Columns2, Timer, Activity } from "lucide-react";
+import { Circle, Disc3, Zap, ArrowRight, RefreshCw, MoveUp, Timer, Activity } from "lucide-react";
 
 export const EVENT_CATEGORIES = [
   { id: "throwing", label: "Throwing", color: "text-amber-500 border-amber-400 bg-amber-50 dark:bg-amber-950/30" },
