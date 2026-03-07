@@ -11,9 +11,10 @@ import EditPlanDialog from "../components/calendar/EditPlanDialog";
 import AbbreviationsKey from "../components/shared/AbbreviationsKey.jsx";
 import EventToggle from "../components/shared/EventToggle";
 import { ChevronLeft, ChevronRight, Trophy } from "lucide-react";
-import { ALL_EVENTS, getEventById } from "../components/shared/eventConfig";
+import { ALL_EVENTS, getEventById, EVENT_CATEGORIES, EVENTS_BY_CATEGORY } from "../components/shared/eventConfig";
 import { Badge } from "@/components/ui/badge";
 import { MobileSelect } from "@/components/ui/mobile-select";
+import MultiSelectWithTags from "../components/shared/MultiSelectWithTags";
 import { cn } from "@/lib/utils";
 import {
   format,
