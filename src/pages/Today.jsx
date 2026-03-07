@@ -27,7 +27,7 @@ import { getActiveViewRole, getAvailableViews } from "../components/shared/getAc
 export default function Today() {
   const [user, setUser] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedEvents, setSelectedEvents] = useState(["shot", "discus", "javelin"]);
+  const [selectedEvents, setSelectedEvents] = useState(["shot_put", "discus", "javelin"]);
   const [eventOptions, setEventOptions] = useState([]);
   const dateStr = format(selectedDate, "yyyy-MM-dd");
 
@@ -43,21 +43,8 @@ export default function Today() {
       { ...currentUser, activeViewRole };
       setUser(effectiveUser);
 
-      // Build event options from user's event_types
-      if (currentUser?.event_types && currentUser.event_types.length > 0) {
-        const options = currentUser.event_types.map((event) => ({
-          id: event.id,
-          label: event.label
-        }));
-        setEventOptions(options);
-      } else {
-        // Fallback to default events
-        setEventOptions([
-        { id: "shot", label: "Shot Put" },
-        { id: "discus", label: "Discus" },
-        { id: "javelin", label: "Javelin" }]
-        );
-      }
+      // Build event options from eventConfig
+      setEventOptions(ALL_EVENTS.map(e => ({ id: e.id, label: e.label })));
 
       if (currentUser?.default_events && currentUser.default_events.length > 0) {
         setSelectedEvents(currentUser.default_events);
