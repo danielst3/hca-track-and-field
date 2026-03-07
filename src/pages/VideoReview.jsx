@@ -226,9 +226,7 @@ function VideoLogCard({ log, eventLabel, isPending, isAnalyzing, onAnalyze, anal
                 {analysis.analysis_date ? format(new Date(analysis.analysis_date), "MMM d, yyyy") : ""}
               </span>
             </div>
-            <div className="prose prose-sm dark:prose-invert max-w-none text-slate-700 dark:text-gray-300 bg-slate-50 dark:bg-gray-900 rounded-lg p-4">
-              <ReactMarkdown>{analysis.ai_response}</ReactMarkdown>
-            </div>
+            <AnalysisFeedback aiResponse={analysis.ai_response} />
           </div>
         )}
       </CardContent>
