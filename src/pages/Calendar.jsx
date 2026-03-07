@@ -64,11 +64,15 @@ export default function Calendar() {
         setUser({ ...currentUser, activeViewRole });
       }
       
-      // Build event options from eventConfig
-      setEventOptions(ALL_EVENTS.map(e => ({ id: e.id, label: e.label })));
-      
       if (currentUser?.default_events && currentUser.default_events.length > 0) {
         setSelectedEvents(currentUser.default_events);
+        const cats = [...new Set(currentUser.default_events.map(evtId => {
+          for (const [catId, evts] of Object.entries(EVENTS_BY_CATEGORY)) {
+            if (evts.find(e => e.id === evtId)) return catId;
+          }
+          return null;
+        }).filter(Boolean))];
+        if (cats.length > 0) setSelectedCategories(cats);
       }
     };
     fetchUser();
