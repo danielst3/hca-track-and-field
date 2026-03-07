@@ -504,7 +504,7 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
         open={drillPickerOpen}
         onOpenChange={setDrillPickerOpen}
         onSelectDrill={handleSelectDrill}
-        eventType={selectedEventForDrill ? { shot: "shot_put", discus: "discus", javelin: "javelin" }[selectedEventForDrill] : null}
+        eventType={selectedEventForDrill ? getEventIdsForField(selectedEventForDrill)[0] : null}
       />
     </Dialog>
   );
