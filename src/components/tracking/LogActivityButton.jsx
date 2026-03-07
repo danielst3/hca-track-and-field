@@ -80,12 +80,12 @@ export default function LogActivityButton({ user }) {
 
       {/* Athlete Selection Dialog (Coach Only) */}
       <Dialog open={athleteDialogOpen} onOpenChange={setAthleteDialogOpen}>
-        <DialogContent className="max-w-sm dark:bg-gray-800 dark:border-gray-700">
-          <DialogHeader>
+        <DialogContent className="max-w-sm w-[calc(100vw-2rem)] max-h-[85dvh] flex flex-col dark:bg-gray-800 dark:border-gray-700">
+          <DialogHeader className="flex-shrink-0">
             <DialogTitle className="dark:text-gray-100">Select Athlete</DialogTitle>
             <DialogDescription>Choose an athlete to log activity for</DialogDescription>
           </DialogHeader>
-          <div className="space-y-2 max-h-96 overflow-y-auto">
+          <div className="space-y-2 overflow-y-auto flex-1">
             {athletes?.map((athlete) => (
               <Button
                 key={athlete.id}
