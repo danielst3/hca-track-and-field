@@ -86,6 +86,7 @@ export default function LogActivity() {
       setTimeout(() => {
         setFormData({ date: format(new Date(), "yyyy-MM-dd"), session_type: "practice", value: "", notes: "" });
         setSelectedEvent(null);
+        setVideoFile(null);
         setSubmitted(false);
       }, 1500);
     },
@@ -94,12 +95,27 @@ export default function LogActivity() {
     },
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedAthlete || !selectedEvent) {
       toast.error("Please select athlete and event");
       return;
     }
+
+    let video_url = null;
+    if (videoFile) {
+      setUploadingVideo(true);
+      try {
+        const result = await base44.integrations.Core.UploadFile({ file: videoFile });
+        video_url = result.file_url;
+      } catch {
+        toast.error("Failed to upload video");
+        setUploadingVideo(false);
+        return;
+      }
+      setUploadingVideo(false);
+    }
+
     const category = getCategoryForEvent(selectedEvent);
     if (isTimeBased) {
       logMutation.mutate({
@@ -110,6 +126,7 @@ export default function LogActivity() {
         session_type: formData.session_type,
         time: formData.value,
         notes: formData.notes || null,
+        ...(video_url && { video_url }),
       });
     } else {
       logMutation.mutate({
@@ -120,6 +137,7 @@ export default function LogActivity() {
         session_type: formData.session_type,
         best_distance: parseFloat(formData.value),
         notes: formData.notes || null,
+        ...(video_url && { video_url }),
       });
     }
   };
