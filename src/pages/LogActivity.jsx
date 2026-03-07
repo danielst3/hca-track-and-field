@@ -347,7 +347,7 @@ export default function LogActivity() {
                   >
                     {submitted ? (
                       <><Check className="w-5 h-5 mr-2" />Logged!</>
-                    ) : logMutation.isPending ? "Saving..." : (
+                    ) : uploadingVideo ? "Uploading video..." : logMutation.isPending ? "Saving..." : (
                       <><Plus className="w-5 h-5 mr-2" />Log Performance</>
                     )}
                   </Button>
