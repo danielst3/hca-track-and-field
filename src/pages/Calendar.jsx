@@ -399,7 +399,7 @@ export default function Calendar() {
           onOpenChange={setDialogOpen}
           onEdit={handleEdit}
           isCoach={!user?.isImpersonating && (user?.activeViewRole === "admin" || user?.activeViewRole === "coach")}
-          selectedEvents={selectedEvents}
+          selectedEvents={eventsToShow}
           athleteOverride={athleteOverride}
         />
 
