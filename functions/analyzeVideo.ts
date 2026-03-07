@@ -55,6 +55,8 @@ Be concise and practical. Provide a brief overall summary, list key strengths to
       event,
       video_url,
       ai_response: typeof aiResult === 'string' ? aiResult : JSON.stringify(aiResult),
+      coach_feedback: typeof aiResult === 'string' ? aiResult : JSON.stringify(aiResult),
+      status: 'pending_review',
       analysis_date: today,
     });
 
