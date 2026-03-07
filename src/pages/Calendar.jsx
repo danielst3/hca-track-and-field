@@ -86,6 +86,12 @@ export default function Calendar() {
     }
   }, [user]);
 
+  const eventsToShow = selectedEvents.length > 0
+    ? selectedEvents
+    : (selectedCategories.length > 0
+        ? selectedCategories.flatMap(catId => EVENTS_BY_CATEGORY[catId] ?? []).map(e => e.id)
+        : ALL_EVENTS.map(e => e.id));
+
   const { data: allSeasons = [] } = useQuery({
     queryKey: ["allSeasons"],
     queryFn: async () => {
