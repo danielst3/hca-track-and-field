@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { MobileSelect } from "@/components/ui/mobile-select";
-import { Plus, Check, Trophy } from "lucide-react";
+import { Plus, Check, Trophy, Video, Upload, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { createPageUrl } from "../utils";
