@@ -306,6 +306,35 @@ export default function LogActivity() {
                     />
                   </div>
 
+                  {/* Video Upload */}
+                  <div className="space-y-2">
+                    <Label className="dark:text-gray-200 flex items-center gap-2">
+                      <Video className="w-4 h-4" />
+                      Upload Video (optional)
+                    </Label>
+                    {videoFile ? (
+                      <div className="flex items-center gap-2 p-3 rounded-lg border border-slate-200 dark:border-gray-600 bg-slate-50 dark:bg-gray-700">
+                        <Video className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                        <span className="text-sm text-slate-700 dark:text-gray-200 truncate flex-1">{videoFile.name}</span>
+                        <button type="button" onClick={() => setVideoFile(null)} className="text-slate-400 hover:text-red-500">
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <label className="flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 border-dashed border-slate-200 dark:border-gray-600 cursor-pointer hover:border-slate-400 dark:hover:border-gray-500 transition-colors">
+                        <Upload className="w-5 h-5 text-slate-400" />
+                        <span className="text-sm text-slate-500 dark:text-gray-400">Tap to select a video</span>
+                        <input
+                          type="file"
+                          accept="video/*"
+                          className="hidden"
+                          onChange={(e) => e.target.files?.[0] && setVideoFile(e.target.files[0])}
+                        />
+                      </label>
+                    )}
+                    <p className="text-xs text-slate-400 dark:text-gray-500">Videos with a performance are sent to coaches for AI analysis</p>
+                  </div>
+
                   <Button
                     type="submit"
                     disabled={logMutation.isPending || submitted}
