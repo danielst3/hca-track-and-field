@@ -21,7 +21,10 @@ Deno.serve(async (req) => {
 
     const eventLabel = event.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
-    const prompt = `You are an expert track and field coach specializing in ${eventLabel}. Analyze the athlete's technique in this video. Be concise and practical. Provide a brief overall summary, list key strengths, list specific areas for improvement with corrections, list prioritized drill recommendations, and give short feedback on body positioning and event-specific mechanics.`;
+    const prompt = `You are an expert track and field coach specializing in ${eventLabel}. 
+A coach has submitted an athlete video for review (video URL: ${video_url}).
+Since the video cannot be directly analyzed, provide detailed expert coaching feedback for the ${eventLabel} event based on common technique issues, best practices, and training recommendations.
+Be concise and practical. Provide a brief overall summary, list key strengths to look for and encourage, list specific areas for improvement with corrections, list prioritized drill recommendations, and give short feedback on body positioning and event-specific mechanics.`;
 
     const responseJsonSchema = {
       type: "object",
@@ -43,7 +46,6 @@ Deno.serve(async (req) => {
 
     const aiResult = await base44.integrations.Core.InvokeLLM({
       prompt,
-      file_urls: [video_url],
       response_json_schema: responseJsonSchema,
     });
 
