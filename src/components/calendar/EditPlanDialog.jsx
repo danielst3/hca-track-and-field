@@ -205,10 +205,27 @@ export default function EditPlanDialog({ date, plan, meet, open, onOpenChange })
       return;
     }
     const dateStr = format(date, "yyyy-MM-dd");
+    // Clear fields that are no longer active
+    const saveData = { ...planData };
+    ALL_PLAN_FIELDS.forEach(f => {
+      if (!activeFields.includes(f)) saveData[f] = "";
+    });
     planMutation.mutate({
       id: plan?.id,
-      data: { ...planData, date: dateStr, season_id: activeSeason.id },
+      data: { ...saveData, date: dateStr, season_id: activeSeason.id },
     });
+  };
+
+  const handleAddEvent = (eventId) => {
+    const field = EVENT_PLAN_FIELDS[eventId];
+    if (!field || activeFields.includes(field)) return;
+    setActiveFields(prev => [...prev, field]);
+    setEventPickerOpen(false);
+  };
+
+  const handleRemoveField = (field) => {
+    setActiveFields(prev => prev.filter(f => f !== field));
+    setPlanData(prev => ({ ...prev, [field]: "" }));
   };
 
   const handleSaveMeet = () => {
