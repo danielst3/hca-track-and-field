@@ -169,27 +169,33 @@ export default function BulkMeetEntry() {
           </div>
         </div>
 
-        {/* Event Toggles */}
-        <div className="flex items-center gap-2 mb-4 flex-wrap">
-          <span className="text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wide mr-1">Events:</span>
-          {EVENTS.map(ev => {
-            const active = activeEvents.includes(ev.id);
-            return (
-              <button
-                key={ev.id}
-                onClick={() => toggleEvent(ev.id)}
-                className={cn(
-                  "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium border transition-all",
-                  active
-                    ? "bg-[var(--brand-primary)] text-white border-[var(--brand-primary)]"
-                    : "bg-white dark:bg-gray-800 text-slate-600 dark:text-gray-400 border-slate-300 dark:border-gray-600"
-                )}
-              >
-                <ev.Icon className="w-3.5 h-3.5" />
-                {ev.label}
-              </button>
-            );
-          })}
+        {/* Event Toggles - grouped by category */}
+        <div className="space-y-2 mb-4">
+          {EVENT_CATEGORIES.map(cat => (
+            <div key={cat.id} className="flex items-start gap-2 flex-wrap">
+              <span className="text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wide w-16 mt-1.5 shrink-0">{cat.label}:</span>
+              <div className="flex flex-wrap gap-1.5">
+                {EVENTS_BY_CATEGORY[cat.id].map(ev => {
+                  const active = activeEvents.includes(ev.id);
+                  return (
+                    <button
+                      key={ev.id}
+                      onClick={() => toggleEvent(ev.id)}
+                      className={cn(
+                        "flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium border transition-all",
+                        active
+                          ? "bg-[var(--brand-primary)] text-white border-[var(--brand-primary)]"
+                          : "bg-white dark:bg-gray-800 text-slate-600 dark:text-gray-400 border-slate-300 dark:border-gray-600"
+                      )}
+                    >
+                      <ev.Icon className="w-3 h-3" />
+                      {ev.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Spreadsheet Grid */}
