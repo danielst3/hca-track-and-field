@@ -10,7 +10,7 @@ import DayDetailDialog from "../components/calendar/DayDetailDialog";
 import EditPlanDialog from "../components/calendar/EditPlanDialog";
 import AbbreviationsKey from "../components/shared/AbbreviationsKey.jsx";
 import { ChevronLeft, ChevronRight, Trophy } from "lucide-react";
-import { ALL_EVENTS, getEventById, EVENT_CATEGORIES, EVENTS_BY_CATEGORY } from "../components/shared/eventConfig";
+import { ALL_EVENTS, getEventById, EVENT_CATEGORIES, EVENTS_BY_CATEGORY, normalizeEventId } from "../components/shared/eventConfig";
 import { Badge } from "@/components/ui/badge";
 import { MobileSelect } from "@/components/ui/mobile-select";
 import MultiSelectWithTags from "../components/shared/MultiSelectWithTags";
