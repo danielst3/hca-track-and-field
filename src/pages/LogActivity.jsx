@@ -234,7 +234,7 @@ export default function LogActivity() {
               <CardHeader><CardTitle className="dark:text-gray-100">Log {currentEvent.label} Performance</CardTitle></CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label className="dark:text-gray-200">Date</Label>
                       <Input
