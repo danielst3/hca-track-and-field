@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Video, Zap, CheckCircle2, Clock, ChevronDown, ChevronUp, Play } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { useViewGuard } from "../components/shared/useViewGuard";
+
 import ReactMarkdown from "react-markdown";
 
 export default function VideoReview() {
