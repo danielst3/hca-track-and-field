@@ -186,18 +186,11 @@ export default function Calendar() {
     updateSelectedEventsMutation.mutate(newEvents);
   };
 
-  const EVENT_ICON_MAP = {
-    shot: <Circle className="w-3.5 h-3.5 inline text-amber-600" />,
-    discus: <Disc3 className="w-3.5 h-3.5 inline text-cyan-600" />,
-    javelin: <Zap className="w-3.5 h-3.5 inline text-rose-600" />,
-  };
-
   const getPlanContent = (plan) => {
-    const icons = [];
-    if (selectedEvents.includes("shot") && plan.shot_text) icons.push("shot");
-    if (selectedEvents.includes("discus") && plan.discus_text) icons.push("discus");
-    if (selectedEvents.includes("javelin") && plan.javelin_text) icons.push("javelin");
-    return icons;
+    return selectedEvents.filter(eventId => {
+      const eventCfg = getEventById(eventId);
+      return eventCfg && plan[eventCfg.planField];
+    });
   };
 
   const selectedPlan = selectedDay ? getPlanForDate(selectedDay) : null;
@@ -355,9 +348,12 @@ export default function Calendar() {
                         {colors?.label}
                       </p>
                       <div className="hidden sm:flex flex-wrap gap-1 mt-1">
-                        {getPlanContent(plan).map(evt => (
-                          <span key={evt}>{EVENT_ICON_MAP[evt]}</span>
-                        ))}
+                        {getPlanContent(plan).map(evt => {
+                          const cfg = getEventById(evt);
+                          if (!cfg) return null;
+                          const Icon = cfg.Icon;
+                          return <Icon key={evt} className={`w-3.5 h-3.5 inline ${cfg.color}`} />;
+                        })}
                       </div>
                     </div>
                   )}
