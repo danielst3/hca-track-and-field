@@ -252,14 +252,37 @@ export default function Calendar() {
               <TabsTrigger value="month" className="h-10 px-5 text-sm">Month</TabsTrigger>
             </TabsList>
           </Tabs>
-          {eventOptions.map(event => (
-            <EventToggle
-              key={event.id}
-              event={event}
-              isSelected={selectedEvents.includes(event.id)}
-              onClick={() => toggleEvent(event.id)}
-            />
-          ))}
+          <div className="flex flex-1 gap-2 min-w-0">
+            <div className="flex-1 min-w-0">
+              <MultiSelectWithTags
+                placeholder="All Categories"
+                options={EVENT_CATEGORIES.map(c => ({ value: c.id, label: c.label }))}
+                selected={selectedCategories}
+                onChange={(cats) => {
+                  setSelectedCategories(cats);
+                  if (cats.length > 0) {
+                    setSelectedEvents(prev => prev.filter(evtId => {
+                      for (const catId of cats) {
+                        if (EVENTS_BY_CATEGORY[catId]?.find(e => e.id === evtId)) return true;
+                      }
+                      return false;
+                    }));
+                  }
+                }}
+              />
+            </div>
+            <div className="flex-1 min-w-0">
+              <MultiSelectWithTags
+                placeholder="All Events"
+                options={(selectedCategories.length > 0
+                  ? selectedCategories.flatMap(catId => EVENTS_BY_CATEGORY[catId] ?? [])
+                  : ALL_EVENTS
+                ).map(e => ({ value: e.id, label: e.label }))}
+                selected={selectedEvents}
+                onChange={setSelectedEvents}
+              />
+            </div>
+          </div>
         </div>
 
         {/* Navigation */}
