@@ -242,7 +242,7 @@ export default function Calendar() {
         </div>
 
         {/* Event Filter */}
-        <div className="flex gap-2 mb-4">
+        <div className="flex flex-col gap-2 mb-4">
           <div className="flex-1 min-w-0">
             <MultiSelectWithTags
               placeholder="All Categories"
