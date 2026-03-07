@@ -81,7 +81,7 @@ export default function VideoReview() {
 
   const eventLabel = (event) => event?.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()) || "";
 
-  if (!ready) {
+  if (userLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-[#111]">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--brand-primary)]" />
