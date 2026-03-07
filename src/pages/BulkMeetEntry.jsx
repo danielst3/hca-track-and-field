@@ -104,6 +104,7 @@ export default function BulkMeetEntry() {
         if (!isNaN(distance) && distance > 0) {
           entries.push({
             athlete_email: athlete.email,
+            event_category: getCategoryForEvent(eventId),
             event: eventId,
             date: meetDate,
             session_type: "meet",
