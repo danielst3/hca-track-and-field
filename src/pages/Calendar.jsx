@@ -64,8 +64,9 @@ export default function Calendar() {
       }
       
       if (currentUser?.default_events && currentUser.default_events.length > 0) {
-        setSelectedEvents(currentUser.default_events);
-        const cats = [...new Set(currentUser.default_events.map(evtId => {
+        const normalizedEvents = currentUser.default_events.map(normalizeEventId);
+        setSelectedEvents(normalizedEvents);
+        const cats = [...new Set(normalizedEvents.map(evtId => {
           for (const [catId, evts] of Object.entries(EVENTS_BY_CATEGORY)) {
             if (evts.find(e => e.id === evtId)) return catId;
           }
