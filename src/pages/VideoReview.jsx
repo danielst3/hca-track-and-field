@@ -156,6 +156,76 @@ export default function VideoReview() {
   );
 }
 
+function AnalysisFeedback({ aiResponse }) {
+  let data = null;
+  try {
+    data = typeof aiResponse === "string" ? JSON.parse(aiResponse) : aiResponse;
+  } catch {
+    // fallback to markdown if not JSON
+  }
+
+  if (!data || typeof data !== "object") {
+    return (
+      <div className="prose prose-sm dark:prose-invert max-w-none text-slate-700 dark:text-gray-300 bg-slate-50 dark:bg-gray-900 rounded-lg p-4">
+        <ReactMarkdown>{aiResponse}</ReactMarkdown>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4 text-sm">
+      {data.summary && (
+        <div className="bg-slate-50 dark:bg-gray-900 rounded-lg p-3">
+          <p className="text-slate-700 dark:text-gray-300">{data.summary}</p>
+        </div>
+      )}
+      {data.strengths?.length > 0 && (
+        <div>
+          <h4 className="font-semibold text-green-700 dark:text-green-400 mb-1.5">✅ Strengths</h4>
+          <ul className="space-y-1 pl-4 list-disc text-slate-700 dark:text-gray-300">
+            {data.strengths.map((s, i) => <li key={i}>{s}</li>)}
+          </ul>
+        </div>
+      )}
+      {data.areas_for_improvement?.length > 0 && (
+        <div>
+          <h4 className="font-semibold text-amber-700 dark:text-amber-400 mb-1.5">🔧 Areas for Improvement</h4>
+          <ul className="space-y-1 pl-4 list-disc text-slate-700 dark:text-gray-300">
+            {data.areas_for_improvement.map((a, i) => <li key={i}>{a}</li>)}
+          </ul>
+        </div>
+      )}
+      {data.drill_recommendations?.length > 0 && (
+        <div>
+          <h4 className="font-semibold text-blue-700 dark:text-blue-400 mb-1.5">🎯 Drill Recommendations</h4>
+          <ul className="space-y-1 pl-4 list-disc text-slate-700 dark:text-gray-300">
+            {data.drill_recommendations.map((d, i) => <li key={i}>{d}</li>)}
+          </ul>
+        </div>
+      )}
+      {data.technical_feedback && (
+        <div>
+          <h4 className="font-semibold text-slate-700 dark:text-gray-200 mb-1.5">📐 Technical Feedback</h4>
+          <div className="space-y-2 bg-slate-50 dark:bg-gray-900 rounded-lg p-3 text-slate-700 dark:text-gray-300">
+            {data.technical_feedback.body_positioning && (
+              <div>
+                <span className="font-medium">Body Positioning: </span>
+                {data.technical_feedback.body_positioning}
+              </div>
+            )}
+            {data.technical_feedback.event_specific_mechanics && (
+              <div>
+                <span className="font-medium">Event Mechanics: </span>
+                {data.technical_feedback.event_specific_mechanics}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function VideoLogCard({ log, eventLabel, isPending, isAnalyzing, onAnalyze, analysis, expanded, onToggleExpand }) {
   return (
     <Card className="dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
