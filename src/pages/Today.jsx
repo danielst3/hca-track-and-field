@@ -319,78 +319,43 @@ export default function Today() {
         }
         {dailyPlan ? (() => {
           const isCoachOrAdmin = user?.activeViewRole === "admin" || user?.activeViewRole === "coach";
-          const dp = isCoachOrAdmin ? dailyPlan : {
-            ...dailyPlan,
-            shot_text: athleteOverride?.shot_text || dailyPlan.shot_text,
-            discus_text: athleteOverride?.discus_text || dailyPlan.discus_text,
-            javelin_text: athleteOverride?.javelin_text || dailyPlan.javelin_text,
-            coach_notes: athleteOverride?.coach_notes || dailyPlan.coach_notes
-          };
-          const shotOverridden = !isCoachOrAdmin && !!athleteOverride?.shot_text;
-          const discusOverridden = !isCoachOrAdmin && !!athleteOverride?.discus_text;
-          const javelinOverridden = !isCoachOrAdmin && !!athleteOverride?.javelin_text;
+          // Merge overrides for non-coaches
+          const dp = isCoachOrAdmin ? dailyPlan : (() => {
+            const merged = { ...dailyPlan, coach_notes: athleteOverride?.coach_notes || dailyPlan.coach_notes };
+            ALL_EVENTS.forEach(evt => {
+              if (athleteOverride?.[evt.planField]) merged[evt.planField] = athleteOverride[evt.planField];
+            });
+            return merged;
+          })();
           return (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {selectedEvents.includes("shot") &&
-              <Card className={cn("bg-white dark:bg-gray-800 shadow-lg", shotOverridden ? "border-2 border-orange-400 dark:border-orange-500" : "border-amber-200 dark:border-gray-700")}>
-                  <CardHeader className="bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-gray-900 dark:to-gray-800 border-b border-amber-200 dark:border-gray-700">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-amber-900 dark:text-amber-300 flex items-center gap-2 select-none">
-                        <Circle className="w-5 h-5" /> Shot Put
-                        {shotOverridden && <span className="text-xs font-normal text-orange-500 bg-orange-100 dark:bg-orange-900/40 px-1.5 py-0.5 rounded">Personalized</span>}
-                      </CardTitle>
-                      {user && !isCoachOrAdmin &&
-                    <LogPerformanceForm event="shot" eventLabel="Shot" user={user} open={undefined} />
-                    }
-                    </div>
-                  </CardHeader>
-                  <CardContent className="pt-4 pb-6">
-                    <div className="prose prose-sm max-w-none">
-                      {dp.shot_text ? <PracticePlanText text={dp.shot_text} /> : <p className="text-slate-500 dark:text-slate-400 italic">No plan for today</p>}
-                    </div>
-                  </CardContent>
-                </Card>
-              }
-              {selectedEvents.includes("discus") &&
-              <Card className={cn("bg-white dark:bg-gray-800 shadow-lg", discusOverridden ? "border-2 border-orange-400 dark:border-orange-500" : "border-cyan-200 dark:border-gray-700")}>
-                  <CardHeader className="bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 border-b border-cyan-200 dark:border-gray-700">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-cyan-900 dark:text-cyan-300 flex items-center gap-2 select-none">
-                        <Disc3 className="w-5 h-5" /> Discus
-                        {discusOverridden && <span className="text-xs font-normal text-orange-500 bg-orange-100 dark:bg-orange-900/40 px-1.5 py-0.5 rounded">Personalized</span>}
-                      </CardTitle>
-                      {user && !isCoachOrAdmin &&
-                    <LogPerformanceForm event="discus" eventLabel="Discus" user={user} open={undefined} />
-                    }
-                    </div>
-                  </CardHeader>
-                  <CardContent className="pt-4 pb-6">
-                    <div className="prose prose-sm max-w-none">
-                      {dp.discus_text ? <PracticePlanText text={dp.discus_text} /> : <p className="text-slate-500 dark:text-slate-400 italic">No plan for today</p>}
-                    </div>
-                  </CardContent>
-                </Card>
-              }
-              {selectedEvents.includes("javelin") &&
-              <Card className={cn("bg-white dark:bg-gray-800 shadow-lg", javelinOverridden ? "border-2 border-orange-400 dark:border-orange-500" : "border-rose-200 dark:border-gray-700")}>
-                  <CardHeader className="bg-gradient-to-br from-rose-50 to-pink-50 dark:from-gray-900 dark:to-gray-800 border-b border-rose-200 dark:border-gray-700">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-rose-900 dark:text-rose-300 flex items-center gap-2 select-none">
-                        <Zap className="w-5 h-5" /> Javelin
-                        {javelinOverridden && <span className="text-xs font-normal text-orange-500 bg-orange-100 dark:bg-orange-900/40 px-1.5 py-0.5 rounded">Personalized</span>}
-                      </CardTitle>
-                      {user && !isCoachOrAdmin &&
-                    <LogPerformanceForm event="javelin" eventLabel="Javelin" user={user} open={undefined} />
-                    }
-                    </div>
-                  </CardHeader>
-                  <CardContent className="pt-4 pb-6">
-                    <div className="prose prose-sm max-w-none">
-                      {dp.javelin_text ? <PracticePlanText text={dp.javelin_text} /> : <p className="text-slate-500 dark:text-slate-400 italic">No plan for today</p>}
-                    </div>
-                  </CardContent>
-                </Card>
-              }
+              {selectedEvents.map(eventId => {
+                const eventCfg = getEventById(eventId);
+                if (!eventCfg) return null;
+                const Icon = eventCfg.Icon;
+                const planText = dp[eventCfg.planField];
+                const isOverridden = !isCoachOrAdmin && !!athleteOverride?.[eventCfg.planField];
+                return (
+                  <Card key={eventId} className={cn("bg-white dark:bg-gray-800 shadow-lg", isOverridden ? "border-2 border-orange-400 dark:border-orange-500" : "border-slate-200 dark:border-gray-700")}>
+                    <CardHeader className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800 border-b border-slate-200 dark:border-gray-700">
+                      <div className="flex items-center justify-between">
+                        <CardTitle className={cn("flex items-center gap-2 select-none", eventCfg.color)}>
+                          <Icon className="w-5 h-5" /> {eventCfg.label}
+                          {isOverridden && <span className="text-xs font-normal text-orange-500 bg-orange-100 dark:bg-orange-900/40 px-1.5 py-0.5 rounded">Personalized</span>}
+                        </CardTitle>
+                        {user && !isCoachOrAdmin &&
+                          <LogPerformanceForm event={eventId} eventLabel={eventCfg.label} user={user} open={undefined} />
+                        }
+                      </div>
+                    </CardHeader>
+                    <CardContent className="pt-4 pb-6">
+                      <div className="prose prose-sm max-w-none">
+                        {planText ? <PracticePlanText text={planText} /> : <p className="text-slate-500 dark:text-slate-400 italic">No plan for today</p>}
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>);
 
         })() :
