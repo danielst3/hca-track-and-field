@@ -27,8 +27,8 @@ import { getActiveViewRole, getAvailableViews } from "../components/shared/getAc
 export default function Today() {
   const [user, setUser] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedCategories, setSelectedCategories] = useState(["throwing"]);
-  const [selectedEvents, setSelectedEvents] = useState(["shot_put", "discus", "javelin"]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedEvents, setSelectedEvents] = useState([]);
   const [eventOptions, setEventOptions] = useState([]);
   const dateStr = format(selectedDate, "yyyy-MM-dd");
 
