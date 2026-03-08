@@ -201,7 +201,7 @@ function EmptyState({ icon: Icon, message }) {
   );
 }
 
-function PendingLogCard({ log, eventLabel, isAnalyzing, onAnalyze }) {
+function PendingLogCard({ log, eventLabel, isAnalyzing, onAnalyze, onPlayVideo }) {
   return (
     <Card className="dark:bg-gray-800 dark:border-gray-700">
       <CardContent className="p-4">
@@ -216,11 +216,9 @@ function PendingLogCard({ log, eventLabel, isAnalyzing, onAnalyze }) {
             </div>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
-            <a href={log.video_url} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" size="sm" className="gap-1.5 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
-                <Play className="w-3.5 h-3.5" /> Video
-              </Button>
-            </a>
+            <Button variant="outline" size="sm" onClick={onPlayVideo} className="gap-1.5 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
+              <Play className="w-3.5 h-3.5" /> Video
+            </Button>
             <Button
               size="sm"
               disabled={isAnalyzing}
