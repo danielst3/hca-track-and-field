@@ -133,6 +133,7 @@ export default function VideoReview() {
                       event: log.event,
                       athlete_email: log.athlete_email,
                     })}
+                    onPlayVideo={() => setVideoModal(log.video_url)}
                   />
                 ))
               )}
@@ -157,6 +158,7 @@ export default function VideoReview() {
                     expanded={expandedId === log.id}
                     onToggleExpand={() => setExpandedId(expandedId === log.id ? null : log.id)}
                     onUpdate={() => queryClient.invalidateQueries({ queryKey: ["videoAnalyses"] })}
+                    onPlayVideo={() => setVideoModal(log.video_url)}
                   />
                 );
               })
@@ -164,6 +166,18 @@ export default function VideoReview() {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Video Modal */}
+      <Dialog open={!!videoModal} onOpenChange={(open) => { if (!open) setVideoModal(null); }}>
+        <DialogContent className="max-w-3xl p-2 dark:bg-gray-900 dark:border-gray-700">
+          <video
+            src={videoModal}
+            controls
+            autoPlay
+            className="w-full rounded-lg max-h-[80vh]"
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
