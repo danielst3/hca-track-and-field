@@ -322,11 +322,9 @@ function AnalyzedLogCard({ log, analysis, eventLabel, isCoachOrAdmin, expanded, 
             </div>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
-            <a href={log.video_url} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" size="sm" className="gap-1.5 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
-                <Play className="w-3.5 h-3.5" /> Video
-              </Button>
-            </a>
+            <Button variant="outline" size="sm" onClick={onPlayVideo} className="gap-1.5 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
+              <Play className="w-3.5 h-3.5" /> Video
+            </Button>
             <Button variant="ghost" size="sm" onClick={onToggleExpand} className="gap-1 dark:text-gray-300 dark:hover:bg-gray-700">
               <CheckCircle2 className={`w-3.5 h-3.5 ${isApproved ? "text-green-500" : "text-yellow-500"}`} />
               {expanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
