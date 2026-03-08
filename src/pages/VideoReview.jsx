@@ -238,7 +238,7 @@ function PendingLogCard({ log, eventLabel, isAnalyzing, onAnalyze, onPlayVideo }
   );
 }
 
-function AnalyzedLogCard({ log, analysis, eventLabel, isCoachOrAdmin, expanded, onToggleExpand, onUpdate }) {
+function AnalyzedLogCard({ log, analysis, eventLabel, isCoachOrAdmin, expanded, onToggleExpand, onUpdate, onPlayVideo }) {
   const [editing, setEditing] = useState(false);
   const [feedbackDraft, setFeedbackDraft] = useState("");
   const [followUpQ, setFollowUpQ] = useState("");
