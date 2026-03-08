@@ -190,9 +190,9 @@ export default function Today() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--brand-secondary)] dark:bg-[#111] px-3 pt-4 pb-20 sm:px-4">
+    <div className="min-h-screen bg-[var(--brand-secondary)] dark:bg-[#111] px-3 pt-4 pb-20">
       {user && user.activeViewRole !== "admin" && <QuickLogButton user={user} />}
-      <div className="w-full max-w-7xl mx-auto space-y-4">
+      <div className="w-full max-w-2xl mx-auto space-y-4">
         {/* Next Meet Countdown */}
         {nextMeet && isSameDay(selectedDate, new Date()) && (() => {
           const daysUntil = differenceInCalendarDays(parseISO(nextMeet.date), new Date());
