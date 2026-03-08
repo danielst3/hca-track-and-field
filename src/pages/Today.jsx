@@ -227,7 +227,7 @@ export default function Today() {
 
                 <ChevronLeft className="w-4 h-4" />
               </Button>
-              <p className="text-slate-700 dark:text-gray-300 font-medium min-w-[200px] text-center select-none">
+              <p className="text-slate-700 dark:text-gray-300 font-medium text-center select-none text-sm sm:text-base">
                 {format(selectedDate, "EEEE, MMMM d, yyyy")}
               </p>
               <Button
