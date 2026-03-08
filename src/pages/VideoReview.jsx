@@ -16,6 +16,7 @@ export default function VideoReview() {
   const [expandedId, setExpandedId] = useState(null);
   const [user, setUser] = useState(null);
   const [userLoading, setUserLoading] = useState(true);
+  const [videoModal, setVideoModal] = useState(null); // video_url or null
   const queryClient = useQueryClient();
 
   useEffect(() => {
