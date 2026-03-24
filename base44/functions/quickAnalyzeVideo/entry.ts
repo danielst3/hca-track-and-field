@@ -52,10 +52,23 @@ Be specific, practical, and constructive. Focus on what you can observe in the v
             },
           },
         },
+        required: ['summary', 'strengths', 'areas_for_improvement', 'drill_recommendations', 'technical_feedback'],
       },
     });
 
-    return Response.json({ analysis: result });
+    const today = new Date().toISOString().split('T')[0];
+    const aiStr = typeof result === 'string' ? result : JSON.stringify(result);
+    const analysisRecord = await base44.asServiceRole.entities.VideoAnalysisResult.create({
+      athlete_email: user.email,
+      event: event || 'shot_put',
+      video_url,
+      ai_response: aiStr,
+      coach_feedback: aiStr,
+      status: 'pending_review',
+      analysis_date: today,
+    });
+
+    return Response.json({ analysis: result, record_id: analysisRecord.id });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }
