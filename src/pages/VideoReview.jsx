@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { Video, Zap, CheckCircle2, Clock, ChevronDown, ChevronUp, Play, Send, Edit2, Save, X, MessageSquare } from "lucide-react";
+import { Video, Zap, CheckCircle2, Clock, ChevronDown, ChevronUp, Play, Send, Edit2, Save, X, MessageSquare, Upload, Loader2 } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -14,6 +14,11 @@ import ReactMarkdown from "react-markdown";
 
 export default function VideoReview() {
   const [expandedId, setExpandedId] = useState(null);
+  const [quickVideoFile, setQuickVideoFile] = useState(null);
+  const [quickEvent, setQuickEvent] = useState("");
+  const [quickAnalyzing, setQuickAnalyzing] = useState(false);
+  const [quickResult, setQuickResult] = useState(null);
+  const [quickVideoUrl, setQuickVideoUrl] = useState(null);
   const [user, setUser] = useState(null);
   const [userLoading, setUserLoading] = useState(true);
   const [videoModal, setVideoModal] = useState(null); // video_url or null
@@ -101,8 +106,13 @@ export default function VideoReview() {
           </p>
         </div>
 
-        <Tabs defaultValue={isCoachOrAdmin ? "pending" : "analyzed"}>
+        <Tabs defaultValue={isCoachOrAdmin ? "quick" : "analyzed"}>
           <TabsList className="mb-4 dark:bg-gray-800">
+            {isCoachOrAdmin && (
+              <TabsTrigger value="quick" className="dark:text-gray-300 dark:data-[state=active]:bg-gray-700">
+                Quick Analyze
+              </TabsTrigger>
+            )}
             {isCoachOrAdmin && (
               <TabsTrigger value="pending" className="dark:text-gray-300 dark:data-[state=active]:bg-gray-700">
                 Pending ({pendingLogs.length})
@@ -112,6 +122,24 @@ export default function VideoReview() {
               {isCoachOrAdmin ? `Analyzed (${analyzedLogs.length})` : `Feedback (${analyzedLogs.length})`}
             </TabsTrigger>
           </TabsList>
+
+          {isCoachOrAdmin && (
+            <TabsContent value="quick">
+              <QuickAnalyzeTab
+                quickVideoFile={quickVideoFile}
+                setQuickVideoFile={setQuickVideoFile}
+                quickEvent={quickEvent}
+                setQuickEvent={setQuickEvent}
+                quickAnalyzing={quickAnalyzing}
+                setQuickAnalyzing={setQuickAnalyzing}
+                quickResult={quickResult}
+                setQuickResult={setQuickResult}
+                quickVideoUrl={quickVideoUrl}
+                setQuickVideoUrl={setQuickVideoUrl}
+                onPlayVideo={() => setVideoModal(quickVideoUrl)}
+              />
+            </TabsContent>
+          )}
 
           {isCoachOrAdmin && (
             <TabsContent value="pending" className="space-y-4">
@@ -435,6 +463,147 @@ function AnalyzedLogCard({ log, analysis, eventLabel, isCoachOrAdmin, expanded, 
         )}
       </CardContent>
     </Card>
+  );
+}
+
+function QuickAnalyzeTab({
+  quickVideoFile, setQuickVideoFile,
+  quickEvent, setQuickEvent,
+  quickAnalyzing, setQuickAnalyzing,
+  quickResult, setQuickResult,
+  quickVideoUrl, setQuickVideoUrl,
+  onPlayVideo,
+}) {
+  const fileInputRef = React.useRef(null);
+
+  const EVENT_OPTIONS = [
+    "shot_put", "discus", "javelin",
+    "long_jump", "triple_jump", "high_jump", "pole_vault",
+    "100m", "200m", "400m", "800m", "1600m", "3200m",
+    "100m_hurdles", "110m_hurdles", "300m_hurdles",
+  ];
+
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setQuickVideoFile(file);
+      setQuickResult(null);
+    }
+  };
+
+  const handleAnalyze = async () => {
+    if (!quickVideoFile) return;
+    setQuickAnalyzing(true);
+    setQuickResult(null);
+    const { file_url } = await base44.integrations.Core.UploadFile({ file: quickVideoFile });
+    setQuickVideoUrl(file_url);
+    const res = await base44.functions.invoke("quickAnalyzeVideo", { video_url: file_url, event: quickEvent || null });
+    setQuickAnalyzing(false);
+    if (res.data?.analysis) {
+      setQuickResult(res.data.analysis);
+    } else {
+      toast.error(res.data?.error || "Analysis failed.");
+    }
+  };
+
+  const handleReset = () => {
+    setQuickVideoFile(null);
+    setQuickResult(null);
+    setQuickVideoUrl(null);
+    setQuickEvent("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  return (
+    <div className="space-y-4">
+      <Card className="dark:bg-gray-800 dark:border-gray-700">
+        <CardContent className="p-4 space-y-4">
+          <p className="text-sm text-slate-600 dark:text-gray-400">
+            Upload any video for instant AI coaching analysis — no athlete tagging required.
+          </p>
+
+          {/* File Upload */}
+          <div
+            className="border-2 border-dashed border-slate-300 dark:border-gray-600 rounded-xl p-6 text-center cursor-pointer hover:border-[var(--brand-primary)] transition-colors"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="video/*"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+            {quickVideoFile ? (
+              <div className="flex items-center justify-center gap-2 text-slate-700 dark:text-gray-200">
+                <Video className="w-5 h-5 text-green-500" />
+                <span className="text-sm font-medium">{quickVideoFile.name}</span>
+                <Button variant="ghost" size="icon" className="h-6 w-6" onClick={(e) => { e.stopPropagation(); handleReset(); }}>
+                  <X className="w-3.5 h-3.5" />
+                </Button>
+              </div>
+            ) : (
+              <div className="text-slate-400 dark:text-gray-500">
+                <Upload className="w-8 h-8 mx-auto mb-2" />
+                <p className="text-sm">Click to upload a video</p>
+                <p className="text-xs mt-1">MP4, MOV, AVI, etc.</p>
+              </div>
+            )}
+          </div>
+
+          {/* Event selector (optional) */}
+          <div>
+            <label className="text-xs font-medium text-slate-600 dark:text-gray-400 mb-1 block">Event (optional)</label>
+            <select
+              value={quickEvent}
+              onChange={(e) => setQuickEvent(e.target.value)}
+              className="w-full h-9 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm dark:bg-gray-900 dark:border-gray-600 dark:text-gray-200"
+            >
+              <option value="">General / Not specified</option>
+              {EVENT_OPTIONS.map(evt => (
+                <option key={evt} value={evt}>{evt.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())}</option>
+              ))}
+            </select>
+          </div>
+
+          <Button
+            onClick={handleAnalyze}
+            disabled={!quickVideoFile || quickAnalyzing}
+            className="w-full gap-2 bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] text-white"
+          >
+            {quickAnalyzing ? (
+              <><Loader2 className="w-4 h-4 animate-spin" /> Uploading & Analyzing...</>
+            ) : (
+              <><Zap className="w-4 h-4" /> Analyze Video</>
+            )}
+          </Button>
+        </CardContent>
+      </Card>
+
+      {quickResult && (
+        <Card className="dark:bg-gray-800 dark:border-gray-700">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Zap className="w-4 h-4 text-yellow-500" />
+                <span className="font-semibold text-slate-800 dark:text-gray-100">AI Analysis Result</span>
+              </div>
+              <div className="flex gap-2">
+                {quickVideoUrl && (
+                  <Button variant="outline" size="sm" onClick={onPlayVideo} className="gap-1.5 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
+                    <Play className="w-3.5 h-3.5" /> Video
+                  </Button>
+                )}
+                <Button variant="ghost" size="sm" onClick={handleReset} className="gap-1.5 dark:text-gray-400 dark:hover:bg-gray-700">
+                  <X className="w-3.5 h-3.5" /> Clear
+                </Button>
+              </div>
+            </div>
+            <AnalysisFeedback aiResponse={quickResult} />
+          </CardContent>
+        </Card>
+      )}
+    </div>
   );
 }
 
