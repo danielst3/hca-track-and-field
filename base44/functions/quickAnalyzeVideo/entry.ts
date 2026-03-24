@@ -37,7 +37,6 @@ Be specific, practical, and constructive. Focus on what you can observe in the v
 
     const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
       prompt,
-      file_urls: [video_url],
       response_json_schema: {
         type: 'object',
         properties: {
