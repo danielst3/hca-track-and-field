@@ -11,6 +11,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
+import { getActiveViewRole, getAvailableViews } from "../components/shared/getActiveViewRole";
 
 export default function VideoReview() {
   const [expandedId, setExpandedId] = useState(null);
@@ -28,7 +29,8 @@ export default function VideoReview() {
     base44.auth.me().then(setUser).finally(() => setUserLoading(false));
   }, []);
 
-  const isCoachOrAdmin = user?.role === "admin" || user?.role === "coach";
+  const activeViewRole = user ? getActiveViewRole(user.id, getAvailableViews(user.user_role_preference, user.role), user.role) : null;
+  const isCoachOrAdmin = activeViewRole === "admin" || activeViewRole === "coach" || user?.role === "admin" || user?.role === "coach";
 
   const { data: throwLogs = [], isLoading: loadingThrows } = useQuery({
     queryKey: ["throwLogsWithVideo", user?.email],
