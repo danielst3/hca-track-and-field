@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
 
 Deno.serve(async (req) => {
   try {
@@ -30,7 +30,7 @@ The coach is now asking a follow-up question:
 
 Please respond as a helpful expert coaching assistant. Be concise and practical. If the coach is asking for more detail on a specific area, provide it. If they're asking for additional drills or corrections, provide those.`;
 
-    const aiResult = await base44.asServiceRole.integrations.Core.InvokeLLM({ prompt });
+    const aiResult = await base44.integrations.Core.InvokeLLM({ prompt });
 
     return Response.json({ success: true, response: aiResult });
   } catch (error) {
