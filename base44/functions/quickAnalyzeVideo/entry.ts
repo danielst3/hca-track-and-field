@@ -3,7 +3,13 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
+
+    let user = null;
+    try {
+      user = await base44.auth.me();
+    } catch (_) {
+      // auth.me can fail on private apps; will check role below
+    }
 
     if (!user || (user.role !== 'admin' && user.role !== 'coach')) {
       return Response.json({ error: 'Forbidden: Coach or Admin access required' }, { status: 403 });
