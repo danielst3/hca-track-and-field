@@ -485,21 +485,31 @@ function QuickAnalyzeTab({
     "100m_hurdles", "110m_hurdles", "300m_hurdles",
   ];
 
+  const [uploading, setUploading] = React.useState(false);
+
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
       setQuickVideoFile(file);
+      setQuickVideoUrl(null);
       setQuickResult(null);
     }
   };
 
-  const handleAnalyze = async () => {
+  const handleUpload = async () => {
     if (!quickVideoFile) return;
-    setQuickAnalyzing(true);
-    setQuickResult(null);
+    setUploading(true);
     const { file_url } = await base44.integrations.Core.UploadFile({ file: quickVideoFile });
     setQuickVideoUrl(file_url);
-    const res = await base44.functions.invoke("quickAnalyzeVideo", { video_url: file_url, event: quickEvent || null });
+    setUploading(false);
+    toast.success("Video uploaded! Ready to analyze.");
+  };
+
+  const handleAnalyze = async () => {
+    if (!quickVideoUrl) return;
+    setQuickAnalyzing(true);
+    setQuickResult(null);
+    const res = await base44.functions.invoke("quickAnalyzeVideo", { video_url: quickVideoUrl, event: quickEvent || null });
     setQuickAnalyzing(false);
     if (res.data?.analysis) {
       setQuickResult(res.data.analysis);
@@ -513,6 +523,7 @@ function QuickAnalyzeTab({
     setQuickResult(null);
     setQuickVideoUrl(null);
     setQuickEvent("");
+    setUploading(false);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
@@ -568,17 +579,42 @@ function QuickAnalyzeTab({
             </select>
           </div>
 
-          <Button
-            onClick={handleAnalyze}
-            disabled={!quickVideoFile || quickAnalyzing}
-            className="w-full gap-2 bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] text-white"
-          >
-            {quickAnalyzing ? (
-              <><Loader2 className="w-4 h-4 animate-spin" /> Uploading & Analyzing...</>
-            ) : (
-              <><Zap className="w-4 h-4" /> Analyze Video</>
-            )}
-          </Button>
+          {/* Step 1: Upload */}
+          {!quickVideoUrl ? (
+            <Button
+              onClick={handleUpload}
+              disabled={!quickVideoFile || uploading}
+              className="w-full gap-2 bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] text-white"
+            >
+              {uploading ? (
+                <><Loader2 className="w-4 h-4 animate-spin" /> Uploading...</>
+              ) : (
+                <><Upload className="w-4 h-4" /> Upload Video</>
+              )}
+            </Button>
+          ) : (
+            /* Step 2: Analyze */
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Video uploaded successfully</span>
+                <Button variant="ghost" size="sm" onClick={handleReset} className="ml-auto text-xs h-6 dark:text-gray-400">
+                  <X className="w-3 h-3 mr-1" /> Reset
+                </Button>
+              </div>
+              <Button
+                onClick={handleAnalyze}
+                disabled={quickAnalyzing}
+                className="w-full gap-2 bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] text-white"
+              >
+                {quickAnalyzing ? (
+                  <><Loader2 className="w-4 h-4 animate-spin" /> Analyzing...</>
+                ) : (
+                  <><Zap className="w-4 h-4" /> Analyze Video</>
+                )}
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
 
