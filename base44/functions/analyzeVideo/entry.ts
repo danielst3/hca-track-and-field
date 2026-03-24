@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
 
 Deno.serve(async (req) => {
   try {
@@ -8,7 +8,6 @@ Deno.serve(async (req) => {
     if (!user) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
     if (user.role !== 'admin' && user.role !== 'coach') {
       return Response.json({ error: 'Forbidden: Coach or admin access required' }, { status: 403 });
     }
@@ -19,49 +18,21 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing required fields: video_url, event, athlete_email' }, { status: 400 });
     }
 
-    const eventLabel = event.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-
-    const prompt = `You are an expert track and field coach specializing in ${eventLabel}. 
-Analyze the attached video and provide detailed, actionable coaching feedback based on what you observe.
-Focus on technique, body mechanics, and specific improvements.
-Be concise and practical. Provide a brief overall summary, list key strengths observed, list specific areas for improvement with corrections, list prioritized drill recommendations, and give short feedback on body positioning and event-specific mechanics.`;
-
-    const responseJsonSchema = {
-      type: "object",
-      properties: {
-        summary: { type: "string" },
-        strengths: { type: "array", items: { type: "string" } },
-        areas_for_improvement: { type: "array", items: { type: "string" } },
-        drill_recommendations: { type: "array", items: { type: "string" } },
-        technical_feedback: {
-          type: "object",
-          properties: {
-            body_positioning: { type: "string" },
-            event_specific_mechanics: { type: "string" }
-          }
-        }
-      },
-      required: ["summary", "strengths", "areas_for_improvement", "drill_recommendations", "technical_feedback"]
-    };
-
-    const aiResult = await base44.integrations.Core.InvokeLLM({
-      prompt,
-      file_urls: [video_url],
-      response_json_schema: responseJsonSchema,
-    });
-
     const today = new Date().toISOString().split('T')[0];
-    const analysisRecord = await base44.asServiceRole.entities.VideoAnalysisResult.create({
+    const record = await base44.asServiceRole.entities.VideoAnalysisResult.create({
       athlete_email,
       event,
       video_url,
-      ai_response: typeof aiResult === 'string' ? aiResult : JSON.stringify(aiResult),
-      coach_feedback: typeof aiResult === 'string' ? aiResult : JSON.stringify(aiResult),
-      status: 'pending_review',
+      ai_response: '',
+      coach_feedback: '',
+      status: 'processing',
       analysis_date: today,
     });
 
-    return Response.json({ success: true, analysis: analysisRecord });
+    // Trigger background processing (fire and forget)
+    base44.asServiceRole.functions.invoke('processVideoAnalysis', { record_id: record.id }).catch(() => {});
+
+    return Response.json({ success: true, analysis: record });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }

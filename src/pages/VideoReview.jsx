@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { Video, Zap, CheckCircle2, Clock, ChevronDown, ChevronUp, Play, Send, Edit2, Save, X, MessageSquare, Upload, Loader2 } from "lucide-react";
+import { Video, Zap, CheckCircle2, Clock, ChevronDown, ChevronUp, Play, Send, Edit2, Save, X, MessageSquare, Upload, Loader2, AlertCircle } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -66,6 +66,22 @@ export default function VideoReview() {
     enabled: !!user,
   });
 
+  // Real-time subscription for processing analyses
+  useEffect(() => {
+    if (!user) return;
+    const unsubscribe = base44.entities.VideoAnalysisResult.subscribe((event) => {
+      if (event.type === 'update') {
+        queryClient.invalidateQueries({ queryKey: ['videoAnalyses'] });
+        if (event.data?.status === 'pending_review') {
+          toast.success('AI analysis complete! Review and approve before sending to athlete.');
+        } else if (event.data?.status === 'error') {
+          toast.error('Analysis failed for a video. Please try again.');
+        }
+      }
+    });
+    return unsubscribe;
+  }, [user, queryClient]);
+
   const analyzeMutation = useMutation({
     mutationFn: async ({ log_id, log_type, video_url, event, athlete_email }) => {
       const res = await base44.functions.invoke("analyzeVideo", { log_id, log_type, video_url, event, athlete_email });
@@ -74,7 +90,7 @@ export default function VideoReview() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["videoAnalyses"] });
-      toast.success("AI analysis complete! Review and approve before sending to athlete.");
+      toast.success("Analysis started! You'll be notified when it's ready.");
     },
     onError: (err) => toast.error(`Analysis failed: ${err.message}`),
   });
@@ -85,6 +101,7 @@ export default function VideoReview() {
   ].sort((a, b) => new Date(b.date) - new Date(a.date));
 
   const analyzedVideoUrls = new Set(analyses.map(a => a.video_url));
+  const processingAnalyses = analyses.filter(a => a.status === 'processing' || a.status === 'error');
   const pendingLogs = allLogs.filter(l => !analyzedVideoUrls.has(l.video_url));
   const analyzedLogs = allLogs.filter(l => analyzedVideoUrls.has(l.video_url));
   const getAnalysisForLog = (log) => analyses.find(a => a.video_url === log.video_url);
@@ -122,6 +139,9 @@ export default function VideoReview() {
             )}
             <TabsTrigger value="analyzed" className="dark:text-gray-300 dark:data-[state=active]:bg-gray-700">
               {isCoachOrAdmin ? `Analyzed (${analyzedLogs.length})` : `Feedback (${analyzedLogs.length})`}
+              {processingAnalyses.length > 0 && (
+                <span className="ml-1 inline-flex items-center justify-center w-4 h-4 text-xs rounded-full bg-blue-500 text-white animate-pulse">{processingAnalyses.length}</span>
+              )}
             </TabsTrigger>
           </TabsList>
 
@@ -171,13 +191,17 @@ export default function VideoReview() {
           )}
 
           <TabsContent value="analyzed" className="space-y-4">
+            {isCoachOrAdmin && processingAnalyses.map(a => (
+              <ProcessingCard key={a.id} analysis={a} />
+            ))}
             {loadingAnalyses ? (
               <Spinner />
-            ) : analyzedLogs.length === 0 ? (
+            ) : analyzedLogs.length === 0 && processingAnalyses.length === 0 ? (
               <EmptyState icon={CheckCircle2} message={isCoachOrAdmin ? "No analyzed videos yet" : "No approved feedback yet"} />
             ) : (
               analyzedLogs.map((log) => {
                 const analysis = getAnalysisForLog(log);
+                if (!analysis || analysis.status === 'processing' || analysis.status === 'error') return null;
                 return (
                   <AnalyzedLogCard
                     key={log.id}
@@ -227,6 +251,35 @@ function EmptyState({ icon: Icon, message }) {
         <Icon className="w-10 h-10 mx-auto mb-3 opacity-40" />
         <p>{message}</p>
       </div>
+    </Card>
+  );
+}
+
+function ProcessingCard({ analysis }) {
+  const isError = analysis.status === 'error';
+  const eventLabel = analysis.event?.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) || 'Video';
+  return (
+    <Card className="dark:bg-gray-800 dark:border-gray-700">
+      <CardContent className="p-4">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <span className="font-semibold text-slate-800 dark:text-gray-100">{eventLabel}</span>
+              {isError ? (
+                <Badge className="text-xs bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">Failed</Badge>
+              ) : (
+                <Badge className="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">Processing...</Badge>
+              )}
+            </div>
+            <div className="text-xs text-slate-500 dark:text-gray-400 mt-1">{analysis.athlete_email}</div>
+          </div>
+          {isError ? (
+            <AlertCircle className="w-5 h-5 text-red-500" />
+          ) : (
+            <Loader2 className="w-5 h-5 text-blue-500 animate-spin" />
+          )}
+        </div>
+      </CardContent>
     </Card>
   );
 }
@@ -511,8 +564,9 @@ function QuickAnalyzeTab({
     setQuickResult(null);
     const res = await base44.functions.invoke("quickAnalyzeVideo", { video_url: quickVideoUrl, event: quickEvent || null });
     setQuickAnalyzing(false);
-    if (res.data?.analysis) {
-      setQuickResult(res.data.analysis);
+    if (res.data?.record_id) {
+      toast.success("Analysis started! Results will appear in the Analyzed tab when ready.");
+      handleReset();
     } else {
       toast.error(res.data?.error || "Analysis failed.");
     }
