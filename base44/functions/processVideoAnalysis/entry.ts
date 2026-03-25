@@ -32,7 +32,9 @@ Deno.serve(async (req) => {
 
     const { event, frame_urls } = record;
     const eventLabel = event ? event.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : 'Track & Field';
-    const hasFrames = Array.isArray(frame_urls) && frame_urls.length > 0;
+    // Filter out video files — only pass image frames to the AI
+    const imageFrameUrls = (frame_urls || []).filter(url => !url.match(/\.(mp4|mov|avi|webm|mkv|m4v)(\?.*)?$/i));
+    const hasFrames = imageFrameUrls.length > 0;
 
     const prompt = hasFrames
       ? `You are an expert track and field coach analyzing video frames of a ${eventLabel} athlete. You are provided with ${frame_urls.length} keyframes extracted from the video. Analyze the athlete's technique visible in these frames and provide detailed, actionable coaching feedback covering: technical strengths you can observe, areas for improvement with specific corrections based on what you see, body mechanics and positioning, and drill recommendations tailored to ${eventLabel}. Be specific about what you observe in the images.`
@@ -42,7 +44,7 @@ Deno.serve(async (req) => {
     try {
       result = await base44.asServiceRole.integrations.Core.InvokeLLM({
         prompt,
-        ...(hasFrames ? { file_urls: frame_urls.slice(0, 4), model: 'gemini_3_flash' } : {}),
+        ...(hasFrames ? { file_urls: imageFrameUrls.slice(0, 4), model: 'gemini_3_flash' } : {}),
         response_json_schema: {
           type: 'object',
           properties: {
@@ -65,7 +67,7 @@ Deno.serve(async (req) => {
       const aiErrorMsg = aiError?.message || String(aiError);
       console.error('AI InvokeLLM failed for record', record_id, ':', aiErrorMsg);
       console.error('AI error details:', JSON.stringify(aiError, Object.getOwnPropertyNames(aiError)));
-      console.error('hasFrames:', hasFrames, 'frame_urls count:', frame_urls?.length ?? 0);
+      console.error('hasFrames:', hasFrames, 'imageFrameUrls count:', imageFrameUrls?.length ?? 0, 'raw frame_urls count:', frame_urls?.length ?? 0);
       await base44.asServiceRole.entities.VideoAnalysisResult.update(record_id, {
         status: 'error',
         ai_response: JSON.stringify({ error: aiErrorMsg, hasFrames, frameCount: frame_urls?.length ?? 0 }),
