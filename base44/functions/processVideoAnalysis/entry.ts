@@ -1,9 +1,13 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
 
 Deno.serve(async (req) => {
+  const base44 = createClientFromRequest(req);
+
   try {
-    const base44 = createClientFromRequest(req);
-    const { record_id } = await req.json();
+    const body = await req.json();
+
+    // Support both direct call (record_id) and entity automation payload (event.entity_id)
+    const record_id = body.record_id || body.event?.entity_id;
 
     if (!record_id) {
       return Response.json({ error: 'record_id is required' }, { status: 400 });
@@ -12,6 +16,11 @@ Deno.serve(async (req) => {
     const record = await base44.asServiceRole.entities.VideoAnalysisResult.get(record_id);
     if (!record) {
       return Response.json({ error: 'Record not found' }, { status: 404 });
+    }
+
+    // Only process records in 'processing' state
+    if (record.status !== 'processing') {
+      return Response.json({ skipped: true, reason: 'Not in processing state' });
     }
 
     const { video_url, event } = record;
@@ -53,10 +62,10 @@ Be specific, practical, and constructive. Focus on what you can observe in the v
 
     return Response.json({ success: true });
   } catch (error) {
-    // Mark as error so UI can reflect it
+    // Try to mark the record as error
     try {
-      const base44 = createClientFromRequest(req);
-      const { record_id } = await req.json().catch(() => ({}));
+      const body2 = await req.clone().json().catch(() => ({}));
+      const record_id = body2.record_id || body2.event?.entity_id;
       if (record_id) {
         await base44.asServiceRole.entities.VideoAnalysisResult.update(record_id, { status: 'error' });
       }

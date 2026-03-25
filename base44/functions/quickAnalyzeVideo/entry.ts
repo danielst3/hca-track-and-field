@@ -30,9 +30,6 @@ Deno.serve(async (req) => {
       analysis_date: today,
     });
 
-    // Trigger background processing (fire and forget)
-    base44.asServiceRole.functions.invoke('processVideoAnalysis', { record_id: record.id }).catch(() => {});
-
     return Response.json({ record_id: record.id, status: 'processing' });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
