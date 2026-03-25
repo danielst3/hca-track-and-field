@@ -250,8 +250,9 @@ export default function VideoReview() {
                   onUpdate={() => queryClient.invalidateQueries({ queryKey: ["videoAnalyses"] })}
                   onPlayVideo={() => setVideoModal(log.video_url)}
                   onDelete={isCoachOrAdmin ? async (id) => { await base44.entities.VideoAnalysisResult.delete(id); queryClient.invalidateQueries({ queryKey: ["videoAnalyses"] }); toast.success("Analysis deleted."); } : undefined}
-                />
-              })}
+                  />
+                  );
+                  })}
               </>
             )}
           </TabsContent>
@@ -523,9 +524,10 @@ function AnalyzedLogCard({ log, analysis, eventLabel, isCoachOrAdmin, expanded, 
                     )
                   )}
                 </div>
+              )}
             </div>
 
-            {/* Drawing Annotations (coach only) */
+            {/* Drawing Annotations (coach only) */}
             {isCoachOrAdmin && (
               <div className="border-t border-slate-200 dark:border-gray-700 pt-4">
                 <button
@@ -903,6 +905,7 @@ function StandaloneAnalysisCard({ analysis, isCoachOrAdmin, expanded, onToggleEx
                     )
                   )}
                 </div>
+              )}
             </div>
             {isCoachOrAdmin && (
               <div className="border-t border-slate-200 dark:border-gray-700 pt-4">
