@@ -38,27 +38,40 @@ Deno.serve(async (req) => {
       ? `You are an expert track and field coach analyzing video frames of a ${eventLabel} athlete. You are provided with ${frame_urls.length} keyframes extracted from the video. Analyze the athlete's technique visible in these frames and provide detailed, actionable coaching feedback covering: technical strengths you can observe, areas for improvement with specific corrections based on what you see, body mechanics and positioning, and drill recommendations tailored to ${eventLabel}. Be specific about what you observe in the images.`
       : `You are an expert track and field coach providing coaching feedback for a ${eventLabel} athlete. Provide detailed, actionable coaching feedback covering: common technical points to focus on for this event, key strengths to build on, the most important areas for improvement with specific corrections, key body mechanics, and drill recommendations tailored to ${eventLabel}. Be specific and practical.`;
 
-    const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
-      prompt,
-      ...(hasFrames ? { file_urls: frame_urls, model: 'claude_sonnet_4_6' } : {}),
-      response_json_schema: {
-        type: 'object',
-        properties: {
-          summary: { type: 'string' },
-          strengths: { type: 'array', items: { type: 'string' } },
-          areas_for_improvement: { type: 'array', items: { type: 'string' } },
-          drill_recommendations: { type: 'array', items: { type: 'string' } },
-          technical_feedback: {
-            type: 'object',
-            properties: {
-              body_positioning: { type: 'string' },
-              event_specific_mechanics: { type: 'string' },
+    let result;
+    try {
+      result = await base44.asServiceRole.integrations.Core.InvokeLLM({
+        prompt,
+        ...(hasFrames ? { file_urls: frame_urls, model: 'claude_sonnet_4_6' } : {}),
+        response_json_schema: {
+          type: 'object',
+          properties: {
+            summary: { type: 'string' },
+            strengths: { type: 'array', items: { type: 'string' } },
+            areas_for_improvement: { type: 'array', items: { type: 'string' } },
+            drill_recommendations: { type: 'array', items: { type: 'string' } },
+            technical_feedback: {
+              type: 'object',
+              properties: {
+                body_positioning: { type: 'string' },
+                event_specific_mechanics: { type: 'string' },
+              },
             },
           },
+          required: ['summary', 'strengths', 'areas_for_improvement', 'drill_recommendations', 'technical_feedback'],
         },
-        required: ['summary', 'strengths', 'areas_for_improvement', 'drill_recommendations', 'technical_feedback'],
-      },
-    });
+      });
+    } catch (aiError) {
+      const aiErrorMsg = aiError?.message || String(aiError);
+      console.error('AI InvokeLLM failed for record', record_id, ':', aiErrorMsg);
+      console.error('AI error details:', JSON.stringify(aiError, Object.getOwnPropertyNames(aiError)));
+      console.error('hasFrames:', hasFrames, 'frame_urls count:', frame_urls?.length ?? 0);
+      await base44.asServiceRole.entities.VideoAnalysisResult.update(record_id, {
+        status: 'error',
+        ai_response: JSON.stringify({ error: aiErrorMsg, hasFrames, frameCount: frame_urls?.length ?? 0 }),
+      });
+      return Response.json({ error: 'AI analysis failed', detail: aiErrorMsg }, { status: 500 });
+    }
 
     const aiStr = typeof result === 'string' ? result : JSON.stringify(result);
     await base44.asServiceRole.entities.VideoAnalysisResult.update(record_id, {
