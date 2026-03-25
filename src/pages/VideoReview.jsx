@@ -144,6 +144,21 @@ export default function VideoReview() {
               )}
             </TabsTrigger>
           </TabsList>
+          {isCoachOrAdmin && processingAnalyses.length > 0 && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="ml-2 text-red-600 border-red-300 hover:bg-red-50 dark:text-red-400 dark:border-red-800 dark:hover:bg-red-950"
+              onClick={async () => {
+                if (!confirm(`Clear ${processingAnalyses.length} stuck/failed analysis record(s)?`)) return;
+                const res = await base44.functions.invoke('clearStuckAnalyses', {});
+                if (res.data?.error) { toast.error(res.data.error); }
+                else { toast.success(`Cleared ${res.data.cleared} stuck analyses.`); queryClient.invalidateQueries({ queryKey: ['videoAnalyses'] }); }
+              }}
+            >
+              Clear Stuck ({processingAnalyses.length})
+            </Button>
+          )}
 
           {isCoachOrAdmin && (
             <TabsContent value="quick">
