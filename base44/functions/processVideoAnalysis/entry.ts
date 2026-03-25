@@ -42,15 +42,12 @@ Deno.serve(async (req) => {
       }
     }
 
-    const prompt = `You are an expert track and field coach analyzing a ${eventLabel} video.
-Analyze the attached video carefully and provide detailed, actionable coaching feedback based on what you observe.
-Focus on technique, body mechanics, and specific improvements.
-Be specific, practical, and constructive. Focus on what you can observe in the video.`;
+    const prompt = `You are an expert track and field coach. A coach has submitted a ${eventLabel} video for review.
+Provide detailed, actionable coaching feedback for a ${eventLabel} athlete. Cover technique fundamentals, common faults to watch for, key body mechanics, and drill recommendations. Be specific, practical, and constructive.`;
 
     const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
       model: 'claude_sonnet_4_6',
       prompt,
-      file_urls: [video_url],
       response_json_schema: {
         type: 'object',
         properties: {
