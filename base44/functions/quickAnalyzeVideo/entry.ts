@@ -13,16 +13,13 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden: Coach or Admin access required' }, { status: 403 });
     }
 
-    const { video_url, event } = await req.json();
-
-    if (!video_url) {
-      return Response.json({ error: 'video_url is required' }, { status: 400 });
-    }
+    const { video_url, event, frame_urls } = await req.json();
 
     const today = new Date().toISOString().split('T')[0];
     const record = await base44.asServiceRole.entities.VideoAnalysisResult.create({
       event: event || 'shot_put',
       video_url,
+      frame_urls: frame_urls || [],
       ai_response: '',
       coach_feedback: '',
       status: 'processing',

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { extractAndUploadFrames } from "../components/video/extractFrames";
 import VideoAnnotationCanvas from "../components/video/VideoAnnotationCanvas";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -86,7 +87,9 @@ export default function VideoReview() {
 
   const analyzeMutation = useMutation({
     mutationFn: async ({ log_id, log_type, video_url, event, athlete_email }) => {
-      const res = await base44.functions.invoke("analyzeVideo", { log_id, log_type, video_url, event, athlete_email });
+      toast.info('Extracting keyframes from video...');
+      const frame_urls = await extractAndUploadFrames(video_url, 6);
+      const res = await base44.functions.invoke("analyzeVideo", { log_id, log_type, video_url, event, athlete_email, frame_urls });
       if (res.data?.error) throw new Error(res.data.error);
       return res.data;
     },
@@ -633,12 +636,10 @@ function QuickAnalyzeTab({
     if (!quickVideoUrl) return;
     setQuickAnalyzing(true);
     setQuickResult(null);
-    const res = await base44.functions.invoke("quickAnalyzeVideo", { video_url: quickVideoUrl, event: quickEvent || null });
-    if (!res.data?.record_id) {
-      setQuickAnalyzing(false);
-      toast.error(res.data?.error || "Analysis failed.");
-      return;
-    }
+    toast.info('Extracting keyframes...');
+    const frame_urls = await extractAndUploadFrames(quickVideoUrl, 6);
+    toast.info('Running AI analysis...');
+    const res = await base44.functions.invoke("quickAnalyzeVideo", { video_url: quickVideoUrl, event: quickEvent || null, frame_urls });
     // Poll for the completed result
     const recordId = res.data.record_id;
     let attempts = 0;

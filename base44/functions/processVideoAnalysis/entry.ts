@@ -30,15 +30,17 @@ Deno.serve(async (req) => {
       return Response.json({ skipped: true, reason: 'Not in processing state' });
     }
 
-    const { event } = record;
+    const { event, frame_urls } = record;
     const eventLabel = event ? event.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : 'Track & Field';
+    const hasFrames = Array.isArray(frame_urls) && frame_urls.length > 0;
 
-    const prompt = `You are an expert track and field coach providing coaching feedback for a ${eventLabel} athlete. Provide detailed, actionable coaching feedback covering: common technical points to focus on for this event, key strengths to build on, the most important areas for improvement with specific corrections, key body mechanics, and drill recommendations tailored to ${eventLabel}. Be specific and practical.
-
-Return your analysis in the requested JSON format.`;
+    const prompt = hasFrames
+      ? `You are an expert track and field coach analyzing video frames of a ${eventLabel} athlete. You are provided with ${frame_urls.length} keyframes extracted from the video. Analyze the athlete's technique visible in these frames and provide detailed, actionable coaching feedback covering: technical strengths you can observe, areas for improvement with specific corrections based on what you see, body mechanics and positioning, and drill recommendations tailored to ${eventLabel}. Be specific about what you observe in the images.`
+      : `You are an expert track and field coach providing coaching feedback for a ${eventLabel} athlete. Provide detailed, actionable coaching feedback covering: common technical points to focus on for this event, key strengths to build on, the most important areas for improvement with specific corrections, key body mechanics, and drill recommendations tailored to ${eventLabel}. Be specific and practical.`;
 
     const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
       prompt,
+      ...(hasFrames ? { file_urls: frame_urls, model: 'claude_sonnet_4_6' } : {}),
       response_json_schema: {
         type: 'object',
         properties: {

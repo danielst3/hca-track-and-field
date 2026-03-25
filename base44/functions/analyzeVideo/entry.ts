@@ -12,7 +12,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden: Coach or admin access required' }, { status: 403 });
     }
 
-    const { log_id, log_type, video_url, event, athlete_email } = await req.json();
+    const { log_id, log_type, video_url, event, athlete_email, frame_urls } = await req.json();
 
     if (!video_url || !event || !athlete_email) {
       return Response.json({ error: 'Missing required fields: video_url, event, athlete_email' }, { status: 400 });
@@ -23,6 +23,7 @@ Deno.serve(async (req) => {
       athlete_email,
       event,
       video_url,
+      frame_urls: frame_urls || [],
       ai_response: '',
       coach_feedback: '',
       status: 'processing',
