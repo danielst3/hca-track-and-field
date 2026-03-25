@@ -218,7 +218,7 @@ export default function VideoReview() {
 
           <TabsContent value="analyzed" className="space-y-4">
             {isCoachOrAdmin && processingAnalyses.map(a => (
-              <ProcessingCard key={a.id} analysis={a} />
+              <ProcessingCard key={a.id} analysis={a} onDelete={async (id) => { await base44.entities.VideoAnalysisResult.delete(id); queryClient.invalidateQueries({ queryKey: ['videoAnalyses'] }); toast.success('Analysis deleted.'); }} />
             ))}
             {loadingAnalyses ? (
               <Spinner />
@@ -294,9 +294,10 @@ function EmptyState({ icon: Icon, message }) {
   );
 }
 
-function ProcessingCard({ analysis }) {
+function ProcessingCard({ analysis, onDelete }) {
   const isError = analysis.status === 'error';
   const eventLabel = analysis.event?.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) || 'Video';
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
   return (
     <Card className="dark:bg-gray-800 dark:border-gray-700">
       <CardContent className="p-4">
@@ -312,11 +313,25 @@ function ProcessingCard({ analysis }) {
             </div>
             <div className="text-xs text-slate-500 dark:text-gray-400 mt-1">{analysis.athlete_email}</div>
           </div>
-          {isError ? (
-            <AlertCircle className="w-5 h-5 text-red-500" />
-          ) : (
-            <Loader2 className="w-5 h-5 text-blue-500 animate-spin" />
-          )}
+          <div className="flex items-center gap-2">
+            {isError && onDelete && (
+              deleteConfirm ? (
+                <>
+                  <Button size="sm" variant="destructive" onClick={() => onDelete(analysis.id)} className="h-7 text-xs">Yes, Delete</Button>
+                  <Button size="sm" variant="outline" onClick={() => setDeleteConfirm(false)} className="h-7 text-xs dark:border-gray-600 dark:text-gray-300">Cancel</Button>
+                </>
+              ) : (
+                <Button size="sm" variant="ghost" onClick={() => setDeleteConfirm(true)} className="gap-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950">
+                  <Trash2 className="w-3.5 h-3.5" /> Delete
+                </Button>
+              )
+            )}
+            {isError ? (
+              <AlertCircle className="w-5 h-5 text-red-500" />
+            ) : (
+              <Loader2 className="w-5 h-5 text-blue-500 animate-spin" />
+            )}
+          </div>
         </div>
       </CardContent>
     </Card>
