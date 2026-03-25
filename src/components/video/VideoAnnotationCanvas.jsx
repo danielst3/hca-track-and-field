@@ -115,9 +115,9 @@ export default function VideoAnnotationCanvas({ analysisId, videoUrl }) {
   const getPoint = (e) => {
     const canvas = canvasRef.current;
     const rect = canvas.getBoundingClientRect();
-    const clientX = e.touches ? e.touches[0].clientX : (e.changedTouches ? e.changedTouches[0].clientX : e.clientX);
-    const clientY = e.touches ? e.touches[0].clientY : (e.changedTouches ? e.changedTouches[0].clientY : e.clientY);
-    // canvas internal resolution matches offsetWidth/offsetHeight so scale = 1
+    const touch = e.touches?.[0] || e.changedTouches?.[0];
+    const clientX = touch ? touch.clientX : e.clientX;
+    const clientY = touch ? touch.clientY : e.clientY;
     return { x: clientX - rect.left, y: clientY - rect.top };
   };
 
