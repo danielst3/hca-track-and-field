@@ -40,7 +40,6 @@ Return your analysis in the requested JSON format.`;
 
     const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
       prompt,
-      file_urls: record.video_url ? [record.video_url] : undefined,
       response_json_schema: {
         type: 'object',
         properties: {
