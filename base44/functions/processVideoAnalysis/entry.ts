@@ -23,8 +23,24 @@ Deno.serve(async (req) => {
       return Response.json({ skipped: true, reason: 'Not in processing state' });
     }
 
-    const { video_url, event } = record;
+    let { video_url, event } = record;
     const eventLabel = event ? event.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : 'Track & Field';
+
+    // Convert .mov files to .mp4 by re-uploading with mp4 content type
+    // iPhone .mov files use H.264 which is the same codec as .mp4
+    if (video_url && video_url.toLowerCase().includes('.mov')) {
+      try {
+        const videoResponse = await fetch(video_url);
+        const videoBuffer = await videoResponse.arrayBuffer();
+        const blob = new Blob([videoBuffer], { type: 'video/mp4' });
+        const file = new File([blob], 'video.mp4', { type: 'video/mp4' });
+        const uploaded = await base44.asServiceRole.integrations.Core.UploadFile({ file });
+        video_url = uploaded.file_url;
+      } catch (convErr) {
+        // If conversion fails, proceed with original URL
+        console.log('MOV conversion failed, using original URL:', convErr.message);
+      }
+    }
 
     const prompt = `You are an expert track and field coach analyzing a ${eventLabel} video.
 Analyze the attached video carefully and provide detailed, actionable coaching feedback based on what you observe.
