@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { Minus, Triangle, Trash2, Save, Undo, Palette } from "lucide-react";
+import { Minus, Triangle, Trash2, Save, Undo, Palette, Pencil } from "lucide-react";
 import { toast } from "sonner";
 
 const COLORS = ["#ef4444", "#3b82f6", "#22c55e", "#f59e0b", "#a855f7", "#ffffff"];
@@ -14,6 +14,8 @@ export default function VideoAnnotationCanvas({ analysisId, videoUrl }) {
   const [color, setColor] = useState("#ef4444");
   const [annotations, setAnnotations] = useState([]);
   const [currentPoints, setCurrentPoints] = useState([]);
+  const [isDrawingFree, setIsDrawingFree] = useState(false);
+  const [freePath, setFreePath] = useState([]);
   const [saving, setSaving] = useState(false);
   const [annotationId, setAnnotationId] = useState(null);
 
@@ -48,21 +50,12 @@ export default function VideoAnnotationCanvas({ analysisId, videoUrl }) {
     ctx.fillStyle = ann.color || "#ef4444";
     ctx.setLineDash([]);
 
-    if (ann.type === "line" && ann.points?.length >= 2) {
+    if (ann.type === "free" && ann.points?.length >= 2) {
       ctx.beginPath();
       ctx.moveTo(ann.points[0].x, ann.points[0].y);
-      ctx.lineTo(ann.points[1].x, ann.points[1].y);
+      ann.points.forEach(p => ctx.lineTo(p.x, p.y));
       ctx.stroke();
-      // Arrow head
-      const headLen = 12;
-      const angle = Math.atan2(ann.points[1].y - ann.points[0].y, ann.points[1].x - ann.points[0].x);
-      ctx.beginPath();
-      ctx.moveTo(ann.points[1].x, ann.points[1].y);
-      ctx.lineTo(ann.points[1].x - headLen * Math.cos(angle - Math.PI / 6), ann.points[1].y - headLen * Math.sin(angle - Math.PI / 6));
-      ctx.lineTo(ann.points[1].x - headLen * Math.cos(angle + Math.PI / 6), ann.points[1].y - headLen * Math.sin(angle + Math.PI / 6));
-      ctx.closePath();
-      ctx.fill();
-    } else if (ann.type === "angle" && ann.points?.length >= 3) {
+    } else if (ann.type === "line" && ann.points?.length >= 2) {
       ctx.beginPath();
       ctx.moveTo(ann.points[0].x, ann.points[0].y);
       ctx.lineTo(ann.points[1].x, ann.points[1].y);
@@ -79,13 +72,23 @@ export default function VideoAnnotationCanvas({ analysisId, videoUrl }) {
   }, []);
 
   // Redraw everything
-  const redraw = useCallback((anns, pts, clr, tl) => {
+  const redraw = useCallback((anns, pts, clr, tl, fp) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     anns.forEach((ann) => drawAnnotation(ctx, ann));
-    if (pts.length > 0) {
+    // Draw active free path
+    if (fp && fp.length >= 2) {
+      ctx.strokeStyle = clr;
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(fp[0].x, fp[0].y);
+      fp.forEach(p => ctx.lineTo(p.x, p.y));
+      ctx.stroke();
+    }
+    if (tl !== "free" && pts.length > 0) {
       ctx.strokeStyle = clr;
       ctx.lineWidth = 2.5;
       ctx.setLineDash([5, 4]);
@@ -109,8 +112,8 @@ export default function VideoAnnotationCanvas({ analysisId, videoUrl }) {
   }, [drawAnnotation]);
 
   useEffect(() => {
-    redraw(annotations, currentPoints, color, tool);
-  }, [annotations, currentPoints, color, tool, redraw]);
+    redraw(annotations, currentPoints, color, tool, freePath);
+  }, [annotations, currentPoints, color, tool, freePath, redraw]);
 
   const getPoint = (e) => {
     const canvas = canvasRef.current;
@@ -121,7 +124,35 @@ export default function VideoAnnotationCanvas({ analysisId, videoUrl }) {
     return { x: clientX - rect.left, y: clientY - rect.top };
   };
 
+  const handleMouseDown = (e) => {
+    if (!drawMode) return;
+    e.preventDefault();
+    if (tool === "free") {
+      setIsDrawingFree(true);
+      setFreePath([getPoint(e)]);
+    }
+  };
+
+  const handleMouseMove = (e) => {
+    if (!drawMode || tool !== "free" || !isDrawingFree) return;
+    e.preventDefault();
+    setFreePath(prev => [...prev, getPoint(e)]);
+  };
+
+  const handleMouseUp = (e) => {
+    if (!drawMode) return;
+    e.preventDefault();
+    if (tool === "free" && isDrawingFree) {
+      if (freePath.length >= 2) {
+        setAnnotations(prev => [...prev, { type: "free", points: freePath, color }]);
+      }
+      setIsDrawingFree(false);
+      setFreePath([]);
+    }
+  };
+
   const handleClick = (e) => {
+    if (tool === "free") return; // handled by mouse/touch events
     e.preventDefault();
     e.stopPropagation();
     const pt = getPoint(e);
@@ -185,6 +216,14 @@ export default function VideoAnnotationCanvas({ analysisId, videoUrl }) {
         >
           <Triangle className="w-3.5 h-3.5" /> Angle
         </Button>
+        <Button
+          size="sm"
+          variant={tool === "free" ? "default" : "ghost"}
+          onClick={() => { setTool("free"); setCurrentPoints([]); }}
+          className="gap-1.5 text-xs h-7 text-slate-300"
+        >
+          <Pencil className="w-3.5 h-3.5" /> Free Draw
+        </Button>
         <div className="flex items-center gap-1 ml-1">
           <Palette className="w-3.5 h-3.5 text-slate-400" />
           {COLORS.map((c) => (
@@ -210,7 +249,7 @@ export default function VideoAnnotationCanvas({ analysisId, videoUrl }) {
       {/* Hint */}
       {drawMode && (
         <p className="text-xs text-amber-500">
-          {tool === "line" ? "Click two points to draw an arrow line." : "Click three points: start → vertex → end to measure angle."}
+          {tool === "free" ? "Click and drag to draw freely." : tool === "line" ? "Click two points to draw an arrow line." : "Click three points: start → vertex → end to measure angle."}
           {currentPoints.length > 0 && <span className="ml-2">({tool === "angle" ? `${3 - currentPoints.length} more click(s)` : "click endpoint"})</span>}
         </p>
       )}
@@ -220,8 +259,13 @@ export default function VideoAnnotationCanvas({ analysisId, videoUrl }) {
         <video src={videoUrl} controls className="w-full h-full object-contain" />
         <canvas
           ref={canvasRef}
-          onClick={drawMode ? handleClick : undefined}
-          onTouchEnd={drawMode ? handleClick : undefined}
+          onMouseDown={drawMode ? handleMouseDown : undefined}
+          onMouseMove={drawMode ? handleMouseMove : undefined}
+          onMouseUp={drawMode ? handleMouseUp : undefined}
+          onTouchStart={drawMode ? handleMouseDown : undefined}
+          onTouchMove={drawMode ? handleMouseMove : undefined}
+          onTouchEnd={drawMode ? (tool === "free" ? handleMouseUp : handleClick) : undefined}
+          onClick={drawMode && tool !== "free" ? handleClick : undefined}
           className={`absolute inset-0 w-full h-full ${drawMode ? "cursor-crosshair" : "pointer-events-none"}`}
           style={{ touchAction: "none" }}
         />
