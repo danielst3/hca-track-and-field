@@ -30,7 +30,6 @@ Provide detailed, actionable coaching feedback for a ${eventLabel} athlete. Cove
 Return your analysis in the requested JSON format.`;
 
     const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
-      model: 'claude_sonnet_4_6',
       prompt,
       response_json_schema: {
         type: 'object',
