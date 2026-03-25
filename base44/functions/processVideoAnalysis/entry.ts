@@ -17,37 +17,21 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Record not found' }, { status: 404 });
     }
 
-    // Only process records in 'processing' state
     if (record.status !== 'processing') {
       return Response.json({ skipped: true, reason: 'Not in processing state' });
     }
 
-    let { video_url, event } = record;
+    const { event } = record;
     const eventLabel = event ? event.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : 'Track & Field';
 
-    // Convert .mov files to .mp4 by re-uploading with mp4 content type
-    // iPhone .mov files use H.264 which is the same codec as .mp4
-    if (video_url && video_url.toLowerCase().includes('.mov')) {
-      try {
-        const videoResponse = await fetch(video_url);
-        const videoBuffer = await videoResponse.arrayBuffer();
-        const blob = new Blob([videoBuffer], { type: 'video/mp4' });
-        const file = new File([blob], 'video.mp4', { type: 'video/mp4' });
-        const uploaded = await base44.asServiceRole.integrations.Core.UploadFile({ file });
-        video_url = uploaded.file_url;
-      } catch (convErr) {
-        // If conversion fails, proceed with original URL
-        console.log('MOV conversion failed, using original URL:', convErr.message);
-      }
-    }
+    const prompt = `You are an expert track and field coach reviewing a ${eventLabel} video submission.
+Provide detailed, actionable coaching feedback for a ${eventLabel} athlete. Cover technique fundamentals, common faults, key body mechanics, and drill recommendations. Be specific, practical, and constructive.
 
-    const prompt = `You are an expert track and field coach. A coach has submitted a ${eventLabel} video for review.
-Provide detailed, actionable coaching feedback for a ${eventLabel} athlete. Cover technique fundamentals, common faults to watch for, key body mechanics, and drill recommendations. Be specific, practical, and constructive.`;
+Return your analysis in the requested JSON format.`;
 
     const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
       model: 'claude_sonnet_4_6',
       prompt,
-      file_urls: [video_url],
       response_json_schema: {
         type: 'object',
         properties: {

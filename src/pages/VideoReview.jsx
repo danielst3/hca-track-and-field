@@ -102,12 +102,14 @@ export default function VideoReview() {
     ...trainingLogs.map(l => ({ ...l, log_type: "training" })),
   ].sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  const analyzedVideoUrls = new Set(analyses.map(a => a.video_url));
+  const completedAnalyses = analyses.filter(a => a.status === 'pending_review' || a.status === 'approved');
+  const completedAnalysisVideoUrls = new Set(completedAnalyses.map(a => a.video_url));
   const allLogVideoUrls = new Set(allLogs.map(l => l.video_url));
   const processingAnalyses = analyses.filter(a => a.status === 'processing' || a.status === 'error');
+  const analyzedVideoUrls = new Set(analyses.map(a => a.video_url));
   const pendingLogs = allLogs.filter(l => !analyzedVideoUrls.has(l.video_url));
-  const analyzedLogs = allLogs.filter(l => analyzedVideoUrls.has(l.video_url));
-  const standaloneAnalyses = analyses.filter(a => !allLogVideoUrls.has(a.video_url) && a.status !== 'processing' && a.status !== 'error');
+  const analyzedLogs = allLogs.filter(l => completedAnalysisVideoUrls.has(l.video_url));
+  const standaloneAnalyses = completedAnalyses.filter(a => !allLogVideoUrls.has(a.video_url));
   const getAnalysisForLog = (log) => analyses.find(a => a.video_url === log.video_url);
   const eventLabel = (event) => event?.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()) || "";
 
@@ -142,7 +144,7 @@ export default function VideoReview() {
               </TabsTrigger>
             )}
             <TabsTrigger value="analyzed" className="dark:text-gray-300 dark:data-[state=active]:bg-gray-700">
-              {isCoachOrAdmin ? `Analyzed (${analyzedLogs.length})` : `Feedback (${analyzedLogs.length})`}
+              {isCoachOrAdmin ? `Analyzed (${analyzedLogs.length + standaloneAnalyses.length})` : `Feedback (${analyzedLogs.length + standaloneAnalyses.length})`}
               {processingAnalyses.length > 0 && (
                 <span className="ml-1 inline-flex items-center justify-center w-4 h-4 text-xs rounded-full bg-blue-500 text-white animate-pulse">{processingAnalyses.length}</span>
               )}
