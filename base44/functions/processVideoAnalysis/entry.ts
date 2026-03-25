@@ -2,12 +2,11 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
 
 Deno.serve(async (req) => {
   const base44 = createClientFromRequest(req);
+  let record_id = null;
 
   try {
     const body = await req.json();
-
-    // Support both direct call (record_id) and entity automation payload (event.entity_id)
-    const record_id = body.record_id || body.event?.entity_id;
+    record_id = body.record_id || body.event?.entity_id;
 
     if (!record_id) {
       return Response.json({ error: 'record_id is required' }, { status: 400 });
@@ -48,6 +47,7 @@ Provide detailed, actionable coaching feedback for a ${eventLabel} athlete. Cove
     const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
       model: 'claude_sonnet_4_6',
       prompt,
+      file_urls: [video_url],
       response_json_schema: {
         type: 'object',
         properties: {
@@ -76,14 +76,12 @@ Provide detailed, actionable coaching feedback for a ${eventLabel} athlete. Cove
 
     return Response.json({ success: true });
   } catch (error) {
-    // Try to mark the record as error
-    try {
-      const body2 = await req.clone().json().catch(() => ({}));
-      const record_id = body2.record_id || body2.event?.entity_id;
-      if (record_id) {
+    console.error('processVideoAnalysis error:', error.message);
+    if (record_id) {
+      try {
         await base44.asServiceRole.entities.VideoAnalysisResult.update(record_id, { status: 'error' });
-      }
-    } catch (_) {}
+      } catch (_) {}
+    }
     return Response.json({ error: error.message }, { status: 500 });
   }
 });
