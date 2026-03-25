@@ -6,18 +6,27 @@ Deno.serve(async (req) => {
 
   try {
     const body = await req.json();
-    record_id = body.record_id || body.event?.entity_id;
+    console.log('processVideoAnalysis payload:', JSON.stringify(body));
+    record_id = body.record_id || body.event?.entity_id || body.data?.id;
+    console.log('resolved record_id:', record_id);
 
     if (!record_id) {
+      console.error('No record_id found in payload:', JSON.stringify(body));
       return Response.json({ error: 'record_id is required' }, { status: 400 });
     }
 
+    console.log('fetching record:', record_id);
     const record = await base44.asServiceRole.entities.VideoAnalysisResult.get(record_id);
+    console.log('fetched record:', JSON.stringify(record));
+
     if (!record) {
+      console.error('Record not found for id:', record_id);
       return Response.json({ error: 'Record not found' }, { status: 404 });
     }
 
+    console.log('record status:', record.status, 'video_url:', record.video_url);
     if (record.status !== 'processing') {
+      console.log('skipping - status is:', record.status);
       return Response.json({ skipped: true, reason: 'Not in processing state' });
     }
 
