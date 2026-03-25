@@ -24,13 +24,14 @@ Deno.serve(async (req) => {
     const { event } = record;
     const eventLabel = event ? event.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : 'Track & Field';
 
-    const prompt = `You are an expert track and field coach reviewing a ${eventLabel} video submission.
-Provide detailed, actionable coaching feedback for a ${eventLabel} athlete. Cover technique fundamentals, common faults, key body mechanics, and drill recommendations. Be specific, practical, and constructive.
+    const prompt = `You are an expert track and field coach analyzing a ${eventLabel} athlete's video submission.
+Carefully observe the athlete's technique in the video. Provide detailed, actionable coaching feedback covering: specific technique observations from the video, strengths you can see, areas needing improvement with specific corrections, key body mechanics issues, and drill recommendations. Be specific to what you actually see.
 
 Return your analysis in the requested JSON format.`;
 
     const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
       prompt,
+      file_urls: record.video_url ? [record.video_url] : undefined,
       response_json_schema: {
         type: 'object',
         properties: {
