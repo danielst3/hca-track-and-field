@@ -172,23 +172,21 @@ export default function VideoAnnotationCanvas({ analysisId, videoUrl, videoRef }
     toast.success("Annotations saved.");
   };
 
-  // Sync canvas size with video
+  // Sync canvas size to container
   useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const container = canvas.parentElement;
     const syncSize = () => {
-      const canvas = canvasRef.current;
-      const video = videoRef?.current;
-      if (!canvas || !video) return;
-      canvas.width = video.videoWidth || video.offsetWidth;
-      canvas.height = video.videoHeight || video.offsetHeight;
+      canvas.width = container.offsetWidth;
+      canvas.height = container.offsetHeight;
       redraw();
     };
-    const video = videoRef?.current;
-    if (video) {
-      video.addEventListener("loadedmetadata", syncSize);
-      syncSize();
-    }
-    return () => video?.removeEventListener("loadedmetadata", syncSize);
-  }, [videoRef, redraw]);
+    syncSize();
+    const observer = new ResizeObserver(syncSize);
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [redraw]);
 
   return (
     <div className="space-y-2">
@@ -262,7 +260,7 @@ export default function VideoAnnotationCanvas({ analysisId, videoUrl, videoRef }
         <canvas
           ref={canvasRef}
           onClick={drawMode ? handleCanvasClick : undefined}
-          onTouchEnd={(e) => { e.preventDefault(); handleCanvasClick(e.changedTouches ? { ...e, clientX: e.changedTouches[0].clientX, clientY: e.changedTouches[0].clientY } : e); }}
+          onTouchEnd={drawMode ? (e) => { e.preventDefault(); handleCanvasClick(e.changedTouches ? { ...e, clientX: e.changedTouches[0].clientX, clientY: e.changedTouches[0].clientY } : e); } : undefined}
           className={`absolute inset-0 w-full h-full ${drawMode ? "cursor-crosshair" : "pointer-events-none"}`}
           style={{ touchAction: "none" }}
         />
