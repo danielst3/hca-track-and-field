@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import VideoAnnotationCanvas from "../components/video/VideoAnnotationCanvas";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
@@ -347,6 +348,8 @@ function AnalyzedLogCard({ log, analysis, eventLabel, isCoachOrAdmin, expanded, 
   const [followUpLoading, setFollowUpLoading] = useState(false);
   const [savingFeedback, setSavingFeedback] = useState(false);
   const [approvingLoading, setApprovingLoading] = useState(false);
+  const [showAnnotations, setShowAnnotations] = useState(false);
+  const annotationVideoRef = useRef(null);
 
   const isApproved = analysis?.status === "approved";
 
@@ -490,6 +493,25 @@ function AnalyzedLogCard({ log, analysis, eventLabel, isCoachOrAdmin, expanded, 
                 </div>
               )}
             </div>
+
+            {/* Drawing Annotations (coach only) */}
+            {isCoachOrAdmin && (
+              <div className="border-t border-slate-200 dark:border-gray-700 pt-4">
+                <button
+                  onClick={() => setShowAnnotations(v => !v)}
+                  className="text-sm font-semibold text-slate-700 dark:text-gray-200 flex items-center gap-2 mb-3"
+                >
+                  🖊️ Video Annotations {showAnnotations ? "▲" : "▼"}
+                </button>
+                {showAnnotations && (
+                  <VideoAnnotationCanvas
+                    analysisId={analysis.id}
+                    videoUrl={log.video_url}
+                    videoRef={annotationVideoRef}
+                  />
+                )}
+              </div>
+            )}
 
             {/* AI Follow-up Q&A (coach only) */}
             {isCoachOrAdmin && (
