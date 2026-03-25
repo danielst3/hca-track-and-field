@@ -32,6 +32,7 @@ Focus on technique, body mechanics, and specific improvements.
 Be specific, practical, and constructive. Focus on what you can observe in the video.`;
 
     const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
+      model: 'claude_sonnet_4_6',
       prompt,
       file_urls: [video_url],
       response_json_schema: {
