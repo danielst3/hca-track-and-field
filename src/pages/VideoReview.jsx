@@ -636,28 +636,39 @@ function QuickAnalyzeTab({
     if (!quickVideoUrl) return;
     setQuickAnalyzing(true);
     setQuickResult(null);
-    toast.info('Extracting keyframes...');
-    const frame_urls = await extractAndUploadFrames(quickVideoUrl, 6);
-    toast.info('Running AI analysis...');
-    const res = await base44.functions.invoke("quickAnalyzeVideo", { video_url: quickVideoUrl, event: quickEvent || null, frame_urls });
-    // Poll for the completed result
-    const recordId = res.data.record_id;
-    let attempts = 0;
-    const maxAttempts = 30;
-    const poll = async () => {
-      attempts++;
-      const record = await base44.entities.VideoAnalysisResult.get(recordId);
-      if (record?.status === 'pending_review' || record?.status === 'approved') {
-        setQuickAnalyzing(false);
-        setQuickResult(record.ai_response || record.coach_feedback);
-      } else if (record?.status === 'error' || attempts >= maxAttempts) {
-        setQuickAnalyzing(false);
-        toast.error('Analysis failed or timed out. Please try again.');
-      } else {
-        setTimeout(poll, 3000);
-      }
-    };
-    setTimeout(poll, 3000);
+    try {
+      toast.info('Extracting keyframes...');
+      const frame_urls = await extractAndUploadFrames(quickVideoUrl, 6);
+      toast.info('Running AI analysis...');
+      const res = await base44.functions.invoke("quickAnalyzeVideo", { video_url: quickVideoUrl, event: quickEvent || null, frame_urls });
+      if (res.data?.error) throw new Error(res.data.error);
+      const recordId = res.data.record_id;
+      let attempts = 0;
+      const maxAttempts = 30;
+      const poll = async () => {
+        attempts++;
+        try {
+          const record = await base44.entities.VideoAnalysisResult.get(recordId);
+          if (record?.status === 'pending_review' || record?.status === 'approved') {
+            setQuickAnalyzing(false);
+            setQuickResult(record.ai_response || record.coach_feedback);
+          } else if (record?.status === 'error' || attempts >= maxAttempts) {
+            setQuickAnalyzing(false);
+            const errDetail = record?.ai_response ? (() => { try { return JSON.parse(record.ai_response)?.error; } catch { return null; } })() : null;
+            toast.error(errDetail ? `Analysis failed: ${errDetail}` : 'Analysis failed or timed out. Please try again.');
+          } else {
+            setTimeout(poll, 3000);
+          }
+        } catch (pollErr) {
+          setQuickAnalyzing(false);
+          toast.error(`Polling error: ${pollErr.message}`);
+        }
+      };
+      setTimeout(poll, 3000);
+    } catch (err) {
+      setQuickAnalyzing(false);
+      toast.error(`Analysis failed: ${err.message}`);
+    }
   };
 
   const handleReset = () => {
