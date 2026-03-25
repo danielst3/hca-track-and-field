@@ -4,7 +4,7 @@
  */
 import { base44 } from "@/api/base44Client";
 
-export async function extractAndUploadFrames(videoUrl, numFrames = 5) {
+export async function extractAndUploadFrames(videoUrl, numFrames = 10) {
   return new Promise((resolve, reject) => {
     const video = document.createElement("video");
     video.crossOrigin = "anonymous";

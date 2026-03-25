@@ -88,7 +88,7 @@ export default function VideoReview() {
   const analyzeMutation = useMutation({
     mutationFn: async ({ log_id, log_type, video_url, event, athlete_email }) => {
       toast.info('Extracting keyframes from video...');
-      const frame_urls = await extractAndUploadFrames(video_url, 4);
+      const frame_urls = await extractAndUploadFrames(video_url, 10);
       const res = await base44.functions.invoke("analyzeVideo", { log_id, log_type, video_url, event, athlete_email, frame_urls });
       if (res.data?.error) throw new Error(res.data.error);
       return res.data;
@@ -638,7 +638,7 @@ function QuickAnalyzeTab({
     setQuickResult(null);
     try {
       toast.info('Extracting keyframes...');
-      const frame_urls = await extractAndUploadFrames(quickVideoUrl, 4);
+      const frame_urls = await extractAndUploadFrames(quickVideoUrl, 10);
       toast.info('Running AI analysis...');
       const res = await base44.functions.invoke("quickAnalyzeVideo", { video_url: quickVideoUrl, event: quickEvent || null, frame_urls });
       if (res.data?.error) throw new Error(res.data.error);
