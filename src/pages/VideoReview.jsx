@@ -103,9 +103,11 @@ export default function VideoReview() {
   ].sort((a, b) => new Date(b.date) - new Date(a.date));
 
   const analyzedVideoUrls = new Set(analyses.map(a => a.video_url));
+  const allLogVideoUrls = new Set(allLogs.map(l => l.video_url));
   const processingAnalyses = analyses.filter(a => a.status === 'processing' || a.status === 'error');
   const pendingLogs = allLogs.filter(l => !analyzedVideoUrls.has(l.video_url));
   const analyzedLogs = allLogs.filter(l => analyzedVideoUrls.has(l.video_url));
+  const standaloneAnalyses = analyses.filter(a => !allLogVideoUrls.has(a.video_url) && a.status !== 'processing' && a.status !== 'error');
   const getAnalysisForLog = (log) => analyses.find(a => a.video_url === log.video_url);
   const eventLabel = (event) => event?.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()) || "";
 
@@ -215,10 +217,22 @@ export default function VideoReview() {
             ))}
             {loadingAnalyses ? (
               <Spinner />
-            ) : analyzedLogs.length === 0 && processingAnalyses.length === 0 ? (
+            ) : analyzedLogs.length === 0 && processingAnalyses.length === 0 && standaloneAnalyses.length === 0 ? (
               <EmptyState icon={CheckCircle2} message={isCoachOrAdmin ? "No analyzed videos yet" : "No approved feedback yet"} />
             ) : (
-              analyzedLogs.map((log) => {
+              <>
+              {standaloneAnalyses.map((analysis) => (
+                <StandaloneAnalysisCard
+                  key={analysis.id}
+                  analysis={analysis}
+                  isCoachOrAdmin={isCoachOrAdmin}
+                  expanded={expandedId === analysis.id}
+                  onToggleExpand={() => setExpandedId(expandedId === analysis.id ? null : analysis.id)}
+                  onUpdate={() => queryClient.invalidateQueries({ queryKey: ["videoAnalyses"] })}
+                  onPlayVideo={() => setVideoModal(analysis.video_url)}
+                />
+              ))}
+              {analyzedLogs.map((log) => {
                 const analysis = getAnalysisForLog(log);
                 if (!analysis || analysis.status === 'processing' || analysis.status === 'error') return null;
                 return (
@@ -234,7 +248,8 @@ export default function VideoReview() {
                     onPlayVideo={() => setVideoModal(log.video_url)}
                   />
                 );
-              })
+              })}
+              </>
             )}
           </TabsContent>
         </Tabs>
@@ -736,6 +751,126 @@ function QuickAnalyzeTab({
         </Card>
       )}
     </div>
+  );
+}
+
+function StandaloneAnalysisCard({ analysis, isCoachOrAdmin, expanded, onToggleExpand, onUpdate, onPlayVideo }) {
+  const [editing, setEditing] = useState(false);
+  const [feedbackDraft, setFeedbackDraft] = useState("");
+  const [savingFeedback, setSavingFeedback] = useState(false);
+  const [approvingLoading, setApprovingLoading] = useState(false);
+  const [showAnnotations, setShowAnnotations] = useState(false);
+  const isApproved = analysis?.status === "approved";
+  const label = analysis.event?.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()) || "Quick Analysis";
+
+  const handleSaveFeedback = async () => {
+    setSavingFeedback(true);
+    await base44.entities.VideoAnalysisResult.update(analysis.id, { coach_feedback: feedbackDraft });
+    setSavingFeedback(false);
+    setEditing(false);
+    onUpdate();
+    toast.success("Feedback saved.");
+  };
+
+  const handleApprove = async () => {
+    setApprovingLoading(true);
+    await base44.entities.VideoAnalysisResult.update(analysis.id, {
+      status: "approved",
+      coach_feedback: editing ? feedbackDraft : (analysis?.coach_feedback || analysis?.ai_response),
+    });
+    setApprovingLoading(false);
+    setEditing(false);
+    onUpdate();
+    toast.success("Feedback approved!");
+  };
+
+  const handleUnapprove = async () => {
+    await base44.entities.VideoAnalysisResult.update(analysis.id, { status: "pending_review" });
+    onUpdate();
+    toast.success("Unpublished.");
+  };
+
+  const displayFeedback = editing ? feedbackDraft : (analysis?.coach_feedback || analysis?.ai_response || "");
+
+  return (
+    <Card className="dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
+      <CardContent className="p-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="font-semibold text-slate-800 dark:text-gray-100">{label}</span>
+              <Badge className="text-xs bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">Quick Analyze</Badge>
+              {isCoachOrAdmin && (
+                <Badge className={`text-xs ${isApproved ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"}`}>
+                  {isApproved ? "Approved" : "Pending Review"}
+                </Badge>
+              )}
+            </div>
+            <div className="text-xs text-slate-500 dark:text-gray-400 mt-1">{analysis.analysis_date}</div>
+          </div>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <Button variant="outline" size="sm" onClick={onPlayVideo} className="gap-1.5 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
+              <Play className="w-3.5 h-3.5" /> Video
+            </Button>
+            <Button variant="ghost" size="sm" onClick={onToggleExpand} className="gap-1 dark:text-gray-300 dark:hover:bg-gray-700">
+              <CheckCircle2 className={`w-3.5 h-3.5 ${isApproved ? "text-green-500" : "text-yellow-500"}`} />
+              {expanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+            </Button>
+          </div>
+        </div>
+
+        {expanded && (
+          <div className="mt-4 pt-4 border-t border-slate-200 dark:border-gray-700 space-y-4">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Zap className="w-4 h-4 text-yellow-500" />
+                <span className="text-sm font-semibold text-slate-700 dark:text-gray-200">AI Coaching Feedback</span>
+              </div>
+              {editing ? (
+                <Textarea value={feedbackDraft} onChange={(e) => setFeedbackDraft(e.target.value)} rows={10} className="text-sm font-mono dark:bg-gray-900 dark:border-gray-600 dark:text-gray-200" />
+              ) : (
+                <AnalysisFeedback aiResponse={displayFeedback} />
+              )}
+              {isCoachOrAdmin && (
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {editing ? (
+                    <>
+                      <Button size="sm" onClick={handleSaveFeedback} disabled={savingFeedback} className="gap-1.5 bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] text-white">
+                        <Save className="w-3.5 h-3.5" /> {savingFeedback ? "Saving..." : "Save Edits"}
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => setEditing(false)} className="gap-1.5 dark:border-gray-600 dark:text-gray-300">
+                        <X className="w-3.5 h-3.5" /> Cancel
+                      </Button>
+                    </>
+                  ) : (
+                    <Button size="sm" variant="outline" onClick={() => { setFeedbackDraft(analysis?.coach_feedback || analysis?.ai_response || ""); setEditing(true); }} className="gap-1.5 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
+                      <Edit2 className="w-3.5 h-3.5" /> Edit Feedback
+                    </Button>
+                  )}
+                  {!isApproved ? (
+                    <Button size="sm" onClick={handleApprove} disabled={approvingLoading} className="gap-1.5 bg-green-600 hover:bg-green-700 text-white">
+                      <CheckCircle2 className="w-3.5 h-3.5" /> {approvingLoading ? "Approving..." : "Approve"}
+                    </Button>
+                  ) : (
+                    <Button size="sm" variant="outline" onClick={handleUnapprove} className="gap-1.5 text-yellow-700 border-yellow-400 hover:bg-yellow-50 dark:text-yellow-400 dark:border-yellow-700 dark:hover:bg-gray-700">
+                      Unpublish
+                    </Button>
+                  )}
+                </div>
+              )}
+            </div>
+            {isCoachOrAdmin && (
+              <div className="border-t border-slate-200 dark:border-gray-700 pt-4">
+                <button onClick={() => setShowAnnotations(v => !v)} className="text-sm font-semibold text-slate-700 dark:text-gray-200 flex items-center gap-2 mb-3">
+                  🖊️ Video Annotations {showAnnotations ? "▲" : "▼"}
+                </button>
+                {showAnnotations && <VideoAnnotationCanvas analysisId={analysis.id} videoUrl={analysis.video_url} />}
+              </div>
+            )}
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 
