@@ -33,8 +33,7 @@ Deno.serve(async (req) => {
     const { event } = record;
     const eventLabel = event ? event.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : 'Track & Field';
 
-    const prompt = `You are an expert track and field coach analyzing a ${eventLabel} athlete's video submission.
-Carefully observe the athlete's technique in the video. Provide detailed, actionable coaching feedback covering: specific technique observations from the video, strengths you can see, areas needing improvement with specific corrections, key body mechanics issues, and drill recommendations. Be specific to what you actually see.
+    const prompt = `You are an expert track and field coach providing coaching feedback for a ${eventLabel} athlete. Provide detailed, actionable coaching feedback covering: common technical points to focus on for this event, key strengths to build on, the most important areas for improvement with specific corrections, key body mechanics, and drill recommendations tailored to ${eventLabel}. Be specific and practical.
 
 Return your analysis in the requested JSON format.`;
 
