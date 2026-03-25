@@ -618,13 +618,29 @@ function QuickAnalyzeTab({
     setQuickAnalyzing(true);
     setQuickResult(null);
     const res = await base44.functions.invoke("quickAnalyzeVideo", { video_url: quickVideoUrl, event: quickEvent || null });
-    setQuickAnalyzing(false);
-    if (res.data?.record_id) {
-      toast.success("Analysis started! Results will appear in the Analyzed tab when ready.");
-      handleReset();
-    } else {
+    if (!res.data?.record_id) {
+      setQuickAnalyzing(false);
       toast.error(res.data?.error || "Analysis failed.");
+      return;
     }
+    // Poll for the completed result
+    const recordId = res.data.record_id;
+    let attempts = 0;
+    const maxAttempts = 30;
+    const poll = async () => {
+      attempts++;
+      const record = await base44.entities.VideoAnalysisResult.get(recordId);
+      if (record?.status === 'pending_review' || record?.status === 'approved') {
+        setQuickAnalyzing(false);
+        setQuickResult(record.ai_response || record.coach_feedback);
+      } else if (record?.status === 'error' || attempts >= maxAttempts) {
+        setQuickAnalyzing(false);
+        toast.error('Analysis failed or timed out. Please try again.');
+      } else {
+        setTimeout(poll, 3000);
+      }
+    };
+    setTimeout(poll, 3000);
   };
 
   const handleReset = () => {
