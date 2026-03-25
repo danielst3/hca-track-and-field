@@ -235,14 +235,13 @@ export default function VideoReview() {
                   onDelete={isCoachOrAdmin ? async (id) => { await base44.entities.VideoAnalysisResult.delete(id); queryClient.invalidateQueries({ queryKey: ["videoAnalyses"] }); toast.success("Analysis deleted."); } : undefined}
                 />
               ))}
-              {analyzedLogs.map((log) => {
-                const analysis = getAnalysisForLog(log);
-                if (!analysis || analysis.status === 'processing' || analysis.status === 'error') return null;
-                return (
+              {analyzedLogs
+                .filter((log) => { const a = getAnalysisForLog(log); return a && a.status !== 'processing' && a.status !== 'error'; })
+                .map((log) => (
                 <AnalyzedLogCard
                   key={log.id}
                   log={log}
-                  analysis={analysis}
+                  analysis={getAnalysisForLog(log)}
                   eventLabel={eventLabel(log.event)}
                   isCoachOrAdmin={isCoachOrAdmin}
                   expanded={expandedId === log.id}
@@ -250,9 +249,8 @@ export default function VideoReview() {
                   onUpdate={() => queryClient.invalidateQueries({ queryKey: ["videoAnalyses"] })}
                   onPlayVideo={() => setVideoModal(log.video_url)}
                   onDelete={isCoachOrAdmin ? async (id) => { await base44.entities.VideoAnalysisResult.delete(id); queryClient.invalidateQueries({ queryKey: ["videoAnalyses"] }); toast.success("Analysis deleted."); } : undefined}
-                  />
-                  );
-                  })}
+                />
+                ))}
               </>
             )}
           </TabsContent>
