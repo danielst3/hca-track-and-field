@@ -20,7 +20,7 @@ Deno.serve(async (req) => {
     }
 
     const today = new Date().toISOString().split('T')[0];
-    const record = await base44.entities.VideoAnalysisResult.create({
+    const record = await base44.asServiceRole.entities.VideoAnalysisResult.create({
       athlete_email: user.email,
       event: event || 'shot_put',
       video_url,
