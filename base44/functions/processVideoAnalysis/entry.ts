@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
     try {
       result = await base44.asServiceRole.integrations.Core.InvokeLLM({
         prompt,
-        ...(hasFrames ? { file_urls: frame_urls, model: 'claude_sonnet_4_6' } : {}),
+        ...(hasFrames ? { file_urls: frame_urls.slice(0, 4), model: 'gemini_3_flash' } : {}),
         response_json_schema: {
           type: 'object',
           properties: {
