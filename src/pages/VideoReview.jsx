@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { Video, Zap, CheckCircle2, Clock, ChevronDown, ChevronUp, Play, Send, Edit2, Save, X, MessageSquare, Upload, Loader2, AlertCircle } from "lucide-react";
+import { Video, Zap, CheckCircle2, Clock, ChevronDown, ChevronUp, Play, Send, Edit2, Save, X, MessageSquare, Upload, Loader2, AlertCircle, Trash2 } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -232,24 +232,25 @@ export default function VideoReview() {
                   onToggleExpand={() => setExpandedId(expandedId === analysis.id ? null : analysis.id)}
                   onUpdate={() => queryClient.invalidateQueries({ queryKey: ["videoAnalyses"] })}
                   onPlayVideo={() => setVideoModal(analysis.video_url)}
+                  onDelete={isCoachOrAdmin ? async (id) => { await base44.entities.VideoAnalysisResult.delete(id); queryClient.invalidateQueries({ queryKey: ["videoAnalyses"] }); toast.success("Analysis deleted."); } : undefined}
                 />
               ))}
               {analyzedLogs.map((log) => {
                 const analysis = getAnalysisForLog(log);
                 if (!analysis || analysis.status === 'processing' || analysis.status === 'error') return null;
                 return (
-                  <AnalyzedLogCard
-                    key={log.id}
-                    log={log}
-                    analysis={analysis}
-                    eventLabel={eventLabel(log.event)}
-                    isCoachOrAdmin={isCoachOrAdmin}
-                    expanded={expandedId === log.id}
-                    onToggleExpand={() => setExpandedId(expandedId === log.id ? null : log.id)}
-                    onUpdate={() => queryClient.invalidateQueries({ queryKey: ["videoAnalyses"] })}
-                    onPlayVideo={() => setVideoModal(log.video_url)}
-                  />
-                );
+                <AnalyzedLogCard
+                  key={log.id}
+                  log={log}
+                  analysis={analysis}
+                  eventLabel={eventLabel(log.event)}
+                  isCoachOrAdmin={isCoachOrAdmin}
+                  expanded={expandedId === log.id}
+                  onToggleExpand={() => setExpandedId(expandedId === log.id ? null : log.id)}
+                  onUpdate={() => queryClient.invalidateQueries({ queryKey: ["videoAnalyses"] })}
+                  onPlayVideo={() => setVideoModal(log.video_url)}
+                  onDelete={isCoachOrAdmin ? async (id) => { await base44.entities.VideoAnalysisResult.delete(id); queryClient.invalidateQueries({ queryKey: ["videoAnalyses"] }); toast.success("Analysis deleted."); } : undefined}
+                />
               })}
               </>
             )}
@@ -357,7 +358,7 @@ function PendingLogCard({ log, eventLabel, isAnalyzing, onAnalyze, onPlayVideo }
   );
 }
 
-function AnalyzedLogCard({ log, analysis, eventLabel, isCoachOrAdmin, expanded, onToggleExpand, onUpdate, onPlayVideo }) {
+function AnalyzedLogCard({ log, analysis, eventLabel, isCoachOrAdmin, expanded, onToggleExpand, onUpdate, onPlayVideo, onDelete }) {
   const [editing, setEditing] = useState(false);
   const [feedbackDraft, setFeedbackDraft] = useState("");
   const [followUpQ, setFollowUpQ] = useState("");
@@ -366,6 +367,7 @@ function AnalyzedLogCard({ log, analysis, eventLabel, isCoachOrAdmin, expanded, 
   const [savingFeedback, setSavingFeedback] = useState(false);
   const [approvingLoading, setApprovingLoading] = useState(false);
   const [showAnnotations, setShowAnnotations] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
   const annotationVideoRef = useRef(null);
 
   const isApproved = analysis?.status === "approved";
@@ -507,11 +509,23 @@ function AnalyzedLogCard({ log, analysis, eventLabel, isCoachOrAdmin, expanded, 
                       Unpublish
                     </Button>
                   )}
+                  {onDelete && (
+                    deleteConfirm ? (
+                      <div className="flex items-center gap-2 ml-auto">
+                        <span className="text-xs text-red-600 dark:text-red-400">Delete this analysis?</span>
+                        <Button size="sm" variant="destructive" onClick={() => onDelete(analysis.id)} className="h-7 text-xs">Yes, Delete</Button>
+                        <Button size="sm" variant="outline" onClick={() => setDeleteConfirm(false)} className="h-7 text-xs dark:border-gray-600 dark:text-gray-300">Cancel</Button>
+                      </div>
+                    ) : (
+                      <Button size="sm" variant="ghost" onClick={() => setDeleteConfirm(true)} className="gap-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950 ml-auto">
+                        <Trash2 className="w-3.5 h-3.5" /> Delete
+                      </Button>
+                    )
+                  )}
                 </div>
-              )}
             </div>
 
-            {/* Drawing Annotations (coach only) */}
+            {/* Drawing Annotations (coach only) */
             {isCoachOrAdmin && (
               <div className="border-t border-slate-200 dark:border-gray-700 pt-4">
                 <button
@@ -772,12 +786,13 @@ function QuickAnalyzeTab({
   );
 }
 
-function StandaloneAnalysisCard({ analysis, isCoachOrAdmin, expanded, onToggleExpand, onUpdate, onPlayVideo }) {
+function StandaloneAnalysisCard({ analysis, isCoachOrAdmin, expanded, onToggleExpand, onUpdate, onPlayVideo, onDelete }) {
   const [editing, setEditing] = useState(false);
   const [feedbackDraft, setFeedbackDraft] = useState("");
   const [savingFeedback, setSavingFeedback] = useState(false);
   const [approvingLoading, setApprovingLoading] = useState(false);
   const [showAnnotations, setShowAnnotations] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
   const isApproved = analysis?.status === "approved";
   const label = analysis.event?.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()) || "Quick Analysis";
 
@@ -874,8 +889,20 @@ function StandaloneAnalysisCard({ analysis, isCoachOrAdmin, expanded, onToggleEx
                       Unpublish
                     </Button>
                   )}
+                  {onDelete && (
+                    deleteConfirm ? (
+                      <div className="flex items-center gap-2 ml-auto">
+                        <span className="text-xs text-red-600 dark:text-red-400">Delete this analysis?</span>
+                        <Button size="sm" variant="destructive" onClick={() => onDelete(analysis.id)} className="h-7 text-xs">Yes, Delete</Button>
+                        <Button size="sm" variant="outline" onClick={() => setDeleteConfirm(false)} className="h-7 text-xs dark:border-gray-600 dark:text-gray-300">Cancel</Button>
+                      </div>
+                    ) : (
+                      <Button size="sm" variant="ghost" onClick={() => setDeleteConfirm(true)} className="gap-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950 ml-auto">
+                        <Trash2 className="w-3.5 h-3.5" /> Delete
+                      </Button>
+                    )
+                  )}
                 </div>
-              )}
             </div>
             {isCoachOrAdmin && (
               <div className="border-t border-slate-200 dark:border-gray-700 pt-4">
