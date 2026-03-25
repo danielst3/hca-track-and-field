@@ -9,6 +9,7 @@ const COLORS = ["#ef4444", "#3b82f6", "#22c55e", "#f59e0b", "#a855f7", "#ffffff"
 export default function VideoAnnotationCanvas({ analysisId, videoUrl, videoRef }) {
   const canvasRef = useRef(null);
   const [tool, setTool] = useState("line"); // "line" | "angle"
+  const [drawMode, setDrawMode] = useState(false);
   const [color, setColor] = useState("#ef4444");
   const [annotations, setAnnotations] = useState([]);
   const [currentPoints, setCurrentPoints] = useState([]);
@@ -195,6 +196,15 @@ export default function VideoAnnotationCanvas({ analysisId, videoUrl, videoRef }
       <div className="flex flex-wrap items-center gap-2 p-2 bg-slate-900 rounded-lg">
         <Button
           size="sm"
+          variant={drawMode ? "default" : "outline"}
+          onClick={() => { setDrawMode(v => !v); setCurrentPoints([]); }}
+          className={`h-7 text-xs gap-1.5 ${drawMode ? "bg-amber-500 hover:bg-amber-600 text-white" : "text-slate-300 border-slate-600 hover:text-white"}`}
+        >
+          ✏️ {drawMode ? "Drawing ON" : "Drawing OFF"}
+        </Button>
+        <div className="w-px h-4 bg-slate-600" />
+        <Button
+          size="sm"
           variant={tool === "line" ? "default" : "ghost"}
           onClick={() => { setTool("line"); setCurrentPoints([]); }}
           className="gap-1.5 text-xs h-7"
@@ -251,9 +261,9 @@ export default function VideoAnnotationCanvas({ analysisId, videoUrl, videoRef }
         />
         <canvas
           ref={canvasRef}
-          onClick={handleCanvasClick}
+          onClick={drawMode ? handleCanvasClick : undefined}
           onTouchEnd={(e) => { e.preventDefault(); handleCanvasClick(e.changedTouches ? { ...e, clientX: e.changedTouches[0].clientX, clientY: e.changedTouches[0].clientY } : e); }}
-          className="absolute inset-0 w-full h-full cursor-crosshair"
+          className={`absolute inset-0 w-full h-full ${drawMode ? "cursor-crosshair" : "pointer-events-none"}`}
           style={{ touchAction: "none" }}
         />
       </div>
