@@ -23,6 +23,7 @@ export default function VideoReview() {
   const [user, setUser] = useState(null);
   const [userLoading, setUserLoading] = useState(true);
   const [videoModal, setVideoModal] = useState(null); // video_url or null
+  const [clearingStuck, setClearingStuck] = useState(false);
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -150,11 +151,13 @@ export default function VideoReview() {
               size="sm"
               className="ml-2 text-red-600 border-red-300 hover:bg-red-50 dark:text-red-400 dark:border-red-800 dark:hover:bg-red-950"
               onClick={async () => {
-                if (!confirm(`Clear ${processingAnalyses.length} stuck/failed analysis record(s)?`)) return;
+                setClearingStuck(true);
                 const res = await base44.functions.invoke('clearStuckAnalyses', {});
+                setClearingStuck(false);
                 if (res.data?.error) { toast.error(res.data.error); }
                 else { toast.success(`Cleared ${res.data.cleared} stuck analyses.`); queryClient.invalidateQueries({ queryKey: ['videoAnalyses'] }); }
               }}
+              disabled={clearingStuck}
             >
               Clear Stuck ({processingAnalyses.length})
             </Button>
