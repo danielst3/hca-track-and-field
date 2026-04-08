@@ -693,7 +693,7 @@ export default function Layout({ children, currentPageName }) {
             dragMomentum={false}
             onClick={() => setIsCreatePostOpen(true)}
             whileTap={{ scale: 0.92 }}
-            className="relative w-14 h-14 rounded-full bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] text-white shadow-xl flex items-center justify-center cursor-grab active:cursor-grabbing select-none"
+            className="relative w-14 h-14 rounded-full bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] text-white shadow-xl flex items-center justify-center cursor-grab active:cursor-grabbing select-none border-4 border-white dark:border-gray-900"
             style={{ touchAction: "none" }}
           >
             <Plus className="w-6 h-6" />
