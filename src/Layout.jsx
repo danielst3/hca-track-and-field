@@ -686,21 +686,19 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Floating Create Post Button (coach/admin only) */}
       {(activeViewRole === "admin" || activeViewRole === "coach" || user?.realRole === "admin") && !user?.isImpersonating && (
-        <motion.button
-          drag
-          dragMomentum={false}
-          onClick={() => setIsCreatePostOpen(true)}
-          whileTap={{ scale: 0.92 }}
-          className="fixed bottom-24 right-4 z-40 flex items-center gap-2 px-4 h-14 rounded-full bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] text-white shadow-xl cursor-grab active:cursor-grabbing select-none"
-          style={{ touchAction: "none" }}
-        >
-          <span className="relative flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-60"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
-          </span>
-          <Plus className="w-5 h-5" />
-          <span className="text-sm font-semibold">Announce</span>
-        </motion.button>
+        <div className="fixed bottom-24 right-4 z-40">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--brand-primary)] opacity-40"></span>
+          <motion.button
+            drag
+            dragMomentum={false}
+            onClick={() => setIsCreatePostOpen(true)}
+            whileTap={{ scale: 0.92 }}
+            className="relative w-14 h-14 rounded-full bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] text-white shadow-xl flex items-center justify-center cursor-grab active:cursor-grabbing select-none"
+            style={{ touchAction: "none" }}
+          >
+            <Plus className="w-6 h-6" />
+          </motion.button>
+        </div>
       )}
 
       <CreatePostModal open={isCreatePostOpen} onClose={() => setIsCreatePostOpen(false)} userEmail={user?.email} />
