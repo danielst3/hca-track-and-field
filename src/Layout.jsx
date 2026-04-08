@@ -39,6 +39,7 @@ import {
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import ReleaseNotesModal from "./components/shared/ReleaseNotesModal";
+import OnboardingTour, { shouldShowTour, resetTour } from "./components/OnboardingTour";
 import CreatePostModal from "./components/CreatePostModal";
 
 export default function Layout({ children, currentPageName }) {
@@ -47,6 +48,7 @@ export default function Layout({ children, currentPageName }) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
+  const [tourRunning, setTourRunning] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [pullDistance, setPullDistance] = useState(0);
   const touchStartY = useRef(0);
@@ -162,6 +164,11 @@ export default function Layout({ children, currentPageName }) {
             activeViewRole,
             availableViews: availableViews.length > 1 ? availableViews : undefined,
           });
+          // Auto-start tour for new users (coaches and athletes only)
+          const role = activeViewRole ?? currentUser.role;
+          if ((role === "admin" || role === "coach" || role === "user") && shouldShowTour(currentUser.id)) {
+            setTimeout(() => setTourRunning(true), 1000);
+          }
         }
       } catch (error) {
         setUser(null);
@@ -410,26 +417,26 @@ export default function Layout({ children, currentPageName }) {
   const activeViewRole = user?.isImpersonating ? user?.role : (user?.activeViewRole ?? user?.role);
   const navItems = (activeViewRole === "admin" || activeViewRole === "coach" || user?.realRole === "admin" || user?.realRole === "coach") && !user?.isImpersonating
     ? [
-        { name: "Today", icon: Home, page: "Today" },
-        { name: "Calendar", icon: Calendar, page: "Calendar" },
-        { name: "Log Activity", icon: Plus, page: "LogActivity" },
-        { name: "Athletes", icon: Users, page: "Athletes" },
-        { name: "Feedback", icon: MessageSquare, page: "VideoReview" },
+        { name: "Today", icon: Home, page: "Today", tour: "nav-today" },
+        { name: "Calendar", icon: Calendar, page: "Calendar", tour: "nav-calendar" },
+        { name: "Log Activity", icon: Plus, page: "LogActivity", tour: "nav-logactivity" },
+        { name: "Athletes", icon: Users, page: "Athletes", tour: "nav-athletes" },
+        { name: "Feedback", icon: MessageSquare, page: "VideoReview", tour: "nav-videoreview" },
       ]
     : activeViewRole === "parent"
     ? [
-        { name: "Today", icon: Home, page: "Today" },
-        { name: "Calendar", icon: Calendar, page: "Calendar" },
-        { name: "Athletes", icon: Users, page: "MyAthletes" },
-        { name: "Posts", icon: FileText, page: "Posts" },
-        { name: "Resources", icon: BookOpen, page: "Resources" },
+        { name: "Today", icon: Home, page: "Today", tour: "nav-today" },
+        { name: "Calendar", icon: Calendar, page: "Calendar", tour: "nav-calendar" },
+        { name: "Athletes", icon: Users, page: "MyAthletes", tour: "nav-athletes" },
+        { name: "Posts", icon: FileText, page: "Posts", tour: "nav-posts" },
+        { name: "Resources", icon: BookOpen, page: "Resources", tour: "nav-resources" },
       ]
     : [
-        { name: "Today", icon: Home, page: "Today" },
-        { name: "Calendar", icon: Calendar, page: "Calendar" },
-        { name: "Log Activity", icon: Plus, page: "LogActivity" },
-        { name: "Progress", icon: TrendingUp, page: "Progress" },
-        { name: "Feedback", icon: MessageSquare, page: "VideoReview" },
+        { name: "Today", icon: Home, page: "Today", tour: "nav-today" },
+        { name: "Calendar", icon: Calendar, page: "Calendar", tour: "nav-calendar" },
+        { name: "Log Activity", icon: Plus, page: "LogActivity", tour: "nav-logactivity" },
+        { name: "Progress", icon: TrendingUp, page: "Progress", tour: "nav-progress" },
+        { name: "Feedback", icon: MessageSquare, page: "VideoReview", tour: "nav-videoreview" },
       ];
 
   return (
@@ -441,6 +448,7 @@ export default function Layout({ children, currentPageName }) {
             <Button
               variant="ghost"
               size="icon"
+              data-tour="hamburger"
               onClick={() => setIsDrawerOpen(true)}
               className="text-gray-200 dark:text-white hover:bg-white/10"
             >
@@ -576,6 +584,16 @@ export default function Layout({ children, currentPageName }) {
 
       <ReleaseNotesModal user={user} />
 
+      {/* Onboarding Tour */}
+      {user && !user.isImpersonating && (
+        <OnboardingTour
+          userRole={activeViewRole}
+          userId={user.id}
+          run={tourRunning}
+          onFinish={() => setTourRunning(false)}
+        />
+      )}
+
       {/* Hamburger Drawer */}
       <AnimatePresence>
         {isDrawerOpen && (
@@ -662,6 +680,13 @@ export default function Layout({ children, currentPageName }) {
                         Install App
                       </button>
                     )}
+                    <button
+                      onClick={() => { resetTour(user?.id); setTourRunning(true); setIsDrawerOpen(false); }}
+                      className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-700 dark:text-gray-200 hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors"
+                    >
+                      <BookOpen className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                      Take the App Tour
+                    </button>
                   </div>
                 </div>
               </div>
@@ -686,7 +711,7 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Floating Create Post Button (coach/admin only) */}
       {(activeViewRole === "admin" || activeViewRole === "coach" || user?.realRole === "admin") && !user?.isImpersonating && (
-        <div className="fixed bottom-24 right-4 z-40">
+        <div className="fixed bottom-24 right-4 z-40" data-tour="create-post">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--brand-primary)] opacity-40"></span>
           <motion.button
             drag
@@ -710,7 +735,7 @@ export default function Layout({ children, currentPageName }) {
             const Icon = item.icon;
             const isActive = currentPageName === item.page;
             return (
-              <Link key={item.page} to={createPageUrl(item.page)}>
+              <Link key={item.page} to={createPageUrl(item.page)} data-tour={item.tour}>
                 <Button
                   variant="ghost"
                   className={cn(
