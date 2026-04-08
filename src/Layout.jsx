@@ -3,13 +3,11 @@ import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "./utils";
 import { Button } from "@/components/ui/button";
-import { Home, Calendar, Plus, LogOut, TrendingUp, Users, BookOpen, FileText, Trash2, RefreshCw, ArrowLeft, Settings, Moon, Sun, MoreHorizontal, Download, Video } from "lucide-react";
-// Note: BookOpen, Shield, MessageSquare, Trophy kept for settings dropdown usage
+import { Home, Calendar, Plus, LogOut, TrendingUp, Users, BookOpen, FileText, Trash2, RefreshCw, ArrowLeft, Settings, Moon, Sun, MoreHorizontal, Download, Video, Menu, X, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import UniversalSearch from "./components/shared/UniversalSearch";
 import NotificationBell from "./components/shared/NotificationBell";
 import { getActiveViewRole, getAvailableViews, setActiveViewRole } from "./components/shared/getActiveViewRole";
-
 import { AnimatePresence, motion } from "framer-motion";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import {
@@ -37,18 +35,18 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import ReleaseNotesModal from "./components/shared/ReleaseNotesModal";
+import CreatePostModal from "./components/CreatePostModal";
 
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [pullDistance, setPullDistance] = useState(0);
   const touchStartY = useRef(0);
@@ -440,6 +438,14 @@ export default function Layout({ children, currentPageName }) {
       <div className="bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-primary-dark)] dark:from-black dark:to-gray-950 border-b border-[var(--brand-primary-darker)] dark:border-gray-800 sticky top-0 z-50 select-none">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsDrawerOpen(true)}
+              className="text-gray-200 dark:text-white hover:bg-white/10"
+            >
+              <Menu className="w-5 h-5" />
+            </Button>
             {canGoBack ? (
               <Button
                 variant="ghost"
@@ -476,112 +482,6 @@ export default function Layout({ children, currentPageName }) {
             >
               {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
             </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-gray-700 hover:text-gray-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-gray-700 select-none"
-                >
-                  <Settings className="w-4 h-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="dark:bg-gray-800 dark:border-gray-700">
-                {user.isImpersonating && (
-                  <>
-                    <DropdownMenuItem 
-                      onClick={handleStopImpersonating}
-                      className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none"
-                    >
-                      <LogOut className="w-4 h-4 mr-2" />
-                      Stop Viewing as Athlete
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator className="dark:bg-gray-700" />
-                  </>
-                )}
-                {user.realRole === "admin" && user.is_parent && (
-                  <>
-                    <DropdownMenuItem 
-                      onClick={handleToggleParentView}
-                      className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none"
-                    >
-                      <Users className="w-4 h-4 mr-2" />
-                      {user.isViewingAsParent ? "Switch to Coach View" : "Switch to Parent View"}
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator className="dark:bg-gray-700" />
-                  </>
-                )}
-                {(user.role === "admin" || user.realRole === "admin") && (
-                  <DropdownMenuSub>
-                    <DropdownMenuSubTrigger className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none cursor-pointer">
-                      <Users className="w-4 h-4 mr-2" />
-                      Team Management
-                    </DropdownMenuSubTrigger>
-                    <DropdownMenuSubContent className="dark:bg-gray-800 dark:border-gray-700">
-                      <DropdownMenuItem asChild>
-                        <Link to={createPageUrl("Athletes")} className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none cursor-pointer">
-                          Athletes
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link to={createPageUrl("Seasons")} className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none cursor-pointer">
-                          Seasons
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link to={createPageUrl("Calendar")} className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none cursor-pointer">
-                          Practice Plans
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link to={createPageUrl("Resources")} className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none cursor-pointer">
-                          Resources
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link to={createPageUrl("AccessRequests")} className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none cursor-pointer">
-                          Access Requests
-                        </Link>
-                      </DropdownMenuItem>
-                    </DropdownMenuSubContent>
-                  </DropdownMenuSub>
-                )}
-                <DropdownMenuItem asChild>
-                  <Link to={createPageUrl("Settings")} className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none cursor-pointer">
-                    <Settings className="w-4 h-4 mr-2" />
-                    Settings
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to={createPageUrl("Privacy")} className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none cursor-pointer">
-                    <FileText className="w-4 h-4 mr-2" />
-                    Privacy Policy
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator className="dark:bg-gray-700" />
-                {canInstall && (
-                  <>
-                    <DropdownMenuItem onClick={handleInstallPWA} className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none">
-                      <Download className="w-4 h-4 mr-2" />
-                      Install App
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator className="dark:bg-gray-700" />
-                  </>
-                )}
-                <DropdownMenuItem onClick={handleLogout} className="text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 select-none">
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Logout
-                </DropdownMenuItem>
-                <DropdownMenuSeparator className="dark:bg-gray-700" />
-                <DropdownMenuItem 
-                  onClick={() => setDeleteDialogOpen(true)}
-                  className="text-red-600 dark:text-red-400 dark:hover:bg-gray-700 select-none"
-                >
-                  <Trash2 className="w-4 h-4 mr-2" />
-                  Delete Account
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
           </div>
         </div>
       </div>
@@ -675,7 +575,126 @@ export default function Layout({ children, currentPageName }) {
       </AlertDialog>
 
       <ReleaseNotesModal user={user} />
-      <Toaster position="top-center" />
+
+      {/* Hamburger Drawer */}
+      <AnimatePresence>
+        {isDrawerOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 z-50"
+              onClick={() => setIsDrawerOpen(false)}
+            />
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed top-0 left-0 h-full w-72 bg-white dark:bg-gray-900 z-50 shadow-2xl flex flex-col"
+            >
+              {/* Drawer Header */}
+              <div className="bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-primary-dark)] dark:from-black dark:to-gray-950 p-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698de82661ea1d1ad2bf86f9/785163a71_HorseLogoOfficial1.png" alt="HCA" className="w-9 h-9 object-contain" />
+                  <div>
+                    <p className="text-sm font-bold text-gray-900 dark:text-gray-100">HCA Chargers</p>
+                    <p className="text-xs text-gray-700 dark:text-gray-400">{user.full_name}</p>
+                  </div>
+                </div>
+                <Button variant="ghost" size="icon" onClick={() => setIsDrawerOpen(false)} className="text-gray-200 hover:bg-white/10">
+                  <X className="w-5 h-5" />
+                </Button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-4 space-y-6">
+                {/* Team Management - admin/coach only */}
+                {(user.role === "admin" || user.realRole === "admin" || activeViewRole === "coach") && (
+                  <div>
+                    <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">Team Management</p>
+                    <div className="space-y-1">
+                      {[
+                        { label: "Athletes", page: "Athletes", icon: Users },
+                        { label: "Seasons", page: "Seasons", icon: Calendar },
+                        { label: "Practice Plans", page: "Calendar", icon: BookOpen },
+                        { label: "Resources", page: "Resources", icon: FileText },
+                        { label: "Access Requests", page: "AccessRequests", icon: Settings },
+                      ].map(({ label, page, icon: Icon }) => (
+                        <Link key={page} to={createPageUrl(page)} onClick={() => setIsDrawerOpen(false)}
+                          className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-700 dark:text-gray-200 hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors">
+                          <Icon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                          {label}
+                          <ChevronRight className="w-3.5 h-3.5 ml-auto text-gray-400" />
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Personal Settings */}
+                <div>
+                  <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">Settings</p>
+                  <div className="space-y-1">
+                    {user.isImpersonating && (
+                      <button onClick={() => { handleStopImpersonating(); setIsDrawerOpen(false); }}
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-700 dark:text-gray-200 hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors">
+                        <LogOut className="w-4 h-4 text-gray-500" />
+                        Stop Viewing as Athlete
+                      </button>
+                    )}
+                    <Link to={createPageUrl("Settings")} onClick={() => setIsDrawerOpen(false)}
+                      className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-700 dark:text-gray-200 hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors">
+                      <Settings className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                      Personal Settings
+                      <ChevronRight className="w-3.5 h-3.5 ml-auto text-gray-400" />
+                    </Link>
+                    <Link to={createPageUrl("Privacy")} onClick={() => setIsDrawerOpen(false)}
+                      className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-700 dark:text-gray-200 hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors">
+                      <FileText className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                      Privacy Policy
+                      <ChevronRight className="w-3.5 h-3.5 ml-auto text-gray-400" />
+                    </Link>
+                    {canInstall && (
+                      <button onClick={() => { handleInstallPWA(); setIsDrawerOpen(false); }}
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-700 dark:text-gray-200 hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors">
+                        <Download className="w-4 h-4 text-gray-500" />
+                        Install App
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Drawer Footer */}
+              <div className="p-4 border-t border-gray-200 dark:border-gray-700 space-y-1">
+                <button onClick={() => { handleLogout(); setIsDrawerOpen(false); }}
+                  className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-700 dark:text-gray-200 hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors">
+                  <LogOut className="w-4 h-4 text-gray-500" />
+                  Logout
+                </button>
+                <button onClick={() => { setDeleteDialogOpen(true); setIsDrawerOpen(false); }}
+                  className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-gray-800 transition-colors">
+                  <Trash2 className="w-4 h-4" />
+                  Delete Account
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Floating Create Post Button (coach/admin only) */}
+      {(activeViewRole === "admin" || activeViewRole === "coach" || user?.realRole === "admin") && !user?.isImpersonating && (
+        <button
+          onClick={() => setIsCreatePostOpen(true)}
+          className="fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] text-white shadow-lg flex items-center justify-center transition-transform hover:scale-105 active:scale-95"
+        >
+          <Plus className="w-6 h-6" />
+        </button>
+      )}
+
+      <CreatePostModal open={isCreatePostOpen} onClose={() => setIsCreatePostOpen(false)} userEmail={user?.email} />
 
       {/* Bottom Navigation */}
       <div ref={navRef} className="bg-white dark:bg-gray-900 border-t border-slate-200 dark:border-gray-700 shadow-lg z-50 select-none flex-shrink-0" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
