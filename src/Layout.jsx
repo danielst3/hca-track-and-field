@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "./utils";
 import { Button } from "@/components/ui/button";
-import { Home, Calendar, Plus, LogOut, TrendingUp, Users, BookOpen, FileText, Trash2, RefreshCw, ArrowLeft, Settings, Moon, Sun, MoreHorizontal, Download, Video, Menu, X, ChevronRight } from "lucide-react";
+import { Home, Calendar, Plus, LogOut, TrendingUp, Users, BookOpen, FileText, Trash2, RefreshCw, ArrowLeft, Settings, Moon, Sun, MoreHorizontal, Download, MessageSquare, Menu, X, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import UniversalSearch from "./components/shared/UniversalSearch";
 import NotificationBell from "./components/shared/NotificationBell";
@@ -414,7 +414,7 @@ export default function Layout({ children, currentPageName }) {
         { name: "Calendar", icon: Calendar, page: "Calendar" },
         { name: "Log Activity", icon: Plus, page: "LogActivity" },
         { name: "Athletes", icon: Users, page: "Athletes" },
-        { name: "Videos", icon: Video, page: "VideoReview" },
+        { name: "Feedback", icon: MessageSquare, page: "VideoReview" },
       ]
     : activeViewRole === "parent"
     ? [
@@ -429,7 +429,7 @@ export default function Layout({ children, currentPageName }) {
         { name: "Calendar", icon: Calendar, page: "Calendar" },
         { name: "Log Activity", icon: Plus, page: "LogActivity" },
         { name: "Progress", icon: TrendingUp, page: "Progress" },
-        { name: "Videos", icon: Video, page: "VideoReview" },
+        { name: "Feedback", icon: MessageSquare, page: "VideoReview" },
       ];
 
   return (
