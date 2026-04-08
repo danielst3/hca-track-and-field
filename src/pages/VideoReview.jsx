@@ -134,9 +134,9 @@ export default function VideoReview() {
     <div className="min-h-screen bg-slate-50 dark:bg-[#111] p-4 pb-20">
       <div className="max-w-3xl mx-auto">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100">Video Review</h1>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-gray-100">Feedback</h1>
           <p className="text-slate-500 dark:text-gray-400 mt-1">
-            {isCoachOrAdmin ? "Analyze videos and approve feedback for athletes" : "Your approved coaching feedback"}
+            {isCoachOrAdmin ? "Send and manage coaching feedback for athletes" : "Your coaching feedback"}
           </p>
         </div>
 
