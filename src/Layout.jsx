@@ -686,12 +686,21 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Floating Create Post Button (coach/admin only) */}
       {(activeViewRole === "admin" || activeViewRole === "coach" || user?.realRole === "admin") && !user?.isImpersonating && (
-        <button
+        <motion.button
+          drag
+          dragMomentum={false}
           onClick={() => setIsCreatePostOpen(true)}
-          className="fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] text-white shadow-lg flex items-center justify-center transition-transform hover:scale-105 active:scale-95"
+          whileTap={{ scale: 0.92 }}
+          className="fixed bottom-24 right-4 z-40 flex items-center gap-2 px-4 h-14 rounded-full bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-dark)] text-white shadow-xl cursor-grab active:cursor-grabbing select-none"
+          style={{ touchAction: "none" }}
         >
-          <Plus className="w-6 h-6" />
-        </button>
+          <span className="relative flex h-3 w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-60"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
+          </span>
+          <Plus className="w-5 h-5" />
+          <span className="text-sm font-semibold">Announce</span>
+        </motion.button>
       )}
 
       <CreatePostModal open={isCreatePostOpen} onClose={() => setIsCreatePostOpen(false)} userEmail={user?.email} />
