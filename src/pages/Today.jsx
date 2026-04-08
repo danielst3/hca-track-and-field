@@ -17,6 +17,7 @@ import { ALL_EVENTS, getEventById, EVENT_CATEGORIES, EVENTS_BY_CATEGORY, normali
 import MultiSelectWithTags from "../components/shared/MultiSelectWithTags";
 import { cn } from "@/lib/utils";
 import AthleteCard from "../components/dashboard/AthleteCard";
+import FeedbackSection from "../components/feedback/FeedbackSection";
 import EventProgressChart from "../components/dashboard/EventProgressChart";
 import CoachAthleteOverviewSection from "@/components/dashboard/CoachAthleteOverviewSection";
 import RecentPostsSection from "@/components/dashboard/RecentPostsSection";
@@ -411,14 +412,14 @@ export default function Today() {
         <CoachAthleteOverviewSection date={selectedDate} dailyPlan={dailyPlan} selectedEvents={selectedEvents} />
         }
 
+        {/* Feedback Section - athletes only */}
+        {user && user.activeViewRole !== "admin" && user.activeViewRole !== "coach" && isSameDay(selectedDate, new Date()) && athleteEmail && (
+          <FeedbackSection athleteEmail={athleteEmail} />
+        )}
+
         {/* Athlete Dashboard */}
         {user && user.activeViewRole !== "admin" && isSameDay(selectedDate, new Date()) &&
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            
-
-
-
-
             <div>
               <AthleteCard user={user} nextMeet={nextMeet} recentPosts={recentPosts} />
             </div>

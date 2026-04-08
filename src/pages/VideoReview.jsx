@@ -14,6 +14,7 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { getActiveViewRole, getAvailableViews } from "../components/shared/getActiveViewRole";
+import GeneralFeedbackComposer from "../components/feedback/GeneralFeedbackComposer";
 
 export default function VideoReview() {
   const [expandedId, setExpandedId] = useState(null);
@@ -55,11 +56,16 @@ export default function VideoReview() {
     enabled: !!user,
   });
 
+  const { data: athletes = [] } = useQuery({
+    queryKey: ["athletesForFeedback"],
+    queryFn: () => base44.entities.User.filter({ role: "user" }),
+    enabled: !!user && isCoachOrAdmin,
+  });
+
   const { data: analyses = [], isLoading: loadingAnalyses } = useQuery({
     queryKey: ["videoAnalyses", user?.email],
     queryFn: () => {
       if (isCoachOrAdmin) return base44.entities.VideoAnalysisResult.list("-analysis_date", 100);
-      // Athletes only see approved analyses
       return base44.entities.VideoAnalysisResult.filter(
         { athlete_email: user.email, status: "approved" },
         "-analysis_date",
@@ -152,6 +158,11 @@ export default function VideoReview() {
                 <span className="ml-1 inline-flex items-center justify-center w-4 h-4 text-xs rounded-full bg-blue-500 text-white animate-pulse">{processingAnalyses.length}</span>
               )}
             </TabsTrigger>
+            {isCoachOrAdmin && (
+              <TabsTrigger value="general-feedback" className="dark:text-gray-300 dark:data-[state=active]:bg-gray-700">
+                General Feedback
+              </TabsTrigger>
+            )}
           </TabsList>
           {isCoachOrAdmin && processingAnalyses.length > 0 && (
             <Button
@@ -257,6 +268,23 @@ export default function VideoReview() {
               </>
             )}
           </TabsContent>
+
+          {isCoachOrAdmin && (
+            <TabsContent value="general-feedback">
+              <Card className="dark:bg-gray-800 dark:border-gray-700">
+                <CardContent className="p-4">
+                  <p className="text-sm text-slate-600 dark:text-gray-400 mb-4">
+                    Send text-based coaching feedback to an athlete — no video required. Use the AI assistant to help craft your message.
+                  </p>
+                  <GeneralFeedbackComposer
+                    athletes={athletes}
+                    userEmail={user?.email}
+                    onSent={() => {}}
+                  />
+                </CardContent>
+              </Card>
+            </TabsContent>
+          )}
         </Tabs>
       </div>
 
