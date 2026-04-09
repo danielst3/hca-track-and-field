@@ -30,17 +30,20 @@ export default function Progress() {
     base44.auth.me().then(setUser).catch(() => setLoadError("Failed to load user data"));
   }, []);
 
-  const { data: throwLogs = [], isError: throwError } = useQuery({
-    queryKey: ["throwLogs", user?.email],
-    queryFn: () => base44.entities.ThrowLog.filter({ athlete_email: user.email }),
+  const { data: progressData, isError: throwError } = useQuery({
+    queryKey: ["athleteProgress", user?.email],
+    queryFn: async () => {
+      const res = await base44.functions.invoke('getAthleteProgress', { athlete_email: user.email });
+      return res.data;
+    },
     enabled: !!user,
   });
 
-  const { data: trainingLogs = [], isError: trainingError } = useQuery({
-    queryKey: ["trainingLogs", user?.email],
-    queryFn: () => base44.entities.TrainingLog.filter({ athlete_email: user.email }),
-    enabled: !!user,
-  });
+  const throwLogs = progressData?.throwLogs ?? [];
+  const trainingLogs = progressData?.trainingLogs ?? [];
+  const trainingError = throwError;
+
+
 
   const handleCategoryChange = (catId) => {
     setActiveCategory(catId);
