@@ -27,7 +27,15 @@ export default function Progress() {
   const [loadError, setLoadError] = useState(null);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => setLoadError("Failed to load user data"));
+    base44.auth.me().then(currentUser => {
+      const impersonating = localStorage.getItem("impersonating");
+      if (impersonating && currentUser?.role === "admin") {
+        const impersonatedUser = JSON.parse(impersonating);
+        setUser({ ...currentUser, ...impersonatedUser, isImpersonating: true });
+      } else {
+        setUser(currentUser);
+      }
+    }).catch(() => setLoadError("Failed to load user data"));
   }, []);
 
   const { data: progressData, isError: throwError } = useQuery({
