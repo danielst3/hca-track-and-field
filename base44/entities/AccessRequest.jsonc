@@ -1,0 +1,46 @@
+{
+  "name": "AccessRequest",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "description": "Email address of person requesting access"
+    },
+    "full_name": {
+      "type": "string",
+      "description": "Full name of person requesting access"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "user",
+        "coach",
+        "parent"
+      ],
+      "description": "Requested role"
+    },
+    "athlete_name": {
+      "type": "string",
+      "description": "Name of athlete (for parent requests)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "denied"
+      ],
+      "default": "pending",
+      "description": "Status of the access request"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes from requester"
+    }
+  },
+  "required": [
+    "email",
+    "full_name",
+    "role"
+  ]
+}

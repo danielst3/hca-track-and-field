@@ -1,0 +1,29 @@
+{
+  "name": "VideoAnnotation",
+  "type": "object",
+  "properties": {
+    "analysis_id": {
+      "type": "string",
+      "description": "ID of the VideoAnalysisResult this annotation belongs to"
+    },
+    "video_url": {
+      "type": "string",
+      "description": "URL of the video being annotated"
+    },
+    "annotations": {
+      "type": "array",
+      "description": "Array of drawing objects (lines, angles)",
+      "items": {
+        "type": "object"
+      }
+    },
+    "label": {
+      "type": "string",
+      "description": "Optional label for this annotation set"
+    }
+  },
+  "required": [
+    "analysis_id",
+    "video_url"
+  ]
+}

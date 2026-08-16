@@ -1,0 +1,48 @@
+{
+  "name": "DataRetentionPolicy",
+  "type": "object",
+  "properties": {
+    "policy_name": {
+      "type": "string",
+      "description": "Name of the policy"
+    },
+    "retention_period_days": {
+      "type": "number",
+      "description": "Number of days to retain data after athlete graduation/departure"
+    },
+    "auto_delete_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to automatically delete data after retention period"
+    },
+    "data_types": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "performance_logs",
+          "training_logs",
+          "meet_results",
+          "posts",
+          "all"
+        ]
+      },
+      "description": "Types of data covered by this policy"
+    },
+    "effective_date": {
+      "type": "string",
+      "format": "date",
+      "description": "When this policy takes effect"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this policy is currently active"
+    }
+  },
+  "required": [
+    "policy_name",
+    "retention_period_days",
+    "data_types"
+  ]
+}

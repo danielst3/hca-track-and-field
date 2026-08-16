@@ -1,0 +1,30 @@
+{
+  "name": "Season",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Season name (e.g., Spring 2026, Fall 2025)"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Season start date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Season end date"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this is the currently active season"
+    }
+  },
+  "required": [
+    "name",
+    "start_date",
+    "end_date"
+  ]
+}

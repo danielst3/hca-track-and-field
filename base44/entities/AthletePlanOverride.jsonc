@@ -1,0 +1,39 @@
+{
+  "name": "AthletePlanOverride",
+  "type": "object",
+  "properties": {
+    "athlete_email": {
+      "type": "string",
+      "description": "Email of the athlete this override is for"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date this override applies to"
+    },
+    "season_id": {
+      "type": "string",
+      "description": "Season ID"
+    },
+    "shot_text": {
+      "type": "string",
+      "description": "Athlete-specific shot put plan (overrides team plan)"
+    },
+    "discus_text": {
+      "type": "string",
+      "description": "Athlete-specific discus plan (overrides team plan)"
+    },
+    "javelin_text": {
+      "type": "string",
+      "description": "Athlete-specific javelin plan (overrides team plan)"
+    },
+    "coach_notes": {
+      "type": "string",
+      "description": "Personal coach notes for this athlete"
+    }
+  },
+  "required": [
+    "athlete_email",
+    "date"
+  ]
+}

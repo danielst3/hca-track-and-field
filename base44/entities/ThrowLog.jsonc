@@ -1,0 +1,87 @@
+{
+  "name": "ThrowLog",
+  "type": "object",
+  "properties": {
+    "athlete_email": {
+      "type": "string",
+      "description": "Email of the athlete"
+    },
+    "event_category": {
+      "type": "string",
+      "enum": [
+        "throwing",
+        "jumping",
+        "running"
+      ],
+      "description": "Category of the event"
+    },
+    "event": {
+      "type": "string",
+      "enum": [
+        "shot_put",
+        "discus",
+        "javelin",
+        "long_jump",
+        "triple_jump",
+        "high_jump",
+        "pole_vault",
+        "100m",
+        "200m",
+        "400m",
+        "800m",
+        "1600m",
+        "3200m",
+        "100m_hurdles",
+        "110m_hurdles",
+        "300m_hurdles",
+        "4x100_relay",
+        "4x400_relay",
+        "4x800_relay"
+      ],
+      "description": "Type of event"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the performance"
+    },
+    "session_type": {
+      "type": "string",
+      "enum": [
+        "practice",
+        "meet"
+      ],
+      "default": "practice",
+      "description": "Type of session"
+    },
+    "best_distance": {
+      "type": "number",
+      "description": "Best mark achieved \u2014 feet for throwing/jumping, seconds for running"
+    },
+    "implement_weight": {
+      "type": "string",
+      "description": "Weight of the implement used (throwing events)"
+    },
+    "attempts": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "description": "All attempts in the session"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notes about the session"
+    },
+    "video_url": {
+      "type": "string",
+      "description": "URL of the uploaded video for this performance"
+    }
+  },
+  "required": [
+    "athlete_email",
+    "event",
+    "date",
+    "best_distance"
+  ]
+}

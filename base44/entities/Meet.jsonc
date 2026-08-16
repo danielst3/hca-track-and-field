@@ -1,0 +1,27 @@
+{
+  "name": "Meet",
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Meet date"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the meet"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes"
+    },
+    "season_id": {
+      "type": "string",
+      "description": "ID of the season this meet belongs to"
+    }
+  },
+  "required": [
+    "date",
+    "name"
+  ]
+}

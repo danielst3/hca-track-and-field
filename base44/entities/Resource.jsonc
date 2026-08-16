@@ -1,0 +1,32 @@
+{
+  "name": "Resource",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Title of the resource"
+    },
+    "content": {
+      "type": "string",
+      "description": "Description or notes about the resource"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "URL for uploaded files (images, PDFs, etc.)"
+    },
+    "link_url": {
+      "type": "string",
+      "description": "External link or YouTube URL"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Tags for filtering: event (shot, discus, javelin), skill level (beginner, intermediate, advanced), type (drill, video, document, reference), etc."
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

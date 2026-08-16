@@ -1,0 +1,84 @@
+{
+  "name": "VideoAnalysisResult",
+  "type": "object",
+  "properties": {
+    "athlete_email": {
+      "type": "string",
+      "description": "Email of the athlete whose video was analyzed (optional for quick/unassigned analyses)"
+    },
+    "event_category": {
+      "type": "string",
+      "enum": [
+        "throwing",
+        "jumping",
+        "running"
+      ],
+      "description": "Category of the event"
+    },
+    "event": {
+      "type": "string",
+      "enum": [
+        "shot_put",
+        "discus",
+        "javelin",
+        "long_jump",
+        "triple_jump",
+        "high_jump",
+        "pole_vault",
+        "100m",
+        "200m",
+        "400m",
+        "800m",
+        "1600m",
+        "3200m",
+        "100m_hurdles",
+        "110m_hurdles",
+        "300m_hurdles",
+        "4x100_relay",
+        "4x400_relay",
+        "4x800_relay"
+      ],
+      "description": "Event type of the analysis"
+    },
+    "video_url": {
+      "type": "string",
+      "description": "URL of the uploaded video"
+    },
+    "frame_urls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "URLs of extracted keyframe images used for AI visual analysis"
+    },
+    "ai_response": {
+      "type": "string",
+      "description": "Raw AI-generated coaching feedback for the video"
+    },
+    "coach_feedback": {
+      "type": "string",
+      "description": "Edited/approved feedback that will be shown to the athlete"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "processing",
+        "pending_review",
+        "approved",
+        "error"
+      ],
+      "default": "processing",
+      "description": "processing = AI running; pending_review = coach has not approved yet; approved = visible to athlete; error = analysis failed"
+    },
+    "analysis_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the video analysis"
+    }
+  },
+  "required": [
+    "event",
+    "video_url",
+    "analysis_date"
+  ]
+}

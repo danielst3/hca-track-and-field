@@ -1,0 +1,72 @@
+{
+  "name": "Drill",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the drill"
+    },
+    "purpose": {
+      "type": "string",
+      "description": "Purpose or goal of the drill"
+    },
+    "setup": {
+      "type": "string",
+      "description": "Setup instructions"
+    },
+    "execution": {
+      "type": "string",
+      "description": "How to execute the drill"
+    },
+    "cues": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Coaching cues"
+    },
+    "common_faults": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Common mistakes to watch for"
+    },
+    "event": {
+      "type": "string",
+      "enum": [
+        "shot_put",
+        "discus",
+        "javelin",
+        "long_jump",
+        "triple_jump",
+        "high_jump",
+        "pole_vault",
+        "100m",
+        "200m",
+        "400m",
+        "800m",
+        "1600m",
+        "3200m",
+        "100m_hurdles",
+        "110m_hurdles",
+        "300m_hurdles",
+        "4x100_relay",
+        "4x400_relay",
+        "4x800_relay",
+        "strength",
+        "prehab",
+        "warmup"
+      ],
+      "description": "Event or category this drill is for"
+    },
+    "youtube_url": {
+      "type": "string",
+      "description": "YouTube link for a video demonstration of the drill"
+    }
+  },
+  "required": [
+    "name",
+    "event"
+  ]
+}

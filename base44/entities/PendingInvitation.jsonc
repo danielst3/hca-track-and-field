@@ -1,0 +1,33 @@
+{
+  "name": "PendingInvitation",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "description": "Email address of invited user"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "user",
+        "admin",
+        "coach",
+        "parent"
+      ],
+      "description": "Role assigned to the invitation"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "accepted"
+      ],
+      "default": "pending",
+      "description": "Invitation status"
+    }
+  },
+  "required": [
+    "email",
+    "role"
+  ]
+}

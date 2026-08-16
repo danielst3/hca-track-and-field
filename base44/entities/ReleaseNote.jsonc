@@ -1,0 +1,31 @@
+{
+  "name": "ReleaseNote",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Version string (e.g. 1.0.0, 1.1.0) - used for ordering"
+    },
+    "title": {
+      "type": "string",
+      "description": "Title of the release (e.g. 'Spring 2026 Update')"
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of new features or improvements"
+    },
+    "release_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the release"
+    }
+  },
+  "required": [
+    "version",
+    "title",
+    "release_date"
+  ]
+}

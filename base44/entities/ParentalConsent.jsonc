@@ -1,0 +1,58 @@
+{
+  "name": "ParentalConsent",
+  "type": "object",
+  "properties": {
+    "athlete_email": {
+      "type": "string",
+      "description": "Email of the athlete"
+    },
+    "parent_name": {
+      "type": "string",
+      "description": "Full name of parent/guardian"
+    },
+    "parent_email": {
+      "type": "string",
+      "description": "Email of parent/guardian"
+    },
+    "consent_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date consent was given"
+    },
+    "consent_type": {
+      "type": "string",
+      "enum": [
+        "data_collection",
+        "data_sharing",
+        "photo_video",
+        "full"
+      ],
+      "default": "full",
+      "description": "Type of consent granted"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "granted",
+        "revoked"
+      ],
+      "default": "pending",
+      "description": "Status of consent"
+    },
+    "signature": {
+      "type": "string",
+      "description": "Digital signature or confirmation"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes"
+    }
+  },
+  "required": [
+    "athlete_email",
+    "parent_name",
+    "parent_email",
+    "consent_type"
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "name": "RolePermission",
+  "type": "object",
+  "properties": {
+    "role_name": {
+      "type": "string",
+      "description": "Name of the role (e.g., athlete, coach, parent)"
+    },
+    "permissions": {
+      "type": "object",
+      "properties": {
+        "view_all_athletes": {
+          "type": "boolean",
+          "default": false
+        },
+        "edit_athletes": {
+          "type": "boolean",
+          "default": false
+        },
+        "view_practice_plans": {
+          "type": "boolean",
+          "default": false
+        },
+        "edit_practice_plans": {
+          "type": "boolean",
+          "default": false
+        },
+        "view_meets": {
+          "type": "boolean",
+          "default": false
+        },
+        "edit_meets": {
+          "type": "boolean",
+          "default": false
+        },
+        "manage_seasons": {
+          "type": "boolean",
+          "default": false
+        },
+        "view_posts": {
+          "type": "boolean",
+          "default": false
+        },
+        "create_posts": {
+          "type": "boolean",
+          "default": false
+        },
+        "edit_posts": {
+          "type": "boolean",
+          "default": false
+        },
+        "view_resources": {
+          "type": "boolean",
+          "default": false
+        },
+        "edit_resources": {
+          "type": "boolean",
+          "default": false
+        },
+        "invite_users": {
+          "type": "boolean",
+          "default": false
+        },
+        "manage_roles": {
+          "type": "boolean",
+          "default": false
+        },
+        "view_ferpa": {
+          "type": "boolean",
+          "default": false
+        },
+        "manage_ferpa": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "is_system_role": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this is a built-in system role"
+    }
+  },
+  "required": [
+    "role_name"
+  ]
+}

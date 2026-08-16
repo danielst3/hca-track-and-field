@@ -1,0 +1,18 @@
+{
+  "name": "Abbreviation",
+  "type": "object",
+  "properties": {
+    "abbr": {
+      "type": "string",
+      "description": "The abbreviation (e.g. PP, FT, SA)"
+    },
+    "full": {
+      "type": "string",
+      "description": "The full meaning of the abbreviation"
+    }
+  },
+  "required": [
+    "abbr",
+    "full"
+  ]
+}

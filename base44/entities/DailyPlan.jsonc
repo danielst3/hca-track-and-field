@@ -1,0 +1,95 @@
+{
+  "name": "DailyPlan",
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "The date for this plan"
+    },
+    "day_type": {
+      "type": "string",
+      "enum": [
+        "technical",
+        "primary",
+        "indoor",
+        "tuneup",
+        "meet",
+        "recovery"
+      ],
+      "description": "Blue=technical, Green=primary, Orange=indoor, Purple=tuneup, Red=meet, Grey=recovery"
+    },
+    "shot_text": {
+      "type": "string",
+      "description": "Shot put plan: theme, drills, cues"
+    },
+    "discus_text": {
+      "type": "string",
+      "description": "Discus plan: theme, drills, cues"
+    },
+    "javelin_text": {
+      "type": "string",
+      "description": "Javelin plan: theme, drills, cues"
+    },
+    "long_jump_text": {
+      "type": "string",
+      "description": "Long jump plan: theme, drills, cues"
+    },
+    "triple_jump_text": {
+      "type": "string",
+      "description": "Triple jump plan: theme, drills, cues"
+    },
+    "high_jump_text": {
+      "type": "string",
+      "description": "High jump plan: theme, drills, cues"
+    },
+    "pole_vault_text": {
+      "type": "string",
+      "description": "Pole vault plan: theme, drills, cues"
+    },
+    "100m_text": {
+      "type": "string",
+      "description": "100m plan: theme, drills, cues"
+    },
+    "200m_text": {
+      "type": "string",
+      "description": "200m plan: theme, drills, cues"
+    },
+    "400m_text": {
+      "type": "string",
+      "description": "400m plan: theme, drills, cues"
+    },
+    "800m_text": {
+      "type": "string",
+      "description": "800m plan: theme, drills, cues"
+    },
+    "1600m_text": {
+      "type": "string",
+      "description": "1600m plan: theme, drills, cues"
+    },
+    "3200m_text": {
+      "type": "string",
+      "description": "3200m plan: theme, drills, cues"
+    },
+    "hurdles_text": {
+      "type": "string",
+      "description": "Hurdles plan (100mH/110mH/300mH): theme, drills, cues"
+    },
+    "relays_text": {
+      "type": "string",
+      "description": "Relays plan (4x100/4x400/4x800): theme, drills, cues"
+    },
+    "coach_notes": {
+      "type": "string",
+      "description": "Coach notes for the day"
+    },
+    "season_id": {
+      "type": "string",
+      "description": "ID of the season this plan belongs to"
+    }
+  },
+  "required": [
+    "date",
+    "day_type"
+  ]
+}

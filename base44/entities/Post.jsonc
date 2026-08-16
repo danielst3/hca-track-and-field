@@ -1,0 +1,37 @@
+{
+  "name": "Post",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Title of the post"
+    },
+    "content": {
+      "type": "string",
+      "description": "Content of the post"
+    },
+    "author_email": {
+      "type": "string",
+      "description": "Email of the post author"
+    },
+    "event_tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Event tags (shot_put, discus, javelin, long_jump, triple_jump, high_jump, pole_vault, 100m, 200m, 400m, 800m, 1600m, 3200m, 100m_hurdles, 110m_hurdles, 300m_hurdles, 4x100_relay, 4x400_relay, 4x800_relay, or custom)"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "URL for uploaded files (images, PDFs, etc.)"
+    },
+    "link_url": {
+      "type": "string",
+      "description": "External link or YouTube URL"
+    }
+  },
+  "required": [
+    "title",
+    "author_email"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "AuditLog",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Email of user performing the action"
+    },
+    "action_type": {
+      "type": "string",
+      "enum": [
+        "view_athlete",
+        "edit_athlete",
+        "view_records",
+        "edit_records",
+        "delete_data",
+        "export_data",
+        "invite_user"
+      ],
+      "description": "Type of action performed"
+    },
+    "target_email": {
+      "type": "string",
+      "description": "Email of athlete whose records were accessed"
+    },
+    "details": {
+      "type": "string",
+      "description": "Additional details about the action"
+    },
+    "ip_address": {
+      "type": "string",
+      "description": "IP address of the user"
+    }
+  },
+  "required": [
+    "user_email",
+    "action_type"
+  ]
+}

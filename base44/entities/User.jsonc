@@ -1,0 +1,84 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "user",
+        "coach",
+        "parent"
+      ],
+      "default": "user",
+      "description": "User's role in the app"
+    },
+    "user_role_preference": {
+      "type": "string",
+      "enum": [
+        "athlete",
+        "parent",
+        "coach"
+      ],
+      "description": "User's preferred role view"
+    },
+    "first_name": {
+      "type": "string",
+      "description": "First name"
+    },
+    "last_name": {
+      "type": "string",
+      "description": "Last name"
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "shot",
+          "discus",
+          "javelin"
+        ]
+      },
+      "description": "Events the athlete participates in"
+    },
+    "grad_year": {
+      "type": "string",
+      "description": "Graduation year"
+    },
+    "is_graduated": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the athlete has graduated"
+    },
+    "is_athlete": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this user is an athlete on the team"
+    },
+    "is_parent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this user is a parent"
+    },
+    "athlete_emails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Emails of athletes this parent is linked to"
+    },
+    "last_seen_release_version": {
+      "type": "string",
+      "description": "The last release note version the user has acknowledged"
+    }
+  },
+  "required": [
+    "user_role_preference",
+    "first_name",
+    "last_name",
+    "events",
+    "grad_year",
+    "athlete_emails"
+  ]
+}
